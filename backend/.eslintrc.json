@@ -1,0 +1,15 @@
+{
+  "env": "node",
+  "extends": ["airbnb-base"],
+  "parser": "espree",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": "off",
+    "func-names": "off",
+    "no-process-exit": "off",
+    "consistent-return": "off"
+  }
+}
