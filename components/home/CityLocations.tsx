@@ -1,0 +1,79 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { cityLocations } from "@/lib/categories";
+import { MapPin, ArrowRight } from "lucide-react";
+
+export function CityLocations() {
+  return (
+    <section className="py-24 bg-[#F5F5F0]">
+      <div className="max-w-7xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h4 className="text-gold font-medium tracking-[0.2em] mb-3 uppercase text-sm">
+            Find Your Dream Home
+          </h4>
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-black leading-tight">
+            Browse by <span className="text-gold-dark">Location</span>
+          </h2>
+          <p className="mt-4 text-zinc-600 max-w-2xl mx-auto">
+            Explore our exclusive properties across India's most prime locations, 
+            offering the best in luxury and connectivity.
+          </p>
+        </motion.div>
+
+        {/* Grid Layout - Scalable for more locations */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {cityLocations.map((location, index) => (
+            <motion.div
+              key={location.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <Link href={`/category/${location.slug}`} className="block h-full">
+                <div className="group relative h-[300px] overflow-hidden rounded-xl shadow-lg cursor-pointer transform transition-all duration-300 hover:-translate-y-2">
+                  <Image
+                    src={location.image}
+                    alt={location.name}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  
+                  {/* Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <div className="flex items-center gap-2 mb-2 text-gold/90 text-sm font-medium tracking-wide uppercase">
+                        <MapPin className="w-4 h-4" />
+                        <span>{location.name}</span>
+                    </div>
+                    <h3 className="text-2xl font-serif font-bold text-white mb-2">
+                      {location.title}
+                    </h3>
+                    <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-300">
+                        <p className="text-white/80 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            {location.subtitle}
+                        </p>
+                        <span className="inline-flex items-center gap-2 text-white text-sm font-medium border-b border-gold pb-1">
+                            View Properties <ArrowRight className="w-4 h-4" />
+                        </span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -1,26 +1,84 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand Colors */
+  --gold: #D4AF37;
+  --gold-light: #F4CF57;
+  --gold-dark: #B48F17;
+
+  /* Premium Palette - Stone & Greige */
+  --sand: #E6E5E0;
+  --cream: #F4F3EF;
+  --charcoal: #2C2C2C;
+  --charcoal-light: #4A4A4A;
+
+  /* Base Colors - Warm Limestone */
+  --background: #F0EFEB;
+  --foreground: #1A1A1A;
+
+  /* UI Colors */
+  --muted: #E0DFD9;
+  --muted-foreground: #666660;
+  --border: #DCDCD6;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-dark: var(--gold-dark);
+
+  --color-sand: var(--sand);
+  --color-cream: var(--cream);
+  --color-charcoal: var(--charcoal);
+  --color-charcoal-light: var(--charcoal-light);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+
+  --font-sans: var(--font-montserrat);
+  --font-serif: var(--font-playfair);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* Utilities for luxury feel */
+.text-gold-gradient {
+  background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Custom Scrollbar Utilities */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-track-transparent {
+    scrollbar-color: rgba(201, 169, 97, 0.3) transparent;
+  }
+
+  .scrollbar-thumb-gold\/30 {
+    scrollbar-color: rgba(201, 169, 97, 0.3) transparent;
+  }
+
+  .scrollbar-thumb-gold\/20 {
+    scrollbar-color: rgba(201, 169, 97, 0.2) transparent;
+  }
+
+  .scrollbar-thumb-gold\/40 {
+    scrollbar-color: rgba(201, 169, 97, 0.4) transparent;
+  }
+
+  .scrollbar-thumb-gold\/50 {
+    scrollbar-color: rgba(201, 169, 97, 0.5) transparent;
+  }
 }
