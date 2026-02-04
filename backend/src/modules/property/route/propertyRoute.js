@@ -48,4 +48,21 @@ router.delete('/:id', authMiddleware, async (req, res, next) => {
   }
 });
 
+// Property Sections routes
+router.post('/:id/sections', authMiddleware, async (req, res, next) => {
+  try {
+    await propertyController.createPropertySections(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put('/:id/sections', authMiddleware, async (req, res, next) => {
+  try {
+    await propertyController.updatePropertySections(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

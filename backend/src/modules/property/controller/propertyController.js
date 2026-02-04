@@ -112,6 +112,46 @@ class PropertyController {
       },
     });
   }
+
+  async createPropertySections(req, res) {
+    const { id } = req.params;
+    const { sections } = req.body;
+
+    if (!sections) {
+      throw {
+        status: 400,
+        message: 'Sections array is required',
+      };
+    }
+
+    const createdSections = await propertyService.createPropertySections(id, sections);
+
+    res.status(201).json({
+      success: true,
+      data: createdSections,
+      message: 'Property sections created successfully',
+    });
+  }
+
+  async updatePropertySections(req, res) {
+    const { id } = req.params;
+    const { sections } = req.body;
+
+    if (!sections) {
+      throw {
+        status: 400,
+        message: 'Sections array is required',
+      };
+    }
+
+    const updatedSections = await propertyService.updatePropertySections(id, sections);
+
+    res.json({
+      success: true,
+      data: updatedSections,
+      message: 'Property sections updated successfully',
+    });
+  }
 }
 
 export default new PropertyController();

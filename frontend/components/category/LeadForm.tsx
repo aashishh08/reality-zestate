@@ -2,45 +2,91 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Phone, Mail, User } from "lucide-react";
+import { X, Send, Phone, Mail, User, AlertCircle } from "lucide-react";
+import { createLead } from "@/lib/api/leads";
+import { useApiCall } from "@/lib/hooks/useApiCall";
+import { validateLeadForm, validateField } from "@/lib/validation/lead-form";
+import { FORM_CONFIG, SUCCESS_MESSAGES } from "@/lib/constants";
 
 interface LeadFormProps {
   offerTitle?: string;
   offerValidTill?: string;
+  source?: string;
+  propertyId?: string;
 }
 
-export function LeadForm({ offerTitle = "Special Offer Till January 31, 2026", offerValidTill }: LeadFormProps) {
+export function LeadForm({
+  offerTitle = "Special Offer Till January 31, 2026",
+  offerValidTill,
+  source = "lead-form",
+  propertyId,
+}: LeadFormProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  
+  const { execute: submitLead, loading: isSubmitting, error: submitError } = useApiCall({
+    onSuccess: () => {
+      setSubmitStatus("success");
+      // Reset form after showing success
+      setTimeout(() => {
+        setFormData({ name: "", email: "", phone: "" });
+        setSubmitStatus("idle");
+        setIsOpen(false);
+      }, FORM_CONFIG.SUCCESS_DISPLAY_TIME);
+    },
+    onError: () => {
+      setSubmitStatus("error");
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Validate form data
+    const validation = validateLeadForm(formData);
+    if (!validation.isValid) {
+      setFieldErrors(validation.errors);
+      return;
+    }
     
-    setSubmitStatus("success");
-    setIsSubmitting(false);
+    // Clear field errors
+    setFieldErrors({});
     
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setFormData({ name: "", email: "", phone: "" });
-      setSubmitStatus("idle");
-      setIsOpen(false);
-    }, 3000);
+    // Submit to API
+    try {
+      await submitLead(() =>
+        createLead({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          source,
+          propertyId,
+        })
+      );
+    } catch (error) {
+      console.error("Failed to submit lead:", error);
+      setSubmitStatus("error");
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value
+    }));
+    
+    // Validate field on change
+    const error = validateField(name as keyof typeof formData, value);
+    setFieldErrors(prev => ({
+      ...prev,
+      [name]: error || "",
     }));
   };
 
@@ -73,7 +119,7 @@ export function LeadForm({ offerTitle = "Special Offer Till January 31, 2026", o
         className="hidden lg:block fixed left-6 top-1/2 -translate-y-1/2 w-80 bg-white rounded-lg shadow-2xl z-50 overflow-hidden border border-zinc-200"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-gold to-gold-dark text-black px-6 py-4 relative">
+        <div className="bg-linear-to-r from-gold to-gold-dark text-black px-6 py-4 relative">
           <button
             onClick={() => setIsOpen(false)}
             className="absolute top-3 right-3 text-black/60 hover:text-black transition-colors"
@@ -102,11 +148,25 @@ export function LeadForm({ offerTitle = "Special Offer Till January 31, 2026", o
               </div>
               <h4 className="text-xl font-bold text-black mb-2">Thank You!</h4>
               <p className="text-zinc-600 text-sm">
-                We'll contact you shortly with exclusive details.
+                {SUCCESS_MESSAGES.LEAD_SUBMITTED}
               </p>
             </motion.div>
           ) : (
             <>
+              {submitStatus === "error" && submitError && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-sm"
+                >
+                  <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-red-900">Error submitting form</p>
+                    <p className="text-xs text-red-700 mt-1">{submitError}</p>
+                  </div>
+                </motion.div>
+              )}
+
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-zinc-700 mb-2">
                   Your Name *
@@ -119,11 +179,17 @@ export function LeadForm({ offerTitle = "Special Offer Till January 31, 2026", o
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    required
-                    className="w-full pl-11 pr-4 py-3 border border-zinc-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all"
+                    className={`w-full pl-11 pr-4 py-3 border rounded-sm focus:outline-none focus:ring-2 focus:border-transparent transition-all ${
+                      fieldErrors.name
+                        ? "border-red-300 focus:ring-red-500"
+                        : "border-zinc-300 focus:ring-gold"
+                    }`}
                     placeholder="Enter your name"
                   />
                 </div>
+                {fieldErrors.name && (
+                  <p className="text-xs text-red-600 mt-1">{fieldErrors.name}</p>
+                )}
               </div>
 
               <div>
@@ -138,11 +204,17 @@ export function LeadForm({ offerTitle = "Special Offer Till January 31, 2026", o
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    required
-                    className="w-full pl-11 pr-4 py-3 border border-zinc-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all"
+                    className={`w-full pl-11 pr-4 py-3 border rounded-sm focus:outline-none focus:ring-2 focus:border-transparent transition-all ${
+                      fieldErrors.email
+                        ? "border-red-300 focus:ring-red-500"
+                        : "border-zinc-300 focus:ring-gold"
+                    }`}
                     placeholder="Enter your email"
                   />
                 </div>
+                {fieldErrors.email && (
+                  <p className="text-xs text-red-600 mt-1">{fieldErrors.email}</p>
+                )}
               </div>
 
               <div>
@@ -157,12 +229,17 @@ export function LeadForm({ offerTitle = "Special Offer Till January 31, 2026", o
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    required
-                    pattern="[0-9]{10}"
-                    className="w-full pl-11 pr-4 py-3 border border-zinc-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all"
+                    className={`w-full pl-11 pr-4 py-3 border rounded-sm focus:outline-none focus:ring-2 focus:border-transparent transition-all ${
+                      fieldErrors.phone
+                        ? "border-red-300 focus:ring-red-500"
+                        : "border-zinc-300 focus:ring-gold"
+                    }`}
                     placeholder="10-digit mobile number"
                   />
                 </div>
+                {fieldErrors.phone && (
+                  <p className="text-xs text-red-600 mt-1">{fieldErrors.phone}</p>
+                )}
               </div>
 
               <button

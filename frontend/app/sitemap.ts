@@ -1,12 +1,17 @@
 import { MetadataRoute } from 'next';
-import { getBlogPosts } from '@/lib/blog-api';
+import { getBlogs } from '@/lib/api/blogs';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://opulnzabode.com';
 
     // Get all blog posts
-    const blogData = await getBlogPosts({ pageSize: 1000 });
-    const blogPosts = blogData.posts;
+    let blogPosts: any[] = [];
+    try {
+        const blogResponse = await getBlogs({ limit: 1000 }, false);
+        blogPosts = blogResponse.data || [];
+    } catch (error) {
+        console.error('Error fetching blogs for sitemap:', error);
+    }
 
     // Static pages
     const staticPages = [
@@ -27,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Blog post pages
     const blogPages = blogPosts.map((post) => ({
         url: `${baseUrl}/blogs/${post.slug}`,
-        lastModified: new Date(post.updatedAt || post.publishedAt),
+        lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.8,
     }));

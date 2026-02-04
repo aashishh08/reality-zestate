@@ -1,11 +1,1 @@
-{
-  "version": 4,
-  "routes": {},
-  "dynamicRoutes": {},
-  "notFoundRoutes": [],
-  "preview": {
-    "previewModeId": "5bb59b134d4698c2dd2a3248817b6a73",
-    "previewModeSigningKey": "fb264c48eecc075c2d924f256ed413ce7f414fe13cd3f4ec0051f51b5183d86c",
-    "previewModeEncryptionKey": "872037797d8c95ff393bfe90c858d893287b2c4a8e45ffa60294d0c8935e28db"
-  }
-}
+{"version":4,"routes":{"/projects/the-grand-arch-gurgaon":{},"/projects/sky-mansion-delhi":{},"/projects/aravalli-hills-estate":{},"/projects/trump-tower-gurgaon":{},"/projects/royal-estate-mumbai":{},"/projects/cloud-9-bangalore":{},"/projects/serenity-gardens-goa":{},"/projects/the-manor-delhi":{},"/projects/villas-in-himalayas":{}},"dynamicRoutes":{"/projects/[slug]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/projects/[slug]","routeRegex":"^\\/projects\\/([^/]+?)(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"4d5ca7111e0a91b87c5f81ff76a5c85b","previewModeSigningKey":"6aed48270f74d5a8d8b03f89f14f51351853c9eb384940b856070a4b77b09b79","previewModeEncryptionKey":"72ba3369118cac595669ba83574aceec6cd1ced76e0951acff97f77c175510c3"}}

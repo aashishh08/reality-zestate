@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getProjectBySlug, getAllProjectSlugs } from "@/lib/data";
+import { getPropertyBySlug } from "@/lib/api/properties";
+import { transformBackendPropertyToProject } from "@/lib/property-transformer";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingActions } from "@/components/layout/FloatingActions";
@@ -24,6 +26,24 @@ import { ProjectSimilar } from "@/components/project/ProjectSimilar";
 import ProjectNavigation from "@/components/project/ProjectNavigation";
 import { projects } from "@/lib/data";
 
+/**
+ * Fetch property data from backend or fallback to hardcoded data (Grand Arch)
+ * This allows ALL properties to use the same unified layout
+ */
+async function getPropertyData(slug: string) {
+  try {
+    console.log(`[ProjectDetail] Fetching property from backend: ${slug}`);
+    const backendProperty = await getPropertyBySlug(slug);
+    console.log(`[ProjectDetail] ✅ Backend property found:`, backendProperty.slug);
+    return transformBackendPropertyToProject(backendProperty);
+  } catch (error) {
+    console.log(`[ProjectDetail] Backend not available, fallback to hardcoded data`);
+    // Fallback to hardcoded Grand Arch data
+    const hardcodedProject = getProjectBySlug(slug);
+    return hardcodedProject;
+  }
+}
+
 // Generate static params for all projects (ISR)
 export async function generateStaticParams() {
   const slugs = getAllProjectSlugs();
@@ -35,7 +55,7 @@ export async function generateStaticParams() {
 // Generate metadata for SEO
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getPropertyData(slug);
   
   if (!project) {
     return {
@@ -67,7 +87,7 @@ export const revalidate = 3600;
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getPropertyData(slug);
 
   if (!project) {
     notFound();
@@ -76,8 +96,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const { details } = project;
 
   // Get similar projects (same category, excluding current project)
-  const similarProjects = projects
-    .filter(p => p.category === project.category && p.id !== project.id)
+  const allProjects = projects;
+  const similarProjects = allProjects
+    .filter(p => p.id !== project.id)
     .slice(0, 3);
 
   return (

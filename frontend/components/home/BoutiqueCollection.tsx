@@ -2,12 +2,21 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { projects } from "@/lib/data";
+import { Location } from "@/lib";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
-export function BoutiqueCollection() {
-  const boutiqueProjects = projects.filter((p) => p.category === "Boutique");
+interface BoutiqueCollectionProps {
+  locations: Location[];
+}
+
+export function BoutiqueCollection({ locations }: BoutiqueCollectionProps) {
+  // Get featured collections (first 2-4 items)
+  const boutiques = locations.slice(0, 4);
+
+  if (!boutiques || boutiques.length === 0) {
+    return null;
+  }
 
   return (
     <section id="boutique-projects" className="py-24 px-6 bg-transparent">
@@ -22,10 +31,10 @@ export function BoutiqueCollection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {boutiqueProjects.map((project, index) => (
+          {boutiques.map((boutique, index) => (
             <Link
-              key={project.id}
-              href={project.subProjects ? `/collection/${project.slug}` : `/project/${project.slug}`}
+              key={boutique.id}
+              href={`/collection/${boutique.slug}`}
               className="block"
             >
               <motion.div
@@ -37,30 +46,29 @@ export function BoutiqueCollection() {
               >
                 <div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-sm mb-6">
                   <Image
-                    src={project.image}
-                    alt={project.title}
+                    src={"/images/project-1.jpg"}
+                    alt={boutique.name}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500" />
                 </div>
-                
+
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-3xl font-serif font-medium text-black mb-2 group-hover:text-gold-dark transition-colors">
-                      {project.title}
+                      {boutique.name}
                     </h3>
-                    <p className="text-zinc-500 text-sm tracking-wide uppercase mb-3">
-                      {project.location}
-                    </p>
-                    <p className="text-zinc-600 max-w-sm font-light leading-relaxed">
-                      {project.description}
+                    <p className="text-zinc-600 text-sm mb-4">
+                      Curated luxury experiences
                     </p>
                   </div>
-                  
-                  <div className="w-12 h-12 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-gold group-hover:border-gold group-hover:text-white transition-all duration-300">
-                    <ArrowUpRight className="w-5 h-5" />
-                  </div>
+                  <motion.div
+                    className="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-black opacity-0 group-hover:opacity-100 transition-opacity"
+                    whileHover={{ rotate: 45 }}
+                  >
+                    <ArrowUpRight className="w-6 h-6" />
+                  </motion.div>
                 </div>
               </motion.div>
             </Link>

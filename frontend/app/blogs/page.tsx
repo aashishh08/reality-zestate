@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { getBlogPosts, getBlogCategories } from '@/lib/blog-api';
+import { getBlogs } from '@/lib/api/blogs';
 import BlogNavigation from '@/components/blog/BlogNavigation';
 import BlogCard from '@/components/blog/BlogCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -16,20 +16,10 @@ interface BlogPageProps {
 
 // Generate metadata for SEO
 export async function generateMetadata({ searchParams }: BlogPageProps): Promise<Metadata> {
-  const category = searchParams.category;
   const search = searchParams.search;
 
   let title = 'Blog - Luxury Real Estate Insights & Guides';
   let description = 'Explore expert insights, market trends, and guides on luxury real estate in India. Stay updated with the latest in premium properties and investment opportunities.';
-
-  if (category) {
-    const categories = await getBlogCategories();
-    const currentCategory = categories.find(c => c.slug === category);
-    if (currentCategory) {
-      title = `${currentCategory.name} - Blog | Opulnz Abode`;
-      description = currentCategory.description || description;
-    }
-  }
 
   if (search) {
     title = `Search Results for "${search}" - Blog | Opulnz Abode`;
@@ -56,22 +46,25 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const pageSize = 9;
 
   // Fetch data with ISR (revalidate every hour)
-  const [blogData, categories] = await Promise.all([
-    getBlogPosts({
-      category: searchParams.category,
-      tag: searchParams.tag,
+  const blogResponse = await getBlogs(
+    {
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
       search: searchParams.search,
-      page,
-      pageSize,
-    }),
-    getBlogCategories(),
-  ]);
+    },
+    3600 // ISR revalidation
+  );
 
-  const { posts, total, totalPages } = blogData;
+  const posts = blogResponse.data || [];
+  const total = blogResponse.pagination?.total || 0;
+  const totalPages = Math.ceil(total / pageSize);
   const hasPosts = posts.length > 0;
 
+  // Categories are not available from new API yet, using empty array
+  const categories: any[] = [];
+
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <main className="min-h-screen bg-linear-to-b from-gray-50 to-white">
       {/* Navigation */}
       <BlogNavigation 
         categories={categories}
@@ -80,7 +73,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-amber-50 to-orange-50 py-16 md:py-24">
+      <section className="bg-linear-to-r from-amber-50 to-orange-50 py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-playfair font-bold text-gray-900 mb-6">
             {searchParams.search 
@@ -189,7 +182,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       </section>
 
       {/* Newsletter Section */}
-      <section className="bg-gradient-to-r from-amber-600 to-orange-600 py-16">
+      <section className="bg-linear-to-r from-amber-600 to-orange-600 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-playfair font-bold text-white mb-4">
             Stay Updated

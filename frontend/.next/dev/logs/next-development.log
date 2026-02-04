@@ -1,23 +1,803 @@
-[00:00:00.667] Server  LOG     ✓ Ready in 515ms
-[00:00:00.973] Server  WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:00:00.542] Server  LOG     ✓ Ready in 417ms
+[00:00:01.354] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:01.359] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:01.391] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:01.392] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:01.392] Server  WARN    No location found for slug: delhi
+[00:00:01.401] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:01.401] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:01.401] Server  WARN    No location found for slug: delhi
+[00:00:03.265] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:03.269] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:03.283] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:03.283] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:03.283] Server  WARN    No location found for slug: delhi
+[00:00:03.286] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:03.287] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:03.287] Server  WARN    No location found for slug: delhi
+[00:00:03.856] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:03.860] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:03.872] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:03.872] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:03.873] Server  WARN    No location found for slug: delhi
+[00:00:03.875] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:03.875] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:03.875] Server  WARN    No location found for slug: delhi
+[00:00:15.745] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:15.746] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:15.747] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:15.747] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:00:15.748] Server  WARN    No location found for slug: delhi [{...},{...},{...},{...},{...},{...},{...},{...},{...},{...},{...},{...}]
+[00:00:15.749] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:15.750] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:15.750] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:15.750] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:00:15.751] Server  WARN    No location found for slug: delhi [{...},{...},{...},{...},{...},{...},{...},{...},{...},{...},{...},{...}]
+[00:00:48.160] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:48.162] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:48.163] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:48.163] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:00:48.163] Server  LOG     [DEBUG] Returning from array for slug: delhi
+[00:00:48.163] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0
+[00:00:48.168] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:48.169] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:48.169] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:48.169] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:00:48.169] Server  LOG     [DEBUG] Returning from array for slug: delhi
+[00:00:48.196] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0 -> 200
+[00:00:48.196] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0
+[00:00:56.429] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:56.430] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:56.431] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:56.431] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:00:56.432] Server  LOG     [DEBUG] Returning from array for slug: delhi
+[00:00:56.432] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0
+[00:00:56.433] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0 -> 200
+[00:00:56.434] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0
+[00:00:56.437] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:56.438] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:00:56.438] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:00:56.438] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:00:56.439] Server  LOG     [DEBUG] Returning from array for slug: delhi
+[00:01:10.544] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:10.549] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:10.578] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:10.578] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:10.578] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:10.578] Server  LOG     [DEBUG] Returning from array for slug: delhi
+[00:01:10.582] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:10.583] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:10.583] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:10.583] Server  LOG     [DEBUG] Returning from array for slug: delhi
+[00:01:10.583] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0
+[00:01:10.589] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0 -> 200
+[00:01:10.590] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0
+[00:01:10.635] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:10.640] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:10.646] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:10.647] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:10.647] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:10.647] Server  LOG     [DEBUG] Returning from array for slug: delhi
+[00:01:10.847] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:11.931] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:11.934] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:11.944] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:11.945] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:11.945] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:11.945] Server  LOG     [DEBUG] Returning from array for slug: delhi
+[00:01:11.945] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0
+[00:01:11.948] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:11.948] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:11.948] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:11.948] Server  LOG     [DEBUG] Returning from array for slug: delhi
+[00:01:11.954] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0 -> 200
+[00:01:11.955] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450011&limit=12&offset=0
+[00:01:11.964] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:11.970] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:11.974] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:11.974] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:11.974] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:11.974] Server  LOG     [DEBUG] Returning from array for slug: delhi
+[00:01:12.160] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:19.351] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:19.355] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:19.388] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:19.389] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:19.389] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:19.389] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:19.389] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:19.394] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:19.394] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:19.394] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:19.394] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:19.402] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:01:19.402] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:19.429] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:19.437] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:19.443] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:19.444] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:19.444] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:19.444] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:19.653] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:22.477] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:22.479] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:22.490] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:22.490] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:22.490] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:22.490] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:22.490] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:22.492] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:22.493] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:22.493] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:22.493] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:22.498] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:01:22.498] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:22.506] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:22.512] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:22.518] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:22.518] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:22.518] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:22.518] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:22.717] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:23.296] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:23.300] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:23.311] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:23.311] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:23.311] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:23.311] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:23.311] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:23.314] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:23.315] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:23.315] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:23.315] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:23.319] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:01:23.319] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:23.329] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:23.335] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:23.339] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:23.339] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:23.339] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:23.339] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:23.531] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:27.581] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:27.586] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:27.600] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:27.600] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:27.600] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:27.600] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:27.601] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:27.604] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:27.604] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:27.604] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:27.604] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:27.610] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:01:27.610] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:27.617] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:27.623] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:27.628] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:27.629] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:27.629] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:27.629] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:27.817] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:28.432] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:28.436] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:28.448] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:28.449] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:28.449] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:28.449] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:28.449] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:28.452] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:28.452] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:28.453] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:28.453] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:28.457] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:01:28.457] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:28.466] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:28.472] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:28.477] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:28.477] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:28.477] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:28.477] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:28.674] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:28.942] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:28.946] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:28.962] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:28.963] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:28.963] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:28.963] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:28.963] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:28.966] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:28.966] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:28.966] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:28.966] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:28.972] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:01:28.972] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:28.998] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:29.005] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:29.010] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:29.011] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:29.011] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:29.011] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:29.218] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'offset')
+[00:01:59.953] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:59.958] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:59.979] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:59.979] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:59.979] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:59.979] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:59.980] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:59.983] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:01:59.983] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:01:59.983] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:01:59.983] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:01:59.991] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:01:59.991] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:01:59.999] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'offset')
+[00:02:00.005] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:00.009] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:00.009] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:00.009] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:00.009] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:00.216] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'offset')
+[00:02:00.677] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:00.681] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:00.695] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:00.696] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:00.696] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:00.696] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:00.696] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:00.699] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:00.699] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:00.699] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:00.700] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:00.704] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:02:00.704] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:00.713] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'offset')
+[00:02:00.720] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:00.724] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:00.724] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:00.725] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:00.725] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:00.917] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'offset')
+[00:02:26.574] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:02:26.624] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:26.627] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:26.630] Server  LOG     ✓ Compiled in 47ms
+[00:02:26.664] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:26.664] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:26.664] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:26.664] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:26.669] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:26.671] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:26.671] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:26.671] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:26.671] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:26.681] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:02:26.681] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:26.710] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:26.718] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:26.725] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:26.725] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:26.725] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:26.725] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:26.930] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:30.120] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:30.124] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:30.137] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:30.137] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:30.137] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:30.137] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:30.138] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:30.141] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:30.142] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:30.142] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:30.142] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:30.148] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:02:30.149] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:30.158] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:30.163] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:30.168] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:30.168] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:30.168] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:30.168] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:30.358] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:30.979] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:30.982] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:30.994] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:30.994] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:30.994] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:30.994] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:30.995] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:30.997] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:30.998] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:30.998] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:30.998] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:31.002] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:02:31.002] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:31.011] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:31.016] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:31.021] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:31.021] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:31.021] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:31.021] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:31.208] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:37.209] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:02:37.303] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:37.308] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:37.310] Server  LOG     ✓ Compiled in 59ms
+[00:02:37.370] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:37.370] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:37.371] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:37.371] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:37.371] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:37.373] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:37.374] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:37.374] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:37.374] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:37.381] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:02:37.382] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:37.407] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:37.414] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:37.422] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:37.423] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:37.423] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:37.423] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:37.622] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:41.564] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:41.568] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:41.580] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:41.580] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:41.580] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:41.581] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:41.581] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:41.583] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:41.584] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:41.584] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:41.584] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:41.590] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:02:41.590] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:41.601] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:41.606] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:41.611] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:41.612] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:41.612] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:41.612] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:41.801] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:42.487] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:42.489] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:42.496] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:42.496] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:42.497] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:42.497] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:42.497] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:42.499] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:42.500] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:42.500] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:42.500] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:42.503] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:02:42.503] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:42.513] Server  ERROR   ⨯ TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:42.518] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:42.526] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:42.527] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:42.528] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:42.528] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:42.727] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'length')
+[00:02:51.766] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:51.769] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:51.790] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:51.791] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:51.791] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:51.791] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:51.791] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:51.794] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:51.795] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:51.795] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:51.796] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:51.806] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:02:51.806] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:57.413] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:57.415] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:57.415] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:57.415] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:57.415] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:57.416] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:57.416] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:02:57.417] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:02:57.419] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:57.420] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:02:57.420] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:02:57.420] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:02:57.420] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:02:58.845] Server  LOG     [HomePage] Starting data fetch...
+[00:02:58.845] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:3000/api/v1"
+[00:02:58.845] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?limit=12&offset=0
+[00:02:58.846] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?limit=20&offset=0
+[00:02:58.846] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/developers?limit=6&offset=0
+[00:02:58.866] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?limit=12&offset=0 -> 200
+[00:02:58.866] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?limit=12&offset=0
+[00:02:58.867] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?limit=20&offset=0 -> 200
+[00:02:58.867] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?limit=20&offset=0
+[00:02:58.868] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/developers?limit=6&offset=0 -> 200
+[00:02:58.868] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/developers?limit=6&offset=0
+[00:02:58.868] Server  LOG     [HomePage] Data fetched successfully
+[00:02:58.868] Server  LOG     [HomePage] Properties: 11
+[00:02:58.869] Server  LOG     [HomePage] Locations: 12
+[00:02:58.869] Server  LOG     [HomePage] Developers: 4
+[00:02:58.912] Server  WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:01.126] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:01.287] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:02:59.180] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:01.287] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:01.287] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:05.961] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:02:59.180] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:02:59.180] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:02:59.180] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:02:59.180] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:02:59.283] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:03:03.828] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:03:03.833] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:03:03.841] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:03:03.842] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:03:03.842] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:03:03.842] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:03:03.847] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:03:03.847] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:03:03.848] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:03:03.848] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:03:03.848] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:03:03.859] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:03:03.860] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:03:06.213] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:03:06.214] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:03:06.214] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:03:06.214] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:03:06.215] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:03:06.215] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:03:06.216] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:03:06.216] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:03:06.218] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:03:06.219] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:03:06.219] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:03:06.219] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:03:06.219] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:03:09.831] Server  LOG     [HomePage] Starting data fetch...
+[00:03:09.831] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:3000/api/v1"
+[00:03:09.832] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?limit=12&offset=0
+[00:03:09.833] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?limit=20&offset=0
+[00:03:09.834] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/developers?limit=6&offset=0
+[00:03:09.843] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?limit=12&offset=0 -> 200
+[00:03:09.843] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?limit=20&offset=0 -> 200
+[00:03:09.844] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/developers?limit=6&offset=0 -> 200
+[00:03:09.844] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?limit=12&offset=0
+[00:03:09.844] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?limit=20&offset=0
+[00:03:09.845] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/developers?limit=6&offset=0
+[00:03:09.845] Server  LOG     [HomePage] Data fetched successfully
+[00:03:09.845] Server  LOG     [HomePage] Properties: 11
+[00:03:09.845] Server  LOG     [HomePage] Locations: 12
+[00:03:09.845] Server  LOG     [HomePage] Developers: 4
+[00:03:14.418] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:03:14.425] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:03:14.435] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:03:14.436] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:03:14.436] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:03:14.436] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:03:14.436] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:03:14.442] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:03:14.443] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:03:14.444] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:03:14.444] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:03:14.453] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0 -> 200
+[00:03:14.453] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:03:14.631] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/placeholder.jpg" "received" null
+[00:03:24.126] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0&propertyType=residential
+[00:03:24.131] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0&propertyType=residential -> 200
+[00:03:24.131] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0&propertyType=residential
+[00:03:24.174] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/placeholder.jpg" "received" null
+[00:03:26.216] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0&propertyType=commercial
+[00:03:26.221] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0&propertyType=commercial -> 200
+[00:03:26.221] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0&propertyType=commercial
+[00:03:26.267] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/placeholder.jpg" "received" null
+[00:06:21.880] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:06:21.888] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:06:21.907] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:06:21.907] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:06:21.907] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:06:21.908] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:06:21.908] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:06:21.912] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:06:21.913] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:06:21.913] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:06:21.913] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:06:21.924] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0 -> 200
+[00:06:21.924] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:06:21.988] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/placeholder.jpg" "received" null
+[00:06:27.246] Server  LOG     [ProjectDetail] Fetching property from backend: dlf-palm-greens-delhi
+[00:06:27.247] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties/dlf-palm-greens-delhi
+[00:06:27.250] Server  LOG     [ProjectDetail] Fetching property from backend: dlf-palm-greens-delhi
+[00:06:27.250] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties/dlf-palm-greens-delhi
+[00:06:27.264] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties/dlf-palm-greens-delhi -> 200
+[00:06:27.265] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties/dlf-palm-greens-delhi
+[00:06:27.265] Server  LOG     [ProjectDetail] ✅ Backend property found: "dlf-palm-greens-delhi"
+[00:06:27.272] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties/dlf-palm-greens-delhi -> 200
+[00:06:27.273] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties/dlf-palm-greens-delhi
+[00:06:27.273] Server  LOG     [ProjectDetail] ✅ Backend property found: "dlf-palm-greens-delhi"
+[00:06:27.273] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:06:27.483] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:05.961] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:05.961] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:05.961] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:05.961] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:05.961] Browser WARN    Image with src "/images/category-senior-living.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:05.961] Browser WARN    Image with src "/images/category-himalayas.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:07.148] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:07.148] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:07.148] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:07.148] Browser WARN    Image with src "/images/project-5.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:41:34.780] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:41:34.780] Browser WARN    Image with src "/images/category-senior-living.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:41:34.780] Browser WARN    Image with src "/images/category-himalayas.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:06:27.483] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:06:27.483] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:06:28.696] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/placeholder.jpg" "received" null
+[00:09:02.065] Server  LOG     [HomePage] Starting data fetch...
+[00:09:02.065] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:3000/api/v1"
+[00:09:02.066] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?limit=12&offset=0
+[00:09:02.066] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?limit=20&offset=0
+[00:09:02.067] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/developers?limit=6&offset=0
+[00:09:02.071] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?limit=12&offset=0 -> 200
+[00:09:02.071] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?limit=20&offset=0 -> 200
+[00:09:02.071] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/developers?limit=6&offset=0 -> 200
+[00:09:02.072] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?limit=12&offset=0
+[00:09:02.073] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?limit=20&offset=0
+[00:09:02.073] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/developers?limit=6&offset=0
+[00:09:02.073] Server  LOG     [HomePage] Data fetched successfully
+[00:09:02.073] Server  LOG     [HomePage] Properties: 11
+[00:09:02.073] Server  LOG     [HomePage] Locations: 12
+[00:09:02.073] Server  LOG     [HomePage] Developers: 4
+[00:09:02.093] Server  LOG     ✓ Compiled in 33ms
+[00:09:23.292] Server  LOG     [HomePage] Starting data fetch...
+[00:09:23.292] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:3000/api/v1"
+[00:09:23.292] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?limit=12&offset=0
+[00:09:23.292] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?limit=20&offset=0
+[00:09:23.293] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/developers?limit=6&offset=0
+[00:09:23.299] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?limit=12&offset=0 -> 200
+[00:09:23.299] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?limit=20&offset=0 -> 200
+[00:09:23.299] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/developers?limit=6&offset=0 -> 200
+[00:09:23.300] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?limit=12&offset=0
+[00:09:23.300] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?limit=20&offset=0
+[00:09:23.300] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/developers?limit=6&offset=0
+[00:09:23.301] Server  LOG     [HomePage] Data fetched successfully
+[00:09:23.301] Server  LOG     [HomePage] Properties: 11
+[00:09:23.301] Server  LOG     [HomePage] Locations: 12
+[00:09:23.301] Server  LOG     [HomePage] Developers: 4
+[00:09:23.318] Server  LOG     ✓ Compiled in 30ms
+[00:11:46.549] Server  LOG     [ProjectDetail] Fetching property from backend: emaar-elements-delhi
+[00:11:46.549] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:11:46.556] Server  LOG     [ProjectDetail] Fetching property from backend: emaar-elements-delhi
+[00:11:46.556] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:11:46.576] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi -> 200
+[00:11:46.577] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:11:46.577] Server  LOG     [ProjectDetail] ✅ Backend property found: "emaar-elements-delhi"
+[00:11:46.583] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi -> 200
+[00:11:46.583] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:11:46.583] Server  LOG     [ProjectDetail] ✅ Backend property found: "emaar-elements-delhi"
+[00:11:46.701] Browser WARN    Image with src "/images/project-2.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:11:55.122] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:11:55.871] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:13:16.794] Server  LOG     [ProjectDetail] Fetching property from backend: emaar-elements-delhi
+[00:13:16.794] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:13:16.799] Server  LOG     [ProjectDetail] Fetching property from backend: emaar-elements-delhi
+[00:13:16.799] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:13:17.016] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi -> 200
+[00:13:17.017] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:13:17.017] Server  LOG     [ProjectDetail] ✅ Backend property found: "emaar-elements-delhi"
+[00:13:17.063] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi -> 200
+[00:13:17.064] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:13:17.064] Server  LOG     [ProjectDetail] ✅ Backend property found: "emaar-elements-delhi"
+[00:13:17.110] Server  WARN    Image with src "/images/project-2.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:13:17.464] Browser WARN    Image with src "/images/project-2.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:13:17.464] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:13:17.464] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:13:17.464] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:13:17.464] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:13:18.455] Server  LOG     [HomePage] Starting data fetch...
+[00:13:18.455] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:3000/api/v1"
+[00:13:18.456] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?limit=12&offset=0
+[00:13:18.457] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?limit=20&offset=0
+[00:13:18.458] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/developers?limit=6&offset=0
+[00:13:18.468] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?limit=12&offset=0 -> 200
+[00:13:18.468] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?limit=20&offset=0 -> 200
+[00:13:18.469] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/developers?limit=6&offset=0 -> 200
+[00:13:18.470] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?limit=12&offset=0
+[00:13:18.470] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?limit=20&offset=0
+[00:13:18.470] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/developers?limit=6&offset=0
+[00:13:18.470] Server  LOG     [HomePage] Data fetched successfully
+[00:13:18.470] Server  LOG     [HomePage] Properties: 11
+[00:13:18.471] Server  LOG     [HomePage] Locations: 12
+[00:13:18.471] Server  LOG     [HomePage] Developers: 4
+[00:13:18.677] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:13:18.677] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:13:19.671] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:13:19.825] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:13:26.004] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:13:26.009] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:13:26.018] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:13:26.019] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:13:26.019] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:13:26.019] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:13:26.019] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:13:26.023] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=delhi -> 200
+[00:13:26.024] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=delhi
+[00:13:26.024] Server  LOG     [DEBUG] getLocationBySlug(delhi): {}
+[00:13:26.024] Server  LOG     [DEBUG] Found matching location with slug: delhi {}
+[00:13:26.032] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0 -> 200
+[00:13:26.032] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450002&limit=12&offset=0
+[00:13:26.032] Server  LOG     [DEBUG] Raw backend response: "{\n  \"isArray\": true,\n  \"hasData\": false,\n  \"hasPagination\": false,\n  \"responseKeys\": \"is array\"\n}"
+[00:13:26.032] Server  LOG     [DEBUG] Returning normalized response: {}
+[00:13:30.107] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=gurgaon
+[00:13:30.113] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=gurgaon
+[00:13:30.121] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=gurgaon -> 200
+[00:13:30.122] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=gurgaon
+[00:13:30.122] Server  LOG     [DEBUG] getLocationBySlug(gurgaon): {}
+[00:13:30.122] Server  LOG     [DEBUG] Found matching location with slug: gurgaon {}
+[00:13:30.122] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450006&limit=12&offset=0
+[00:13:30.126] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=gurgaon -> 200
+[00:13:30.127] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=gurgaon
+[00:13:30.127] Server  LOG     [DEBUG] getLocationBySlug(gurgaon): {}
+[00:13:30.127] Server  LOG     [DEBUG] Found matching location with slug: gurgaon {}
+[00:13:30.143] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450006&limit=12&offset=0 -> 200
+[00:13:30.144] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450006&limit=12&offset=0
+[00:13:30.144] Server  LOG     [DEBUG] Raw backend response: "{\n  \"isArray\": true,\n  \"hasData\": false,\n  \"hasPagination\": false,\n  \"responseKeys\": \"is array\"\n}"
+[00:13:30.144] Server  LOG     [DEBUG] Returning normalized response: {}
+[00:13:34.304] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:13:34.309] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:13:34.318] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:13:34.318] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:13:34.319] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:13:34.319] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:13:34.319] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:13:34.323] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:13:34.324] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:13:34.324] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:13:34.324] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:13:34.331] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0 -> 200
+[00:13:34.331] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:13:34.332] Server  LOG     [DEBUG] Raw backend response: "{\n  \"isArray\": true,\n  \"hasData\": false,\n  \"hasPagination\": false,\n  \"responseKeys\": \"is array\"\n}"
+[00:13:34.332] Server  LOG     [DEBUG] Returning normalized response: {}
+[00:13:34.384] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/placeholder.jpg" "received" null
+[00:15:11.712] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:11.714] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:15:11.714] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:11.714] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:15:11.714] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:15:11.715] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:15:11.716] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0 -> 200
+[00:15:11.716] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:15:11.716] Server  LOG     [DEBUG] Raw backend response: "{\n  \"isArray\": true,\n  \"hasData\": false,\n  \"hasPagination\": false,\n  \"responseKeys\": \"is array\"\n}"
+[00:15:11.716] Server  LOG     [DEBUG] Returning normalized response: {}
+[00:15:11.738] Server  ERROR   ⨯ Error: Attempted to call createMotionComponent() from the server but createMotionComponent is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
+[00:15:11.738] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:11.739] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:15:11.740] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:11.740] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:15:11.740] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:15:12.262] Browser ERROR   uncaughtError: Error: Attempted to call createMotionComponent() from the server but createMotionComponent is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
+[00:15:27.328] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:15:27.343] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:27.345] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:27.366] Server  LOG     ✓ Compiled in 84ms
+[00:15:27.383] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:15:27.383] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:27.383] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:15:27.383] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:15:27.383] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:15:27.386] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:15:27.386] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:27.386] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:15:27.386] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:15:27.437] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0 -> 200
+[00:15:27.437] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:15:27.437] Server  LOG     [DEBUG] Raw backend response: "{\n  \"isArray\": true,\n  \"hasData\": false,\n  \"hasPagination\": false,\n  \"responseKeys\": \"is array\"\n}"
+[00:15:27.437] Server  LOG     [DEBUG] Returning normalized response: {}
+[00:15:27.474] Server  ERROR   ⨯ Error: Attempted to call createMotionComponent() from the server but createMotionComponent is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
+[00:15:27.488] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:27.496] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:15:27.497] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:27.497] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:15:27.497] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:15:28.271] Browser ERROR   uncaughtError: Error: Attempted to call createMotionComponent() from the server but createMotionComponent is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
+[00:15:37.401] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:15:37.464] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:37.468] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:37.503] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:15:37.504] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:37.504] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:15:37.504] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:15:37.505] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:15:37.509] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:15:37.509] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:37.509] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:15:37.509] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:15:37.525] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0 -> 200
+[00:15:37.526] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:15:37.526] Server  LOG     [DEBUG] Raw backend response: "{\n  \"isArray\": true,\n  \"hasData\": false,\n  \"hasPagination\": false,\n  \"responseKeys\": \"is array\"\n}"
+[00:15:37.527] Server  LOG     [DEBUG] Returning normalized response: {}
+[00:15:37.577] Server  ERROR   ⨯ Error: Attempted to call createMotionComponent() from the server but createMotionComponent is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
+[00:15:37.589] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:37.595] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:15:37.595] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:37.595] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:15:37.595] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:15:38.269] Browser ERROR   uncaughtError: Error: Attempted to call createMotionComponent() from the server but createMotionComponent is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
+[00:15:38.848] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:38.850] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:38.869] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:15:38.869] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:38.869] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:15:38.869] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:15:38.869] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:15:38.871] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:15:38.872] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:38.872] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:15:38.872] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:15:38.875] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0 -> 200
+[00:15:38.875] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:15:38.875] Server  LOG     [DEBUG] Raw backend response: "{\n  \"isArray\": true,\n  \"hasData\": false,\n  \"hasPagination\": false,\n  \"responseKeys\": \"is array\"\n}"
+[00:15:38.875] Server  LOG     [DEBUG] Returning normalized response: {}
+[00:15:38.900] Server  ERROR   ⨯ Error: Attempted to call createMotionComponent() from the server but createMotionComponent is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
+[00:15:38.908] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:38.915] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:15:38.915] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:15:38.915] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:15:38.915] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:15:39.262] Browser ERROR   uncaughtError: Error: Attempted to call createMotionComponent() from the server but createMotionComponent is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
+[00:17:27.565] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:17:27.570] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:17:27.597] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:17:27.608] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:17:27.608] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:17:27.608] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:17:27.608] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:17:27.609] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:17:27.613] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:17:27.614] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:17:27.614] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:17:27.614] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:17:27.628] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0 -> 200
+[00:17:27.629] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:17:27.630] Server  LOG     [DEBUG] Raw backend response: "{\n  \"isArray\": true,\n  \"hasData\": false,\n  \"hasPagination\": false,\n  \"responseKeys\": \"is array\"\n}"
+[00:17:27.630] Server  LOG     [DEBUG] Returning normalized response: {}
+[00:17:27.677] Server  WARN    Image with src "https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?w=1200&h=600&fit=crop" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:17:27.873] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/placeholder.jpg" "received" null
+[00:17:27.899] Server  LOG     ✓ Compiled in 7ms
+[00:17:28.014] Browser WARN    Image with src "https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?w=1200&h=600&fit=crop" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:17:28.014] Browser WARN    Image with src "/images/placeholder.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:18:41.720] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:18:41.724] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:18:41.745] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:18:41.746] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:18:41.746] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:18:41.746] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:18:41.746] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:18:41.749] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/locations?slug=new-delhi -> 200
+[00:18:41.749] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/locations?slug=new-delhi
+[00:18:41.749] Server  LOG     [DEBUG] getLocationBySlug(new-delhi): {}
+[00:18:41.749] Server  LOG     [DEBUG] Found matching location with slug: new-delhi {}
+[00:18:41.759] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0 -> 200
+[00:18:41.760] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties?locationId=550e8400-e29b-41d4-a716-446655450005&limit=12&offset=0
+[00:18:41.760] Server  LOG     [DEBUG] Raw backend response: "{\n  \"isArray\": true,\n  \"hasData\": false,\n  \"hasPagination\": false,\n  \"responseKeys\": \"is array\"\n}"
+[00:18:41.760] Server  LOG     [DEBUG] Returning normalized response: {}
+[00:18:41.850] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/placeholder.jpg" "received" null
+[00:18:42.020] Browser WARN    Image with src "https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?w=1200&h=600&fit=crop" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:18:42.020] Browser WARN    Image with src "/images/placeholder.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:18:51.467] Server  LOG     [ProjectDetail] Fetching property from backend: emaar-elements-delhi
+[00:18:51.467] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:18:51.473] Server  LOG     [ProjectDetail] Fetching property from backend: emaar-elements-delhi
+[00:18:51.473] Server  LOG     [API] Fetching: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:18:51.487] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi -> 200
+[00:18:51.488] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:18:51.488] Server  LOG     [ProjectDetail] ✅ Backend property found: "emaar-elements-delhi"
+[00:18:51.495] Server  LOG     [API] Response: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi -> 200
+[00:18:51.495] Server  LOG     [API] Success: GET http://localhost:3000/api/v1/properties/emaar-elements-delhi
+[00:18:51.496] Server  LOG     [ProjectDetail] ✅ Backend property found: "emaar-elements-delhi"
+[00:18:51.851] Browser WARN    Image with src "/images/project-2.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:18:51.851] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:18:51.851] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:18:51.851] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:18:51.851] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:18:53.249] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/placeholder.jpg" "received" null

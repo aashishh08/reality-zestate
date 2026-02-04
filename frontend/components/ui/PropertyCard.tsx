@@ -12,6 +12,10 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({ project, index }: PropertyCardProps) {
+  if (!project?.slug || !project?.title) {
+    return null; // Don't render if essential fields are missing
+  }
+
   return (
     <Link href={`/projects/${project.slug}`}>
       <motion.div

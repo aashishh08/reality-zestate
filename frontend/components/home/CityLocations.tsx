@@ -3,10 +3,37 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { cityLocations } from "@/lib/categories";
+import { Location } from "@/lib";
 import { MapPin, ArrowRight } from "lucide-react";
 
-export function CityLocations() {
+interface CityLocationsProps {
+  locations: Location[];
+}
+
+// Sample images for locations
+const locationImages: Record<string, string> = {
+  delhi: "/images/category-delhi.jpg",
+  gurgaon: "/images/category-gurugram.jpg",
+  noida: "/images/category-noida.jpg",
+};
+
+const locationSubtitles: Record<string, string> = {
+  delhi: "Premium Properties in the Capital",
+  gurgaon: "Luxury Living in Millennium City",
+  noida: "Modern Residences in NCR",
+};
+
+export function CityLocations({ locations }: CityLocationsProps) {
+  // Filter for city-level locations only
+  const cities = locations.filter(l => l.type === "city").slice(0, 6);
+
+  // If no cities found, use any locations as fallback
+  const displayCities = cities.length > 0 ? cities : locations.slice(0, 6);
+
+  if (!displayCities || displayCities.length === 0) {
+    return null;
+  }
+
   return (
     <section className="py-24 bg-[#F5F5F0]">
       <div className="max-w-7xl mx-auto px-6">
@@ -24,14 +51,14 @@ export function CityLocations() {
             Browse by <span className="text-gold-dark">Location</span>
           </h2>
           <p className="mt-4 text-zinc-600 max-w-2xl mx-auto">
-            Explore our exclusive properties across India's most prime locations, 
+            Explore our exclusive properties across India's most prime locations,
             offering the best in luxury and connectivity.
           </p>
         </motion.div>
 
         {/* Grid Layout - Scalable for more locations */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {cityLocations.map((location, index) => (
+          {displayCities.map((location, index) => (
             <motion.div
               key={location.id}
               initial={{ opacity: 0, y: 30 }}
@@ -39,33 +66,33 @@ export function CityLocations() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Link href={`/category/${location.slug}`} className="block h-full">
+              <Link href={`/location/${location.slug}`} className="block h-full">
                 <div className="group relative h-[300px] overflow-hidden rounded-xl shadow-lg cursor-pointer transform transition-all duration-300 hover:-translate-y-2">
                   <Image
-                    src={location.image}
+                    src={locationImages[location.slug.toLowerCase()] || "/images/category-delhi.jpg"}
                     alt={location.name}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  
+
                   {/* Content */}
                   <div className="absolute bottom-0 left-0 right-0 p-6">
                     <div className="flex items-center gap-2 mb-2 text-gold/90 text-sm font-medium tracking-wide uppercase">
-                        <MapPin className="w-4 h-4" />
-                        <span>{location.name}</span>
+                      <MapPin className="w-4 h-4" />
+                      <span>{location.name}</span>
                     </div>
                     <h3 className="text-2xl font-serif font-bold text-white mb-2">
-                      {location.title}
+                      {location.name}
                     </h3>
                     <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-300">
-                        <p className="text-white/80 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                            {location.subtitle}
-                        </p>
-                        <span className="inline-flex items-center gap-2 text-white text-sm font-medium border-b border-gold pb-1">
-                            View Properties <ArrowRight className="w-4 h-4" />
-                        </span>
+                      <p className="text-white/80 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        {locationSubtitles[location.slug.toLowerCase()] || `Luxury properties in ${location.name}`}
+                      </p>
+                      <span className="inline-flex items-center gap-2 text-white text-sm font-medium border-b border-gold pb-1">
+                        View Properties <ArrowRight className="w-4 h-4" />
+                      </span>
                     </div>
                   </div>
                 </div>
