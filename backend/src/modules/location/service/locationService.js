@@ -26,10 +26,13 @@ class LocationService {
     return location;
   }
 
-  async listLocations(type = null) {
+  async listLocations(type = null, slug = null) {
     const where = {};
     if (type) {
       where.type = type;
+    }
+    if (slug) {
+      where.slug = slug;
     }
 
     const locations = await Location.findAll({

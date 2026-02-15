@@ -148,9 +148,17 @@ export async function fetchFromAPI<T = any>(
     }
 
     console.log(`[API] Success: ${method} ${url}`);
+    console.log(`[API] Response data type:`, typeof data, `Is array:`, Array.isArray(data));
+    console.log(`[API] Response data:`, data);
 
-    // Return data from successful response
-    return data.data as T;
+    // Return data from successful response  
+    // API response structure: { success: true, data: T }
+    // If data is already the payload (array/object), return it
+    // Otherwise extract from data.data
+    if (Array.isArray(data)) {
+      return data as T;
+    }
+    return (data.data || data) as T;
   } catch (error) {
     console.error(`[API] Error: ${method} ${url}`, error instanceof Error ? error.message : error);
     

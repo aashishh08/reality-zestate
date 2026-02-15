@@ -13,9 +13,9 @@ class LocationController {
   }
 
   async listLocations(req, res) {
-    const { type } = req.query;
+    const { type, slug } = req.query;
 
-    const locations = await locationService.listLocations(type);
+    const locations = await locationService.listLocations(type, slug);
 
     res.json({
       success: true,

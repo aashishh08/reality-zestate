@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getProjectBySlug, getAllProjectSlugs } from "@/lib/data";
-import { getPropertyBySlug } from "@/lib/api/properties";
+import { getPropertyBySlug, getProperties } from "@/lib/api/properties";
 import { transformBackendPropertyToProject } from "@/lib/property-transformer";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingActions } from "@/components/layout/FloatingActions";
 import { ProjectHero } from "@/components/project/ProjectHero";
-import { ProjectHighlights } from "@/components/project/ProjectHighlights";
 import { ProjectOverview } from "@/components/project/ProjectOverview";
 import { ProjectAmenities } from "@/components/project/ProjectAmenities";
 import { ProjectFloorPlans } from "@/components/project/ProjectFloorPlans";
@@ -17,7 +16,6 @@ import { ProjectFAQ } from "@/components/project/ProjectFAQ";
 import { ProjectSpecifications } from "@/components/project/ProjectSpecifications";
 import { ProjectPaymentPlan } from "@/components/project/ProjectPaymentPlan";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { ProjectMeta } from "@/components/project/ProjectMeta";
 import { ProjectGallery } from "@/components/project/ProjectGallery";
 import { ProjectKeyTakeaways } from "@/components/project/ProjectKeyTakeaways";
 import { ProjectBookingCTA } from "@/components/project/ProjectBookingCTA";
@@ -27,45 +25,95 @@ import ProjectNavigation from "@/components/project/ProjectNavigation";
 import { projects } from "@/lib/data";
 
 /**
- * Fetch property data from backend or fallback to hardcoded data (Grand Arch)
- * This allows ALL properties to use the same unified layout
+ * Fetch property data from backend or fallback to hardcoded data
+ * @param slug - Property slug to fetch
+ * @returns Property data transformed into Project format
  */
 async function getPropertyData(slug: string) {
   try {
-    console.log(`[ProjectDetail] Fetching property from backend: ${slug}`);
+    console.log(`[ProjectPage] Attempting to fetch from backend: ${slug}`);
     const backendProperty = await getPropertyBySlug(slug);
-    console.log(`[ProjectDetail] ✅ Backend property found:`, backendProperty.slug);
+    
+    console.log(`[ProjectPage] ✅ Successfully fetched from backend: ${backendProperty.slug}`);
     return transformBackendPropertyToProject(backendProperty);
   } catch (error) {
-    console.log(`[ProjectDetail] Backend not available, fallback to hardcoded data`);
-    // Fallback to hardcoded Grand Arch data
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.warn(`[ProjectPage] Backend fetch failed for '${slug}': ${errorMessage}`);
+    console.log(`[ProjectPage] Attempting fallback to hardcoded data...`);
+    
+    // Fallback to hardcoded data
     const hardcodedProject = getProjectBySlug(slug);
-    return hardcodedProject;
+    
+    if (hardcodedProject) {
+      console.log(`[ProjectPage] ✅ Found hardcoded data for: ${slug}`);
+      return hardcodedProject;
+    }
+    
+    console.error(`[ProjectPage] ❌ Property not found in backend or hardcoded data: ${slug}`);
+    return null;
   }
 }
 
-// Generate static params for all projects (ISR)
+/**
+ * Generate static params for all projects (ISR)
+ * Fetches from backend API and merges with hardcoded slugs
+ */
 export async function generateStaticParams() {
-  const slugs = getAllProjectSlugs();
-  return slugs.map((slug) => ({
-    slug: slug,
-  }));
+  try {
+    console.log('[generateStaticParams] Fetching properties from backend API...');
+    
+    // Fetch published properties from backend
+    const backendProperties = await getProperties({ isPublished: true }, false);
+    const backendSlugs = backendProperties.map((p) => p.slug);
+    
+    console.log(`[generateStaticParams] Backend slugs (${backendSlugs.length}):`, backendSlugs);
+    
+    // Get hardcoded slugs as fallback
+    const hardcodedSlugs = getAllProjectSlugs();
+    console.log(`[generateStaticParams] Hardcoded slugs (${hardcodedSlugs.length}):`, hardcodedSlugs);
+    
+    // Combine and deduplicate
+    const allSlugs = [...new Set([...backendSlugs, ...hardcodedSlugs])];
+    
+    console.log(`[generateStaticParams] ✅ Total unique slugs: ${allSlugs.length}`);
+    
+    return allSlugs.map((slug) => ({ slug }));
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error(`[generateStaticParams] ❌ Backend API error: ${errorMessage}`);
+    console.log('[generateStaticParams] Using hardcoded slugs only as fallback');
+    
+    // Fallback to hardcoded slugs if backend is unavailable
+    const slugs = getAllProjectSlugs();
+    return slugs.map((slug) => ({ slug }));
+  }
 }
 
-// Generate metadata for SEO
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+/**
+ * Generate metadata for SEO
+ */
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: Promise<{ slug: string }> 
+}): Promise<Metadata> {
   const { slug } = await params;
   const project = await getPropertyData(slug);
   
   if (!project) {
     return {
-      title: "Project Not Found",
+      title: "Project Not Found | Opulnz Abode",
+      description: "The requested property could not be found.",
     };
   }
 
+  const description = project.details?.overview.content[0] 
+    || project.description 
+    || `Luxury ${project.type} in ${project.location}. ${project.price}`;
+
   return {
     title: `${project.title} - ${project.location} | Opulnz Abode`,
-    description: project.details?.overview.content[0] || `Luxury ${project.type} in ${project.location}. ${project.price}`,
+    description,
     keywords: [
       project.title,
       project.location,
@@ -76,7 +124,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     ],
     openGraph: {
       title: project.title,
-      description: project.details?.subtitle || project.description || "",
+      description: project.details?.subtitle || description,
       images: [project.details?.heroImage || project.image],
     },
   };
@@ -84,6 +132,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 // ISR Configuration - Revalidate every hour
 export const revalidate = 3600;
+
+// Allow rendering pages for slugs not in generateStaticParams
+export const dynamicParams = true;
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -120,8 +171,18 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {/* Hero Section */}
       {details && <ProjectHero project={project} />}
       
-      {/* Meta Information Bar */}
-      {details?.highlights && <ProjectMeta highlights={details.highlights} />}
+      {/* Introduction Text Section */}
+      {details?.introText && (
+        <section className="py-12 bg-[#F5F0E8]">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
+              <p className="text-[#2C2416] text-lg leading-relaxed text-center">
+                {details.introText}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
       
       {/* Gallery + Key Takeaways Section */}
       {details?.gallery && details?.keyTakeaways && (
@@ -131,12 +192,18 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               {/* Left: Gallery */}
               <div>
                 <h2 className="text-3xl font-serif text-[#2C2416] mb-6">Project Gallery</h2>
-                <ProjectGallery images={details.gallery} />
+                <ProjectGallery 
+                  images={details.gallery} 
+                  videoUrl={details.videoUrl}
+                />
               </div>
               
-              {/* Right: Key Takeaways */}
+              {/* Right: Key Takeaways with Highlights */}
               <div>
-                <ProjectKeyTakeaways takeaways={details.keyTakeaways} />
+                <ProjectKeyTakeaways 
+                  takeaways={details.keyTakeaways}
+                  highlights={details.highlights}
+                />
               </div>
             </div>
           </div>
@@ -153,10 +220,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       
       {/* Navigation Bar */}
       <ProjectNavigation />
-      {details?.whyInvest && (
+      
+      {/* Investment Analysis - Always show if details exist */}
+      {details && (
         <ProjectWhyInvest 
-          reasons={details.whyInvest} 
-          videoUrl={details.videoUrl} 
+          reasons={details.whyInvest || []} 
+          videoUrl={details.videoUrl}
+          detailedAnalysis={details.investmentAnalysis}
         />
       )}
       

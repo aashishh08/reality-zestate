@@ -40,6 +40,7 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
 
   // Extract data from sections
   const heroData = sectionMap.get("heroImage") || {};
+  const introData = sectionMap.get("intro") || {};
   const highlightsData = sectionMap.get("highlights") || {};
   const amenitiesData = sectionMap.get("amenities") || { items: [] };
   const keyTakeawaysData = sectionMap.get("keyTakeaways") || { takeaways: [] };
@@ -49,6 +50,7 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
   return {
     heroImage: heroData.image || "/images/project-1.jpg",
     subtitle: heroData.subtitle || "Luxury Development",
+    introText: introData.text || "Discover premium living at its finest with world-class amenities, strategic location, and architectural excellence. Experience a lifestyle that redefines luxury and comfort in every detail.",
     
     highlights: {
       landArea: highlightsData.landArea || "N/A",
@@ -85,9 +87,24 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
 
     keyTakeaways: keyTakeawaysData.takeaways || [],
 
-    whyInvest: whyInvestData.reasons || [],
+    whyInvest: whyInvestData.reasons || [
+      { title: "Prime Location Appreciation", subtitle: "Strategic location with high appreciation potential", icon: "location" },
+      { title: "Brand Legacy", subtitle: "Trusted developer with proven track record", icon: "award" },
+      { title: "Investment Returns", subtitle: "Strong rental yield and capital appreciation", icon: "trending" },
+      { title: "Market Timing", subtitle: "Pre-launch pricing advantage", icon: "calendar" }
+    ],
 
-    videoUrl: "",
+    investmentAnalysis: whyInvestData.analysis || `This premium development offers a compelling investment opportunity in one of the most sought-after locations. The strategic location ensures excellent connectivity to major business hubs, entertainment zones, and essential amenities.
+
+The property benefits from being developed by a renowned builder with a proven track record in delivering quality projects on time. This reputation provides investors with the assurance of transparent dealings and reliable possession timelines.
+
+From an appreciation perspective, the micro-market has demonstrated consistent growth over the years. The area's infrastructure development, coupled with limited supply of premium properties, creates a favorable environment for long-term capital appreciation. Historical data suggests properties in this corridor have delivered superior returns compared to other residential zones.
+
+Rental yield potential is another attractive aspect of this investment. The location commands premium rents due to its proximity to corporate offices and lifestyle amenities. Luxury apartments in this area typically generate rental yields in the range of 3-4%, providing steady cash flow for investors.
+
+The current pre-launch phase presents an optimal entry point from a pricing perspective. Early investors typically benefit from significant appreciation by the time of possession, as seen in previous projects in similar locations. Combined with flexible payment plans, this timing advantage enhances the overall investment proposition.`,
+
+    videoUrl: "https://www.youtube.com/embed/ScMzIvxBSi4",
 
     location: {
       mapImage: "/images/grand-arch-location.jpg",

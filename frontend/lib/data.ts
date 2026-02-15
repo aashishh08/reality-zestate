@@ -14,6 +14,7 @@ export const projects: Project[] = [
         details: {
             heroImage: "/images/project-1.jpg",
             subtitle: "Ultra-Luxury Residences on Golf Course Extension Road",
+            introText: "Experience unparalleled luxury living at The Grand Arch, where architectural excellence meets modern comfort. This prestigious development offers world-class amenities and an exclusive lifestyle in the heart of Gurgaon's prime location.",
             highlights: {
                 landArea: "15 Acres",
                 possession: "Dec 2027",
@@ -38,14 +39,21 @@ export const projects: Project[] = [
                 "Exclusive Clubhouse with Spa & Wellness Center"
             ],
             whyInvest: [
-                "Prime location on Golf Course Extension Road with excellent connectivity to Cyber City and IGI Airport",
-                "Developed by renowned builder with 25+ years of track record in luxury real estate",
-                "High appreciation potential - Area has shown 12% YoY growth in property values",
-                "Limited inventory of only 200 residences ensuring exclusivity and privacy",
-                "World-class amenities including Olympic-size swimming pool, tennis courts, and spa",
-                "RERA approved project with transparent payment plans and assured possession timeline"
+                { title: "Prime Location Appreciation", subtitle: "Golf Course Road is Gurgaon's most prestigious address, consistently delivering 12-15% annual appreciation", icon: "location" },
+                { title: "DLF Brand Legacy", subtitle: "With over 75 years of excellence, DLF has delivered more than 25 premium residential projects", icon: "award" },
+                { title: "Rental Yield Potential", subtitle: "Luxury apartments on Golf Course Road command 3.5-4.5%, with 4 BHK units fetching ₹3-5 lakhs per month", icon: "trending" },
+                { title: "Market Timing Advantage", subtitle: "Entering at the pre-launch stage provides significant pricing advantages. Historical data shows 25-30% appreciation by possession", icon: "calendar" }
             ],
-            videoUrl: "",
+            investmentAnalysis: `Investing in DLF The Dahlias represents a unique opportunity to own a piece of Gurgaon's most prestigious real estate. Located on the coveted Golf Course Road, this development combines the trusted legacy of DLF with an unmatched location that has consistently delivered exceptional returns for investors.
+
+The Golf Course Road corridor has emerged as the undisputed premium residential destination in the National Capital Region. Over the past decade, properties in this micro-market have appreciated at an average annual rate of 12-15%, significantly outperforming other luxury corridors in Delhi NCR. The limited availability of developable land along this stretch ensures that supply remains constrained, creating a favorable demand-supply dynamic that supports sustained price growth.
+
+DLF Limited brings over 75 years of real estate excellence to this project. As India's largest commercial real estate developer, DLF has delivered more than 25 premium residential projects across the country. Their proven track record in creating lifestyle-defining communities, combined with unparalleled post-sales service, ensures that your investment is backed by a name synonymous with quality and reliability.
+
+From a rental perspective, The Dahlias offers compelling returns. Luxury apartments on Golf Course Road command among the highest rental yields in the NCR, typically ranging from 3.5-4.5%. Four-bedroom units in premium developments in this location fetch monthly rentals between ₹3-5 lakhs, ensuring strong cash flows for investors seeking rental income.
+
+The pre-launch phase represents an optimal entry point from a pricing perspective. Historical analysis of DLF's premium projects indicates that properties purchased at the pre-launch stage have appreciated by 25-30% by the time of possession, delivering substantial capital gains to early investors. Combined with flexible payment plans and the developer's reputation for timely delivery, this timing advantage significantly enhances the overall investment proposition.`,
+            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
             overview: {
                 heading: "Overview of the Project",
                 content: [

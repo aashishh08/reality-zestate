@@ -68,6 +68,7 @@ export interface Project extends Property {
   details?: {
     heroImage: string;
     subtitle: string;
+    introText?: string;
     highlights: {
       landArea?: string;
       possession?: string;
@@ -102,7 +103,8 @@ export interface Project extends Property {
     usp?: string[];
     gallery?: string[];
     keyTakeaways?: string[];
-    whyInvest?: string[];
+    whyInvest?: string[] | Array<{ title: string; subtitle: string; icon?: string }>;
+    investmentAnalysis?: string;
     videoUrl?: string;
     specifications?: {
       category: string;
