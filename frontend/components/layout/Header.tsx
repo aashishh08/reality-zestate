@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, Phone, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SCROLL_THRESHOLDS } from "@/lib/constants";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -22,10 +23,19 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > SCROLL_THRESHOLDS.HEADER);
+          ticking = false;
+        });
+      }
     };
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

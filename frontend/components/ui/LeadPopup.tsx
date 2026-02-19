@@ -68,7 +68,9 @@ export function LeadPopup({ source = "lead-popup" }: { source?: string }) {
         })
       );
     } catch (error) {
-      console.error("Failed to submit lead:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Failed to submit lead:", error);
+      }
     }
   };
 
@@ -76,7 +78,7 @@ export function LeadPopup({ source = "lead-popup" }: { source?: string }) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-60 flex items-center justify-center pointer-events-none">
+      <div className={`fixed inset-0 z-[${UI_CONFIG.Z_INDEX.POPUP}] flex items-center justify-center pointer-events-none`}>
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -105,7 +107,7 @@ export function LeadPopup({ source = "lead-popup" }: { source?: string }) {
 
           <div className="flex flex-col md:flex-row">
             {/* Left Image Side - Hidden on mobile */}
-            <div className="hidden md:block w-2/5 bg-black relative overflow-hidden">
+            <div style={{ width: `${UI_CONFIG.MODAL_IMAGE_WIDTH_PERCENTAGE}%` }} className="hidden md:block bg-black relative overflow-hidden">
               <div className="absolute inset-0 opacity-60">
                 {/* Abstract Pattern or Image */}
                 <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2700&auto=format&fit=crop')] bg-cover bg-center" />
@@ -118,7 +120,7 @@ export function LeadPopup({ source = "lead-popup" }: { source?: string }) {
             </div>
 
             {/* Form Side */}
-            <div className="w-full md:w-3/5 p-8">
+            <div className="w-full md:flex-1 p-8">
               {submitStatus === "success" ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}

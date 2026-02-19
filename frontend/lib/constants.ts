@@ -48,4 +48,23 @@ export const UI_CONFIG = {
     type: 'spring' as const,
     duration: 0.5,
   },
+  Z_INDEX: {
+    POPUP: 60,
+    FLOATING_ACTIONS: 40,
+    HEADER: 50,
+    MODAL_BACKDROP: 50,
+  },
+  MODAL_IMAGE_WIDTH_PERCENTAGE: 40,
+} as const;
+
+// UI Scroll Thresholds
+export const SCROLL_THRESHOLDS = {
+  HEADER: 50,
+  SCROLL_TO_TOP_BUTTON: 400,
+} as const;
+
+// Contact Information
+export const CONTACT_INFO = {
+  WHATSAPP_NUMBER: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+919999999999',
+  PHONE_NUMBER: process.env.NEXT_PUBLIC_PHONE_NUMBER || '+919999999999',
 } as const;

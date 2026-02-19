@@ -16,19 +16,11 @@ export const revalidate = 3600;
 
 async function getHomePageData() {
   try {
-    console.log('[HomePage] Starting data fetch...');
-    console.log('[HomePage] API_BASE_URL:', process.env.NEXT_PUBLIC_API_URL);
-    
     const [properties, locations, developers] = await Promise.all([
       getProperties({ limit: 12, offset: 0 }, 3600),
       getLocations({ limit: 20, offset: 0 }, 3600),
       getDevelopers({ limit: 6, offset: 0 }, 3600),
     ]);
-
-    console.log('[HomePage] Data fetched successfully');
-    console.log('[HomePage] Properties:', properties?.length);
-    console.log('[HomePage] Locations:', locations?.length);
-    console.log('[HomePage] Developers:', developers?.length);
 
     return {
       properties: properties || [],
@@ -37,9 +29,9 @@ async function getHomePageData() {
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error("[HomePage] Failed to fetch homepage data:", errorMessage);
-    console.error("[HomePage] Error type:", error instanceof Error ? error.constructor.name : typeof error);
-    console.error("[HomePage] Full error stack:", error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error("[HomePage] Failed to fetch data:", errorMessage);
+    }
     
     // Return empty arrays so homepage still renders
     return {

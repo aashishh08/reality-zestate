@@ -3,7 +3,7 @@
  * Provides a clean interface for components to handle async operations
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useMemo } from 'react';
 import { ApiError } from '../api-client';
 import { API_CONFIG, ERROR_MESSAGES } from '../constants';
 
@@ -15,7 +15,7 @@ export interface UseApiCallState<T> {
 }
 
 interface UseApiCallOptions {
-  onSuccess?: (data: any) => void;
+  onSuccess?: (data: unknown) => void;
   onError?: (error: string) => void;
   retryCount?: number;
   timeout?: number;
@@ -41,7 +41,14 @@ export function useApiCall<T>(
 
   const lastCallRef = useRef<(() => Promise<T>) | null>(null);
   const retryCountRef = useRef(0);
-  const maxRetriesRef = useRef(options.retryCount ?? API_CONFIG.RETRY_ATTEMPTS);
+  
+  // Memoize options to prevent unnecessary dependency changes
+  const memoizedOptions = useMemo(() => ({
+    retryCount: options.retryCount ?? API_CONFIG.RETRY_ATTEMPTS,
+    onSuccess: options.onSuccess,
+    onError: options.onError,
+    timeout: options.timeout,
+  }), [options.retryCount, options.onSuccess, options.onError, options.timeout]);
 
   const reset = useCallback(() => {
     setState({
@@ -72,14 +79,14 @@ export function useApiCall<T>(
           error: null,
         }));
         retryCountRef.current = 0;
-        options.onSuccess?.(result);
+        memoizedOptions.onSuccess?.(result);
         return result;
       } catch (error) {
         const errorMessage = getErrorMessage(error);
         
         // Check if we should retry
         const isRetryable = isRetryableError(error);
-        if (isRetryable && retryCountRef.current < maxRetriesRef.current) {
+        if (isRetryable && retryCountRef.current < memoizedOptions.retryCount) {
           retryCountRef.current += 1;
           setState((prev) => ({
             ...prev,
@@ -88,7 +95,7 @@ export function useApiCall<T>(
             isRetrying: true,
           }));
 
-          // Wait before retrying
+          // Wait before retrying with exponential backoff
           await new Promise((resolve) =>
             setTimeout(resolve, API_CONFIG.RETRY_DELAY * retryCountRef.current)
           );
@@ -103,11 +110,11 @@ export function useApiCall<T>(
           error: errorMessage,
           isRetrying: false,
         }));
-        options.onError?.(errorMessage);
+        memoizedOptions.onError?.(errorMessage);
         return null;
       }
     },
-    [options]
+    [memoizedOptions]
   );
 
   const retryLastCall = useCallback(async (): Promise<T | null> => {

@@ -7,10 +7,15 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 const API_TIMEOUT = parseInt(process.env.NEXT_PUBLIC_API_TIMEOUT || '30000');
 
+// Enable debug logging only in development
+const isDev = process.env.NODE_ENV === 'development';
+const debugLog = (...args: any[]) => isDev && console.log('[API]', ...args);
+const debugError = (...args: any[]) => isDev && console.error('[API]', ...args);
+
 export interface ApiRequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
-  body?: any;
+  body?: Record<string, any>;
   token?: string;
   timeout?: number;
   cache?: RequestCache;
@@ -20,7 +25,7 @@ export interface ApiRequestOptions {
   };
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   message?: string;
@@ -34,14 +39,31 @@ export interface ApiResponse<T = any> {
 
 export interface ApiError extends Error {
   status?: number;
-  data?: any;
+  data?: ApiResponse;
+}
+
+/**
+ * Validates and normalizes API response
+ */
+function normalizeResponse<T>(data: unknown): T {
+  // If it's already a plain object/array, return as-is
+  if (data && typeof data === 'object') {
+    // If it's an ApiResponse wrapper, extract the data
+    if ('success' in data && 'data' in data) {
+      const response = data as ApiResponse<T>;
+      return response.data ?? (data as T);
+    }
+    // If it's an array or object, return directly
+    return data as T;
+  }
+  return data as T;
 }
 
 /**
  * Main API request function
  * All API calls should go through this function
  */
-export async function fetchFromAPI<T = any>(
+export async function fetchFromAPI<T = unknown>(
   endpoint: string,
   options: ApiRequestOptions = {}
 ): Promise<T> {
@@ -95,7 +117,7 @@ export async function fetchFromAPI<T = any>(
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-    console.log(`[API] Fetching: ${method} ${url}`);
+    debugLog(`Fetching: ${method} ${url}`);
 
     // Make the request
     const response = await fetch(url, {
@@ -106,7 +128,7 @@ export async function fetchFromAPI<T = any>(
     // Clear timeout
     clearTimeout(timeoutId);
 
-    console.log(`[API] Response: ${method} ${url} -> ${response.status}`);
+    debugLog(`Response: ${method} ${url} -> ${response.status}`);
 
     // Check if response is JSON
     const contentType = response.headers.get('content-type');
@@ -125,9 +147,9 @@ export async function fetchFromAPI<T = any>(
     }
 
     // Parse response
-    let data: ApiResponse<T>;
+    let data: unknown;
     try {
-      data = await response.json() as ApiResponse<T>;
+      data = await response.json();
     } catch (parseError) {
       // If JSON parsing fails, it's likely an error page
       const error: ApiError = new Error(
@@ -139,28 +161,20 @@ export async function fetchFromAPI<T = any>(
 
     // Handle error responses
     if (!response.ok) {
+      const apiResponse = data as ApiResponse;
       const error: ApiError = new Error(
-        data.message || `API Error: ${response.statusText}`
+        apiResponse.message || `API Error: ${response.statusText}`
       );
       error.status = response.status;
-      error.data = data;
+      error.data = apiResponse;
       throw error;
     }
 
-    console.log(`[API] Success: ${method} ${url}`);
-    console.log(`[API] Response data type:`, typeof data, `Is array:`, Array.isArray(data));
-    console.log(`[API] Response data:`, data);
+    debugLog(`Success: ${method} ${url}`);
 
-    // Return data from successful response  
-    // API response structure: { success: true, data: T }
-    // If data is already the payload (array/object), return it
-    // Otherwise extract from data.data
-    if (Array.isArray(data)) {
-      return data as T;
-    }
-    return (data.data || data) as T;
+    return normalizeResponse<T>(data);
   } catch (error) {
-    console.error(`[API] Error: ${method} ${url}`, error instanceof Error ? error.message : error);
+    debugError(`Error: ${method} ${url}`, error instanceof Error ? error.message : error);
     
     // Handle network errors
     if (error instanceof TypeError && error.message === 'Failed to fetch') {
@@ -189,7 +203,7 @@ export async function fetchFromAPI<T = any>(
     const apiError: ApiError = new Error(
       error instanceof Error ? error.message : 'An unknown error occurred'
     );
-    apiError.data = error;
+    apiError.data = error as ApiResponse;
     throw apiError;
   }
 }

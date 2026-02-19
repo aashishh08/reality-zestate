@@ -33,25 +33,21 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
  */
 async function getPropertyData(slug: string) {
   try {
-    console.log(`[ProjectPage] Attempting to fetch from backend: ${slug}`);
     const backendProperty = await getPropertyBySlug(slug);
-
-    console.log(`[ProjectPage] ✅ Successfully fetched from backend: ${backendProperty.slug}`);
     return transformBackendPropertyToProject(backendProperty);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.warn(`[ProjectPage] Backend fetch failed for '${slug}': ${errorMessage}`);
-    console.log(`[ProjectPage] Attempting fallback to hardcoded data...`);
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`[ProjectPage] Backend fetch failed for '${slug}': ${errorMessage}`);
+    }
 
     // Fallback to hardcoded data
     const hardcodedProject = getProjectBySlug(slug);
 
     if (hardcodedProject) {
-      console.log(`[ProjectPage] ✅ Found hardcoded data for: ${slug}`);
       return hardcodedProject;
     }
 
-    console.error(`[ProjectPage] ❌ Property not found in backend or hardcoded data: ${slug}`);
     return null;
   }
 }
@@ -62,28 +58,22 @@ async function getPropertyData(slug: string) {
  */
 export async function generateStaticParams() {
   try {
-    console.log('[generateStaticParams] Fetching properties from backend API...');
-
     // Fetch published properties from backend
     const backendProperties = await getProperties({ isPublished: true }, false);
     const backendSlugs = backendProperties.map((p) => p.slug);
 
-    console.log(`[generateStaticParams] Backend slugs (${backendSlugs.length}):`, backendSlugs);
-
     // Get hardcoded slugs as fallback
     const hardcodedSlugs = getAllProjectSlugs();
-    console.log(`[generateStaticParams] Hardcoded slugs (${hardcodedSlugs.length}):`, hardcodedSlugs);
 
     // Combine and deduplicate
     const allSlugs = [...new Set([...backendSlugs, ...hardcodedSlugs])];
 
-    console.log(`[generateStaticParams] ✅ Total unique slugs: ${allSlugs.length}`);
-
     return allSlugs.map((slug) => ({ slug }));
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error(`[generateStaticParams] ❌ Backend API error: ${errorMessage}`);
-    console.log('[generateStaticParams] Using hardcoded slugs only as fallback');
+    if (process.env.NODE_ENV === 'development') {
+      console.error(`[generateStaticParams] Backend API error: ${errorMessage}`);
+    }
 
     // Fallback to hardcoded slugs if backend is unavailable
     const slugs = getAllProjectSlugs();
