@@ -186,50 +186,54 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      {/* Gallery + Key Takeaways Section */}
-      {details?.gallery && details?.keyTakeaways && (
-        <section className="py-20 bg-white" id="gallery">
+      {/* Key Takeaways Section - Before Why Invest */}
+      {details?.keyTakeaways && (
+        <section className="py-20 bg-[#F5F0E8]" id="key-takeaways">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-2 gap-12">
-              {/* Left: Gallery */}
-              <div>
-                <SectionHeading centered={false}>Project Gallery</SectionHeading>
-                <ProjectGallery
-                  images={details.gallery}
-                  videoUrl={details.videoUrl}
-                />
-              </div>
+            <SectionHeading>Key Takeaways</SectionHeading>
 
-              {/* Right: Key Takeaways with Highlights */}
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Left Side - Key Takeaways Box */}
               <div>
                 <ProjectKeyTakeaways
                   takeaways={details.keyTakeaways}
                   highlights={details.highlights}
                 />
               </div>
+
+              {/* Right Side - Scrollable Text */}
+              <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
+                <h3 className="text-xl font-serif font-bold text-[#2C2416] mb-6">Project Details</h3>
+                <div className="h-[400px] overflow-y-auto pr-4 scrollbar-custom">
+                  <div className="space-y-4 text-gray-700 leading-relaxed">
+                    {details.keyTakeawaysDescription ? (
+                      <p className="text-[15px]">{details.keyTakeawaysDescription}</p>
+                    ) : (
+                      <>
+                        <p className="text-[15px]">
+                          This ultra-luxury residential development represents a pinnacle of architectural excellence and contemporary living. Meticulously designed by renowned architects, every detail has been crafted to provide an unparalleled lifestyle experience.
+                        </p>
+                        <p className="text-[15px]">
+                          The project features state-of-the-art amenities including a world-class spa, infinity pool, private cinema, fitness center with personal training facilities, and lush landscaped gardens designed by international experts.
+                        </p>
+                        <p className="text-[15px]">
+                          Located in one of the most sought-after micro-markets, the property offers excellent connectivity to business districts, premium shopping destinations, fine dining establishments, and international schools.
+                        </p>
+                        <p className="text-[15px]">
+                          Each residence is designed with open layouts, premium finishes, high ceilings, and panoramic views. Smart home integration and sustainable building practices ensure a modern, eco-conscious living environment.
+                        </p>
+                        <p className="text-[15px]">
+                          Developed by a trusted builder with a proven track record of delivering luxury projects on time and with exceptional quality standards. Transparent communication and investor satisfaction are our core commitments.
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
       )}
-
-      {/* Overview */}
-      <div id="overview">
-        {details?.overview && <ProjectOverview overview={details.overview} />}
-
-        {/* Booking CTA Section - Under Overview */}
-        <ProjectBookingCTA projectTitle={project.title} />
-      </div>
-
-      {/* Master Plan */}
-      {details?.masterPlan && (
-        <ProjectMasterPlan
-          masterPlanImage={details.masterPlan}
-          description={details.masterPlanDescription}
-        />
-      )}
-
-      {/* Navigation Bar */}
-      <ProjectNavigation />
 
       {/* Investment Analysis - Always show if details exist */}
       {details && (
@@ -240,35 +244,55 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         />
       )}
 
+      {/* Overview */}
+      <div id="overview">
+        {details?.overview && <ProjectOverview overview={details.overview} />}
+      </div>
+
+      {/* Gallery Section */}
+      {details?.gallery && (
+        <section className="py-20 bg-white" id="gallery">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <SectionHeading centered={false}>Project Gallery</SectionHeading>
+            <ProjectGallery
+              images={details.gallery}
+              videoUrl={details.videoUrl}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Master Plan */}
+      {details?.masterPlan && (
+        <ProjectMasterPlan
+          masterPlanImage={details.masterPlan}
+          description={details.masterPlanDescription}
+        />
+      )}
+
+      {/* Location Advantage */}
+      {details?.location && <ProjectLocation location={details.location} />}
+
+      {/* Contact Form #1 - First Appearance */}
+      <ProjectBookingCTA projectTitle={project.title} />
+
       {/* Amenities */}
       {details?.amenities && details.amenities.length > 0 && (
         <ProjectAmenities amenities={details.amenities} />
       )}
 
-      {/* Floor Plans */}
+      {/* Residences (Floor Plans) */}
       {details?.floorPlans && details.floorPlans.length > 0 && (
         <ProjectFloorPlans floorPlans={details.floorPlans} />
       )}
-
-      {/* Location */}
-      {details?.location && <ProjectLocation location={details.location} />}
-
-
-
-      {/* Design & Construction Team */}
-      {details?.team && <ProjectTeam team={details.team} />}
-
-
 
       {/* Payment Plans */}
       {details?.paymentPlans && details.paymentPlans.length > 0 && (
         <ProjectPaymentPlan paymentPlans={details.paymentPlans} />
       )}
 
-      {/* USP */}
-      {details?.usp && details.usp.length > 0 && (
-        <ProjectUSP usp={details.usp} projectTitle={project.title} />
-      )}
+      {/* Design & Construction Team */}
+      {details?.team && <ProjectTeam team={details.team} />}
 
       {/* FAQs */}
       {details && details.faqs && details.faqs.length > 0 ? (
@@ -302,6 +326,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {similarProjects.length > 0 && (
         <ProjectSimilar projects={similarProjects} />
       )}
+
+      {/* Contact Form #2 - Final */}
+      <ProjectBookingCTA projectTitle={project.title} />
 
       <Footer />
       <FloatingActions />

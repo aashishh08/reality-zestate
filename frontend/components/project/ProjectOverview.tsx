@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, ChevronDown } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { Check } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 interface ProjectOverviewProps {
@@ -14,41 +13,45 @@ interface ProjectOverviewProps {
 }
 
 export function ProjectOverview({ overview }: ProjectOverviewProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (contentRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
-        // Hide indicator when scrolled to bottom
-        setShowScrollIndicator(scrollTop + clientHeight < scrollHeight - 10);
-      }
-    };
-
-    const currentRef = contentRef.current;
-    if (currentRef) {
-      currentRef.addEventListener('scroll', handleScroll);
-      // Check initial state
-      handleScroll();
-    }
-
-    return () => {
-      if (currentRef) {
-        currentRef.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
-
   return (
     <section className="py-24 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Left: Project Image with Overlapping Key Features Card (Previously Right) */}
+          {/* Left: Scrollable Text Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            <SectionHeading centered={false}>{overview.heading}</SectionHeading>
+
+            {/* Scrollable Content Container - Why Invest Style */}
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
+              <div className="h-[400px] overflow-y-auto pr-4 scrollbar-custom">
+                <div className="space-y-6 text-gray-700 leading-relaxed">
+                  {overview.content.map((paragraph, index) => (
+                    <motion.p
+                      key={index}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="text-[15px]"
+                    >
+                      {paragraph}
+                    </motion.p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right: Project Image with Overlapping Key Features Card */}
           {overview.features && overview.features.length > 0 && (
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
@@ -172,98 +175,6 @@ export function ProjectOverview({ overview }: ProjectOverviewProps) {
             </motion.div>
           )}
 
-          {/* Right: Scrollable Text Content (Previously Left) */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
-            <SectionHeading centered={false}>{overview.heading}</SectionHeading>
-
-            {/* Scrollable Content Container */}
-            <div className="relative">
-              <div
-                ref={contentRef}
-                className={`
-                  space-y-4 text-zinc-700 leading-relaxed
-                  overflow-y-auto pr-4
-                  transition-all duration-500 ease-in-out
-                  ${isExpanded ? 'max-h-[600px]' : 'max-h-[400px]'}
-                  
-                  /* Custom Scrollbar Styling */
-                  scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gold/30
-                  hover:scrollbar-thumb-gold/50
-                  
-                  /* For browsers that don't support scrollbar-thin */
-                  [&::-webkit-scrollbar]:w-2
-                  [&::-webkit-scrollbar-track]:bg-transparent
-                  [&::-webkit-scrollbar-track]:rounded-full
-                  [&::-webkit-scrollbar-thumb]:bg-gold/30
-                  [&::-webkit-scrollbar-thumb]:rounded-full
-                  [&::-webkit-scrollbar-thumb]:border-2
-                  [&::-webkit-scrollbar-thumb]:border-transparent
-                  hover:[&::-webkit-scrollbar-thumb]:bg-gold/50
-                  
-                  /* Firefox */
-                  [scrollbar-width:thin]
-                  [scrollbar-color:rgba(201,169,97,0.3)_transparent]
-                `}
-              >
-                {overview.content.map((paragraph, index) => (
-                  <motion.p
-                    key={index}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="text-lg"
-                  >
-                    {paragraph}
-                  </motion.p>
-                ))}
-              </div>
-
-              {/* Gradient Fade at Bottom */}
-              {showScrollIndicator && !isExpanded && (
-                <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
-              )}
-
-              {/* Scroll Indicator */}
-              {showScrollIndicator && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-gold-dark pointer-events-none"
-                >
-                  <span className="text-xs font-medium uppercase tracking-wider">Scroll for more</span>
-                  <motion.div
-                    animate={{ y: [0, 4, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    <ChevronDown className="w-5 h-5" />
-                  </motion.div>
-                </motion.div>
-              )}
-            </div>
-
-            {/* Expand/Collapse Button */}
-            <motion.button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="mt-6 px-6 py-3 bg-white border-2 border-gold/30 text-gold-dark font-semibold rounded-sm hover:bg-gold/5 hover:border-gold transition-all duration-300 flex items-center gap-2 group"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span>{isExpanded ? 'Show Less' : 'Read More'}</span>
-              <motion.div
-                animate={{ rotate: isExpanded ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ChevronDown className="w-4 h-4" />
-              </motion.div>
-            </motion.button>
-          </motion.div>
         </div>
       </div>
     </section>

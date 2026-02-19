@@ -81,4 +81,27 @@ body {
   .scrollbar-thumb-gold\/50 {
     scrollbar-color: rgba(201, 169, 97, 0.5) transparent;
   }
+
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: #C9A961 #f1f1f1;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: #C9A961;
+    border-radius: 10px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: #A88B4A;
+  }
 }
