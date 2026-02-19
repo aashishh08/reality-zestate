@@ -3,6 +3,7 @@
 import { SplitSection } from "@/components/ui/SplitSection";
 import { CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 
 interface ProjectAmenitiesProps {
   amenities: {
@@ -16,22 +17,16 @@ export function ProjectAmenities({ amenities }: ProjectAmenitiesProps) {
   return (
     <section id="amenities" className="py-24 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-black mb-4">
+        <div className="text-center mb-16">
+          <SectionHeading>
             World-Class <span className="text-gold-dark">Amenities</span>
-          </h2>
+          </SectionHeading>
           <p className="text-zinc-600 max-w-2xl mx-auto">
             Experience a lifestyle of unparalleled luxury with our curated selection of premium amenities.
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
           {amenities.map((amenity, index) => (
             <motion.div
               key={amenity.name}
@@ -39,7 +34,7 @@ export function ProjectAmenities({ amenities }: ProjectAmenitiesProps) {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: index * 0.05 }}
               viewport={{ once: true }}
-              className="relative aspect-[4/5] overflow-hidden rounded-xl group cursor-pointer shadow-lg hover:shadow-xl transition-all"
+              className="relative aspect-square overflow-hidden rounded-xl group cursor-pointer shadow-lg hover:shadow-xl transition-all"
             >
               {/* Background Image */}
               <div 

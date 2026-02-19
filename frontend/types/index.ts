@@ -75,6 +75,7 @@ export interface Project extends Property {
       rera?: string;
       configuration?: string;
       priceRange?: string;
+      totalUnits?: string;
     };
     overview: {
       heading: string;
@@ -93,11 +94,19 @@ export interface Project extends Property {
       image: string;
     }[];
     masterPlan?: string;
+    masterPlanDescription?: string[];
     location?: {
+      address?: string;
       mapImage?: string;
       nearby: {
         category: string;
-        items: { name: string; distance: string }[];
+        icon?: string;
+        items: { name: string; distance?: string }[];
+      }[];
+      connectivity?: {
+        place: string;
+        icon?: string;
+        time: string;
       }[];
     };
     usp?: string[];
@@ -118,7 +127,22 @@ export interface Project extends Property {
     faqs?: {
       question: string;
       answer: string;
+      category?: string;
     }[];
+    team?: {
+      members: {
+        role: string;
+        name: string;
+        color: string;
+        description: string;
+        achievements: string[];
+      }[];
+      highlights?: {
+        title: string;
+        subtitle: string;
+        icon?: string;
+      }[];
+    };
   };
 }
 

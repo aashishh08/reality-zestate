@@ -1,1176 +1,134 @@
-[00:00:00.786] Server  LOG     ✓ Ready in 635ms
-[00:00:02.185] Server  LOG     [HomePage] Starting data fetch...
-[00:00:02.186] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:00:02.187] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:02.202] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:02.202] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:02.251] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:00:02.252] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:02.252] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:02.253] Server  LOG     [API] Response data: {}
-[00:00:02.254] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:00:02.255] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:02.255] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:02.255] Server  LOG     [API] Response data: {}
-[00:00:02.255] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:00:02.256] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:02.256] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:02.256] Server  LOG     [API] Response data: {}
-[00:00:02.256] Server  LOG     [HomePage] Data fetched successfully
-[00:00:02.256] Server  LOG     [HomePage] Properties: 6
-[00:00:02.256] Server  LOG     [HomePage] Locations: 11
-[00:00:02.256] Server  LOG     [HomePage] Developers: 5
-[00:00:02.323] Server  WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:00:00.932] Server  LOG     ✓ Ready in 758ms
+[00:00:01.280] Server  LOG     [HomePage] Starting data fetch...
+[00:00:01.280] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
+[00:00:01.281] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
+[00:00:01.294] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
+[00:00:01.294] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
+[00:00:01.341] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
+[00:00:01.342] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
+[00:00:01.342] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:00:01.342] Server  LOG     [API] Response data: {}
+[00:00:01.343] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
+[00:00:01.343] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
+[00:00:01.343] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:00:01.344] Server  LOG     [API] Response data: {}
+[00:00:01.345] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
+[00:00:01.345] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
+[00:00:01.345] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:00:01.346] Server  LOG     [API] Response data: {}
+[00:00:01.346] Server  LOG     [HomePage] Data fetched successfully
+[00:00:01.346] Server  LOG     [HomePage] Properties: 6
+[00:00:01.346] Server  LOG     [HomePage] Locations: 11
+[00:00:01.346] Server  LOG     [HomePage] Developers: 5
+[00:00:01.406] Server  WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:02.379] Server  LOG     [ProjectPage] Attempting to fetch from backend: lodha-supreme-delhi
-[00:00:02.379] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/lodha-supreme-delhi
-[00:00:02.382] Server  LOG     [ProjectPage] Attempting to fetch from backend: lodha-supreme-delhi
-[00:00:02.382] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/lodha-supreme-delhi
-[00:00:02.420] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/lodha-supreme-delhi -> 404
-[00:00:02.420] Server  ERROR   [API] Error: GET http://localhost:4002/api/v1/properties/lodha-supreme-delhi "Property not found"
-[00:00:02.420] Server  WARN    [ProjectPage] Backend fetch failed for 'lodha-supreme-delhi': Property not found
-[00:00:02.420] Server  LOG     [ProjectPage] Attempting fallback to hardcoded data...
-[00:00:02.420] Server  ERROR   [ProjectPage] ❌ Property not found in backend or hardcoded data: lodha-supreme-delhi
-[00:00:02.430] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/lodha-supreme-delhi -> 404
-[00:00:02.431] Server  ERROR   [API] Error: GET http://localhost:4002/api/v1/properties/lodha-supreme-delhi "Property not found"
-[00:00:02.431] Server  WARN    [ProjectPage] Backend fetch failed for 'lodha-supreme-delhi': Property not found
-[00:00:02.431] Server  LOG     [ProjectPage] Attempting fallback to hardcoded data...
-[00:00:02.431] Server  ERROR   [ProjectPage] ❌ Property not found in backend or hardcoded data: lodha-supreme-delhi
-[00:00:02.556] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:02.718] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:00:01.583] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:01.763] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:02.729] Server  LOG     [HomePage] Starting data fetch...
-[00:00:02.729] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:00:02.729] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:02.730] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:02.730] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:02.736] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:00:02.736] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:00:02.737] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:00:02.737] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:02.737] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:02.738] Server  LOG     [API] Response data: {}
-[00:00:02.738] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:02.738] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:02.738] Server  LOG     [API] Response data: {}
-[00:00:02.738] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:02.738] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:02.747] Server  LOG     [API] Response data: {}
-[00:00:02.748] Server  LOG     [HomePage] Data fetched successfully
-[00:00:02.748] Server  LOG     [HomePage] Properties: 6
-[00:00:02.748] Server  LOG     [HomePage] Locations: 11
-[00:00:02.748] Server  LOG     [HomePage] Developers: 5
-[00:00:02.913] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:03.620] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:00:01.763] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:01.763] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:01.763] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:01.763] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:14.722] Server  LOG     [HomePage] Starting data fetch...
+[00:00:14.722] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
+[00:00:14.723] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
+[00:00:14.724] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
+[00:00:14.725] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
+[00:00:14.733] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
+[00:00:14.733] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
+[00:00:14.733] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
+[00:00:14.734] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
+[00:00:14.734] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:00:14.735] Server  LOG     [API] Response data: {}
+[00:00:14.735] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
+[00:00:14.735] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:00:14.736] Server  LOG     [API] Response data: {}
+[00:00:14.736] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
+[00:00:14.736] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:00:14.736] Server  LOG     [API] Response data: {}
+[00:00:14.737] Server  LOG     [HomePage] Data fetched successfully
+[00:00:14.737] Server  LOG     [HomePage] Properties: 6
+[00:00:14.737] Server  LOG     [HomePage] Locations: 11
+[00:00:14.737] Server  LOG     [HomePage] Developers: 5
+[00:00:15.067] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:03.620] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:03.620] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:03.620] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:03.620] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:03.620] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:55.451] Server  LOG     [HomePage] Starting data fetch...
-[00:00:55.452] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:00:55.453] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:55.455] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:55.457] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:55.469] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:00:55.469] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:00:55.470] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:00:55.470] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:55.470] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:55.471] Server  LOG     [API] Response data: {}
-[00:00:55.471] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:55.471] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:55.472] Server  LOG     [API] Response data: {}
-[00:00:55.472] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:55.472] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:55.472] Server  LOG     [API] Response data: {}
-[00:00:55.472] Server  LOG     [HomePage] Data fetched successfully
-[00:00:55.472] Server  LOG     [HomePage] Properties: 6
-[00:00:55.472] Server  LOG     [HomePage] Locations: 11
-[00:00:55.473] Server  LOG     [HomePage] Developers: 5
-[00:00:55.681] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:00:15.067] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:15.067] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:20.694] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:20.694] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:23.174] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:29.109] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
+[00:00:29.110] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:00:29.114] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
+[00:00:29.114] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:00:29.150] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
+[00:00:29.150] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:00:29.150] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:00:29.150] Server  LOG     [API] Response data: {}
+[00:00:29.151] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
+[00:00:29.155] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
+[00:00:29.155] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:00:29.156] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:00:29.156] Server  LOG     [API] Response data: {}
+[00:00:29.156] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
+[00:00:29.156] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:00:29.293] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:55.681] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:55.681] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:56.319] Server  LOG     [HomePage] Starting data fetch...
-[00:00:56.320] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:00:56.320] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:56.321] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:56.321] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:56.328] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:00:56.328] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:00:56.329] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:00:56.329] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:56.330] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:56.330] Server  LOG     [API] Response data: {}
-[00:00:56.330] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:56.330] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:56.330] Server  LOG     [API] Response data: {}
-[00:00:56.330] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:56.331] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:56.331] Server  LOG     [API] Response data: {}
-[00:00:56.331] Server  LOG     [HomePage] Data fetched successfully
-[00:00:56.331] Server  LOG     [HomePage] Properties: 6
-[00:00:56.331] Server  LOG     [HomePage] Locations: 11
-[00:00:56.331] Server  LOG     [HomePage] Developers: 5
-[00:00:56.719] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:00:29.399] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:29.399] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:34.449] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:02:01.745] Server  LOG     ✓ Compiled in 531ms
+[00:03:06.640] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
+[00:03:06.640] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:03:06.646] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
+[00:03:06.647] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:03:06.716] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
+[00:03:06.717] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:03:06.717] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:03:06.717] Server  LOG     [API] Response data: {}
+[00:03:06.717] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
+[00:03:06.717] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:03:06.735] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
+[00:03:06.735] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:03:06.736] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:03:06.736] Server  LOG     [API] Response data: {}
+[00:03:06.736] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
+[00:03:06.846] Server  WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:56.719] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:56.719] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:57.342] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:57.475] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:01:00.078] Server  LOG     [ProjectPage] Attempting to fetch from backend: godrej-aqua-mumbai
-[00:01:00.079] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:01:00.083] Server  LOG     [ProjectPage] Attempting to fetch from backend: godrej-aqua-mumbai
-[00:01:00.083] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:01:00.116] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai -> 200
-[00:01:00.117] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:01:00.117] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:01:00.118] Server  LOG     [API] Response data: {}
-[00:01:00.118] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: godrej-aqua-mumbai
-[00:01:00.124] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai -> 200
-[00:01:00.125] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:01:00.126] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:01:00.126] Server  LOG     [API] Response data: {}
-[00:01:00.126] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: godrej-aqua-mumbai
-[00:01:00.127] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:01:00.269] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:03:07.267] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:01:00.530] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:01:00.530] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:01:00.530] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:01:02.595] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:01:02.728] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:31:31.528] Server  LOG     ✓ Compiled in 672ms
-[00:31:45.313] Server  LOG     [ProjectPage] Attempting to fetch from backend: godrej-aqua-mumbai
-[00:31:45.313] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:31:45.317] Server  LOG     [ProjectPage] Attempting to fetch from backend: godrej-aqua-mumbai
-[00:31:45.317] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:31:45.461] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai -> 200
-[00:31:45.461] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:31:45.462] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:31:45.462] Server  LOG     [API] Response data: {}
-[00:31:45.462] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: godrej-aqua-mumbai
-[00:31:45.514] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai -> 200
-[00:31:45.514] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:31:45.514] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:31:45.514] Server  LOG     [API] Response data: {}
-[00:31:45.514] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: godrej-aqua-mumbai
-[00:31:45.515] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:31:45.539] Server  WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:03:07.267] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:03:07.267] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:03:08.668] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:03:30.605] Server  LOG     ✓ Compiled in 29ms
+[00:03:41.005] Server  LOG     ✓ Compiled in 32ms
+[00:03:42.477] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
+[00:03:42.477] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:03:42.481] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
+[00:03:42.481] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:03:42.624] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
+[00:03:42.625] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:03:42.625] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:03:42.625] Server  LOG     [API] Response data: {}
+[00:03:42.625] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
+[00:03:42.625] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:03:42.630] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
+[00:03:42.630] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
+[00:03:42.630] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:03:42.630] Server  LOG     [API] Response data: {}
+[00:03:42.631] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
+[00:03:42.664] Server  WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:31:46.011] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:03:43.062] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:31:46.011] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:31:46.011] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:31:46.011] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:31:46.011] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:31:52.197] Server  LOG     [HomePage] Starting data fetch...
-[00:31:52.197] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:31:52.197] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:31:52.197] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:31:52.198] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:31:52.205] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:31:52.206] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:31:52.207] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:31:52.207] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:31:52.207] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:31:52.208] Server  LOG     [API] Response data: {}
-[00:31:52.208] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:31:52.208] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:31:52.208] Server  LOG     [API] Response data: {}
-[00:31:52.209] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:31:52.209] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:31:52.209] Server  LOG     [API] Response data: {}
-[00:31:52.209] Server  LOG     [HomePage] Data fetched successfully
-[00:31:52.209] Server  LOG     [HomePage] Properties: 6
-[00:31:52.209] Server  LOG     [HomePage] Locations: 11
-[00:31:52.209] Server  LOG     [HomePage] Developers: 5
-[00:31:52.229] Server  LOG     [HomePage] Starting data fetch...
-[00:31:52.229] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:31:52.229] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:31:52.230] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:31:52.230] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:31:52.238] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:31:52.238] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:31:52.238] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:31:52.240] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:31:52.240] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:31:52.240] Server  LOG     [API] Response data: {}
-[00:31:52.240] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:31:52.240] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:31:52.241] Server  LOG     [API] Response data: {}
-[00:31:52.241] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:31:52.241] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:31:52.241] Server  LOG     [API] Response data: {}
-[00:31:52.241] Server  LOG     [HomePage] Data fetched successfully
-[00:31:52.242] Server  LOG     [HomePage] Properties: 6
-[00:31:52.242] Server  LOG     [HomePage] Locations: 11
-[00:31:52.242] Server  LOG     [HomePage] Developers: 5
-[00:31:52.330] Server  LOG     [ProjectPage] Attempting to fetch from backend: godrej-aqua-mumbai
-[00:31:52.330] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:31:52.331] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai -> 200
-[00:31:52.332] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:31:52.332] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:31:52.333] Server  LOG     [API] Response data: {}
-[00:31:52.333] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: godrej-aqua-mumbai
-[00:31:52.340] Server  ERROR   ⨯ ReferenceError: ProjectMeta is not defined
-[00:31:52.341] Server  LOG     [ProjectPage] Attempting to fetch from backend: godrej-aqua-mumbai
-[00:31:52.341] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:31:52.342] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai -> 200
-[00:31:52.342] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:31:52.342] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:31:52.342] Server  LOG     [API] Response data: {}
-[00:31:52.342] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: godrej-aqua-mumbai
-[00:31:52.342] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:31:52.425] Server  LOG     ✓ Compiled in 12ms
-[00:31:52.462] Browser ERROR   uncaughtError: ReferenceError: ProjectMeta is not defined
-[00:32:02.194] Server  LOG     [HomePage] Starting data fetch...
-[00:32:02.194] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:32:02.194] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:32:02.195] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:32:02.196] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:32:02.203] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:32:02.203] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:32:02.204] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:32:02.206] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:32:02.207] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:32:02.207] Server  LOG     [API] Response data: {}
-[00:32:02.207] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:32:02.207] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:32:02.208] Server  LOG     [API] Response data: {}
-[00:32:02.209] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:32:02.209] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:32:02.209] Server  LOG     [API] Response data: {}
-[00:32:02.211] Server  LOG     [HomePage] Data fetched successfully
-[00:32:02.211] Server  LOG     [HomePage] Properties: 6
-[00:32:02.212] Server  LOG     [HomePage] Locations: 11
-[00:32:02.212] Server  LOG     [HomePage] Developers: 5
-[00:32:02.219] Server  LOG     ✓ Compiled in 41ms
-[00:32:02.234] Server  LOG     [HomePage] Starting data fetch...
-[00:32:02.234] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:32:02.234] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:32:02.235] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:32:02.235] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:32:02.243] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:32:02.244] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:32:02.244] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:32:02.245] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:32:02.245] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:32:02.245] Server  LOG     [API] Response data: {}
-[00:32:02.245] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:32:02.245] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:32:02.246] Server  LOG     [API] Response data: {}
-[00:32:02.246] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:32:02.246] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:32:02.246] Server  LOG     [API] Response data: {}
-[00:32:02.246] Server  LOG     [HomePage] Data fetched successfully
-[00:32:02.246] Server  LOG     [HomePage] Properties: 6
-[00:32:02.246] Server  LOG     [HomePage] Locations: 11
-[00:32:02.246] Server  LOG     [HomePage] Developers: 5
-[00:32:02.322] Server  LOG     [ProjectPage] Attempting to fetch from backend: godrej-aqua-mumbai
-[00:32:02.323] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:32:02.333] Server  LOG     [ProjectPage] Attempting to fetch from backend: godrej-aqua-mumbai
-[00:32:02.333] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:32:02.431] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai -> 200
-[00:32:02.432] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:32:02.433] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:32:02.434] Server  LOG     [API] Response data: {}
-[00:32:02.434] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: godrej-aqua-mumbai
-[00:32:02.438] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:32:02.485] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai -> 200
-[00:32:02.485] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai
-[00:32:02.485] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:32:02.485] Server  LOG     [API] Response data: {}
-[00:32:02.485] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: godrej-aqua-mumbai
-[00:32:02.579] Server  WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:32:03.033] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:32:03.033] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:32:03.033] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:32:03.033] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:32:03.033] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:32:57.058] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:32:58.191] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:34:49.526] Server  LOG     [HomePage] Starting data fetch...
-[00:34:49.526] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:34:49.527] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:34:49.528] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:34:49.528] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:34:49.551] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:34:49.552] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:34:49.553] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:34:49.556] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:34:49.556] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:34:49.558] Server  LOG     [API] Response data: {}
-[00:34:49.558] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:34:49.558] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:34:49.559] Server  LOG     [API] Response data: {}
-[00:34:49.559] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:34:49.559] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:34:49.560] Server  LOG     [API] Response data: {}
-[00:34:49.562] Server  LOG     [HomePage] Data fetched successfully
-[00:34:49.562] Server  LOG     [HomePage] Properties: 6
-[00:34:49.562] Server  LOG     [HomePage] Locations: 11
-[00:34:49.562] Server  LOG     [HomePage] Developers: 5
-[00:34:49.785] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:34:49.785] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:34:49.785] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:34:49.785] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:34:51.768] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:34:51.768] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:34:51.777] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:34:51.778] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:34:51.830] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:34:51.832] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:34:51.832] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:34:51.832] Server  LOG     [API] Response data: {}
-[00:34:51.835] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:34:51.840] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:34:51.841] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:34:51.841] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:34:51.841] Server  LOG     [API] Response data: {}
-[00:34:51.842] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:34:54.976] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[00:34:54.976] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:34:54.981] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[00:34:54.981] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:34:54.995] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[00:34:54.996] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:34:54.996] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:34:54.997] Server  LOG     [API] Response data: {}
-[00:34:54.997] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[00:34:55.004] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[00:34:55.005] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:34:55.005] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:34:55.005] Server  LOG     [API] Response data: {}
-[00:34:55.005] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[00:35:02.903] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:35:02.903] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:35:02.908] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:35:02.908] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:35:02.918] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:35:02.919] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:35:02.920] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:35:02.920] Server  LOG     [API] Response data: {}
-[00:35:02.920] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:35:02.927] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:35:02.928] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:35:02.928] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:35:02.928] Server  LOG     [API] Response data: {}
-[00:35:02.928] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:36:00.808] Server  LOG     ✓ Compiled in 227ms
-[00:36:20.866] Server  LOG     ✓ Compiled in 45ms
-[00:37:26.062] Server  LOG     [HomePage] Starting data fetch...
-[00:37:26.062] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:37:26.062] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:26.065] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:26.066] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:26.077] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:37:26.078] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:37:26.078] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:37:26.079] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:26.079] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:26.079] Server  LOG     [API] Response data: {}
-[00:37:26.080] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:26.080] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:26.080] Server  LOG     [API] Response data: {}
-[00:37:26.081] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:26.081] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:26.082] Server  LOG     [API] Response data: {}
-[00:37:26.083] Server  LOG     [HomePage] Data fetched successfully
-[00:37:26.083] Server  LOG     [HomePage] Properties: 6
-[00:37:26.083] Server  LOG     [HomePage] Locations: 11
-[00:37:26.083] Server  LOG     [HomePage] Developers: 5
-[00:37:26.095] Server  LOG     [HomePage] Starting data fetch...
-[00:37:26.095] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:37:26.095] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:26.096] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:26.096] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:26.104] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:37:26.105] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:37:26.106] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:37:26.108] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:26.108] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:26.109] Server  LOG     [API] Response data: {}
-[00:37:26.109] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:26.109] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:26.109] Server  LOG     [API] Response data: {}
-[00:37:26.109] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:26.109] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:26.109] Server  LOG     [API] Response data: {}
-[00:37:26.109] Server  LOG     [HomePage] Data fetched successfully
-[00:37:26.110] Server  LOG     [HomePage] Properties: 6
-[00:37:26.110] Server  LOG     [HomePage] Locations: 11
-[00:37:26.110] Server  LOG     [HomePage] Developers: 5
-[00:37:26.112] Server  LOG     ✓ Compiled in 95ms
-[00:37:26.225] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:37:26.225] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:26.226] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:37:26.227] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:26.227] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:26.227] Server  LOG     [API] Response data: {}
-[00:37:26.227] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:37:26.229] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:37:26.229] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:26.231] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:37:26.232] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:26.232] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:26.232] Server  LOG     [API] Response data: {}
-[00:37:26.232] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:37:26.232] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:37:31.722] Server  LOG     [HomePage] Starting data fetch...
-[00:37:31.722] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:37:31.722] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:31.723] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:31.724] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:31.730] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:37:31.730] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:37:31.730] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:37:31.731] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:31.731] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:31.731] Server  LOG     [API] Response data: {}
-[00:37:31.732] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:31.732] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:31.732] Server  LOG     [API] Response data: {}
-[00:37:31.732] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:31.732] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:31.732] Server  LOG     [API] Response data: {}
-[00:37:31.736] Server  LOG     [HomePage] Data fetched successfully
-[00:37:31.736] Server  LOG     [HomePage] Properties: 6
-[00:37:31.736] Server  LOG     [HomePage] Locations: 11
-[00:37:31.736] Server  LOG     [HomePage] Developers: 5
-[00:37:31.743] Server  LOG     [HomePage] Starting data fetch...
-[00:37:31.743] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:37:31.743] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:31.744] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:31.744] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:31.749] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:37:31.749] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:37:31.750] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:37:31.750] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:31.750] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:31.751] Server  LOG     [API] Response data: {}
-[00:37:31.751] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:31.751] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:31.752] Server  LOG     [API] Response data: {}
-[00:37:31.752] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:31.752] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:31.752] Server  LOG     [API] Response data: {}
-[00:37:31.752] Server  LOG     [HomePage] Data fetched successfully
-[00:37:31.752] Server  LOG     [HomePage] Properties: 6
-[00:37:31.752] Server  LOG     [HomePage] Locations: 11
-[00:37:31.752] Server  LOG     [HomePage] Developers: 5
-[00:37:31.757] Server  LOG     ✓ Compiled in 32ms
-[00:37:31.833] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:37:31.833] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:31.836] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:37:31.837] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:31.837] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:31.837] Server  LOG     [API] Response data: {}
-[00:37:31.838] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:37:31.840] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:37:31.841] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:31.841] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:37:31.841] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:31.841] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:31.842] Server  LOG     [API] Response data: {}
-[00:37:31.842] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:37:31.842] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:37:56.407] Server  LOG     [HomePage] Starting data fetch...
-[00:37:56.407] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:37:56.407] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:56.408] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:56.408] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:56.415] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:37:56.415] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:37:56.415] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:37:56.416] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:56.416] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:56.417] Server  LOG     [API] Response data: {}
-[00:37:56.417] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:56.417] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:56.418] Server  LOG     [API] Response data: {}
-[00:37:56.418] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:56.418] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:56.418] Server  LOG     [API] Response data: {}
-[00:37:56.419] Server  LOG     [HomePage] Data fetched successfully
-[00:37:56.419] Server  LOG     [HomePage] Properties: 6
-[00:37:56.419] Server  LOG     [HomePage] Locations: 11
-[00:37:56.419] Server  LOG     [HomePage] Developers: 5
-[00:37:56.431] Server  LOG     [HomePage] Starting data fetch...
-[00:37:56.431] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:37:56.431] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:56.432] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:56.433] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:56.438] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:37:56.439] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:37:56.439] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:37:56.440] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:37:56.440] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:56.441] Server  LOG     [API] Response data: {}
-[00:37:56.441] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:37:56.441] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:56.441] Server  LOG     [API] Response data: {}
-[00:37:56.441] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:37:56.441] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:56.441] Server  LOG     [API] Response data: {}
-[00:37:56.441] Server  LOG     [HomePage] Data fetched successfully
-[00:37:56.441] Server  LOG     [HomePage] Properties: 6
-[00:37:56.441] Server  LOG     [HomePage] Locations: 11
-[00:37:56.441] Server  LOG     [HomePage] Developers: 5
-[00:37:56.538] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:37:56.538] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:56.548] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:37:56.550] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:56.550] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:56.556] Server  LOG     [API] Response data: {}
-[00:37:56.557] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:37:56.564] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:37:56.565] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:56.567] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:37:56.567] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:37:56.567] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:37:56.572] Server  LOG     [API] Response data: {}
-[00:37:56.573] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:37:56.573] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:38:38.929] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:38:38.929] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:38:38.935] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:38:38.935] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:38:39.109] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:38:39.109] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:38:39.110] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:38:39.110] Server  LOG     [API] Response data: {}
-[00:38:39.110] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:38:39.129] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:38:39.129] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:38:39.129] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:38:39.129] Server  LOG     [API] Response data: {}
-[00:38:39.129] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:38:39.227] Server  WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:38:39.672] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:38:39.672] Browser WARN    Image with src "/images/project-1.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
-Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
-[00:38:39.672] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:38:39.672] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:38:39.672] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:38:39.672] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:38:43.101] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:38:43.880] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:40:06.854] Server  LOG     [HomePage] Starting data fetch...
-[00:40:06.854] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:40:06.856] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:40:06.858] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:40:06.859] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:40:06.871] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:40:06.872] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:40:06.872] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:40:06.874] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:40:06.874] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:40:06.874] Server  LOG     [API] Response data: {}
-[00:40:06.874] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:40:06.874] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:40:06.875] Server  LOG     [API] Response data: {}
-[00:40:06.875] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:40:06.875] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:40:06.875] Server  LOG     [API] Response data: {}
-[00:40:06.875] Server  LOG     [HomePage] Data fetched successfully
-[00:40:06.875] Server  LOG     [HomePage] Properties: 6
-[00:40:06.875] Server  LOG     [HomePage] Locations: 11
-[00:40:06.875] Server  LOG     [HomePage] Developers: 5
-[00:40:06.879] Server  LOG     ✓ Compiled in 47ms
-[00:40:06.891] Server  LOG     [HomePage] Starting data fetch...
-[00:40:06.891] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:40:06.891] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:40:06.892] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:40:06.892] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:40:06.896] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:40:06.898] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:40:06.898] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:40:06.899] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:40:06.899] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:40:06.899] Server  LOG     [API] Response data: {}
-[00:40:06.899] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:40:06.899] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:40:06.900] Server  LOG     [API] Response data: {}
-[00:40:06.900] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:40:06.900] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:40:06.900] Server  LOG     [API] Response data: {}
-[00:40:06.900] Server  LOG     [HomePage] Data fetched successfully
-[00:40:06.901] Server  LOG     [HomePage] Properties: 6
-[00:40:06.901] Server  LOG     [HomePage] Locations: 11
-[00:40:06.901] Server  LOG     [HomePage] Developers: 5
-[00:40:06.972] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:40:06.972] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:40:06.975] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:40:06.976] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:40:06.976] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:40:06.976] Server  LOG     [API] Response data: {}
-[00:40:06.976] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:40:06.981] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:40:06.981] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:40:06.982] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:40:06.982] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:40:06.982] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:40:06.982] Server  LOG     [API] Response data: {}
-[00:40:06.982] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:40:06.983] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:42:46.160] Server  LOG     ✓ Compiled in 203ms
-[00:59:30.866] Server  LOG     ✓ Compiled in 245ms
-[00:59:51.339] Server  LOG     [HomePage] Starting data fetch...
-[00:59:51.339] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:59:51.339] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:59:51.344] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:59:51.345] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:59:51.370] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:59:51.372] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:59:51.373] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:59:51.374] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:59:51.374] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:59:51.375] Server  LOG     [API] Response data: {}
-[00:59:51.375] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:59:51.375] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:59:51.376] Server  LOG     [API] Response data: {}
-[00:59:51.376] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:59:51.376] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:59:51.376] Server  LOG     [API] Response data: {}
-[00:59:51.377] Server  LOG     [HomePage] Data fetched successfully
-[00:59:51.377] Server  LOG     [HomePage] Properties: 6
-[00:59:51.377] Server  LOG     [HomePage] Locations: 11
-[00:59:51.377] Server  LOG     [HomePage] Developers: 5
-[00:59:51.384] Server  LOG     ✓ Compiled in 38ms
-[00:59:51.392] Server  LOG     [HomePage] Starting data fetch...
-[00:59:51.392] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:59:51.392] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:59:51.393] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:59:51.393] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:59:51.400] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:59:51.401] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:59:51.401] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:59:51.402] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:59:51.402] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:59:51.402] Server  LOG     [API] Response data: {}
-[00:59:51.402] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:59:51.402] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:59:51.402] Server  LOG     [API] Response data: {}
-[00:59:51.402] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:59:51.402] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:59:51.402] Server  LOG     [API] Response data: {}
-[00:59:51.403] Server  LOG     [HomePage] Data fetched successfully
-[00:59:51.403] Server  LOG     [HomePage] Properties: 6
-[00:59:51.403] Server  LOG     [HomePage] Locations: 11
-[00:59:51.403] Server  LOG     [HomePage] Developers: 5
-[00:59:51.505] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:59:51.506] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:59:51.507] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:59:51.508] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:59:51.509] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:59:51.509] Server  LOG     [API] Response data: {}
-[00:59:51.509] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:59:51.513] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[00:59:51.513] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:59:51.513] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[00:59:51.520] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[00:59:51.520] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:59:51.520] Server  LOG     [API] Response data: {}
-[00:59:51.520] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[00:59:51.520] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[01:00:17.015] Server  LOG     [HomePage] Starting data fetch...
-[01:00:17.015] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:00:17.015] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:00:17.016] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:00:17.017] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:00:17.022] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:00:17.023] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:00:17.023] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:00:17.026] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:00:17.026] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:00:17.026] Server  LOG     [API] Response data: {}
-[01:00:17.026] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:00:17.026] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:00:17.027] Server  LOG     [API] Response data: {}
-[01:00:17.027] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:00:17.027] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:00:17.027] Server  LOG     [API] Response data: {}
-[01:00:17.027] Server  LOG     [HomePage] Data fetched successfully
-[01:00:17.027] Server  LOG     [HomePage] Properties: 6
-[01:00:17.027] Server  LOG     [HomePage] Locations: 11
-[01:00:17.027] Server  LOG     [HomePage] Developers: 5
-[01:00:17.033] Server  LOG     ✓ Compiled in 56ms
-[01:00:17.041] Server  LOG     [HomePage] Starting data fetch...
-[01:00:17.041] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:00:17.041] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:00:17.042] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:00:17.042] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:00:17.049] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:00:17.049] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:00:17.049] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:00:17.050] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:00:17.051] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:00:17.051] Server  LOG     [API] Response data: {}
-[01:00:17.051] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:00:17.051] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:00:17.052] Server  LOG     [API] Response data: {}
-[01:00:17.052] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:00:17.052] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:00:17.052] Server  LOG     [API] Response data: {}
-[01:00:17.056] Server  LOG     [HomePage] Data fetched successfully
-[01:00:17.056] Server  LOG     [HomePage] Properties: 6
-[01:00:17.056] Server  LOG     [HomePage] Locations: 11
-[01:00:17.056] Server  LOG     [HomePage] Developers: 5
-[01:00:17.131] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[01:00:17.131] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:00:17.137] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[01:00:17.139] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:00:17.139] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:00:17.139] Server  LOG     [API] Response data: {}
-[01:00:17.139] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[01:00:17.142] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[01:00:17.142] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:00:17.143] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[01:00:17.144] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:00:17.144] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:00:17.144] Server  LOG     [API] Response data: {}
-[01:00:17.144] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[01:00:17.144] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[01:01:08.519] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[01:01:08.519] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:01:08.525] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[01:01:08.526] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:01:08.632] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[01:01:08.633] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:01:08.633] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:01:08.633] Server  LOG     [API] Response data: {}
-[01:01:08.633] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[01:01:08.659] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[01:01:08.660] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:01:08.660] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:01:08.660] Server  LOG     [API] Response data: {}
-[01:01:08.660] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[01:01:08.834] Server  WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[01:01:09.286] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[01:01:09.286] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:01:09.286] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:01:09.286] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:01:11.804] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:01:11.804] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:01:11.804] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:01:57.121] Server  LOG     [HomePage] Starting data fetch...
-[01:01:57.122] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:01:57.122] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:01:57.123] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:01:57.124] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:01:57.129] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:01:57.129] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:01:57.129] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:01:57.131] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:01:57.131] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:01:57.131] Server  LOG     [API] Response data: {}
-[01:01:57.131] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:01:57.131] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:01:57.132] Server  LOG     [API] Response data: {}
-[01:01:57.132] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:01:57.132] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:01:57.132] Server  LOG     [API] Response data: {}
-[01:01:57.132] Server  LOG     [HomePage] Data fetched successfully
-[01:01:57.132] Server  LOG     [HomePage] Properties: 6
-[01:01:57.132] Server  LOG     [HomePage] Locations: 11
-[01:01:57.132] Server  LOG     [HomePage] Developers: 5
-[01:01:57.140] Server  LOG     ✓ Compiled in 51ms
-[01:01:57.152] Server  LOG     [HomePage] Starting data fetch...
-[01:01:57.152] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:01:57.152] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:01:57.153] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:01:57.153] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:01:57.157] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:01:57.157] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:01:57.158] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:01:57.160] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:01:57.161] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:01:57.161] Server  LOG     [API] Response data: {}
-[01:01:57.161] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:01:57.161] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:01:57.161] Server  LOG     [API] Response data: {}
-[01:01:57.161] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:01:57.161] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:01:57.161] Server  LOG     [API] Response data: {}
-[01:01:57.162] Server  LOG     [HomePage] Data fetched successfully
-[01:01:57.162] Server  LOG     [HomePage] Properties: 6
-[01:01:57.162] Server  LOG     [HomePage] Locations: 11
-[01:01:57.162] Server  LOG     [HomePage] Developers: 5
-[01:01:57.258] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[01:01:57.258] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:01:57.264] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[01:01:57.265] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:01:57.265] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:01:57.265] Server  LOG     [API] Response data: {}
-[01:01:57.265] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[01:01:57.272] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[01:01:57.272] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:01:57.273] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[01:01:57.274] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:01:57.274] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:01:57.274] Server  LOG     [API] Response data: {}
-[01:01:57.274] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[01:01:57.274] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[01:02:58.323] Server  LOG     ✓ Compiled in 128ms
-[01:03:07.166] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[01:03:07.166] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:03:07.171] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[01:03:07.172] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:03:07.321] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[01:03:07.321] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:03:07.322] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:03:07.322] Server  LOG     [API] Response data: {}
-[01:03:07.322] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[01:03:07.374] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[01:03:07.374] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:03:07.374] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:03:07.374] Server  LOG     [API] Response data: {}
-[01:03:07.374] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[01:03:07.374] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[01:03:07.424] Server  WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[01:03:07.875] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[01:03:07.875] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:07.875] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:07.875] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:10.206] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:10.206] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:10.206] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:21.912] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[01:03:21.912] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:03:21.917] Server  LOG     [ProjectPage] Attempting to fetch from backend: dlf-cyber-hub-gurgaon
-[01:03:21.917] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:03:21.963] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[01:03:21.964] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:03:21.964] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:03:21.966] Server  LOG     [API] Response data: {}
-[01:03:21.966] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[01:03:21.972] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon -> 200
-[01:03:21.972] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/dlf-cyber-hub-gurgaon
-[01:03:21.972] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:03:21.972] Server  LOG     [API] Response data: {}
-[01:03:21.972] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: dlf-cyber-hub-gurgaon
-[01:03:22.361] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[01:03:22.361] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:22.361] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:22.361] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:28.046] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:28.046] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:28.046] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:58.889] Server  LOG     [HomePage] Starting data fetch...
-[01:03:58.890] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:03:58.890] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:03:58.894] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:03:58.895] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:03:58.902] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:03:58.902] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:03:58.903] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:03:58.905] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:03:58.905] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:03:58.906] Server  LOG     [API] Response data: {}
-[01:03:58.906] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:03:58.906] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:03:58.906] Server  LOG     [API] Response data: {}
-[01:03:58.907] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:03:58.907] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:03:58.907] Server  LOG     [API] Response data: {}
-[01:03:58.907] Server  LOG     [HomePage] Data fetched successfully
-[01:03:58.907] Server  LOG     [HomePage] Properties: 6
-[01:03:58.907] Server  LOG     [HomePage] Locations: 11
-[01:03:58.907] Server  LOG     [HomePage] Developers: 5
-[01:03:59.456] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[01:03:59.456] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:03:59.456] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:04:00.822] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:04:03.596] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:04:05.315] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:04:05.315] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:04:05.323] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:04:05.323] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:04:05.368] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:04:05.369] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:04:05.369] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:04:05.369] Server  LOG     [API] Response data: {}
-[01:04:05.369] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:04:05.379] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:04:05.380] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:04:05.380] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:04:05.380] Server  LOG     [API] Response data: {}
-[01:04:05.381] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:04:05.535] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[01:04:05.661] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:04:05.661] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:04:05.661] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:04:08.528] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:04:10.251] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:05:18.949] Server  LOG     ✓ Compiled in 60ms
-[01:05:31.499] Server  LOG     [HomePage] Starting data fetch...
-[01:05:31.499] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:05:31.499] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:05:31.500] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:05:31.501] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:05:31.512] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:05:31.513] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:05:31.513] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:05:31.516] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:05:31.516] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:05:31.516] Server  LOG     [API] Response data: {}
-[01:05:31.517] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:05:31.517] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:05:31.517] Server  LOG     [API] Response data: {}
-[01:05:31.517] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:05:31.517] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:05:31.517] Server  LOG     [API] Response data: {}
-[01:05:31.517] Server  LOG     [HomePage] Data fetched successfully
-[01:05:31.517] Server  LOG     [HomePage] Properties: 6
-[01:05:31.518] Server  LOG     [HomePage] Locations: 11
-[01:05:31.518] Server  LOG     [HomePage] Developers: 5
-[01:05:31.527] Server  LOG     [HomePage] Starting data fetch...
-[01:05:31.527] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:05:31.528] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:05:31.528] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:05:31.528] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:05:31.532] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:05:31.532] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:05:31.532] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:05:31.533] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:05:31.533] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:05:31.533] Server  LOG     [API] Response data: {}
-[01:05:31.533] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:05:31.533] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:05:31.534] Server  LOG     [API] Response data: {}
-[01:05:31.534] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:05:31.534] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:05:31.534] Server  LOG     [API] Response data: {}
-[01:05:31.534] Server  LOG     [HomePage] Data fetched successfully
-[01:05:31.534] Server  LOG     [HomePage] Properties: 6
-[01:05:31.534] Server  LOG     [HomePage] Locations: 11
-[01:05:31.534] Server  LOG     [HomePage] Developers: 5
-[01:05:31.538] Server  LOG     ✓ Compiled in 31ms
-[01:05:31.625] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:05:31.625] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:05:31.627] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:05:31.628] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:05:31.628] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:05:31.629] Server  LOG     [API] Response data: {}
-[01:05:31.629] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:05:31.634] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:05:31.634] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:05:31.635] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:05:31.636] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:05:31.636] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:05:31.636] Server  LOG     [API] Response data: {}
-[01:05:31.637] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:05:31.637] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[01:13:29.110] Server  LOG     ✓ Compiled in 119ms
-[01:13:40.452] Server  LOG     [HomePage] Starting data fetch...
-[01:13:40.452] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:13:40.452] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:13:40.454] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:13:40.456] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:13:40.464] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:13:40.466] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:13:40.466] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:13:40.482] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:13:40.483] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:40.483] Server  LOG     [API] Response data: {}
-[01:13:40.483] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:13:40.483] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:40.484] Server  LOG     [API] Response data: {}
-[01:13:40.484] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:13:40.484] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:40.484] Server  LOG     [API] Response data: {}
-[01:13:40.484] Server  LOG     [HomePage] Data fetched successfully
-[01:13:40.484] Server  LOG     [HomePage] Properties: 6
-[01:13:40.484] Server  LOG     [HomePage] Locations: 11
-[01:13:40.484] Server  LOG     [HomePage] Developers: 5
-[01:13:40.490] Server  LOG     ✓ Compiled in 37ms
-[01:13:40.499] Server  LOG     [HomePage] Starting data fetch...
-[01:13:40.499] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:13:40.499] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:13:40.500] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:13:40.500] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:13:40.503] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:13:40.503] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:13:40.503] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:13:40.506] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:13:40.506] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:40.507] Server  LOG     [API] Response data: {}
-[01:13:40.507] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:13:40.508] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:40.508] Server  LOG     [API] Response data: {}
-[01:13:40.509] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:13:40.509] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:40.509] Server  LOG     [API] Response data: {}
-[01:13:40.509] Server  LOG     [HomePage] Data fetched successfully
-[01:13:40.509] Server  LOG     [HomePage] Properties: 6
-[01:13:40.509] Server  LOG     [HomePage] Locations: 11
-[01:13:40.510] Server  LOG     [HomePage] Developers: 5
-[01:13:40.661] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:13:40.662] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:13:40.665] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:13:40.666] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:13:40.666] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:40.667] Server  LOG     [API] Response data: {}
-[01:13:40.667] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:13:40.670] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:13:40.670] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:13:40.671] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:13:40.672] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:13:40.672] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:40.672] Server  LOG     [API] Response data: {}
-[01:13:40.673] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:13:40.673] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[01:13:55.930] Server  LOG     [HomePage] Starting data fetch...
-[01:13:55.930] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:13:55.930] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:13:55.930] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:13:55.931] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:13:55.934] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:13:55.934] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:13:55.935] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:13:55.936] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:13:55.937] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:55.937] Server  LOG     [API] Response data: {}
-[01:13:55.937] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:13:55.937] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:55.937] Server  LOG     [API] Response data: {}
-[01:13:55.937] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:13:55.937] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:55.937] Server  LOG     [API] Response data: {}
-[01:13:55.938] Server  LOG     [HomePage] Data fetched successfully
-[01:13:55.938] Server  LOG     [HomePage] Properties: 6
-[01:13:55.938] Server  LOG     [HomePage] Locations: 11
-[01:13:55.938] Server  LOG     [HomePage] Developers: 5
-[01:13:55.953] Server  LOG     [HomePage] Starting data fetch...
-[01:13:55.953] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:13:55.953] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:13:55.954] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:13:55.954] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:13:55.957] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:13:55.957] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:13:55.958] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:13:55.960] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:13:55.960] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:55.961] Server  LOG     [API] Response data: {}
-[01:13:55.961] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:13:55.961] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:55.961] Server  LOG     [API] Response data: {}
-[01:13:55.962] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:13:55.962] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:55.962] Server  LOG     [API] Response data: {}
-[01:13:55.962] Server  LOG     [HomePage] Data fetched successfully
-[01:13:55.962] Server  LOG     [HomePage] Properties: 6
-[01:13:55.962] Server  LOG     [HomePage] Locations: 11
-[01:13:55.962] Server  LOG     [HomePage] Developers: 5
-[01:13:55.965] Server  LOG     ✓ Compiled in 31ms
-[01:13:56.035] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:13:56.035] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:13:56.037] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:13:56.038] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:13:56.038] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:56.038] Server  LOG     [API] Response data: {}
-[01:13:56.038] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:13:56.045] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:13:56.045] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:13:56.045] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:13:56.046] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:13:56.046] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:13:56.046] Server  LOG     [API] Response data: {}
-[01:13:56.046] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:13:56.047] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[01:16:35.934] Server  LOG     [HomePage] Starting data fetch...
-[01:16:35.935] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:16:35.936] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:16:35.947] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:16:35.950] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:16:36.076] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:16:36.076] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:16:36.077] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:16:36.078] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:16:36.078] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:16:36.079] Server  LOG     [API] Response data: {}
-[01:16:36.079] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:16:36.079] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:16:36.083] Server  LOG     [API] Response data: {}
-[01:16:36.083] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:16:36.083] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:16:36.084] Server  LOG     [API] Response data: {}
-[01:16:36.084] Server  LOG     [HomePage] Data fetched successfully
-[01:16:36.084] Server  LOG     [HomePage] Properties: 6
-[01:16:36.084] Server  LOG     [HomePage] Locations: 11
-[01:16:36.084] Server  LOG     [HomePage] Developers: 5
-[01:16:36.087] Server  LOG     ✓ Compiled in 55ms
-[01:16:36.101] Server  LOG     [HomePage] Starting data fetch...
-[01:16:36.101] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[01:16:36.101] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:16:36.102] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:16:36.102] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:16:36.111] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[01:16:36.112] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[01:16:36.114] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[01:16:36.120] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[01:16:36.121] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:16:36.127] Server  LOG     [API] Response data: {}
-[01:16:36.127] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[01:16:36.128] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:16:36.135] Server  LOG     [API] Response data: {}
-[01:16:36.135] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[01:16:36.135] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:16:36.136] Server  LOG     [API] Response data: {}
-[01:16:36.136] Server  LOG     [HomePage] Data fetched successfully
-[01:16:36.136] Server  LOG     [HomePage] Properties: 6
-[01:16:36.136] Server  LOG     [HomePage] Locations: 11
-[01:16:36.136] Server  LOG     [HomePage] Developers: 5
-[01:16:36.274] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:16:36.275] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:16:36.277] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:16:36.279] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:16:36.279] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:16:36.280] Server  LOG     [API] Response data: {}
-[01:16:36.280] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:16:36.284] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:16:36.284] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:16:36.285] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:16:36.286] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:16:36.286] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:16:36.286] Server  LOG     [API] Response data: {}
-[01:16:36.286] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:16:36.287] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3001". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[01:16:44.786] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:16:44.786] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:16:44.791] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[01:16:44.791] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:16:44.974] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:16:44.974] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:16:44.974] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:16:44.974] Server  LOG     [API] Response data: {}
-[01:16:44.975] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:16:44.978] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[01:16:44.978] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[01:16:44.979] Server  LOG     [API] Response data type: "object" "Is array:" false
-[01:16:44.979] Server  LOG     [API] Response data: {}
-[01:16:44.979] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[01:16:45.055] Server  WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[01:16:45.488] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[01:16:45.488] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:16:45.488] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:16:45.488] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:16:45.488] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[01:17:10.766] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:03:43.062] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:03:43.062] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:04:59.984] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:05:38.122] Server  WARN    Error: Route "/blogs" used `searchParams.page`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:38.122] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/blogs?limit=9&offset=0
+[00:05:38.143] Server  WARN    Error: Route "/blogs" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:38.149] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/blogs?limit=9&offset=0 -> 200
+[00:05:38.150] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/blogs?limit=9&offset=0
+[00:05:38.150] Server  LOG     [API] Response data type: "object" "Is array:" false
+[00:05:38.150] Server  LOG     [API] Response data: {}
+[00:05:38.155] Server  WARN    Error: Route "/blogs" used `searchParams.category`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis

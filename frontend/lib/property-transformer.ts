@@ -1,6 +1,20 @@
 import { Property, Project } from "@/types";
 
 /**
+ * Default amenities to display when backend data is not available
+ */
+const DEFAULT_AMENITIES = [
+  { name: "Swimming Pool", icon: "🏊", image: "/images/project-1.jpg" },
+  { name: "Gymnasium & Fitness Center", icon: "💪", image: "/images/project-2.jpg" },
+  { name: "Clubhouse", icon: "🏛️", image: "/images/project-3.jpg" },
+  { name: "Landscaped Gardens", icon: "🌳", image: "/images/project-4.jpg" },
+  { name: "Children's Play Area", icon: "🎪", image: "/images/project-1.jpg" },
+  { name: "24/7 Security", icon: "🔒", image: "/images/project-2.jpg" },
+  { name: "Power Backup", icon: "⚡", image: "/images/project-3.jpg" },
+  { name: "Parking", icon: "🚗", image: "/images/project-4.jpg" },
+];
+
+/**
  * Transforms backend Property with PropertySections into frontend Project format
  * This allows all properties to use the same unified detail page layout (Grand Arch style)
  */
@@ -22,7 +36,7 @@ export function transformBackendPropertyToProject(property: Property): Project {
     image: detailsFromSections.heroImage || "/images/project-1.jpg",
     type: formatPropertyType(property.propertyType),
     category: "Exclusive",
-    
+
     // Detailed page content built from PropertySections
     details: detailsFromSections,
   };
@@ -46,18 +60,20 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
   const keyTakeawaysData = sectionMap.get("keyTakeaways") || { takeaways: [] };
   const whyInvestData = sectionMap.get("whyInvest") || { reasons: [] };
   const faqsData = sectionMap.get("faqs") || { faqs: [] };
+  const masterPlanData = sectionMap.get("masterPlan") || {};
 
   return {
     heroImage: heroData.image || "/images/project-1.jpg",
     subtitle: heroData.subtitle || "Luxury Development",
     introText: introData.text || "Discover premium living at its finest with world-class amenities, strategic location, and architectural excellence. Experience a lifestyle that redefines luxury and comfort in every detail.",
-    
+
     highlights: {
       landArea: highlightsData.landArea || "N/A",
       possession: highlightsData.possession || "N/A",
       rera: highlightsData.rera || "N/A",
       configuration: highlightsData.configuration || "N/A",
       priceRange: highlightsData.priceRange || "N/A",
+      totalUnits: highlightsData.totalUnits || "N/A",
     },
 
     overview: {
@@ -77,7 +93,10 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
     },
 
     amenities: transformAmenities(amenitiesData.items || []),
-    
+
+    masterPlan: masterPlanData.image || "/images/project-1.jpg",
+    masterPlanDescription: masterPlanData.description || [],
+
     gallery: [
       "/images/project-1.jpg",
       "/images/project-2.jpg",
@@ -107,40 +126,70 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
     videoUrl: "https://www.youtube.com/embed/ScMzIvxBSi4",
 
     location: {
+      address: "Prime Location",
       mapImage: "/images/grand-arch-location.jpg",
       nearby: [
         {
-          category: "Schools",
+          category: "Educational Institutions",
+          icon: "education",
           items: [
-            { name: "Delhi Public School", distance: "2 km" },
-            { name: "DPS International", distance: "3 km" },
+            { name: "Delhi Public School" },
+            { name: "DPS International" },
+            { name: "The Shri Ram School" },
+            { name: "Heritage School" },
           ],
         },
         {
-          category: "Hospitals",
+          category: "Healthcare Facilities",
+          icon: "healthcare",
           items: [
-            { name: "Apollo Hospital", distance: "1.5 km" },
-            { name: "Fortis Healthcare", distance: "2 km" },
+            { name: "Apollo Hospital" },
+            { name: "Fortis Healthcare" },
+            { name: "Max Hospital" },
+            { name: "Medanta Hospital" },
           ],
         },
         {
-          category: "Shopping",
+          category: "Shopping & Entertainment",
+          icon: "shopping",
           items: [
-            { name: "Central Mall", distance: "1 km" },
-            { name: "Premium Market", distance: "1.5 km" },
-          ],
-        },
-        {
-          category: "Transportation",
-          items: [
-            { name: "Metro Station", distance: "0.5 km" },
-            { name: "Bus Stand", distance: "1 km" },
+            { name: "Central Mall" },
+            { name: "Premium Market" },
+            { name: "DLF Cyber Hub" },
+            { name: "Ambience Mall" },
           ],
         },
       ],
+      connectivity: [
+        { place: "IGI Airport", icon: "airport", time: "20 mins" },
+        { place: "Sector 54 Chowk", icon: "location", time: "5 mins" },
+        { place: "Business District", icon: "building", time: "15 mins" },
+        { place: "Highway", icon: "location", time: "10 mins" },
+      ],
     },
 
-    faqs: faqsData.faqs || [],
+    faqs: faqsData.faqs || [
+      {
+        question: "What is the project about?",
+        answer: "This is a premium residential development featuring ultra-luxury apartments with world-class amenities and strategic location.",
+        category: "General"
+      },
+      {
+        question: "What are the available unit configurations?",
+        answer: "We offer multiple configurations ranging from 2 BHK to 4+ BHK units, each designed with premium finishes and modern amenities.",
+        category: "Units"
+      },
+      {
+        question: "What are the payment options?",
+        answer: "We provide flexible payment plans including construction-linked, down payment, and progressive payment options to suit your needs.",
+        category: "Payment"
+      },
+      {
+        question: "When is the possession timeline?",
+        answer: "The project is planned for possession within the specified timeline. Contact our sales team for detailed information.",
+        category: "Possession"
+      }
+    ],
 
     usp: [
       "Premium Location",
@@ -197,15 +246,73 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
         items: ["24/7 Power Supply", "Water Harvesting", "Waste Management"],
       },
     ],
+
+    team: {
+      members: [
+        {
+          role: "Architect",
+          name: "Renowned Architecture Firm",
+          color: "#3B82F6",
+          description: "Experienced architects bringing international standards to the project with award-winning designs.",
+          achievements: [
+            "Multiple architecture excellence awards",
+            "100+ million sq.ft. designed globally",
+            "Specialized in luxury residential developments",
+          ],
+        },
+        {
+          role: "Landscape Design",
+          name: "International Landscape Partners",
+          color: "#10B981",
+          description: "World-class landscape designers creating sustainable outdoor spaces that enhance living experience.",
+          achievements: [
+            "40+ years of design excellence",
+            "Projects across multiple continents",
+            "Focus on sustainable landscaping",
+          ],
+        },
+        {
+          role: "Construction",
+          name: "Trusted Construction Partner",
+          color: "#F97316",
+          description: "Experienced construction team with proven track record in delivering premium quality projects.",
+          achievements: [
+            "50+ years of construction expertise",
+            "25+ million sq.ft. delivered",
+            "ISO certified quality processes",
+          ],
+        },
+      ],
+      highlights: [
+        {
+          title: "Global Expertise",
+          subtitle: "International design standards",
+        },
+        {
+          title: "Proven Track Record",
+          subtitle: "100+ million sq.ft. delivered",
+        },
+        {
+          title: "Award Winning",
+          subtitle: "Multiple industry accolades",
+        },
+      ],
+    },
   };
 }
 
 /**
  * Transform amenities from backend format to frontend format
+ * Returns default amenities if no data is provided
  */
 function transformAmenities(
   amenities: Array<{ name: string; icon?: string; image?: string }>
 ) {
+  // If no amenities provided, return defaults
+  if (!amenities || amenities.length === 0) {
+    return DEFAULT_AMENITIES;
+  }
+
   return amenities.map((amenity) => ({
     name: amenity.name,
     icon: amenity.icon || "🏢",

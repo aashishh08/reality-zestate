@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 
 interface ProjectUSPProps {
   usp: string[];
@@ -12,20 +13,14 @@ export function ProjectUSP({ usp, projectTitle }: ProjectUSPProps) {
   return (
     <section id="usp" className="py-24 bg-[#F5F5F0]">
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-black">
+        <div className="text-center mb-16">
+          <SectionHeading>
             Why Choose <span className="text-gold-dark">{projectTitle}</span>?
-          </h2>
+          </SectionHeading>
           <p className="text-zinc-600 max-w-2xl mx-auto">
             Discover what makes this project truly exceptional.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {usp.map((point, index) => (

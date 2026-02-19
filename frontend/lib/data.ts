@@ -102,29 +102,45 @@ The pre-launch phase represents an optimal entry point from a pricing perspectiv
                 }
             ],
             location: {
+                address: "Golf Course Road",
                 mapImage: "/images/grand-arch-location.jpg",
                 nearby: [
                     {
-                        category: "Schools",
+                        category: "Educational Institutions",
+                        icon: "education",
                         items: [
-                            { name: "DPS International", distance: "2 km" },
-                            { name: "The Shri Ram School", distance: "3.5 km" }
+                            { name: "The Shri Ram School" },
+                            { name: "Heritage School" },
+                            { name: "GD Goenka World School" },
+                            { name: "Pathways School" }
                         ]
                     },
                     {
-                        category: "Hospitals",
+                        category: "Healthcare Facilities",
+                        icon: "healthcare",
                         items: [
-                            { name: "Medanta Hospital", distance: "5 km" },
-                            { name: "Artemis Hospital", distance: "6 km" }
+                            { name: "Medanta - The Medicity" },
+                            { name: "Fortis Memorial" },
+                            { name: "Artemis Hospital" },
+                            { name: "Max Hospital" }
                         ]
                     },
                     {
-                        category: "Entertainment",
+                        category: "Shopping & Entertainment",
+                        icon: "shopping",
                         items: [
-                            { name: "Ambience Mall", distance: "4 km" },
-                            { name: "Kingdom of Dreams", distance: "7 km" }
+                            { name: "DLF Cyber Hub" },
+                            { name: "Ambience Mall" },
+                            { name: "MGF Metropolitan" },
+                            { name: "South Point Mall" }
                         ]
                     }
+                ],
+                connectivity: [
+                    { place: "IGI Airport", icon: "airport", time: "20 mins" },
+                    { place: "Sector 54 Chowk", icon: "location", time: "5 mins" },
+                    { place: "Business District", icon: "building", time: "15 mins" },
+                    { place: "Highway", icon: "location", time: "10 mins" }
                 ]
             },
             usp: [
@@ -186,18 +202,120 @@ The pre-launch phase represents an optimal entry point from a pricing perspectiv
             ],
             faqs: [
                 {
-                    question: "What is the possession timeline?",
-                    answer: "The project is scheduled for possession in December 2027."
+                    question: "What is DLF The Dahlias?",
+                    answer: "DLF The Dahlias is an ultra-luxury residential development by DLF Limited, featuring 4, 5, and 6 BHK apartments on Golf Course Road, Sector 54, Gurgaon. The project spans 17 acres with 7 residential towers surrounding a 9-hole executive golf course.",
+                    category: "General"
                 },
                 {
-                    question: "Is the project RERA approved?",
-                    answer: "Yes, the project is RERA registered under GGM/650/382/2023/111."
+                    question: "Where is DLF The Dahlias located?",
+                    answer: "Located on Golf Course Road in Sector 54, Gurgaon, DLF The Dahlias sits in one of the most prestigious addresses in the National Capital Region with excellent connectivity to business districts, airports, and lifestyle amenities.",
+                    category: "General"
                 },
                 {
-                    question: "What are the payment plans available?",
-                    answer: "We offer flexible payment plans including construction-linked and down payment schemes. Contact our sales team for detailed information."
+                    question: "What is the total land area of the project?",
+                    answer: "The project spans across 17 acres of premium land with 80% open green spaces, including a central park and a 9-hole executive golf course.",
+                    category: "General"
+                },
+                {
+                    question: "How many towers and units are there?",
+                    answer: "The project features 7 residential towers with a total of 280 ultra-luxury residences including 3 BHK, 4 BHK, and 5 BHK Penthouses.",
+                    category: "Units"
+                },
+                {
+                    question: "What are the unit configurations available?",
+                    answer: "We offer 3 BHK, 4 BHK, and 5 BHK Penthouse configurations with super built-up areas ranging from 2200 sq.ft. to 5500 sq.ft.",
+                    category: "Units"
+                },
+                {
+                    question: "What are the available super built-up areas?",
+                    answer: "3 BHK: 2200 sq.ft., 4 BHK: 3200 sq.ft., 5 BHK Penthouse: 5500 sq.ft. Each unit is designed for maximum luxury and comfort.",
+                    category: "Units"
+                },
+                {
+                    question: "What payment plans are available?",
+                    answer: "We offer flexible payment plans including 20-40-40 (Standard), Progressive Payment Plan, and Construction-Linked Plan to suit your financial needs.",
+                    category: "Payment"
+                },
+                {
+                    question: "Is there a down payment option?",
+                    answer: "Yes, we offer a down payment plan where you can pay 95% within 45 days of booking and receive an attractive discount on the Basic Sale Price.",
+                    category: "Payment"
+                },
+                {
+                    question: "What is the price range?",
+                    answer: "Prices start from ₹4.5 Cr for 3 BHK and go up to ₹8.2 Cr for 5 BHK Penthouses. Contact our sales team for detailed pricing information.",
+                    category: "Payment"
+                },
+                {
+                    question: "When is the possession timeline?",
+                    answer: "The project is scheduled for possession in December 2027. We maintain a strict timeline with transparent communication to all investors.",
+                    category: "Possession"
+                },
+                {
+                    question: "What is the RERA registration number?",
+                    answer: "The project is RERA registered under GGM/650/382/2023/111, ensuring full transparency and compliance with regulatory standards.",
+                    category: "Possession"
+                },
+                {
+                    question: "What are the key amenities?",
+                    answer: "The project features a 9-hole executive golf course, swimming pool, gymnasium, spa, clubhouse, landscaped gardens, yoga deck, kids play area, and 24/7 security.",
+                    category: "General"
                 }
-            ]
+            ],
+            team: {
+                members: [
+                    {
+                        role: "Architect",
+                        name: "Hafeez Contractor",
+                        color: "#3B82F6",
+                        description: "India's most celebrated architect with over 40 years of experience designing iconic structures. His portfolio includes DLF Cyber City, Mumbai's tallest buildings, and numerous premium residential developments.",
+                        achievements: [
+                            "Designed 100+ million sq.ft. of real estate",
+                            "Recipient of multiple architectural excellence awards",
+                            "Known for sustainable and innovative designs"
+                        ]
+                    },
+                    {
+                        role: "Landscape Design",
+                        name: "Paul Friedberg & Partners",
+                        color: "#10B981",
+                        description: "Internationally acclaimed landscape architecture firm based in New York. They bring decades of experience in creating award-winning outdoor spaces that harmonize with their surroundings.",
+                        achievements: [
+                            "50+ years of landscape design excellence",
+                            "Projects across 30+ countries",
+                            "Focus on sustainable and native landscaping"
+                        ]
+                    },
+                    {
+                        role: "Construction",
+                        name: "DLF Home Developers",
+                        color: "#F97316",
+                        description: "The construction arm of DLF Limited, responsible for delivering some of India's most prestigious residential and commercial projects with uncompromising quality standards.",
+                        achievements: [
+                            "75+ years of construction expertise",
+                            "25+ million sq.ft. delivered annually",
+                            "ISO 9001:2015 certified processes"
+                        ]
+                    }
+                ],
+                highlights: [
+                    {
+                        title: "Global Expertise",
+                        subtitle: "International design standards",
+                        icon: "globe"
+                    },
+                    {
+                        title: "Proven Track Record",
+                        subtitle: "100+ million sq.ft. delivered",
+                        icon: "checkmark"
+                    },
+                    {
+                        title: "Award Winning",
+                        subtitle: "Multiple industry accolades",
+                        icon: "award"
+                    }
+                ]
+            }
         }
     },
     {

@@ -13,7 +13,7 @@ import { ProjectFloorPlans } from "@/components/project/ProjectFloorPlans";
 import { ProjectLocation } from "@/components/project/ProjectLocation";
 import { ProjectUSP } from "@/components/project/ProjectUSP";
 import { ProjectFAQ } from "@/components/project/ProjectFAQ";
-import { ProjectSpecifications } from "@/components/project/ProjectSpecifications";
+import { ProjectMasterPlan } from "@/components/project/ProjectMasterPlan";
 import { ProjectPaymentPlan } from "@/components/project/ProjectPaymentPlan";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ProjectGallery } from "@/components/project/ProjectGallery";
@@ -22,7 +22,9 @@ import { ProjectBookingCTA } from "@/components/project/ProjectBookingCTA";
 import { ProjectWhyInvest } from "@/components/project/ProjectWhyInvest";
 import { ProjectSimilar } from "@/components/project/ProjectSimilar";
 import ProjectNavigation from "@/components/project/ProjectNavigation";
+import { ProjectTeam } from "@/components/project/ProjectTeam";
 import { projects } from "@/lib/data";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 
 /**
  * Fetch property data from backend or fallback to hardcoded data
@@ -33,22 +35,22 @@ async function getPropertyData(slug: string) {
   try {
     console.log(`[ProjectPage] Attempting to fetch from backend: ${slug}`);
     const backendProperty = await getPropertyBySlug(slug);
-    
+
     console.log(`[ProjectPage] ✅ Successfully fetched from backend: ${backendProperty.slug}`);
     return transformBackendPropertyToProject(backendProperty);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.warn(`[ProjectPage] Backend fetch failed for '${slug}': ${errorMessage}`);
     console.log(`[ProjectPage] Attempting fallback to hardcoded data...`);
-    
+
     // Fallback to hardcoded data
     const hardcodedProject = getProjectBySlug(slug);
-    
+
     if (hardcodedProject) {
       console.log(`[ProjectPage] ✅ Found hardcoded data for: ${slug}`);
       return hardcodedProject;
     }
-    
+
     console.error(`[ProjectPage] ❌ Property not found in backend or hardcoded data: ${slug}`);
     return null;
   }
@@ -61,28 +63,28 @@ async function getPropertyData(slug: string) {
 export async function generateStaticParams() {
   try {
     console.log('[generateStaticParams] Fetching properties from backend API...');
-    
+
     // Fetch published properties from backend
     const backendProperties = await getProperties({ isPublished: true }, false);
     const backendSlugs = backendProperties.map((p) => p.slug);
-    
+
     console.log(`[generateStaticParams] Backend slugs (${backendSlugs.length}):`, backendSlugs);
-    
+
     // Get hardcoded slugs as fallback
     const hardcodedSlugs = getAllProjectSlugs();
     console.log(`[generateStaticParams] Hardcoded slugs (${hardcodedSlugs.length}):`, hardcodedSlugs);
-    
+
     // Combine and deduplicate
     const allSlugs = [...new Set([...backendSlugs, ...hardcodedSlugs])];
-    
+
     console.log(`[generateStaticParams] ✅ Total unique slugs: ${allSlugs.length}`);
-    
+
     return allSlugs.map((slug) => ({ slug }));
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error(`[generateStaticParams] ❌ Backend API error: ${errorMessage}`);
     console.log('[generateStaticParams] Using hardcoded slugs only as fallback');
-    
+
     // Fallback to hardcoded slugs if backend is unavailable
     const slugs = getAllProjectSlugs();
     return slugs.map((slug) => ({ slug }));
@@ -92,14 +94,14 @@ export async function generateStaticParams() {
 /**
  * Generate metadata for SEO
  */
-export async function generateMetadata({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = await getPropertyData(slug);
-  
+
   if (!project) {
     return {
       title: "Project Not Found | Opulnz Abode",
@@ -107,8 +109,8 @@ export async function generateMetadata({
     };
   }
 
-  const description = project.details?.overview.content[0] 
-    || project.description 
+  const description = project.details?.overview.content[0]
+    || project.description
     || `Luxury ${project.type} in ${project.location}. ${project.price}`;
 
   return {
@@ -156,21 +158,21 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     <main className="min-h-screen relative selection:bg-gold selection:text-white pt-[80px]">
       {/* Premium Background Texture */}
       <div className="fixed inset-0 z-[-1] bg-[#F0EFEB]">
-         <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
+        <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
       </div>
 
       <Header />
-      
-      <Breadcrumbs 
+
+      <Breadcrumbs
         items={[
-          { label: "Projects", href: "/projects" }, 
+          { label: "Projects", href: "/projects" },
           { label: project.title, href: "#" }
-        ]} 
+        ]}
       />
-      
+
       {/* Hero Section */}
       {details && <ProjectHero project={project} />}
-      
+
       {/* Introduction Text Section */}
       {details?.introText && (
         <section className="py-12 bg-[#F5F0E8]">
@@ -183,7 +185,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
         </section>
       )}
-      
+
       {/* Gallery + Key Takeaways Section */}
       {details?.gallery && details?.keyTakeaways && (
         <section className="py-20 bg-white" id="gallery">
@@ -191,16 +193,16 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <div className="grid md:grid-cols-2 gap-12">
               {/* Left: Gallery */}
               <div>
-                <h2 className="text-3xl font-serif text-[#2C2416] mb-6">Project Gallery</h2>
-                <ProjectGallery 
-                  images={details.gallery} 
+                <SectionHeading centered={false}>Project Gallery</SectionHeading>
+                <ProjectGallery
+                  images={details.gallery}
                   videoUrl={details.videoUrl}
                 />
               </div>
-              
+
               {/* Right: Key Takeaways with Highlights */}
               <div>
-                <ProjectKeyTakeaways 
+                <ProjectKeyTakeaways
                   takeaways={details.keyTakeaways}
                   highlights={details.highlights}
                 />
@@ -209,65 +211,98 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
         </section>
       )}
-      
+
       {/* Overview */}
       <div id="overview">
         {details?.overview && <ProjectOverview overview={details.overview} />}
-        
+
         {/* Booking CTA Section - Under Overview */}
         <ProjectBookingCTA projectTitle={project.title} />
       </div>
-      
+
+      {/* Master Plan */}
+      {details?.masterPlan && (
+        <ProjectMasterPlan
+          masterPlanImage={details.masterPlan}
+          description={details.masterPlanDescription}
+        />
+      )}
+
       {/* Navigation Bar */}
       <ProjectNavigation />
-      
+
       {/* Investment Analysis - Always show if details exist */}
       {details && (
-        <ProjectWhyInvest 
-          reasons={details.whyInvest || []} 
+        <ProjectWhyInvest
+          reasons={details.whyInvest || []}
           videoUrl={details.videoUrl}
           detailedAnalysis={details.investmentAnalysis}
         />
       )}
-      
+
       {/* Amenities */}
       {details?.amenities && details.amenities.length > 0 && (
         <ProjectAmenities amenities={details.amenities} />
       )}
-      
+
       {/* Floor Plans */}
       {details?.floorPlans && details.floorPlans.length > 0 && (
         <ProjectFloorPlans floorPlans={details.floorPlans} />
       )}
-      
+
       {/* Location */}
       {details?.location && <ProjectLocation location={details.location} />}
 
-      {/* Specifications */}
-      {details?.specifications && details.specifications.length > 0 && (
-        <ProjectSpecifications specifications={details.specifications} />
-      )}
+
+
+      {/* Design & Construction Team */}
+      {details?.team && <ProjectTeam team={details.team} />}
+
+
 
       {/* Payment Plans */}
       {details?.paymentPlans && details.paymentPlans.length > 0 && (
         <ProjectPaymentPlan paymentPlans={details.paymentPlans} />
       )}
-      
+
       {/* USP */}
       {details?.usp && details.usp.length > 0 && (
         <ProjectUSP usp={details.usp} projectTitle={project.title} />
       )}
-      
+
       {/* FAQs */}
-      {details?.faqs && details.faqs.length > 0 && (
+      {details && details.faqs && details.faqs.length > 0 ? (
         <ProjectFAQ faqs={details.faqs} />
-      )}
-      
+      ) : details ? (
+        <ProjectFAQ faqs={[
+          {
+            question: "What is the project about?",
+            answer: "This is a premium residential development featuring ultra-luxury apartments with world-class amenities and strategic location.",
+            category: "General"
+          },
+          {
+            question: "What are the available unit configurations?",
+            answer: "We offer multiple configurations ranging from 2 BHK to 4+ BHK units, each designed with premium finishes and modern amenities.",
+            category: "Units"
+          },
+          {
+            question: "What are the payment options?",
+            answer: "We provide flexible payment plans including construction-linked, down payment, and progressive payment options to suit your needs.",
+            category: "Payment"
+          },
+          {
+            question: "When is the possession timeline?",
+            answer: "The project is planned for possession within the specified timeline. Contact our sales team for detailed information.",
+            category: "Possession"
+          }
+        ]} />
+      ) : null}
+
       {/* Similar Properties */}
       {similarProjects.length > 0 && (
         <ProjectSimilar projects={similarProjects} />
       )}
-      
+
       <Footer />
       <FloatingActions />
     </main>

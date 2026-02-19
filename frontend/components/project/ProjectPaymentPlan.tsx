@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 
 interface ProjectPaymentPlanProps {
   paymentPlans: {
@@ -15,20 +16,14 @@ export function ProjectPaymentPlan({ paymentPlans }: ProjectPaymentPlanProps) {
   return (
     <section id="payment-plans" className="py-24 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-black mb-4">
+        <div className="text-center mb-16">
+          <SectionHeading>
             Payment <span className="text-gold-dark">Plans</span>
-          </h2>
+          </SectionHeading>
           <p className="text-zinc-600 max-w-2xl mx-auto">
             Flexible payment options designed to suit your financial planning.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {paymentPlans.map((plan, index) => (

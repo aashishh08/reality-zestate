@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download } from "lucide-react";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 
 interface ProjectFloorPlansProps {
   floorPlans: {
@@ -21,16 +22,10 @@ export function ProjectFloorPlans({ floorPlans }: ProjectFloorPlansProps) {
     <section id="floor-plans" className="py-24 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-black mb-4">
+        <div className="text-center mb-12">
+          <SectionHeading>
             Master <span className="text-gold-dark">Floor Plans</span>
-          </h2>
+          </SectionHeading>
           <p className="text-zinc-600 max-w-2xl mx-auto mb-10">
             Choose from our meticulously designed layouts, each crafted to maximize space, light, and ventilation.
           </p>
@@ -51,7 +46,7 @@ export function ProjectFloorPlans({ floorPlans }: ProjectFloorPlansProps) {
               </button>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Content Area */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">

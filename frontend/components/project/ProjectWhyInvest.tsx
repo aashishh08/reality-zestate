@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { MapPin, Award, TrendingUp, Calendar } from "lucide-react";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 
 interface WhyInvestItem {
   title: string;
@@ -46,13 +47,7 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
   return (
     <section className="py-20 bg-[#F5F0E8]" id="why-invest">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="text-4xl font-serif text-[#2C2416] mb-12 text-center"
-        >
-          Investment Analysis
-        </motion.h2>
+        <SectionHeading>Why Invest ?</SectionHeading>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Left Side - Small Icon Boxes in Grid */}
@@ -85,29 +80,65 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
             })}
           </div>
 
-          {/* Right Side - Scrollable Text */}
+          {/* Right Side - Scrollable Text + Stats */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10"
+            className="flex flex-col gap-6"
           >
-            <div className="h-[500px] overflow-y-auto pr-4 custom-scrollbar">
-              <div className="space-y-6 text-gray-700 leading-relaxed">
-                {typeof analysisText === 'string' ? (
-                  analysisText.split('\n\n').map((paragraph, index) => (
-                    <p key={index} className="text-[15px]">
-                      {paragraph}
-                    </p>
-                  ))
-                ) : (
-                  reasons.map((reason, index) => (
-                    <p key={index} className="text-[15px]">
-                      {typeof reason === 'string' ? reason : `${reason.title}: ${reason.subtitle}`}
-                    </p>
-                  ))
-                )}
+            {/* Scrollable Analysis Text */}
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
+              <div className="h-[400px] overflow-y-auto pr-4 custom-scrollbar">
+                <div className="space-y-6 text-gray-700 leading-relaxed">
+                  {typeof analysisText === 'string' ? (
+                    analysisText.split('\n\n').map((paragraph, index) => (
+                      <p key={index} className="text-[15px]">
+                        {paragraph}
+                      </p>
+                    ))
+                  ) : (
+                    reasons.map((reason, index) => (
+                      <p key={index} className="text-[15px]">
+                        {typeof reason === 'string' ? reason : `${reason.title}: ${reason.subtitle}`}
+                      </p>
+                    ))
+                  )}
+                </div>
               </div>
+            </div>
+
+            {/* Investment Statistics Cards */}
+            <div className="grid grid-cols-3 gap-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-[#1A1A2E] rounded-xl p-6 text-center"
+              >
+                <p className="text-[#C9A961] text-2xl font-bold mb-2">12-15%</p>
+                <p className="text-gray-300 text-sm font-medium">Annual Appreciation</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="bg-[#1A1A2E] rounded-xl p-6 text-center"
+              >
+                <p className="text-[#C9A961] text-2xl font-bold mb-2">3.5-4.5%</p>
+                <p className="text-gray-300 text-sm font-medium">Rental Yield</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-[#1A1A2E] rounded-xl p-6 text-center"
+              >
+                <p className="text-[#C9A961] text-2xl font-bold mb-2">25-30%</p>
+                <p className="text-gray-300 text-sm font-medium">Pre-Launch Gain</p>
+              </motion.div>
             </div>
           </motion.div>
         </div>
