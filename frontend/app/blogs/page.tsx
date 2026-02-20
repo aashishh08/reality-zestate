@@ -45,14 +45,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const page = parseInt(searchParams.page || '1');
   const pageSize = 9;
 
-  // Fetch data with ISR (revalidate every hour)
+  // Always fetch fresh — force-dynamic at page level handles this
   const blogResponse = await getBlogs(
     {
       limit: pageSize,
       offset: (page - 1) * pageSize,
       search: searchParams.search,
     },
-    3600 // ISR revalidation
+    false // no caching
   );
 
   const posts = blogResponse.data || [];
@@ -210,5 +210,5 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   );
 }
 
-// Enable ISR with revalidation every hour (3600 seconds)
-export const revalidate = 3600;
+// Always render fresh so newly published blogs appear immediately
+export const dynamic = 'force-dynamic';

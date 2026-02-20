@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { User } from '../../../models/index.js';
 
 class AuthService {
-  async register(email, password) {
+  async register(email, password, role = 'VIEWER') {
     // Check if user already exists
     const existingUser = await User.findOne({ where: { email } });
 
@@ -14,14 +14,23 @@ class AuthService {
       };
     }
 
+    // Validate role
+    const validRoles = ['SUPER_ADMIN', 'ADMIN', 'EDITOR', 'VIEWER'];
+    if (!validRoles.includes(role)) {
+      throw {
+        status: 400,
+        message: 'Invalid role. Must be one of: ' + validRoles.join(', '),
+      };
+    }
+
     // Hash password
     const hashedPassword = await this.hashPassword(password);
 
-    // Create user with SUPER_ADMIN role
+    // Create user
     const user = await User.create({
       email,
       password: hashedPassword,
-      role: 'SUPER_ADMIN',
+      role,
     });
 
     const token = jwt.sign(

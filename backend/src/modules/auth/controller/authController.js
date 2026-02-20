@@ -2,7 +2,7 @@ import authService from '../service/authService.js';
 
 class AuthController {
   async register(req, res) {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     if (!email || !password) {
       throw {
@@ -18,7 +18,7 @@ class AuthController {
       };
     }
 
-    const result = await authService.register(email, password);
+    const result = await authService.register(email, password, role);
 
     res.status(201).json({
       success: true,

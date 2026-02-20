@@ -21,9 +21,9 @@ export default (sequelize) => {
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM('SUPER_ADMIN'),
+      type: DataTypes.ENUM('SUPER_ADMIN', 'ADMIN', 'EDITOR', 'VIEWER'),
       allowNull: false,
-      defaultValue: 'SUPER_ADMIN',
+      defaultValue: 'VIEWER',
     },
     createdAt: {
       type: DataTypes.DATE,

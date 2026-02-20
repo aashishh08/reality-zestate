@@ -43,20 +43,27 @@ export interface ApiError extends Error {
 }
 
 /**
- * Validates and normalizes API response
+ * Validates and normalizes API response.
+ * - For paginated responses `{ success, data, pagination }` returns `{ data, pagination }`
+ *   so callers can read both the records and the pagination meta.
+ * - For plain data responses `{ success, data }` returns `data` directly.
+ * - For raw objects/arrays returns as-is.
  */
-function normalizeResponse<T>(data: unknown): T {
-  // If it's already a plain object/array, return as-is
-  if (data && typeof data === 'object') {
-    // If it's an ApiResponse wrapper, extract the data
-    if ('success' in data && 'data' in data) {
-      const response = data as ApiResponse<T>;
-      return response.data ?? (data as T);
+function normalizeResponse<T>(raw: unknown): T {
+  if (raw && typeof raw === 'object') {
+    const obj = raw as Record<string, unknown>;
+    if ('success' in obj && 'data' in obj) {
+      // Paginated response — preserve pagination alongside data
+      if ('pagination' in obj) {
+        const { success: _s, ...rest } = obj;
+        return rest as T;
+      }
+      // Simple wrapper — unwrap to just the data value
+      return (obj['data'] ?? raw) as T;
     }
-    // If it's an array or object, return directly
-    return data as T;
+    return raw as T;
   }
-  return data as T;
+  return raw as T;
 }
 
 /**

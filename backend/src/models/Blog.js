@@ -21,6 +21,32 @@ export default (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    excerpt: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    authorName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: 'Team Opulnz Abode',
+    },
+    featuredImage: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    metaTitle: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    metaDescription: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    tags: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+      defaultValue: [],
+    },
     isPublished: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

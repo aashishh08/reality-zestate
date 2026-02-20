@@ -2,7 +2,10 @@ import blogService from '../service/blogService.js';
 
 class BlogController {
   async createBlog(req, res) {
-    const { title, slug, content, isPublished } = req.body;
+    const {
+      title, slug, content, isPublished,
+      excerpt, authorName, featuredImage, metaTitle, metaDescription, tags,
+    } = req.body;
 
     if (!title || !slug || !content) {
       throw {
@@ -16,6 +19,12 @@ class BlogController {
       slug,
       content,
       isPublished: isPublished || false,
+      excerpt: excerpt || null,
+      authorName: authorName || 'Team Opulnz Abode',
+      featuredImage: featuredImage || null,
+      metaTitle: metaTitle || null,
+      metaDescription: metaDescription || null,
+      tags: tags || [],
     });
 
     res.status(201).json({
@@ -27,13 +36,22 @@ class BlogController {
 
   async updateBlog(req, res) {
     const { id } = req.params;
-    const { title, slug, content, isPublished } = req.body;
+    const {
+      title, slug, content, isPublished,
+      excerpt, authorName, featuredImage, metaTitle, metaDescription, tags,
+    } = req.body;
 
     const blog = await blogService.updateBlog(id, {
       title,
       slug,
       content,
       isPublished,
+      excerpt,
+      authorName,
+      featuredImage,
+      metaTitle,
+      metaDescription,
+      tags,
     });
 
     res.json({
@@ -65,10 +83,37 @@ class BlogController {
     });
   }
 
+  async getBlogById(req, res) {
+    const { id } = req.params;
+
+    const blog = await blogService.getBlogById(id);
+
+    res.json({
+      success: true,
+      data: blog,
+    });
+  }
+
   async listPublishedBlogs(req, res) {
     const { limit = 10, offset = 0 } = req.query;
 
     const result = await blogService.listPublishedBlogs(limit, offset);
+
+    res.json({
+      success: true,
+      data: result.blogs,
+      pagination: {
+        total: result.total,
+        limit: parseInt(limit, 10),
+        offset: parseInt(offset, 10),
+      },
+    });
+  }
+
+  async listAllBlogs(req, res) {
+    const { limit = 20, offset = 0, search = '' } = req.query;
+
+    const result = await blogService.listAllBlogs(limit, offset, search);
 
     res.json({
       success: true,

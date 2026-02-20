@@ -53,24 +53,61 @@ export interface BlogsResponse {
 }
 
 /**
- * Get all blogs
+ * Maps raw backend blog records (which only contain id/title/slug/content/
+ * isPublished/createdAt/updatedAt) to the full BlogPost shape the UI expects.
+ * All missing fields are derived from what IS available.
+ */
+function normalizeBlogPost(raw: Record<string, any>): BlogPost {
+  const plainText = (raw.content || '').replace(/<[^>]+>/g, '').trim();
+  const wordCount = plainText.split(/\s+/).filter(Boolean).length;
+
+  // Use stored excerpt if present, otherwise auto-generate from content
+  const autoExcerpt =
+    plainText.length > 160 ? plainText.substring(0, 157) + '...' : plainText;
+
+  return {
+    id: raw.id,
+    slug: raw.slug,
+    title: raw.title,
+    excerpt: raw.excerpt || autoExcerpt || raw.title,
+    content: raw.content || '',
+    author: { name: raw.authorName || 'Team Opulnz Abode' },
+    publishedAt: raw.createdAt,
+    updatedAt: raw.updatedAt,
+    featuredImage: raw.featuredImage || '',
+    category: { id: 'real-estate', name: 'Real Estate', slug: 'real-estate' },
+    tags: raw.tags || [],
+    readTime: Math.max(1, Math.ceil(wordCount / 200)),
+    isPublished: raw.isPublished,
+    createdAt: raw.createdAt,
+    seo: (raw.metaTitle || raw.metaDescription)
+      ? { metaTitle: raw.metaTitle, metaDescription: raw.metaDescription }
+      : undefined,
+  };
+}
+
+/**
+ * Get all published blogs
  * Used for ISR pages with revalidation
  */
 export async function getBlogs(
   filters?: BlogFilters,
-  revalidate: number | false = 3600
+  revalidate: number | false = 60
 ): Promise<BlogsResponse> {
   const queryString = buildQueryString(filters);
 
-  return fetchFromAPI<BlogsResponse>(
-    `/blogs${queryString}`,
-    {
-      method: 'GET',
-      next: {
-        revalidate, // ISR revalidation
-      },
-    }
-  );
+  // revalidate: false means no ISR — use no-store so Next.js never caches the fetch
+  const fetchOptions =
+    revalidate === false
+      ? { method: 'GET' as const, cache: 'no-store' as RequestCache }
+      : { method: 'GET' as const, next: { revalidate } };
+
+  const raw = await fetchFromAPI<BlogsResponse>(`/blogs${queryString}`, fetchOptions);
+
+  return {
+    data: (raw.data || []).map(normalizeBlogPost),
+    pagination: raw.pagination || { limit: 10, offset: 0, total: 0 },
+  };
 }
 
 /**
@@ -78,13 +115,15 @@ export async function getBlogs(
  * Used for SSR pages (always fresh)
  */
 export async function getBlogBySlug(slug: string): Promise<BlogPost> {
-  return fetchFromAPI<BlogPost>(
+  const raw = await fetchFromAPI<Record<string, any>>(
     `/blogs/${slug}`,
     {
       method: 'GET',
-      cache: 'no-store', // SSR: no caching
+      cache: 'no-store',
     }
   );
+
+  return normalizeBlogPost(raw);
 }
 
 /**

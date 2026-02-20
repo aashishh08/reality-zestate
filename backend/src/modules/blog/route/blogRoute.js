@@ -2,6 +2,7 @@ import express from 'express';
 import { validateRequest } from '../../../middleware/validationMiddleware.js';
 import { createBlogSchema, updateBlogSchema } from '../../../utils/validators.js';
 import authMiddleware from '../../../middleware/authMiddleware.js';
+import { requireRole } from '../../../middleware/roleMiddleware.js';
 import blogController from '../controller/blogController.js';
 
 const router = express.Router();
@@ -15,6 +16,24 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// Admin routes MUST be before /:slug otherwise Express matches "admin" as a slug value
+router.get('/admin/all', authMiddleware, requireRole('SUPER_ADMIN', 'ADMIN', 'EDITOR'), async (req, res, next) => {
+  try {
+    await blogController.listAllBlogs(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/admin/:id', authMiddleware, requireRole('SUPER_ADMIN', 'ADMIN', 'EDITOR'), async (req, res, next) => {
+  try {
+    await blogController.getBlogById(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Public slug route comes AFTER /admin/* fixed routes
 router.get('/:slug', async (req, res, next) => {
   try {
     await blogController.getBlogBySlug(req, res);
@@ -23,8 +42,8 @@ router.get('/:slug', async (req, res, next) => {
   }
 });
 
-// Protected routes (super-admin only)
-router.post('/', authMiddleware, validateRequest(createBlogSchema), async (req, res, next) => {
+// Protected routes - create blog (EDITOR or ADMIN)
+router.post('/', authMiddleware, requireRole('SUPER_ADMIN', 'ADMIN', 'EDITOR'), validateRequest(createBlogSchema), async (req, res, next) => {
   try {
     await blogController.createBlog(req, res);
   } catch (error) {
@@ -32,7 +51,8 @@ router.post('/', authMiddleware, validateRequest(createBlogSchema), async (req, 
   }
 });
 
-router.put('/:id', authMiddleware, validateRequest(updateBlogSchema), async (req, res, next) => {
+// Protected routes - update blog
+router.put('/:id', authMiddleware, requireRole('SUPER_ADMIN', 'ADMIN', 'EDITOR'), validateRequest(updateBlogSchema), async (req, res, next) => {
   try {
     await blogController.updateBlog(req, res);
   } catch (error) {
@@ -40,7 +60,8 @@ router.put('/:id', authMiddleware, validateRequest(updateBlogSchema), async (req
   }
 });
 
-router.delete('/:id', authMiddleware, async (req, res, next) => {
+// Protected routes - delete blog (ADMIN or SUPER_ADMIN only)
+router.delete('/:id', authMiddleware, requireRole('SUPER_ADMIN', 'ADMIN'), async (req, res, next) => {
   try {
     await blogController.deleteBlog(req, res);
   } catch (error) {
