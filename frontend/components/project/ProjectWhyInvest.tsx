@@ -1,8 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Award, TrendingUp, Calendar } from "lucide-react";
+import { MapPin, Award, TrendingUp, Calendar, X } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { createLead } from "@/lib/api/leads";
+import { useApiCall } from "@/lib/hooks/useApiCall";
+import { validateLeadForm } from "@/lib/validation/lead-form";
+import { SUCCESS_MESSAGES, UI_CONFIG } from "@/lib/constants";
 
 interface WhyInvestItem {
   title: string;
@@ -14,6 +19,7 @@ interface ProjectWhyInvestProps {
   reasons: string[] | WhyInvestItem[];
   videoUrl?: string;
   detailedAnalysis?: string;
+  projectTitle?: string;
 }
 
 const iconMap = {
@@ -23,7 +29,58 @@ const iconMap = {
   calendar: Calendar,
 };
 
-export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis }: ProjectWhyInvestProps) {
+export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectTitle = "Project" }: ProjectWhyInvestProps) {
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success">("idle");
+
+  const { execute: submitLead, loading: isSubmitting, error: submitError } = useApiCall({
+    onSuccess: () => {
+      setSubmitStatus("success");
+      setTimeout(() => {
+        setFormData({ name: "", email: "", phone: "" });
+        setSubmitStatus("idle");
+        setShowForm(false);
+      }, SUCCESS_MESSAGES.LEAD_SUBMITTED.length > 0 ? 3000 : 2000);
+    },
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const validation = validateLeadForm(formData);
+    if (!validation.isValid) {
+      return;
+    }
+
+    try {
+      await submitLead(() =>
+        createLead({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          source: "why-invest-cta",
+        })
+      );
+    } catch (error) {
+      if (process.env.NODE_ENV === "development") {
+        console.error("Failed to submit lead:", error);
+      }
+    }
+  };
+
   // Convert simple string array to structured format if needed
   const investmentBoxes: WhyInvestItem[] = !reasons || reasons.length === 0 || (Array.isArray(reasons) && typeof reasons[0] === 'string')
     ? [
@@ -54,6 +111,7 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
           <div className="grid grid-cols-2 gap-3">
             {investmentBoxes.slice(0, 4).map((item, index) => {
               const IconComponent = item.icon ? iconMap[item.icon as keyof typeof iconMap] : TrendingUp;
+              const isMarketTiming = item.title === "Market Timing";
               
               return (
                 <motion.div
@@ -61,20 +119,33 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group cursor-pointer"
+                  className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group cursor-pointer flex flex-col ${
+                    isMarketTiming ? "bg-gradient-to-br from-[#C9A961]/10 to-[#C9A961]/5" : "bg-white"
+                  }`}
                 >
-                  <div className="w-10 h-10 bg-[#C9A961]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#C9A961]/20 transition-colors">
-                    <IconComponent className="w-5 h-5 text-[#C9A961]" />
+                  <div className="flex-1">
+                    <div className="w-10 h-10 bg-[#C9A961]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#C9A961]/20 transition-colors">
+                      <IconComponent className="w-5 h-5 text-[#C9A961]" />
+                    </div>
+                    <h3 className="text-sm font-semibold text-[#2C2416] mb-1.5 leading-tight">
+                      {typeof item === 'string' ? item.split(':')[0] : item.title}
+                    </h3>
+                    <p className="text-xs text-gray-600 leading-snug line-clamp-2">
+                      {typeof item === 'string' 
+                        ? item.includes(':') ? item.split(':').slice(1).join(':').trim() : item
+                        : item.subtitle
+                      }
+                    </p>
                   </div>
-                  <h3 className="text-sm font-semibold text-[#2C2416] mb-1.5 leading-tight">
-                    {typeof item === 'string' ? item.split(':')[0] : item.title}
-                  </h3>
-                  <p className="text-xs text-gray-600 leading-snug line-clamp-2">
-                    {typeof item === 'string' 
-                      ? item.includes(':') ? item.split(':').slice(1).join(':').trim() : item
-                      : item.subtitle
-                    }
-                  </p>
+
+                  {isMarketTiming && (
+                    <button
+                      onClick={() => setShowForm(true)}
+                      className="mt-3 w-full bg-[#C9A961] hover:bg-[#A88B4A] text-black text-xs font-semibold py-1.5 px-2 rounded transition-all"
+                    >
+                      Get More Insights
+                    </button>
+                  )}
                 </motion.div>
               );
             })}
@@ -143,6 +214,152 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
           </motion.div>
         </div>
       </div>
+
+      {/* Lead Form Modal */}
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto"
+            onClick={() => setShowForm(false)}
+          />
+
+          {/* Modal */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={UI_CONFIG.SPRING_CONFIG}
+            className="relative w-full max-w-lg bg-white overflow-hidden shadow-2xl rounded-lg pointer-events-auto m-4"
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowForm(false)}
+              className="absolute top-4 right-4 text-zinc-400 hover:text-black transition-colors z-20"
+              aria-label="Close form"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="p-8">
+              {submitStatus === "success" ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center py-8"
+                >
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg
+                      className="w-8 h-8 text-green-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-bold text-black mb-2">Thank You!</h4>
+                  <p className="text-zinc-600 text-sm">{SUCCESS_MESSAGES.LEAD_SUBMITTED}</p>
+                </motion.div>
+              ) : (
+                <>
+                  <div className="mb-6">
+                    <h3 className="text-2xl font-bold text-black">Get More Insights</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Learn more about market timing and investment opportunities
+                    </p>
+                  </div>
+
+                  {submitError && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-sm mb-4"
+                    >
+                      <div>
+                        <p className="text-xs font-medium text-red-900">Error</p>
+                        <p className="text-xs text-red-700">{submitError}</p>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  <form className="space-y-4" onSubmit={handleSubmit}>
+                    <div>
+                      <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className="w-full border-b border-zinc-200 py-2 focus:outline-none focus:border-gold transition-colors text-sm"
+                        placeholder="Your Name"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1">
+                        Phone
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="w-full border-b border-zinc-200 py-2 focus:outline-none focus:border-gold transition-colors text-sm"
+                        placeholder="+91 XXXXX XXXXX"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full border-b border-zinc-200 py-2 focus:outline-none focus:border-gold transition-colors text-sm"
+                        placeholder="your@email.com"
+                        required
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-black text-white py-3 font-medium mt-6 hover:bg-gold hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                          <span>Submitting...</span>
+                        </>
+                      ) : (
+                        "Get Insights"
+                      )}
+                    </button>
+                  </form>
+
+                  <p className="text-[10px] text-center text-zinc-400 mt-4">
+                    We respect your privacy. No spam, ever.
+                  </p>
+                </>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar {

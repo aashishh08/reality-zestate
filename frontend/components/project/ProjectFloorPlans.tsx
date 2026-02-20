@@ -108,7 +108,61 @@ export function ProjectFloorPlans({ floorPlans }: ProjectFloorPlansProps) {
           </motion.div>
 
         </div>
+
+        {/* Scrollable Description Container */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mt-16 bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10"
+        >
+          <div className="h-[300px] overflow-y-auto pr-4 custom-scrollbar">
+            <div className="space-y-8">
+              <div>
+                <h4 className="text-lg font-semibold text-[#2C2416] mb-3">Premium Design</h4>
+                <p className="text-gray-700 leading-relaxed text-sm">
+                  Each floor plan is meticulously designed by award-winning architects to maximize natural light, ventilation, and living space. Every detail has been considered to ensure optimal comfort and functionality for modern luxury living.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold text-[#2C2416] mb-3">Smart Layouts</h4>
+                <p className="text-gray-700 leading-relaxed text-sm">
+                  Open-plan living areas seamlessly blend with private spaces, creating flexible layouts that adapt to your lifestyle. High ceilings and expansive windows provide panoramic views while maintaining optimal privacy and security.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold text-[#2C2416] mb-3">Sustainable Features</h4>
+                <p className="text-gray-700 leading-relaxed text-sm">
+                  Smart home integration, energy-efficient systems, and sustainable materials throughout. Every residence incorporates cutting-edge technology while maintaining the timeless elegance and sophistication expected in luxury living.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold text-[#2C2416] mb-3">Perfect Proportions</h4>
+                <p className="text-gray-700 leading-relaxed text-sm">
+                  Spacious bedrooms with walk-in closets, luxurious bathrooms with premium fixtures, and entertainment spaces designed for hosting. Every corner reflects the commitment to excellence and attention to detail that defines this exclusive community.
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
+
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #C9A961;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #A88B4A;
+        }
+      `}</style>
     </section>
   );
 }

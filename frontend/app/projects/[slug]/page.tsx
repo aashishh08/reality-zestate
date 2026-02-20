@@ -21,6 +21,7 @@ import { ProjectKeyTakeaways } from "@/components/project/ProjectKeyTakeaways";
 import { ProjectBookingCTA } from "@/components/project/ProjectBookingCTA";
 import { ProjectWhyInvest } from "@/components/project/ProjectWhyInvest";
 import { ProjectSimilar } from "@/components/project/ProjectSimilar";
+import { ProjectSectionNavigation } from "@/components/project/ProjectSectionNavigation";
 import ProjectNavigation from "@/components/project/ProjectNavigation";
 import { ProjectTeam } from "@/components/project/ProjectTeam";
 import { projects } from "@/lib/data";
@@ -183,42 +184,23 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <SectionHeading>Key Takeaways</SectionHeading>
 
             <div className="grid md:grid-cols-2 gap-8">
-              {/* Left Side - Key Takeaways Box */}
+              {/* Left Side - Image */}
+              <div className="relative rounded-2xl overflow-hidden shadow-lg h-[450px]">
+                <img
+                  src={details.gallery?.[0] || details.heroImage || "/images/project-1.jpg"}
+                  alt="Project Details"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                />
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+              </div>
+
+              {/* Right Side - Key Takeaways Box */}
               <div>
                 <ProjectKeyTakeaways
                   takeaways={details.keyTakeaways}
                   highlights={details.highlights}
                 />
-              </div>
-
-              {/* Right Side - Scrollable Text */}
-              <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
-                <h3 className="text-xl font-serif font-bold text-[#2C2416] mb-6">Project Details</h3>
-                <div className="h-[400px] overflow-y-auto pr-4 scrollbar-custom">
-                  <div className="space-y-4 text-gray-700 leading-relaxed">
-                    {details.keyTakeawaysDescription ? (
-                      <p className="text-[15px]">{details.keyTakeawaysDescription}</p>
-                    ) : (
-                      <>
-                        <p className="text-[15px]">
-                          This ultra-luxury residential development represents a pinnacle of architectural excellence and contemporary living. Meticulously designed by renowned architects, every detail has been crafted to provide an unparalleled lifestyle experience.
-                        </p>
-                        <p className="text-[15px]">
-                          The project features state-of-the-art amenities including a world-class spa, infinity pool, private cinema, fitness center with personal training facilities, and lush landscaped gardens designed by international experts.
-                        </p>
-                        <p className="text-[15px]">
-                          Located in one of the most sought-after micro-markets, the property offers excellent connectivity to business districts, premium shopping destinations, fine dining establishments, and international schools.
-                        </p>
-                        <p className="text-[15px]">
-                          Each residence is designed with open layouts, premium finishes, high ceilings, and panoramic views. Smart home integration and sustainable building practices ensure a modern, eco-conscious living environment.
-                        </p>
-                        <p className="text-[15px]">
-                          Developed by a trusted builder with a proven track record of delivering luxury projects on time and with exceptional quality standards. Transparent communication and investor satisfaction are our core commitments.
-                        </p>
-                      </>
-                    )}
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -231,8 +213,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           reasons={details.whyInvest || []}
           videoUrl={details.videoUrl}
           detailedAnalysis={details.investmentAnalysis}
+          projectTitle={project.title}
         />
       )}
+
+      {/* Section Navigation */}
+      <ProjectSectionNavigation />
 
       {/* Overview */}
       <div id="overview">
@@ -254,67 +240,87 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Master Plan */}
       {details?.masterPlan && (
-        <ProjectMasterPlan
-          masterPlanImage={details.masterPlan}
-          description={details.masterPlanDescription}
-        />
+        <section id="masterplan" className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ProjectMasterPlan
+              masterPlanImage={details.masterPlan}
+              description={details.masterPlanDescription}
+            />
+          </div>
+        </section>
       )}
 
       {/* Location Advantage */}
-      {details?.location && <ProjectLocation location={details.location} />}
+      <section id="location">
+        {details?.location && <ProjectLocation location={details.location} />}
+      </section>
 
       {/* Contact Form #1 - First Appearance */}
       <ProjectBookingCTA projectTitle={project.title} />
 
       {/* Amenities */}
       {details?.amenities && details.amenities.length > 0 && (
-        <ProjectAmenities amenities={details.amenities} />
+        <section id="amenities">
+          <ProjectAmenities amenities={details.amenities} />
+        </section>
       )}
 
       {/* Residences (Floor Plans) */}
       {details?.floorPlans && details.floorPlans.length > 0 && (
-        <ProjectFloorPlans floorPlans={details.floorPlans} />
+        <section id="floorplans">
+          <ProjectFloorPlans floorPlans={details.floorPlans} />
+        </section>
       )}
 
       {/* Payment Plans */}
       {details?.paymentPlans && details.paymentPlans.length > 0 && (
-        <ProjectPaymentPlan paymentPlans={details.paymentPlans} />
+        <section id="paymentplans">
+          <ProjectPaymentPlan paymentPlans={details.paymentPlans} />
+        </section>
       )}
 
       {/* Design & Construction Team */}
-      {details?.team && <ProjectTeam team={details.team} />}
+      {details?.team && (
+        <section id="team">
+          <ProjectTeam team={details.team} />
+        </section>
+      )}
 
       {/* FAQs */}
-      {details && details.faqs && details.faqs.length > 0 ? (
-        <ProjectFAQ faqs={details.faqs} />
-      ) : details ? (
-        <ProjectFAQ faqs={[
-          {
-            question: "What is the project about?",
-            answer: "This is a premium residential development featuring ultra-luxury apartments with world-class amenities and strategic location.",
-            category: "General"
-          },
-          {
-            question: "What are the available unit configurations?",
-            answer: "We offer multiple configurations ranging from 2 BHK to 4+ BHK units, each designed with premium finishes and modern amenities.",
-            category: "Units"
-          },
-          {
-            question: "What are the payment options?",
-            answer: "We provide flexible payment plans including construction-linked, down payment, and progressive payment options to suit your needs.",
-            category: "Payment"
-          },
-          {
-            question: "When is the possession timeline?",
-            answer: "The project is planned for possession within the specified timeline. Contact our sales team for detailed information.",
-            category: "Possession"
-          }
-        ]} />
-      ) : null}
+      <section id="faqs">
+        {details && details.faqs && details.faqs.length > 0 ? (
+          <ProjectFAQ faqs={details.faqs} />
+        ) : details ? (
+          <ProjectFAQ faqs={[
+            {
+              question: "What is the project about?",
+              answer: "This is a premium residential development featuring ultra-luxury apartments with world-class amenities and strategic location.",
+              category: "General"
+            },
+            {
+              question: "What are the available unit configurations?",
+              answer: "We offer multiple configurations ranging from 2 BHK to 4+ BHK units, each designed with premium finishes and modern amenities.",
+              category: "Units"
+            },
+            {
+              question: "What are the payment options?",
+              answer: "We provide flexible payment plans including construction-linked, down payment, and progressive payment options to suit your needs.",
+              category: "Payment"
+            },
+            {
+              question: "When is the possession timeline?",
+              answer: "The project is planned for possession within the specified timeline. Contact our sales team for detailed information.",
+              category: "Possession"
+            }
+          ]} />
+        ) : null}
+      </section>
 
       {/* Similar Properties */}
       {similarProjects.length > 0 && (
-        <ProjectSimilar projects={similarProjects} />
+        <section id="similar">
+          <ProjectSimilar projects={similarProjects} />
+        </section>
       )}
 
       {/* Contact Form #2 - Final */}
