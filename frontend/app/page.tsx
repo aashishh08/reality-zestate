@@ -16,16 +16,16 @@ export const revalidate = 3600;
 
 async function getHomePageData() {
   try {
-    const [properties, locations, developers] = await Promise.all([
+    const [propertiesRes, locationsRes, developersRes] = await Promise.all([
       getProperties({ limit: 12, offset: 0 }, 3600),
       getLocations({ limit: 20, offset: 0 }, 3600),
       getDevelopers({ limit: 6, offset: 0 }, 3600),
     ]);
 
     return {
-      properties: properties || [],
-      locations: locations || [],
-      developers: developers || [],
+      properties: Array.isArray(propertiesRes) ? propertiesRes : propertiesRes?.data || [],
+      locations: locationsRes?.data || locationsRes || [],
+      developers: Array.isArray(developersRes) ? developersRes : developersRes?.data || [],
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';

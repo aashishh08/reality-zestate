@@ -15,7 +15,7 @@ export interface BlogPost {
     category: BlogCategory;
     tags: string[];
     readTime: number; // in minutes
-    seo: {
+    seo?: {
         metaTitle?: string;
         metaDescription?: string;
         keywords?: string[];

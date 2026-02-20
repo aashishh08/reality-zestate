@@ -245,8 +245,8 @@ export function buildQueryString(
 export function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     // Check if it's an ApiError with data
-    if ('data' in error && error.data?.message) {
-      return error.data.message;
+    if ('data' in error && error.data && typeof error.data === 'object' && 'message' in error.data) {
+      return (error.data as any).message;
     }
     return error.message;
   }
@@ -257,8 +257,8 @@ export function getErrorMessage(error: unknown): string {
  * Helper to handle validation errors from API
  */
 export function getValidationErrors(error: unknown): Record<string, string[]> | null {
-  if (error instanceof Error && 'data' in error && error.data?.errors) {
-    return error.data.errors;
+  if (error instanceof Error && 'data' in error && error.data && typeof error.data === 'object' && 'errors' in error.data) {
+    return (error.data as any).errors;
   }
   return null;
 }

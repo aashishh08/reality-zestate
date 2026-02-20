@@ -8,7 +8,7 @@ import { ArrowRight, MapPin } from "lucide-react";
 import Link from "next/link";
 
 interface UpcomingProjectsProps {
-  properties: Property[];
+  properties: (Property & { image?: string })[];
 }
 
 // Client-only component that uses useScroll

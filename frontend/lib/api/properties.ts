@@ -12,6 +12,7 @@ export interface PropertyFilters {
   categoryIds?: string[];
   priceMin?: number;
   priceMax?: number;
+  isPublished?: boolean;
   limit?: number;
   offset?: number;
 }

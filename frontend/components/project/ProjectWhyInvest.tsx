@@ -128,13 +128,10 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
                       <IconComponent className="w-5 h-5 text-[#C9A961]" />
                     </div>
                     <h3 className="text-sm font-semibold text-[#2C2416] mb-1.5 leading-tight">
-                      {typeof item === 'string' ? item.split(':')[0] : item.title}
+                      {item.title}
                     </h3>
                     <p className="text-xs text-gray-600 leading-snug line-clamp-2">
-                      {typeof item === 'string' 
-                        ? item.includes(':') ? item.split(':').slice(1).join(':').trim() : item
-                        : item.subtitle
-                      }
+                      {item.subtitle}
                     </p>
                   </div>
 

@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { PropertyFilters } from '@/types/property-listing';
+import type { PropertyFilters } from '@/types/property-listing';
 
 export interface PropertyFiltersProps {
   filters: PropertyFilters;
@@ -168,7 +168,7 @@ function FilterSection({ title, isExpanded, onToggle, children }: FilterSectionP
         initial={false}
         animate={{ height: isExpanded ? 'auto' : 0 }}
         transition={{ duration: 0.2 }}
-        overflow="hidden"
+        className="overflow-hidden"
       >
         <div className="pt-4">
           {children}

@@ -28,7 +28,7 @@ export function PropertyCard({ project, index }: PropertyCardProps) {
       {/* Background Image with Zoom Effect */}
       <div className="absolute inset-0 w-full h-full">
         <Image
-          src={project.image}
+          src={project.image || "/images/placeholder.jpg"}
           alt={project.title}
           fill
           className="object-cover transition-transform duration-1000 group-hover:scale-110"

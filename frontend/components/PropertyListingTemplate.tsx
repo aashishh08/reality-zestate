@@ -328,10 +328,10 @@ export function PropertyListingTemplate({
                       image: property.image || '/images/placeholder.jpg',
                       location: property.Location?.name || 'Unknown',
                       price: `₹${property.priceMin.toLocaleString('en-IN')} - ₹${property.priceMax.toLocaleString('en-IN')}`,
-                      category: 'Property',
+                      category: 'Trending' as const,
                       Developer: property.Developer,
-                      Location: property.Location,
-                      Categories: property.Categories,
+                      Location: property.Location ? { ...property.Location, type: 'location' } : undefined,
+                      Categories: (property as any).Categories,
                     };
 
                     return (

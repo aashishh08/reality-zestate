@@ -15,10 +15,32 @@ export interface BlogPost {
   id: string;
   slug: string;
   title: string;
+  excerpt: string;
   content: string;
-  isPublished: boolean;
-  createdAt?: string;
+  author: {
+    name: string;
+    avatar?: string;
+    bio?: string;
+  };
+  publishedAt: string;
   updatedAt?: string;
+  featuredImage: string;
+  category: {
+    id: string;
+    name: string;
+    slug: string;
+    description?: string;
+  };
+  tags: string[];
+  readTime: number;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    keywords?: string[];
+    ogImage?: string;
+  };
+  isPublished?: boolean;
+  createdAt?: string;
 }
 
 export interface BlogsResponse {

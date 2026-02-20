@@ -36,7 +36,7 @@ export function ProjectGallery({ images, videoUrl }: ProjectGalleryProps) {
 
   const visibleThumbnails = totalItems;
   const thumbnailItems = [
-    ...(videoUrl ? [{ type: "video" }] : []),
+    ...(videoUrl ? [{ type: "video", src: undefined }] : []),
     ...images.map((img) => ({ type: "image", src: img })),
   ];
 

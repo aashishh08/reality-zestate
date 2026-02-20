@@ -4,6 +4,8 @@
  * In production, this should come from an API
  */
 
+import { Project } from '@/types';
+
 export interface CategoryData {
   slug: string;
   title: string;
@@ -13,8 +15,9 @@ export interface CategoryData {
   heroSubtitle: string;
   introText: string;
   citySections?: Array<{
-    city: string;
-    projects: string[];
+    cityName: string;
+    citySlug: string;
+    projects: Project[];
   }>;
   features?: Array<{
     title: string;
@@ -44,15 +47,18 @@ const categories: Record<string, CategoryData> = {
     introText: 'Explore our collection of premium apartment properties across Delhi NCR region.',
     citySections: [
       {
-        city: 'Delhi',
+        cityName: 'Delhi',
+        citySlug: 'delhi',
         projects: [],
       },
       {
-        city: 'Gurgaon',
+        cityName: 'Gurgaon',
+        citySlug: 'gurgaon',
         projects: [],
       },
       {
-        city: 'Noida',
+        cityName: 'Noida',
+        citySlug: 'noida',
         projects: [],
       },
     ],
@@ -95,11 +101,13 @@ const categories: Record<string, CategoryData> = {
     introText: 'Explore our collection of premium villa properties with expansive spaces.',
     citySections: [
       {
-        city: 'Delhi',
+        cityName: 'Delhi',
+        citySlug: 'delhi',
         projects: [],
       },
       {
-        city: 'Gurgaon',
+        cityName: 'Gurgaon',
+        citySlug: 'gurgaon',
         projects: [],
       },
     ],

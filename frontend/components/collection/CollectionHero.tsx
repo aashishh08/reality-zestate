@@ -20,7 +20,7 @@ export function CollectionHero({ collection }: CollectionHeroProps) {
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src={collection.image}
+          src={collection.image || "/images/project-1.jpg"}
           alt={collection.title}
           fill
           className="object-cover"

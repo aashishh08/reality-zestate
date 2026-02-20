@@ -38,10 +38,10 @@ export interface LocationsResponse {
 export async function getLocations(
   filters?: LocationFilters,
   revalidate: number | false = 3600
-): Promise<Location[]> {
+): Promise<LocationsResponse> {
   const queryString = buildQueryString(filters);
 
-  return fetchFromAPI<Location[]>(
+  return fetchFromAPI<LocationsResponse>(
     `/locations${queryString}`,
     {
       method: 'GET',

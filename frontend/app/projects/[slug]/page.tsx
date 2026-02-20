@@ -109,8 +109,8 @@ export async function generateMetadata({
     description,
     keywords: [
       project.title,
-      project.location,
-      project.type,
+      project.location || "luxury property",
+      project.type || "residential",
       "luxury real estate",
       "premium properties",
       "Opulnz Abode"
@@ -118,7 +118,7 @@ export async function generateMetadata({
     openGraph: {
       title: project.title,
       description: project.details?.subtitle || description,
-      images: [project.details?.heroImage || project.image],
+      images: [project.details?.heroImage || project.image || "/images/project-1.jpg"],
     },
   };
 }
