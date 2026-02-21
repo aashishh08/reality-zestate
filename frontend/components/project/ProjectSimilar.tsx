@@ -13,13 +13,15 @@ export function ProjectSimilar({ projects }: ProjectSimilarProps) {
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section className="py-20 bg-[#F0EFEB]">
+    <section className="py-12 bg-[#F0EFEB]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <SectionHeading>Similar Properties</SectionHeading>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Explore other luxury properties that might interest you
-          </p>
+          <SectionHeading
+            label="You May Also Like"
+            description="Explore other luxury properties that might interest you"
+          >
+            Similar Properties
+          </SectionHeading>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">

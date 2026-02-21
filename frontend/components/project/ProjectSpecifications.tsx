@@ -13,7 +13,7 @@ interface ProjectSpecificationsProps {
 
 export function ProjectSpecifications({ specifications }: ProjectSpecificationsProps) {
   return (
-    <section className="py-24 bg-transparent">
+    <section className="py-14 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <SectionHeading>

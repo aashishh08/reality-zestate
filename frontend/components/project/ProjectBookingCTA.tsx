@@ -1,126 +1,189 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useState } from "react";
+import { motion } from "framer-motion";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { CONTACT_INFO } from "@/lib/constants";
+import { createLead } from "@/lib/api/leads";
+import { useApiCall } from "@/lib/hooks/useApiCall";
 
 interface ProjectBookingCTAProps {
   projectTitle: string;
 }
 
+const contactCards = [
+  {
+    icon: Phone,
+    label: "Phone",
+    value: CONTACT_INFO.PHONE_NUMBER,
+    href: `tel:${CONTACT_INFO.PHONE_NUMBER}`,
+  },
+  {
+    icon: Mail,
+    label: "Email",
+    value: "info@opulnzabode.com",
+    href: "mailto:info@opulnzabode.com",
+  },
+  {
+    icon: MapPin,
+    label: "Address",
+    value: "Golf Course Road, Sector 54, Gurgaon",
+    href: "#location",
+  },
+  {
+    icon: Clock,
+    label: "Working Hours",
+    value: "Mon - Sun: 10:00 AM – 7:00 PM",
+    href: null,
+  },
+];
+
 export function ProjectBookingCTA({ projectTitle }: ProjectBookingCTAProps) {
-  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [submitted, setSubmitted] = useState(false);
+
+  const { execute: submitLead, loading } = useApiCall({
+    onSuccess: () => {
+      setSubmitted(true);
+      setForm({ name: "", email: "", phone: "", message: "" });
+    },
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.phone) return;
+    await submitLead(() =>
+      createLead({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        source: "site-visit-cta",
+      })
+    );
+  };
 
   return (
-    <>
-      <section className="relative py-20 overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#C9A961] to-[#A88B4A]">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }} />
-          </div>
+    <section className="py-12 bg-[#1A1A2E]" id="contact">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-serif text-white mb-2">
+            Schedule a Site Visit
+          </h2>
+          <div className="w-8 h-[2px] bg-[#C9A961] mx-auto mb-3" />
+          <p className="text-gray-400 text-sm">
+            Experience {projectTitle} in person. Our team is ready to assist you.
+          </p>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="text-4xl md:text-5xl font-serif text-white mb-6"
-            >
-              Book a Private Tour
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-xl text-white/90 mb-8 max-w-2xl mx-auto"
-            >
-              Experience {projectTitle} firsthand with our exclusive guided tour
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-            >
-              <button
-                onClick={() => setShowForm(true)}
-                className="bg-white text-[#2C2416] px-8 py-4 rounded-full font-semibold text-lg hover:bg-[#2C2416] hover:text-white transition-all shadow-xl hover:shadow-2xl transform hover:scale-105"
-              >
-                Schedule a Visit
-              </button>
-              <a
-                href="#overview"
-                className="text-white border-2 border-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-[#2C2416] transition-all"
-              >
-                Scroll Down to Explore
-              </a>
-            </motion.div>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
 
-          {/* Scroll Indicator */}
+          {/* Left — Request a Callback Form */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, y: [0, 10, 0] }}
-            transition={{ delay: 0.5, y: { repeat: Infinity, duration: 1.5 } }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white rounded-xl p-7"
           >
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </motion.div>
-        </div>
-      </section>
+            <h3 className="text-lg font-serif font-semibold text-[#1A1A2E] mb-1">Request a Callback</h3>
+            <p className="text-gray-500 text-xs mb-5">Fill in your details and our team will get in touch shortly.</p>
 
-      {/* Booking Form Modal */}
-      {showForm && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl p-8 max-w-md w-full relative"
-          >
-            <button
-              onClick={() => setShowForm(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            <h3 className="text-2xl font-serif text-[#2C2416] mb-6">Schedule Your Visit</h3>
-            <form className="space-y-4">
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A961] focus:border-transparent"
-              />
-              <input
-                type="email"
-                placeholder="Email Address"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A961] focus:border-transparent"
-              />
-              <input
-                type="tel"
-                placeholder="Phone Number"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A961] focus:border-transparent"
-              />
-              <input
-                type="date"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A961] focus:border-transparent"
-              />
-              <button
-                type="submit"
-                className="w-full bg-[#C9A961] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#A88B4A] transition-all"
-              >
-                Book Now
-              </button>
-            </form>
+            {submitted ? (
+              <div className="py-8 text-center">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p className="text-[#1A1A2E] font-semibold text-sm">Thank you! We'll be in touch soon.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="Full Name *"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  required
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#C9A961] transition-colors"
+                />
+                <input
+                  type="email"
+                  placeholder="Email Address *"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#C9A961] transition-colors"
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number *"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  required
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#C9A961] transition-colors"
+                />
+                <textarea
+                  placeholder="Message (Optional)"
+                  rows={2}
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#C9A961] transition-colors resize-none"
+                />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-[#C9A961] hover:bg-[#A88B4A] text-white text-sm font-bold uppercase tracking-widest py-3 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {loading ? "Submitting..." : "Request Callback"}
+                </button>
+              </form>
+            )}
           </motion.div>
+
+          {/* Right — Contact Info Grid + Experience Center */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col gap-4"
+          >
+            {/* 2×2 Contact Cards */}
+            <div className="grid grid-cols-2 gap-3">
+              {contactCards.map(({ icon: Icon, label, value, href }) => {
+                const content = (
+                  <div className="bg-[#232340] rounded-xl p-4 hover:bg-[#2a2a50] transition-colors h-full">
+                    <Icon className="w-5 h-5 text-[#C9A961] mb-2" />
+                    <p className="text-gray-400 text-xs mb-1">{label}</p>
+                    <p className="text-white text-sm font-medium leading-snug">{value}</p>
+                  </div>
+                );
+                return href ? (
+                  <a key={label} href={href} className="block">
+                    {content}
+                  </a>
+                ) : (
+                  <div key={label}>{content}</div>
+                );
+              })}
+            </div>
+
+            {/* Visit Our Experience Center */}
+            <a
+              href={`https://wa.me/${CONTACT_INFO.WHATSAPP_NUMBER.replace(/\D/g, '')}?text=Hi, I'd like to visit the experience center for ${encodeURIComponent(projectTitle)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#232340] hover:bg-[#2a2a50] transition-colors rounded-xl p-5 text-center border border-[#C9A961]/20 hover:border-[#C9A961]/50 group"
+            >
+              <p className="text-white font-serif text-base font-semibold mb-1 group-hover:text-[#C9A961] transition-colors">
+                Visit Our Experience Center
+              </p>
+              <p className="text-gray-400 text-xs">Book a slot via WhatsApp — we're available 7 days a week</p>
+            </a>
+          </motion.div>
+
         </div>
-      )}
-    </>
+      </div>
+    </section>
   );
 }

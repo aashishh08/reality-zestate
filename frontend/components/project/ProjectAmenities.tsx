@@ -61,19 +61,16 @@ const amenityCategories = [
 
 export function ProjectAmenities({ amenities }: ProjectAmenitiesProps) {
   return (
-    <section id="amenities" className="py-24 bg-white">
+    <section id="amenities" className="py-14 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-[#C9A961] text-sm font-semibold uppercase tracking-widest mb-2">
-            World-Class Facilities
-          </p>
-          <h2 className="text-5xl font-serif font-bold text-[#2C2416] mb-4">
+          <SectionHeading
+            label="World-Class Facilities"
+            description="Experience a lifestyle of unparalleled luxury with our comprehensive range of world-class amenities designed for your comfort and well-being"
+          >
             Amenities
-          </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Experience a lifestyle of unparalleled luxury with our comprehensive range of world-class amenities designed for your comfort and well-being
-          </p>
+          </SectionHeading>
         </div>
 
         {/* Featured Images and Categories */}

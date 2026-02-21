@@ -49,28 +49,16 @@ export function ProjectMasterPlan({ masterPlanImage, description }: ProjectMaste
     const displayDescription = description && description.length > 0 ? description : defaultDescription;
 
     return (
-        <section className="py-24 bg-white" id="master-plan">
+        <section className="py-14 bg-white" id="master-plan">
             <div className="max-w-7xl mx-auto px-6">
                 {/* Header */}
                 <div className="text-center mb-16">
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        className="text-[#C9A961] text-sm font-bold uppercase tracking-widest mb-4"
+                    <SectionHeading
+                        label="Project Layout"
+                        description="Explore the comprehensive layout and thoughtful design of our premium development"
                     >
-                        Project Layout
-                    </motion.p>
-
-                    <SectionHeading>Master Plan</SectionHeading>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-gray-600 text-center max-w-2xl mx-auto"
-                    >
-                        Explore the comprehensive layout and thoughtful design of our premium development
-                    </motion.p>
+                        Master Plan
+                    </SectionHeading>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">

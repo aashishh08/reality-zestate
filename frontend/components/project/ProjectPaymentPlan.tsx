@@ -14,15 +14,15 @@ interface ProjectPaymentPlanProps {
 
 export function ProjectPaymentPlan({ paymentPlans }: ProjectPaymentPlanProps) {
   return (
-    <section id="payment-plans" className="py-24 bg-transparent">
+    <section id="payment-plans" className="py-14 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <SectionHeading>
-            Payment <span className="text-gold-dark">Plans</span>
+          <SectionHeading
+            label="Flexible Options"
+            description="Flexible payment options designed to suit your financial planning."
+          >
+            Payment <span className="text-[#C9A961]">Plans</span>
           </SectionHeading>
-          <p className="text-zinc-600 max-w-2xl mx-auto">
-            Flexible payment options designed to suit your financial planning.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

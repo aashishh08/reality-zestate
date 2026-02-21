@@ -45,28 +45,16 @@ const connectivityIcons = {
 
 export function ProjectLocation({ location }: ProjectLocationProps) {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="text-[#C9A961] text-sm font-bold uppercase tracking-widest mb-4"
+          <SectionHeading
+            label="Prime Address"
+            description="Strategically located on Golf Course Road, offering unmatched connectivity to business districts, airports, and lifestyle destinations"
           >
-            Prime Address
-          </motion.p>
-          
-          <SectionHeading>Location Advantage</SectionHeading>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-600 text-center max-w-2xl mx-auto"
-          >
-            Strategically located on Golf Course Road, offering unmatched connectivity to business districts, airports, and lifestyle destinations
-          </motion.p>
+            Location Advantage
+          </SectionHeading>
         </div>
 
         {/* Content Grid */}

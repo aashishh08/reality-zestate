@@ -19,6 +19,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ProjectGallery } from "@/components/project/ProjectGallery";
 import { ProjectKeyTakeaways } from "@/components/project/ProjectKeyTakeaways";
 import { ProjectBookingCTA } from "@/components/project/ProjectBookingCTA";
+import { ProjectBookingBanner } from "@/components/project/ProjectBookingBanner";
 import { ProjectWhyInvest } from "@/components/project/ProjectWhyInvest";
 import { ProjectSimilar } from "@/components/project/ProjectSimilar";
 import { ProjectSectionNavigation } from "@/components/project/ProjectSectionNavigation";
@@ -166,7 +167,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Introduction Text Section */}
       {details?.introText && (
-        <section className="py-12 bg-[#F5F0E8]">
+        <section className="py-8 bg-[#F5F0E8]">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
               <p className="text-[#2C2416] text-lg leading-relaxed text-center">
@@ -179,9 +180,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Key Takeaways Section - Before Why Invest */}
       {details?.keyTakeaways && (
-        <section className="py-20 bg-[#F5F0E8]" id="key-takeaways">
+        <section className="py-12 bg-[#F5F0E8]" id="key-takeaways">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <SectionHeading>Key Takeaways</SectionHeading>
+            <SectionHeading label="Highlights">Key Takeaways</SectionHeading>
 
             <div className="grid md:grid-cols-2 gap-8">
               {/* Left Side - Image */}
@@ -227,9 +228,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Gallery Section */}
       {details?.gallery && (
-        <section className="py-20 bg-white" id="gallery">
+        <section className="py-12 bg-white" id="gallery">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <SectionHeading centered={false}>Project Gallery</SectionHeading>
+            <SectionHeading centered={false} label="Visual Tour">Project Gallery</SectionHeading>
             <ProjectGallery
               images={details.gallery}
               videoUrl={details.videoUrl}
@@ -240,7 +241,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Master Plan */}
       {details?.masterPlan && (
-        <section id="masterplan" className="py-20 bg-white">
+        <section id="masterplan" className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ProjectMasterPlan
               masterPlanImage={details.masterPlan}
@@ -255,8 +256,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         {details?.location && <ProjectLocation location={details.location} />}
       </section>
 
-      {/* Contact Form #1 - First Appearance */}
-      <ProjectBookingCTA projectTitle={project.title} />
+      {/* Book a Private Tour Banner */}
+      <ProjectBookingBanner projectTitle={project.title} />
 
       {/* Amenities */}
       {details?.amenities && details.amenities.length > 0 && (

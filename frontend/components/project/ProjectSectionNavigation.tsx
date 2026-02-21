@@ -14,16 +14,16 @@ interface ProjectSectionNavigationProps {
 }
 
 const defaultSections: NavItem[] = [
-  { id: "overview", label: "Overview", icon: "📋" },
-  { id: "gallery", label: "Gallery", icon: "🖼️" },
-  { id: "masterplan", label: "Masterplan", icon: "🗺️" },
-  { id: "location", label: "Location", icon: "📍" },
-  { id: "amenities", label: "Amenities", icon: "🏊" },
-  { id: "floorplans", label: "Residences", icon: "🏠" },
-  { id: "paymentplans", label: "Payment Plans", icon: "💰" },
-  { id: "team", label: "Team", icon: "🏗️" },
-  { id: "faqs", label: "FAQs", icon: "❓" },
-  { id: "similar", label: "Similar Properties", icon: "🏘️" },
+  { id: "overview", label: "Overview" },
+  { id: "gallery", label: "Gallery" },
+  { id: "masterplan", label: "Masterplan" },
+  { id: "location", label: "Location" },
+  { id: "amenities", label: "Amenities" },
+  { id: "floorplans", label: "Residences" },
+  { id: "paymentplans", label: "Payment Plans" },
+  { id: "team", label: "Team" },
+  { id: "faqs", label: "FAQs" },
+  { id: "similar", label: "Similar Properties" },
 ];
 
 export function ProjectSectionNavigation({ sections = defaultSections }: ProjectSectionNavigationProps) {
@@ -76,7 +76,6 @@ export function ProjectSectionNavigation({ sections = defaultSections }: Project
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white"
               }`}
             >
-              {section.icon && <span className="text-lg">{section.icon}</span>}
               <span>{section.label}</span>
             </motion.button>
           ))}

@@ -102,9 +102,16 @@ Rental yield potential is another attractive aspect of this investment. The loca
 The current pre-launch phase presents an optimal entry point from a pricing perspective. Early investors typically benefit from significant appreciation by the time of possession, as seen in previous projects in similar locations.`;
 
   return (
-    <section className="py-20 bg-[#F5F0E8]" id="why-invest">
+    <section className="py-12 bg-[#F5F0E8]" id="why-invest">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading>Why Invest ?</SectionHeading>
+        <div className="text-center mb-16">
+          <SectionHeading
+            label="Investment Opportunity"
+            description={`Discover the compelling reasons why ${projectTitle} represents one of the finest investment opportunities in Gurgaon`}
+          >
+            Why Invest in <span className="text-[#C9A961]">{projectTitle}</span>
+          </SectionHeading>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Left Side - Small Icon Boxes in Grid */}

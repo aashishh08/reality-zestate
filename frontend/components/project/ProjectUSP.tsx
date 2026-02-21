@@ -11,15 +11,15 @@ interface ProjectUSPProps {
 
 export function ProjectUSP({ usp, projectTitle }: ProjectUSPProps) {
   return (
-    <section id="usp" className="py-24 bg-[#F5F5F0]">
+    <section id="usp" className="py-14 bg-[#F5F5F0]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <SectionHeading>
-            Why Choose <span className="text-gold-dark">{projectTitle}</span>?
+          <SectionHeading
+            label="Unique Selling Points"
+            description="Discover what makes this project truly exceptional."
+          >
+            Why Choose <span className="text-[#C9A961]">{projectTitle}</span>?
           </SectionHeading>
-          <p className="text-zinc-600 max-w-2xl mx-auto">
-            Discover what makes this project truly exceptional.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">

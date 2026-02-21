@@ -40,28 +40,16 @@ export function ProjectTeam({ team }: ProjectTeamProps) {
   if (!team || !team.members || team.members.length === 0) return null;
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="text-[#C9A961] text-sm font-bold uppercase tracking-widest mb-4"
+          <SectionHeading
+            label="The Visionaries"
+            description="World-class professionals coming together to create an architectural masterpiece"
           >
-            The Visionaries
-          </motion.p>
-
-          <SectionHeading>Design & Construction Team</SectionHeading>
-
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-600 text-center max-w-2xl mx-auto"
-          >
-            World-class professionals coming together to create an architectural masterpiece
-          </motion.p>
+            Design &amp; Construction Team
+          </SectionHeading>
         </div>
 
         {/* Team Members Grid */}

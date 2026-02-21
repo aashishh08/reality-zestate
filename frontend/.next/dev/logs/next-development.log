@@ -1,134 +1,215 @@
-[00:00:00.932] Server  LOG     ✓ Ready in 758ms
-[00:00:01.280] Server  LOG     [HomePage] Starting data fetch...
-[00:00:01.280] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:00:01.281] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:01.294] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:01.294] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:01.341] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:00:01.342] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:01.342] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:01.342] Server  LOG     [API] Response data: {}
-[00:00:01.343] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:00:01.343] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:01.343] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:01.344] Server  LOG     [API] Response data: {}
-[00:00:01.345] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:00:01.345] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:01.345] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:01.346] Server  LOG     [API] Response data: {}
-[00:00:01.346] Server  LOG     [HomePage] Data fetched successfully
-[00:00:01.346] Server  LOG     [HomePage] Properties: 6
-[00:00:01.346] Server  LOG     [HomePage] Locations: 11
-[00:00:01.346] Server  LOG     [HomePage] Developers: 5
-[00:00:01.406] Server  WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:00:02.252] Server  LOG     ✓ Ready in 2.1s
+[00:00:09.490] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0"
+[00:00:09.504] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0"
+[00:00:09.505] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0"
+[00:00:09.618] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200"
+[00:00:09.619] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0"
+[00:00:09.621] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200"
+[00:00:09.622] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0"
+[00:00:09.625] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200"
+[00:00:09.626] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0"
+[00:00:09.682] Server  WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:01.583] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:01.763] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:00:10.778] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:01.763] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:01.763] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:01.763] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:01.763] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:14.722] Server  LOG     [HomePage] Starting data fetch...
-[00:00:14.722] Server  LOG     [HomePage] API_BASE_URL: "http://localhost:4002/api/v1"
-[00:00:14.723] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:14.724] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:14.725] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:14.733] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200
-[00:00:14.733] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200
-[00:00:14.733] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200
-[00:00:14.734] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0
-[00:00:14.734] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:14.735] Server  LOG     [API] Response data: {}
-[00:00:14.735] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0
-[00:00:14.735] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:14.736] Server  LOG     [API] Response data: {}
-[00:00:14.736] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0
-[00:00:14.736] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:14.736] Server  LOG     [API] Response data: {}
-[00:00:14.737] Server  LOG     [HomePage] Data fetched successfully
-[00:00:14.737] Server  LOG     [HomePage] Properties: 6
-[00:00:14.737] Server  LOG     [HomePage] Locations: 11
-[00:00:14.737] Server  LOG     [HomePage] Developers: 5
-[00:00:15.067] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:00:10.778] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:10.778] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:10.778] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:10.778] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:10.778] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:02:51.497] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:02:51.501] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:02:51.515] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:02:51.516] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:02:51.520] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:02:51.521] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:02:51.521] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:02:51.740] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:15.067] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:15.067] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:20.694] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:20.694] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:23.174] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:29.109] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[00:00:29.110] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:00:29.114] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[00:00:29.114] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:00:29.150] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[00:00:29.150] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:00:29.150] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:29.150] Server  LOG     [API] Response data: {}
-[00:00:29.151] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[00:00:29.155] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[00:00:29.155] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:00:29.156] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:00:29.156] Server  LOG     [API] Response data: {}
-[00:00:29.156] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[00:00:29.156] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:00:29.293] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:02:53.206] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:02:55.189] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:02:56.708] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:03:03.725] Browser WARN    Image with src "/images/4bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:03:04.437] Browser WARN    Image with src "/images/5bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:03:57.267] Server  LOG     ✓ Compiled in 127ms
+[00:04:01.871] Server  LOG     ✓ Compiled in 32ms
+[00:13:05.923] Server  LOG     ✓ Compiled in 173ms
+[00:13:10.317] Server  LOG     ✓ Compiled in 33ms
+[00:17:50.970] Server  LOG     ✓ Compiled in 130ms
+[00:17:59.955] Server  LOG     ✓ Compiled in 37ms
+[00:18:08.750] Server  LOG     ✓ Compiled in 63ms
+[00:18:16.942] Server  LOG     ✓ Compiled in 53ms
+[00:18:26.096] Server  LOG     ✓ Compiled in 68ms
+[00:18:31.107] Server  LOG     ✓ Compiled in 33ms
+[00:18:36.780] Server  LOG     ✓ Compiled in 55ms
+[00:18:53.475] Server  LOG     ✓ Compiled in 73ms
+[00:18:57.377] Server  LOG     ✓ Compiled in 37ms
+[00:19:01.404] Server  LOG     ✓ Compiled in 68ms
+[00:19:05.421] Server  LOG     ✓ Compiled in 34ms
+[00:19:12.687] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:19:12.702] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:19:12.705] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:19:12.714] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:19:12.716] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:19:12.718] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:19:12.719] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:19:15.442] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:19:15.444] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:19:15.444] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:19:15.448] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:19:15.450] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:19:15.450] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:19:15.451] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:20:04.032] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:20:04.041] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:20:04.205] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:20:04.206] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:20:04.281] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:20:04.281] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:20:04.366] Server  WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:29.399] Browser WARN    Image with src "/images/project-4.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:29.399] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:34.449] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:02:01.745] Server  LOG     ✓ Compiled in 531ms
-[00:03:06.640] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[00:03:06.640] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:03:06.646] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[00:03:06.647] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:03:06.716] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[00:03:06.717] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:03:06.717] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:03:06.717] Server  LOG     [API] Response data: {}
-[00:03:06.717] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[00:03:06.717] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:03:06.735] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[00:03:06.735] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:03:06.736] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:03:06.736] Server  LOG     [API] Response data: {}
-[00:03:06.736] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[00:03:06.846] Server  WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:20:04.913] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:03:07.267] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:20:04.913] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:20:05.336] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:20:05.336] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:21:17.981] Server  LOG     ✓ Compiled in 124ms
+[00:24:00.970] Server  LOG     ✓ Compiled in 81ms
+[00:24:31.365] Server  LOG     ✓ Compiled in 40ms
+[00:25:30.509] Server  LOG     ✓ Compiled in 57ms
+[00:25:34.842] Server  LOG     ✓ Compiled in 52ms
+[00:27:10.370] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:27:19.710] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:27:19.853] Server  LOG     ✓ Compiled in 297ms
+[00:27:36.490] Browser LOG     [API] Fetching: POST http://localhost:4002/api/v1/leads
+[00:27:36.490] Browser ERROR   [API] Error: POST http://localhost:4002/api/v1/leads Failed to fetch
+[00:27:36.490] Browser ERROR   unhandledRejection: TypeError: Failed to fetch
+[00:27:47.357] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0"
+[00:27:47.358] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0"
+[00:27:47.358] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0"
+[00:27:47.365] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200"
+[00:27:47.366] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200"
+[00:27:47.366] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200"
+[00:27:47.367] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0"
+[00:27:47.367] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0"
+[00:27:47.367] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0"
+[00:27:47.510] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:03:07.267] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:03:07.267] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:03:08.668] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:03:30.605] Server  LOG     ✓ Compiled in 29ms
-[00:03:41.005] Server  LOG     ✓ Compiled in 32ms
-[00:03:42.477] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[00:03:42.477] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:03:42.481] Server  LOG     [ProjectPage] Attempting to fetch from backend: mahindra-origins-pune
-[00:03:42.481] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:03:42.624] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[00:03:42.625] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:03:42.625] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:03:42.625] Server  LOG     [API] Response data: {}
-[00:03:42.625] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[00:03:42.625] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:03:42.630] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200
-[00:03:42.630] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune
-[00:03:42.630] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:03:42.630] Server  LOG     [API] Response data: {}
-[00:03:42.631] Server  LOG     [ProjectPage] ✅ Successfully fetched from backend: mahindra-origins-pune
-[00:03:42.664] Server  WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:27:47.624] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:27:47.624] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:27:47.624] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:27:48.805] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0"
+[00:27:48.806] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0"
+[00:27:48.806] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0"
+[00:27:48.814] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200"
+[00:27:48.814] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200"
+[00:27:48.815] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200"
+[00:27:48.816] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0"
+[00:27:48.816] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0"
+[00:27:48.816] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0"
+[00:27:50.216] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai"
+[00:27:50.229] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai"
+[00:27:50.352] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai -> 200"
+[00:27:50.353] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai"
+[00:27:50.361] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai -> 200"
+[00:27:50.362] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/godrej-aqua-mumbai"
+[00:27:50.365] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:28:35.138] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties?limit=12&offset=0"
+[00:28:35.142] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/locations?limit=20&offset=0"
+[00:28:35.142] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/developers?limit=6&offset=0"
+[00:28:35.149] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties?limit=12&offset=0 -> 200"
+[00:28:35.150] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/locations?limit=20&offset=0 -> 200"
+[00:28:35.150] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/developers?limit=6&offset=0 -> 200"
+[00:28:35.151] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties?limit=12&offset=0"
+[00:28:35.151] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/locations?limit=20&offset=0"
+[00:28:35.151] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/developers?limit=6&offset=0"
+[00:28:35.937] Browser WARN    Image with src "/images/hero-bg.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:03:43.062] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+[00:28:35.937] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:28:35.937] Browser WARN    Image with src "/images/category-delhi.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:28:35.937] Browser WARN    Image with src "/images/category-noida.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:28:35.937] Browser WARN    Image with src "/images/category-gurugram.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:28:35.937] Browser WARN    Image with src "/images/project-2.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:28:37.981] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/locations?slug=bangalore"
+[00:28:37.987] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/locations?slug=bangalore"
+[00:28:37.996] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/locations?slug=bangalore -> 200"
+[00:28:37.997] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/locations?slug=bangalore"
+[00:28:37.997] Server  LOG     [DEBUG] getLocationBySlug(bangalore): {}
+[00:28:37.997] Server  LOG     [DEBUG] Found matching location with slug: bangalore {}
+[00:28:37.998] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties?locationId=6b40719f-e55a-4fa8-b80e-ce53d7da48ce&limit=12&offset=0"
+[00:28:38.001] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/locations?slug=bangalore -> 200"
+[00:28:38.002] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/locations?slug=bangalore"
+[00:28:38.002] Server  LOG     [DEBUG] getLocationBySlug(bangalore): {}
+[00:28:38.002] Server  LOG     [DEBUG] Found matching location with slug: bangalore {}
+[00:28:38.015] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties?locationId=6b40719f-e55a-4fa8-b80e-ce53d7da48ce&limit=12&offset=0 -> 200"
+[00:28:38.015] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties?locationId=6b40719f-e55a-4fa8-b80e-ce53d7da48ce&limit=12&offset=0"
+[00:28:38.015] Server  LOG     [DEBUG] Raw backend response: "{\n  \"isArray\": false,\n  \"hasData\": true,\n  \"hasPagination\": true,\n  \"responseKeys\": [\n    \"data\",\n    \"pagination\"\n  ]\n}"
+[00:28:38.015] Server  LOG     [DEBUG] Returning normalized response: {}
+[00:28:38.167] Browser WARN    Image with src "https://images.unsplash.com/photo-1596521222512-f1b99a8b2d0d?w=1200&h=600&fit=crop" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:03:43.062] Browser WARN    Image with src "/images/project-1.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:03:43.062] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:04:59.984] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:05:38.122] Server  WARN    Error: Route "/blogs" used `searchParams.page`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-[00:05:38.122] Server  LOG     [API] Fetching: GET http://localhost:4002/api/v1/blogs?limit=9&offset=0
-[00:05:38.143] Server  WARN    Error: Route "/blogs" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-[00:05:38.149] Server  LOG     [API] Response: GET http://localhost:4002/api/v1/blogs?limit=9&offset=0 -> 200
-[00:05:38.150] Server  LOG     [API] Success: GET http://localhost:4002/api/v1/blogs?limit=9&offset=0
-[00:05:38.150] Server  LOG     [API] Response data type: "object" "Is array:" false
-[00:05:38.150] Server  LOG     [API] Response data: {}
-[00:05:38.155] Server  WARN    Error: Route "/blogs" used `searchParams.category`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:28:38.808] Server  ERROR   ⨯ "upstream image response failed for" "https://images.unsplash.com/photo-1596521222512-f1b99a8b2d0d?w=1200&h=600&fit=crop" 404
+[00:28:42.491] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:28:42.499] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:28:42.517] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:28:42.520] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:28:42.531] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:28:42.532] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:28:42.534] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:28:42.704] Browser WARN    Image with src "/images/project-1.jpg" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:28:42.940] Server  LOG     ✓ Compiled in 26ms
+[00:28:44.332] Browser WARN    Image with src "/images/project-3.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:28:44.821] Browser WARN    Image with src "/images/grand-arch-location.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:28:45.338] Browser WARN    Image with src "/images/3bhk-plan.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:28:46.176] Server  LOG     ✓ Compiled in 34ms
+[00:28:52.851] Server  LOG     ✓ Compiled in 38ms
+[00:28:56.005] Server  LOG     ✓ Compiled in 34ms
+[00:29:02.176] Server  LOG     ✓ Compiled in 39ms
+[00:29:05.076] Server  LOG     ✓ Compiled in 33ms
+[00:29:08.568] Server  LOG     ✓ Compiled in 35ms
+[00:29:12.371] Server  LOG     ✓ Compiled in 28ms
+[00:29:16.066] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:16.071] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:29:16.073] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:16.082] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:16.084] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:29:16.084] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:16.085] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:29:19.215] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:19.218] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:29:19.219] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:19.224] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:19.225] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:29:19.225] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:19.226] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:29:22.111] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:22.115] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:29:22.116] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:22.123] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:22.125] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:29:22.125] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:22.126] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:29:25.374] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:25.378] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:29:25.379] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:25.390] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:25.391] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:29:25.391] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:29:25.392] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:29:30.960] Server  LOG     ✓ Compiled in 41ms
+[00:30:59.935] Server  LOG     ✓ Compiled in 151ms
+[00:31:03.505] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:31:03.508] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:31:03.509] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:31:03.517] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:31:03.518] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:31:03.518] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:31:03.519] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:31:07.389] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:31:07.397] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:31:07.398] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:31:07.408] Server  LOG     [API] "Fetching: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:31:07.411] Server  LOG     [API] "Response: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune -> 200"
+[00:31:07.413] Server  LOG     [API] "Success: GET http://localhost:4002/api/v1/properties/mahindra-origins-pune"
+[00:31:07.415] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:32:22.258] Server  LOG     ✓ Compiled in 184ms

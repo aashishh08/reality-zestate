@@ -19,16 +19,16 @@ export function ProjectFloorPlans({ floorPlans }: ProjectFloorPlansProps) {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <section id="floor-plans" className="py-24 bg-transparent">
+    <section id="floor-plans" className="py-14 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12">
-          <SectionHeading>
-            Master <span className="text-gold-dark">Floor Plans</span>
+          <SectionHeading
+            label="Configuration Options"
+            description="Choose from our range of meticulously designed residences, each offering unparalleled luxury and comfort"
+          >
+            Sizes, Prices <span className="text-[#C9A961]">&amp; Layouts</span>
           </SectionHeading>
-          <p className="text-zinc-600 max-w-2xl mx-auto mb-10">
-            Choose from our meticulously designed layouts, each crafted to maximize space, light, and ventilation.
-          </p>
 
           {/* Type Switcher Tabs */}
           <div className="inline-flex bg-white rounded-full p-1.5 shadow-sm border border-black/5">
