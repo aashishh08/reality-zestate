@@ -26,7 +26,7 @@ services:
       dockerfile: Dockerfile
     container_name: reality_estate_api
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       PORT: 4002
       DB_HOST: postgres
       DB_PORT: 5432
@@ -36,7 +36,7 @@ services:
       JWT_SECRET: your_jwt_secret_key_here_change_in_production
       JWT_EXPIRE: 7d
       CRM_API_KEY: your_crm_api_key_here_change_in_production
-      CORS_ORIGIN: http://localhost:3002
+      CORS_ORIGIN: https://superluxere.com
     ports:
       - "4002:4002"
     depends_on:
@@ -54,8 +54,8 @@ services:
       dockerfile: Dockerfile
     container_name: reality_estate_web
     environment:
-      NEXT_PUBLIC_API_URL: http://backend:4002/api/v1
-      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: https://api.superluxere.com/api/v1
+      NODE_ENV: production
     ports:
       - "3002:3002"
     depends_on:
