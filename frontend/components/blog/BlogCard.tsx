@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
@@ -17,16 +20,20 @@ function CoverImage({
   alt: string;
   className?: string;
 }) {
-  if (src) {
+  const [imgError, setImgError] = useState(false);
+
+  if (src && !imgError) {
     return (
       <Image
         src={src}
         alt={alt}
         fill
         className={className}
+        onError={() => setImgError(true)}
       />
     );
   }
+  // Fallback gradient when src is missing or image fails to load
   return (
     <div className="absolute inset-0 bg-gradient-to-br from-amber-400 via-orange-400 to-amber-600" />
   );
@@ -36,10 +43,10 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
   const dateSource = post.publishedAt || post.createdAt || '';
   const formattedDate = dateSource
     ? new Date(dateSource).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
     : '';
 
   const categoryName = post.category?.name ?? 'Real Estate';
