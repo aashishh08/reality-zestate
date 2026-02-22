@@ -2,9 +2,9 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
-RUN npm install
+RUN yarn install --frozen-lockfile
 
 COPY . .
 
@@ -13,6 +13,6 @@ ENV NEXT_PUBLIC_API_URL=http://backend:4002/api/v1
 
 EXPOSE 3002
 
-CMD ["npm", "run", "dev", "--", "-p", "3002", "-H", "0.0.0.0"]
+CMD ["yarn", "dev", "--", "-p", "3002", "-H", "0.0.0.0"]
 
 
