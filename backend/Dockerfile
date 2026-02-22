@@ -1,10 +1,10 @@
-FROM node:18-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --frozen-lockfile
+RUN yarn install
 
 COPY .sequelizerc ./
 COPY src/ ./src/
