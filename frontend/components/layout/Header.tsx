@@ -6,6 +6,7 @@ import { Menu, X, ChevronDown, MapPin, Building2, Tag, LayoutGrid } from "lucide
 import { cn } from "@/lib/utils";
 import { SCROLL_THRESHOLDS } from "@/lib/constants";
 import { Location, Developer, Category } from "@/lib";
+import { useLeadModal } from "@/lib/contexts/LeadModalContext";
 
 // Status tags — hardcoded because they are a fixed product concept
 const STATUS_TAGS = [
@@ -28,6 +29,7 @@ interface HeaderProps {
 type MegaMenu = "locations" | "developers" | "categories" | "status" | null;
 
 export function Header({ locations = [], developers = [], categories = [] }: HeaderProps) {
+  const { openModal } = useLeadModal();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setMobileMenu] = useState(false);
   const [activeMega, setActiveMega] = useState<MegaMenu>(null);
@@ -242,12 +244,12 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
             </nav>
 
             <div className="flex items-center gap-6">
-              <Link
-                href="/contact"
+              <button
+                onClick={() => openModal("header-book-button")}
                 className="hidden lg:inline-block px-6 py-2.5 bg-black text-white font-bold text-xs tracking-widest rounded-sm hover:bg-gold-dark transition-colors uppercase ml-8"
               >
                 Book
-              </Link>
+              </button>
 
               <button
                 onClick={() => setMobileMenu(!isMobileMenuOpen)}

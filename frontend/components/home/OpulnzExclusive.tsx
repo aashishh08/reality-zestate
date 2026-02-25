@@ -4,12 +4,14 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { Developer } from "@/lib";
+import { useLeadModal } from "@/lib/contexts/LeadModalContext";
 
 interface SuperluxereExclusiveProps {
   developers: Developer[];
 }
 
 export function SuperluxereExclusive({ developers }: SuperluxereExclusiveProps) {
+  const { openModal } = useLeadModal();
   return (
     <section id="superluxere-exclusive" className="relative py-32 px-6 bg-[#F5F5F0] text-foreground overflow-hidden">
       {/* Background with Overlay */}
@@ -54,7 +56,10 @@ export function SuperluxereExclusive({ developers }: SuperluxereExclusiveProps) 
               ))}
             </ul>
 
-            <button className="bg-gradient-to-r from-gold to-gold-dark text-white px-10 py-4 rounded-sm font-bold tracking-wide hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300 transform hover:-translate-y-1">
+            <button
+              onClick={() => openModal("superluxere-exclusive-section")}
+              className="bg-gradient-to-r from-gold to-gold-dark text-white px-10 py-4 rounded-sm font-bold tracking-wide hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300 transform hover:-translate-y-1"
+            >
               JOIN THE INNER CIRCLE
             </button>
           </motion.div>

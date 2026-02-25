@@ -34,6 +34,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { LeadModalProvider } from "@/lib/contexts/LeadModalContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -44,7 +46,9 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${montserrat.variable} antialiased`}
       >
-        {children}
+        <LeadModalProvider>
+          {children}
+        </LeadModalProvider>
       </body>
     </html>
   );

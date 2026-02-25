@@ -7,9 +7,10 @@ import { createLead } from "@/lib/api/leads";
 import { useApiCall } from "@/lib/hooks/useApiCall";
 import { validateLeadForm } from "@/lib/validation/lead-form";
 import { FORM_CONFIG, SUCCESS_MESSAGES, UI_CONFIG } from "@/lib/constants";
+import { useLeadModal } from "@/lib/contexts/LeadModalContext";
 
-export function LeadPopup({ source = "lead-popup" }: { source?: string }) {
-  const [isOpen, setIsOpen] = useState(false);
+export function LeadPopup() {
+  const { isOpen, openModal, closeModal, modalSource } = useLeadModal();
   const [hasOpened, setHasOpened] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -24,21 +25,21 @@ export function LeadPopup({ source = "lead-popup" }: { source?: string }) {
       setTimeout(() => {
         setFormData({ name: "", email: "", phone: "" });
         setSubmitStatus("idle");
-        setIsOpen(false);
+        closeModal();
       }, FORM_CONFIG.SUCCESS_DISPLAY_TIME);
     },
   });
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (!hasOpened) {
-        setIsOpen(true);
+      if (!hasOpened && !isOpen) {
+        openModal("lead-popup-timer");
         setHasOpened(true);
       }
     }, FORM_CONFIG.LEAD_POPUP_DELAY);
 
     return () => clearTimeout(timer);
-  }, [hasOpened]);
+  }, [hasOpened, isOpen, openModal]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -64,7 +65,7 @@ export function LeadPopup({ source = "lead-popup" }: { source?: string }) {
           name: formData.name.trim(),
           email: formData.email.trim(),
           phone: formData.phone.trim(),
-          source,
+          source: modalSource,
         })
       );
     } catch (error) {
@@ -85,7 +86,7 @@ export function LeadPopup({ source = "lead-popup" }: { source?: string }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto"
-          onClick={() => setIsOpen(false)}
+          onClick={closeModal}
         />
 
         {/* Modal */}
@@ -98,7 +99,7 @@ export function LeadPopup({ source = "lead-popup" }: { source?: string }) {
         >
           {/* Close Button */}
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={closeModal}
             className="absolute top-4 right-4 text-zinc-400 hover:text-black transition-colors z-20"
             aria-label="Close popup"
           >
