@@ -7,7 +7,6 @@ import { LocationCategories } from "@/components/home/LocationCategories";
 import { CityLocations } from "@/components/home/CityLocations";
 import { UpcomingProjects } from "@/components/home/UpcomingProjects";
 import { BrowseByDeveloper } from "@/components/home/BrowseByDeveloper";
-import { BrowseByProjectType } from "@/components/home/BrowseByProjectType";
 import { BoutiqueCollection } from "@/components/home/BoutiqueCollection";
 import { SuperluxereExclusive } from "@/components/home/OpulnzExclusive";
 import { LeadPopup } from "@/components/ui/LeadPopup";
@@ -104,8 +103,6 @@ export default async function Home() {
       {/* 4. Browse by Developer */}
       <BrowseByDeveloper developers={developers} />
 
-      {/* 5. Browse by Project Type (Categories) */}
-      <BrowseByProjectType categories={categories} />
 
       <BoutiqueCollection locations={locations} />
       <SuperluxereExclusive developers={developers} />

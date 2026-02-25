@@ -53,78 +53,68 @@ export function LocationCategories({ locations }: LocationCategoriesProps) {
           </h2>
         </motion.div>
 
-        {/* Grid Layout - Masonry Style */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Large Cards - First Row */}
-          {displayCollections.slice(0, 2).map((location, index) => (
-            <motion.div
-              key={location.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Link href={`/location/${location.slug}`}>
-                <div className="group relative h-[400px] overflow-hidden rounded-sm cursor-pointer">
-                  <Image
-                    src={categoryImages[location.slug] || "/images/category-delhi.jpg"}
-                    alt={location.name}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-90 transition-opacity duration-300" />
+        {/* Bento Grid Layout - Uneven & Dynamic */}
+        <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-4 h-auto md:h-[700px]">
+          {displayCollections.map((location, index) => {
+            // Define grid positions for a balanced but uneven look
+            const gridClasses = [
+              "md:col-span-2 md:row-span-2", // Large primary box
+              "md:col-span-2 md:row-span-1", // Wide horizontal box
+              "md:col-span-1 md:row-span-1", // Small square box
+              "md:col-span-1 md:row-span-1", // Small square box
+            ];
 
-                  {/* Content Overlay */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
-                    <h3 className="text-3xl md:text-4xl font-serif font-bold text-white mb-3 tracking-wider">
-                      {location.name}
-                    </h3>
-                    <p className="text-white/90 text-sm md:text-base mb-6 max-w-md">
-                      {categoryDescriptions[location.slug] || `Premium properties in ${location.name}`}
-                    </p>
-                    <button className="bg-white/10 backdrop-blur-sm border border-white/30 text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gold hover:text-black hover:border-gold transition-all duration-300 flex items-center gap-2 group-hover:gap-3">
-                      Explore
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
+            return (
+              <motion.div
+                key={location.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className={`${gridClasses[index] || "md:col-span-1"} relative rounded-2xl overflow-hidden group shadow-xl`}
+              >
+                <Link href={`/location/${location.slug}`} className="block h-full w-full">
+                  <div className="relative h-full w-full min-h-[300px] md:min-h-0">
+                    <Image
+                      src={categoryImages[location.slug] || `/images/category-${index % 2 === 0 ? 'delhi' : 'noida'}.jpg`}
+                      alt={location.name}
+                      fill
+                      className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                    />
+
+                    {/* Dynamic Overlay Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-all duration-500 group-hover:via-black/40" />
+
+                    {/* Content */}
+                    <div className={`absolute inset-0 p-8 flex flex-col ${index === 0 ? 'justify-end md:justify-center md:items-center text-center' : 'justify-end'}`}>
+                      {index === 0 && (
+                        <motion.span
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          className="hidden md:block text-gold text-xs font-bold tracking-widest uppercase mb-4"
+                        >
+                          Featured Destination
+                        </motion.span>
+                      )}
+
+                      <h3 className={`${index === 0 ? 'text-3xl md:text-5xl' : 'text-2xl md:text-3xl'} font-serif font-bold text-white mb-2 leading-tight`}>
+                        {location.name}
+                      </h3>
+
+                      <p className={`text-white/80 line-clamp-2 leading-relaxed ${index === 0 ? 'max-w-md mx-auto text-base' : 'max-w-xs text-sm'}`}>
+                        {categoryDescriptions[location.slug] || `Explore exclusive premium residential and commercial spaces in ${location.name}.`}
+                      </p>
+
+                      <div className="mt-6 flex items-center gap-3 text-gold opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
+                        <span className="text-xs font-bold uppercase tracking-wider">Explore Collection</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-
-          {/* Smaller Cards - Second Row */}
-          {displayCollections.slice(2, 4).map((location, index) => (
-            <motion.div
-              key={location.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: (index + 2) * 0.1 }}
-              viewport={{ once: true }}
-              className="md:col-span-1"
-            >
-              <Link href={`/location/${location.slug}`}>
-                <div className="group relative h-[250px] overflow-hidden rounded-sm cursor-pointer">
-                  <Image
-                    src={categoryImages[location.slug] || "/images/category-noida.jpg"}
-                    alt={location.name}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-90 transition-opacity duration-300" />
-
-                  {/* Content Overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-center">
-                    <h3 className="text-2xl font-serif font-bold text-white mb-2 tracking-wide">
-                      {location.name}
-                    </h3>
-                    <button className="bg-white/10 backdrop-blur-sm border border-white/30 text-white px-5 py-1.5 rounded-full text-xs font-medium hover:bg-gold hover:text-black hover:border-gold transition-all duration-300">
-                      Explore
-                    </button>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
