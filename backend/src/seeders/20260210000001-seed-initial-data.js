@@ -10,6 +10,7 @@
  */
 
 import { randomUUID } from 'crypto';
+import bcrypt from 'bcrypt';
 
 // Helper to build and insert a location, returning its id
 async function insertLocation(queryInterface, { name, slug, type, parentId }) {
@@ -28,6 +29,22 @@ async function insertLocation(queryInterface, { name, slug, type, parentId }) {
 }
 
 export async function up(queryInterface) {
+  // ─── 0. Admin User ─────────────────────────────────────────────────────────
+  const hashedPassword = await bcrypt.hash('admin123', 10);
+  await queryInterface.sequelize.query(
+    `INSERT INTO "users" ("id", "email", "password", "role", "createdAt", "updatedAt")
+     VALUES (:id, :email, :password, :role, NOW(), NOW())
+     ON CONFLICT ("email") DO UPDATE SET "password" = EXCLUDED."password", "role" = EXCLUDED."role", "updatedAt" = NOW()`,
+    {
+      replacements: {
+        id: randomUUID(),
+        email: 'admin@superluxere.com',
+        password: hashedPassword,
+        role: 'SUPER_ADMIN'
+      }
+    }
+  );
+
   // ─── 1. Country ────────────────────────────────────────────────────────────
   const indiaId = await insertLocation(queryInterface, {
     name: 'India', slug: 'india', type: 'country', parentId: null,
