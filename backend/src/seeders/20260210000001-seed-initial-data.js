@@ -13,11 +13,18 @@ import { randomUUID } from 'crypto';
 
 // Helper to build and insert a location, returning its id
 async function insertLocation(queryInterface, { name, slug, type, parentId }) {
-  const id = randomUUID();
-  await queryInterface.bulkInsert('locations', [
-    { id, name, slug, type, parentId, createdAt: new Date(), updatedAt: new Date() },
-  ]);
-  return id;
+  const newId = randomUUID();
+  const rows = await queryInterface.sequelize.query(
+    `INSERT INTO "locations" ("id", "name", "slug", "type", "parentId", "createdAt", "updatedAt")
+     VALUES (:id, :name, :slug, :type, :parentId, NOW(), NOW())
+     ON CONFLICT ("slug") DO UPDATE SET "name" = EXCLUDED."name", "updatedAt" = NOW()
+     RETURNING "id"`,
+    {
+      replacements: { id: newId, name, slug, type, parentId: parentId || null },
+      type: queryInterface.sequelize.QueryTypes.SELECT
+    }
+  );
+  return rows[0].id;
 }
 
 export async function up(queryInterface) {
@@ -155,12 +162,14 @@ export async function up(queryInterface) {
     { name: 'Shapoorji Pallonji', slug: 'shapoorji-pallonji' },
     { name: 'Eldeco Terra Grande', slug: 'eldeco-terra-grande' },
   ]) {
-    await queryInterface.bulkInsert('developers', [
+    await queryInterface.sequelize.query(
+      `INSERT INTO "developers" ("id", "name", "slug", "logo", "createdAt", "updatedAt")
+       VALUES (:id, :name, :slug, NULL, NOW(), NOW())
+       ON CONFLICT ("slug") DO UPDATE SET "name" = EXCLUDED."name", "updatedAt" = NOW()`,
       {
-        id: randomUUID(), name: dev.name, slug: dev.slug, logo: null,
-        createdAt: new Date(), updatedAt: new Date()
-      },
-    ]);
+        replacements: { id: randomUUID(), name: dev.name, slug: dev.slug }
+      }
+    );
   }
 
   // ─── 6. Categories ─────────────────────────────────────────────────────────
@@ -180,13 +189,14 @@ export async function up(queryInterface) {
     { name: 'Co-working', slug: 'co-working', propertyType: 'commercial' },
     { name: 'Industrial', slug: 'industrial', propertyType: 'commercial' },
   ]) {
-    await queryInterface.bulkInsert('categories', [
+    await queryInterface.sequelize.query(
+      `INSERT INTO "categories" ("id", "name", "slug", "propertyType", "parentId", "createdAt", "updatedAt")
+       VALUES (:id, :name, :slug, :propertyType, NULL, NOW(), NOW())
+       ON CONFLICT ("slug") DO UPDATE SET "name" = EXCLUDED."name", "propertyType" = EXCLUDED."propertyType", "updatedAt" = NOW()`,
       {
-        id: randomUUID(), name: cat.name, slug: cat.slug,
-        propertyType: cat.propertyType, parentId: null,
-        createdAt: new Date(), updatedAt: new Date()
-      },
-    ]);
+        replacements: { id: randomUUID(), name: cat.name, slug: cat.slug, propertyType: cat.propertyType }
+      }
+    );
   }
 }
 

@@ -5,15 +5,15 @@ services:
     image: postgres:15-alpine
     container_name: reality_estate_db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: reality_estate_dev
+      POSTGRES_USER: reality_estate_user
+      POSTGRES_PASSWORD: reality_estate_password
+      POSTGRES_DB: reality_estate_db
     ports:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U reality_estate_user"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -30,9 +30,9 @@ services:
       PORT: 4002
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: reality_estate_dev
+      DB_USER: reality_estate_user
+      DB_PASSWORD: reality_estate_password
+      DB_NAME: reality_estate_db
       JWT_SECRET: your_jwt_secret_key_here_change_in_production
       JWT_EXPIRE: 7d
       CRM_API_KEY: your_crm_api_key_here_change_in_production
