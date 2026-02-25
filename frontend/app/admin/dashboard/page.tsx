@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
 import { getAllBlogs } from '@/lib/api/admin';
+import { AdminSidebar } from '@/components/admin/AdminSidebar';
 
 interface Blog {
   id: string;
@@ -30,7 +31,6 @@ interface Stats {
 export default function AdminDashboardPage() {
   const router = useRouter();
   const { user, token, logout } = useAdminAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const [stats, setStats] = useState<Stats | null>(null);
   const [recentBlogs, setRecentBlogs] = useState<Blog[]>([]);
@@ -102,59 +102,7 @@ export default function AdminDashboardPage() {
       <div className="flex h-screen bg-gray-900">
 
         {/* Sidebar */}
-        <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-800 border-r border-gray-700 transition-all duration-300 flex flex-col`}>
-          <div className="h-16 border-b border-gray-700 flex items-center justify-between px-4">
-            <div className={`flex items-center space-x-3 ${!sidebarOpen && 'hidden'}`}>
-              <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
-                <FileText className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-white font-bold">Admin</span>
-            </div>
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-400 hover:text-white">
-              {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-
-          <nav className="flex-1 px-4 py-6 space-y-2">
-            <Link href="/admin/dashboard" className="flex items-center space-x-3 px-4 py-3 text-white bg-amber-500/20 border border-amber-500/30 rounded-lg font-medium">
-              <TrendingUp className="w-5 h-5 flex-shrink-0" />
-              {sidebarOpen && <span>Dashboard</span>}
-            </Link>
-            <Link href="/admin/properties" className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition">
-              <Building2 className="w-5 h-5 flex-shrink-0" />
-              {sidebarOpen && <span>Properties</span>}
-            </Link>
-            <Link href="/admin/properties/create" className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition">
-              <Plus className="w-5 h-5 flex-shrink-0" />
-              {sidebarOpen && <span>Create Property</span>}
-            </Link>
-            <Link href="/admin/blogs" className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition">
-              <FileText className="w-5 h-5 flex-shrink-0" />
-              {sidebarOpen && <span>Blogs</span>}
-            </Link>
-            <Link href="/admin/blogs/create" className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition">
-              <Plus className="w-5 h-5 flex-shrink-0" />
-              {sidebarOpen && <span>Create Blog</span>}
-            </Link>
-            <Link href="/admin/leads" className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition">
-              <Users className="w-5 h-5 flex-shrink-0" />
-              {sidebarOpen && <span>Leads</span>}
-            </Link>
-          </nav>
-
-          <div className="border-t border-gray-700 p-4">
-            <div className={`flex items-center justify-between ${!sidebarOpen && 'flex-col space-y-2'}`}>
-              <div className={`${!sidebarOpen && 'hidden'}`}>
-                <p className="text-sm text-gray-400">Logged in as</p>
-                <p className="text-white font-medium truncate text-sm">{user?.email}</p>
-                <p className="text-xs text-amber-500">{user?.role}</p>
-              </div>
-              <button onClick={handleLogout} className="text-gray-400 hover:text-red-500 transition" title="Logout">
-                <LogOut className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
+        <AdminSidebar />
 
         {/* Main */}
         <div className="flex-1 overflow-auto">

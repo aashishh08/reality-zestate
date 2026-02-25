@@ -12,17 +12,11 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { getLeads, updateLeadStatus, Lead } from '@/lib/api/leads';
+import { AdminSidebar } from '@/components/admin/AdminSidebar';
 
 // ─────────────────────────────────────────
 // Sidebar nav — shared across admin pages
 // ─────────────────────────────────────────
-const SIDEBAR_LINKS = [
-    { href: '/admin/dashboard', icon: TrendingUp, label: 'Dashboard' },
-    { href: '/admin/properties', icon: Building2, label: 'Properties' },
-    { href: '/admin/properties/create', icon: Plus, label: 'Create Property' },
-    { href: '/admin/blogs', icon: FileText, label: 'Blogs' },
-    { href: '/admin/leads', icon: Users, label: 'Leads', active: true },
-];
 
 // ─────────────────────────────────────────
 // Status meta
@@ -64,7 +58,6 @@ function formatDate(iso?: string) {
 export default function AdminLeadsPage() {
     const router = useRouter();
     const { token, user, logout } = useAdminAuth();
-    const [sidebarOpen, setSidebarOpen] = useState(true);
 
     const [leads, setLeads] = useState<Lead[]>([]);
     const [total, setTotal] = useState(0);
@@ -137,44 +130,7 @@ export default function AdminLeadsPage() {
         <ProtectedAdminRoute>
             <div className="flex h-screen bg-gray-900 overflow-hidden">
 
-                {/* ── Sidebar ── */}
-                <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-800 border-r border-gray-700 transition-all duration-300 flex flex-col flex-shrink-0`}>
-                    <div className="h-16 border-b border-gray-700 flex items-center justify-between px-4">
-                        <div className={`flex items-center space-x-3 ${!sidebarOpen && 'hidden'}`}>
-                            <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
-                                <Users className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="text-white font-bold">Admin</span>
-                        </div>
-                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-400 hover:text-white">
-                            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                        </button>
-                    </div>
-                    <nav className="flex-1 px-4 py-6 space-y-1">
-                        {SIDEBAR_LINKS.map(({ href, icon: Icon, label, active }) => (
-                            <Link key={href} href={href}
-                                className={`flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition text-sm ${active
-                                        ? 'text-white bg-amber-500/20 border border-amber-500/30'
-                                        : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-                                    }`}>
-                                <Icon className="w-5 h-5 flex-shrink-0" />
-                                {sidebarOpen && <span>{label}</span>}
-                            </Link>
-                        ))}
-                    </nav>
-                    <div className="border-t border-gray-700 p-4">
-                        <div className={`flex items-center justify-between ${!sidebarOpen && 'flex-col space-y-2'}`}>
-                            <div className={!sidebarOpen ? 'hidden' : ''}>
-                                <p className="text-xs text-gray-400">Logged in as</p>
-                                <p className="text-white font-medium truncate text-sm">{user?.email}</p>
-                                <p className="text-xs text-amber-500">{user?.role}</p>
-                            </div>
-                            <button onClick={handleLogout} className="text-gray-400 hover:text-red-500 transition" title="Logout">
-                                <LogOut className="w-5 h-5" />
-                            </button>
-                        </div>
-                    </div>
-                </aside>
+                <AdminSidebar />
 
                 {/* ── Main ── */}
                 <div className="flex-1 overflow-auto">
