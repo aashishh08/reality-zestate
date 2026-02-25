@@ -30,3 +30,7 @@ export * from './api/auth';
 
 // Health
 export * from './api/health';
+
+// Tags
+export { fetchAllTags, getTagBySlug, fetchTagProperties, getAllTagSlugs } from './api/properties-listing';
+export type { Tag } from './api/properties-listing';

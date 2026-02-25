@@ -8,7 +8,7 @@ const quickLinks = [
   "Trending Projects",
   "Upcoming Projects",
   "Boutique Projects",
-  "Opulnz Exclusive",
+  "Superluxere Exclusive",
 ];
 
 export function Hero() {
@@ -45,10 +45,10 @@ export function Hero() {
             Luxury Redefined
           </h2>
           <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif font-bold text-white mb-6 drop-shadow-md">
-            OPULNZ <span className="text-gold-light">ABODE</span>
+            SUPERLUXERE
           </h1>
           <p className="max-w-2xl mx-auto text-white/95 text-lg font-light leading-relaxed drop-shadow-sm">
-            Discover a curated collection of the most exquisite properties. 
+            Discover a curated collection of the most exquisite properties.
             Where elegance meets exclusivity.
           </p>
         </motion.div>
@@ -74,11 +74,11 @@ export function Hero() {
                     </span>
                     <ChevronDown className="w-4 h-4 text-gold opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" />
                   </div>
-                  
+
                   <span className="text-sm md:text-lg font-serif text-white group-hover:text-gold transition-colors">
                     {link}
                   </span>
-                  
+
                   {/* Bottom Active Line indicator */}
                   <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
                 </motion.button>

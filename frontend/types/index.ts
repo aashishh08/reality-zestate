@@ -3,10 +3,10 @@ export interface Property {
   id: string;
   slug: string;
   title: string;
-  propertyType: 'residential' | 'commercial';
-  priceMin: number;
-  priceMax: number;
-  isPublished: boolean;
+  propertyType?: 'residential' | 'commercial';
+  priceMin?: number | null;
+  priceMax?: number | null;
+  isPublished?: boolean;
   status?: 'draft' | 'published' | 'archived';
 
   Developer?: {
@@ -30,6 +30,14 @@ export interface Property {
     slug: string;
   }>;
 
+  Tags?: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    color?: string;
+    icon?: string;
+  }>;
+
   PropertySections?: Array<{
     id: string;
     type: string;
@@ -49,7 +57,9 @@ export interface Project extends Property {
   location?: string; // Display location name
   price?: string; // Display price range
   image?: string; // Display image URL
-  category?: "Trending" | "Upcoming" | "Boutique" | "Exclusive";
+  category?: "Trending" | "Upcoming" | "Boutique" | "Exclusive" | "Featured" | "New Launch" | "Luxury" | "Affordable" | string;
+  tagColor?: string;
+
   type?: string;
   completionDate?: string;
   description?: string;

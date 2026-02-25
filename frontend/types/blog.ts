@@ -10,6 +10,7 @@ export interface BlogPost {
         bio?: string;
     };
     publishedAt: string;
+    createdAt?: string;
     updatedAt?: string;
     featuredImage: string;
     category: BlogCategory;

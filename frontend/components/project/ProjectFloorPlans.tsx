@@ -16,7 +16,13 @@ interface ProjectFloorPlansProps {
 }
 
 export function ProjectFloorPlans({ floorPlans }: ProjectFloorPlansProps) {
+  const safePlans = Array.isArray(floorPlans) && floorPlans.length > 0 ? floorPlans : null;
   const [activeTab, setActiveTab] = useState(0);
+
+  if (!safePlans) return null;
+
+  // Clamp activeTab so it's always a valid index
+  const safeTab = Math.min(activeTab, safePlans.length - 1);
 
   return (
     <section id="floor-plans" className="py-14 bg-transparent">
@@ -32,15 +38,14 @@ export function ProjectFloorPlans({ floorPlans }: ProjectFloorPlansProps) {
 
           {/* Type Switcher Tabs */}
           <div className="inline-flex bg-white rounded-full p-1.5 shadow-sm border border-black/5">
-            {floorPlans.map((plan, index) => (
+            {safePlans.map((plan, index) => (
               <button
                 key={index}
                 onClick={() => setActiveTab(index)}
-                className={`px-8 py-3 rounded-full text-sm font-bold tracking-wide transition-all duration-300 ${
-                  activeTab === index
-                    ? "bg-black text-white shadow-md"
-                    : "text-zinc-500 hover:text-black hover:bg-zinc-50"
-                }`}
+                className={`px-8 py-3 rounded-full text-sm font-bold tracking-wide transition-all duration-300 ${activeTab === index
+                  ? "bg-black text-white shadow-md"
+                  : "text-zinc-500 hover:text-black hover:bg-zinc-50"
+                  }`}
               >
                 {plan.type}
               </button>
@@ -50,27 +55,27 @@ export function ProjectFloorPlans({ floorPlans }: ProjectFloorPlansProps) {
 
         {/* Content Area */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          
+
           {/* Left: Details Panel (4 cols) */}
-          <motion.div 
-             className="lg:col-span-4 order-2 lg:order-1"
-             key={`details-${activeTab}`}
-             initial={{ opacity: 0, x: -20 }}
-             animate={{ opacity: 1, x: 0 }}
-             transition={{ duration: 0.5 }}
+          <motion.div
+            className="lg:col-span-4 order-2 lg:order-1"
+            key={`details-${activeTab}`}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
           >
             <div className="bg-white p-8 rounded-sm border border-black/5 shadow-sm">
-              <h3 className="text-3xl font-serif font-bold text-black mb-2">{floorPlans[activeTab].type}</h3>
+              <h3 className="text-3xl font-serif font-bold text-black mb-2">{safePlans[safeTab].type}</h3>
               <p className="text-zinc-500 font-medium mb-8 uppercase tracking-widest text-xs">Unit Type</p>
 
               <div className="space-y-6 mb-10">
                 <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
                   <span className="text-zinc-600">Super Area</span>
-                  <span className="font-bold text-black text-lg">{floorPlans[activeTab].superArea}</span>
+                  <span className="font-bold text-black text-lg">{safePlans[safeTab].superArea}</span>
                 </div>
                 <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
                   <span className="text-zinc-600">Starting Price</span>
-                  <span className="font-bold text-gold-dark text-lg">{floorPlans[activeTab].price}</span>
+                  <span className="font-bold text-gold-dark text-lg">{safePlans[safeTab].price}</span>
                 </div>
               </div>
 
@@ -82,13 +87,13 @@ export function ProjectFloorPlans({ floorPlans }: ProjectFloorPlansProps) {
 
             <div className="mt-6 p-6 bg-gold/5 rounded-sm border border-gold/10">
               <p className="text-zinc-700 text-sm italic">
-                "This {floorPlans[activeTab].type} layout offers exceptional cross-ventilation and privacy, perfectly suited for modern family living."
+                &quot;This {safePlans[safeTab].type} layout offers exceptional cross-ventilation and privacy, perfectly suited for modern family living.&quot;
               </p>
             </div>
           </motion.div>
 
           {/* Right: Interactive Image Area (8 cols) */}
-          <motion.div 
+          <motion.div
             className="lg:col-span-8 order-1 lg:order-2"
             key={`image-${activeTab}`}
             initial={{ opacity: 0, scale: 0.95 }}
@@ -97,12 +102,12 @@ export function ProjectFloorPlans({ floorPlans }: ProjectFloorPlansProps) {
           >
             <div className="relative aspect-[16/10] bg-white rounded-sm overflow-hidden shadow-xl border border-black/5 group">
               <Image
-                src={floorPlans[activeTab].image}
-                alt={floorPlans[activeTab].type}
+                src={safePlans[safeTab].image}
+                alt={safePlans[safeTab].type}
                 fill
                 className="object-contain p-8 group-hover:scale-105 transition-transform duration-700"
               />
-              
+
 
             </div>
           </motion.div>

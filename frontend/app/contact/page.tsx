@@ -4,16 +4,16 @@ import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Twitter, Send } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Contact Us - Get in Touch | Opulnz Abode',
-  description: 'Contact Opulnz Abode for luxury real estate inquiries. Visit our office, call us, or send a message. We\'re here to help you find your dream property.',
+  title: 'Contact Us - Get in Touch | Superluxere',
+  description: 'Contact Superluxere for luxury real estate inquiries. Visit our office, call us, or send a message. We\'re here to help you find your dream property.',
   openGraph: {
-    title: 'Contact Us - Get in Touch | Opulnz Abode',
-    description: 'Contact Opulnz Abode for luxury real estate inquiries. Visit our office, call us, or send a message.',
+    title: 'Contact Us - Get in Touch | Superluxere',
+    description: 'Contact Superluxere for luxury real estate inquiries. Visit our office, call us, or send a message.',
     type: 'website',
-    url: 'https://opulnzabode.com/contact',
+    url: 'https://superluxere.com/contact',
   },
   alternates: {
-    canonical: 'https://opulnzabode.com/contact',
+    canonical: 'https://superluxere.com/contact',
   },
 };
 
@@ -30,8 +30,8 @@ const contactInfo = {
     secondary: '+91 888 888 8888',
   },
   email: {
-    sales: 'sales@opulnzabode.com',
-    support: 'support@opulnzabode.com',
+    sales: 'sales@superluxere.com',
+    support: 'support@superluxere.com',
   },
   hours: {
     weekdays: 'Monday - Friday: 9:00 AM - 7:00 PM',
@@ -39,10 +39,10 @@ const contactInfo = {
     sunday: 'Sunday: Closed',
   },
   social: [
-    { name: 'Facebook', icon: Facebook, url: 'https://facebook.com/opulnzabode' },
-    { name: 'Instagram', icon: Instagram, url: 'https://instagram.com/opulnzabode' },
-    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/company/opulnzabode' },
-    { name: 'Twitter', icon: Twitter, url: 'https://twitter.com/opulnzabode' },
+    { name: 'Facebook', icon: Facebook, url: 'https://facebook.com/superluxere' },
+    { name: 'Instagram', icon: Instagram, url: 'https://instagram.com/superluxere' },
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/company/superluxere' },
+    { name: 'Twitter', icon: Twitter, url: 'https://twitter.com/superluxere' },
   ],
 };
 
@@ -54,7 +54,7 @@ export default function ContactPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/category-noida.jpg"
-            alt="Contact Opulnz Abode"
+            alt="Contact Superluxere"
             fill
             className="object-cover"
             priority
@@ -164,7 +164,7 @@ export default function ContactPage() {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Opulnz Abode Office Location"
+              title="Superluxere Office Location"
             />
           </div>
 

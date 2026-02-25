@@ -20,7 +20,7 @@ class BlogController {
       content,
       isPublished: isPublished || false,
       excerpt: excerpt || null,
-      authorName: authorName || 'Team Opulnz Abode',
+      authorName: authorName || 'Team Superluxere',
       featuredImage: featuredImage || null,
       metaTitle: metaTitle || null,
       metaDescription: metaDescription || null,

@@ -40,7 +40,7 @@ const categories: Record<string, CategoryData> = {
   apartment: {
     slug: 'apartment',
     title: 'Apartments',
-    metaTitle: 'Luxury Apartments | Opulnz Abode',
+    metaTitle: 'Luxury Apartments | Superluxere',
     metaDescription: 'Discover premium apartment properties in Delhi NCR',
     heroTitle: 'Luxury Apartments',
     heroSubtitle: 'Experience premium living spaces designed for modern lifestyles',
@@ -94,7 +94,7 @@ const categories: Record<string, CategoryData> = {
   villa: {
     slug: 'villa',
     title: 'Villas',
-    metaTitle: 'Luxury Villas | Opulnz Abode',
+    metaTitle: 'Luxury Villas | Superluxere',
     metaDescription: 'Discover premium villa properties in Delhi NCR',
     heroTitle: 'Luxury Villas',
     heroSubtitle: 'Experience the pinnacle of luxury living',
@@ -143,7 +143,7 @@ const categories: Record<string, CategoryData> = {
   boutique: {
     slug: 'boutique',
     title: 'Boutique Collection',
-    metaTitle: 'Boutique Properties | Opulnz Abode',
+    metaTitle: 'Boutique Properties | Superluxere',
     metaDescription: 'Discover exclusive boutique properties',
     heroTitle: 'Boutique Collection',
     heroSubtitle: 'Limited edition luxury properties',

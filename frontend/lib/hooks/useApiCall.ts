@@ -41,7 +41,7 @@ export function useApiCall<T>(
 
   const lastCallRef = useRef<(() => Promise<T>) | null>(null);
   const retryCountRef = useRef(0);
-  
+
   // Memoize options to prevent unnecessary dependency changes
   const memoizedOptions = useMemo(() => ({
     retryCount: options.retryCount ?? API_CONFIG.RETRY_ATTEMPTS,
@@ -83,7 +83,7 @@ export function useApiCall<T>(
         return result;
       } catch (error) {
         const errorMessage = getErrorMessage(error);
-        
+
         // Check if we should retry
         const isRetryable = isRetryableError(error);
         if (isRetryable && retryCountRef.current < memoizedOptions.retryCount) {
@@ -147,7 +147,7 @@ function isRetryableError(error: unknown): boolean {
       return true;
     }
   }
-  
+
   if (error instanceof Error && 'status' in error) {
     const status = (error as ApiError).status;
     // Retry on server errors (5xx) but not client errors (4xx)
@@ -169,8 +169,8 @@ function isRetryableError(error: unknown): boolean {
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     // Check if it's an ApiError with data
-    if ('data' in error && error.data?.message) {
-      return error.data.message;
+    if ('data' in error && (error as any).data?.message) {
+      return (error as any).data.message;
     }
     // Network errors
     if (error.message.includes('Failed to fetch')) {

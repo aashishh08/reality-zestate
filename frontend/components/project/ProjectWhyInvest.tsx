@@ -20,6 +20,8 @@ interface ProjectWhyInvestProps {
   videoUrl?: string;
   detailedAnalysis?: string;
   projectTitle?: string;
+  propertyId?: string;
+  propertySlug?: string;
 }
 
 const iconMap = {
@@ -29,7 +31,7 @@ const iconMap = {
   calendar: Calendar,
 };
 
-export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectTitle = "Project" }: ProjectWhyInvestProps) {
+export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectTitle = "Project", propertyId, propertySlug }: ProjectWhyInvestProps) {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -71,7 +73,8 @@ export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectT
           name: formData.name.trim(),
           email: formData.email.trim(),
           phone: formData.phone.trim(),
-          source: "why-invest-cta",
+          source: propertySlug ? `investment-inquiry | ${propertySlug}` : 'why-invest-cta',
+          propertyId: propertyId || undefined,
         })
       );
     } catch (error) {
@@ -81,17 +84,23 @@ export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectT
     }
   };
 
-  // Convert simple string array to structured format if needed
-  const investmentBoxes: WhyInvestItem[] = !reasons || reasons.length === 0 || (Array.isArray(reasons) && typeof reasons[0] === 'string')
-    ? [
+  // Convert simple string array to structured format if needed.
+  // Guard against null/undefined reasons with a safe array fallback.
+  const safeReasons = Array.isArray(reasons) ? reasons : [];
+
+  const investmentBoxes: WhyInvestItem[] =
+    safeReasons.length === 0 || typeof safeReasons[0] === 'string'
+      ? [
         { title: "Prime Location", subtitle: "Strategic location with high appreciation", icon: "location" },
         { title: "Brand Legacy", subtitle: "Trusted developer with proven track record", icon: "award" },
         { title: "Investment Returns", subtitle: "Strong rental yield and capital appreciation", icon: "trending" },
         { title: "Market Timing", subtitle: "Pre-launch pricing advantage", icon: "calendar" },
       ]
-    : reasons as WhyInvestItem[];
+      : (safeReasons as WhyInvestItem[]);
 
-  const analysisText = detailedAnalysis || (reasons && reasons.length > 0 ? (typeof reasons[0] === 'string' ? reasons.join('\n\n') : '') : '') || `This premium development offers a compelling investment opportunity in one of the most sought-after locations. The strategic location ensures excellent connectivity to major business hubs, entertainment zones, and essential amenities.
+  const analysisText = detailedAnalysis ||
+    (safeReasons.length > 0 && typeof safeReasons[0] === 'string' ? safeReasons.join('\n\n') : '') ||
+    `This premium development offers a compelling investment opportunity in one of the most sought-after locations. The strategic location ensures excellent connectivity to major business hubs, entertainment zones, and essential amenities.
 
 The property benefits from being developed by a renowned builder with a proven track record in delivering quality projects on time. This reputation provides investors with the assurance of transparent dealings and reliable possession timelines.
 
@@ -117,18 +126,18 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
           {/* Left Side - Small Icon Boxes in Grid */}
           <div className="grid grid-cols-2 gap-3">
             {investmentBoxes.slice(0, 4).map((item, index) => {
-              const IconComponent = item.icon ? iconMap[item.icon as keyof typeof iconMap] : TrendingUp;
+              // Safe icon lookup: unknown keys (e.g. "building", "star") return undefined → fall back to TrendingUp
+              const IconComponent = (item.icon ? iconMap[item.icon as keyof typeof iconMap] : null) ?? TrendingUp;
               const isMarketTiming = item.title === "Market Timing";
-              
+
               return (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group cursor-pointer flex flex-col ${
-                    isMarketTiming ? "bg-gradient-to-br from-[#C9A961]/10 to-[#C9A961]/5" : "bg-white"
-                  }`}
+                  className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group cursor-pointer flex flex-col ${isMarketTiming ? "bg-gradient-to-br from-[#C9A961]/10 to-[#C9A961]/5" : "bg-white"
+                    }`}
                 >
                   <div className="flex-1">
                     <div className="w-10 h-10 bg-[#C9A961]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#C9A961]/20 transition-colors">
@@ -173,7 +182,7 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
                       </p>
                     ))
                   ) : (
-                    reasons.map((reason, index) => (
+                    safeReasons.map((reason, index) => (
                       <p key={index} className="text-[15px]">
                         {typeof reason === 'string' ? reason : `${reason.title}: ${reason.subtitle}`}
                       </p>

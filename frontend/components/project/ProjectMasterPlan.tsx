@@ -46,7 +46,9 @@ export function ProjectMasterPlan({ masterPlanImage, description }: ProjectMaste
         "State-of-the-art infrastructure including underground utilities, rainwater harvesting systems, and sustainable design elements are integrated seamlessly into the master plan, making this a truly modern and eco-friendly development."
     ];
 
-    const displayDescription = description && description.length > 0 ? description : defaultDescription;
+    const safeImage = masterPlanImage || "/images/project-1.jpg";
+    const safeDescription = Array.isArray(description) && description.length > 0 ? description : defaultDescription;
+    const displayDescription = safeDescription;
 
     return (
         <section className="py-14 bg-white" id="master-plan">
@@ -73,7 +75,7 @@ export function ProjectMasterPlan({ masterPlanImage, description }: ProjectMaste
                         {/* Main Master Plan Image */}
                         <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl">
                             <Image
-                                src={masterPlanImage}
+                                src={safeImage}
                                 alt="Master Plan"
                                 fill
                                 className="object-contain bg-gray-50"

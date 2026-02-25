@@ -2,57 +2,84 @@
 
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
-import { Property } from "@/types";
+import { PropertyItem } from "@/types/property-listing";
 import { motion, useScroll } from "framer-motion";
-import { ArrowRight, MapPin } from "lucide-react";
+import { ArrowRight, Calendar, MapPin } from "lucide-react";
 import Link from "next/link";
 
 interface UpcomingProjectsProps {
-  properties: (Property & { image?: string })[];
+  properties: PropertyItem[];
 }
 
-// Client-only component that uses useScroll
+// Inner component — uses useScroll (client only)
 function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  
-  // This hook only runs in this component which is client-only
-  const { scrollXProgress } = useScroll({
-    container: containerRef,
-  });
-
+  const { scrollXProgress } = useScroll({ container: containerRef });
 
   return (
     <section id="upcoming-projects" className="py-24 bg-transparent overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 mb-12">
-        <h4 className="text-gold font-medium tracking-[0.2em] mb-3 uppercase text-sm">
-          Future Living
-        </h4>
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-black leading-tight">
-          Upcoming <span className="text-gold-dark">Launches</span>
-        </h2>
+      <div className="max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <Calendar className="w-4 h-4 text-gold" />
+            <h4 className="text-gold font-medium tracking-[0.2em] uppercase text-sm">
+              Future Living
+            </h4>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-black leading-tight">
+            Upcoming <span className="text-gold-dark">Launches</span>
+          </h2>
+          <p className="mt-3 text-zinc-500 max-w-md">
+            Register your interest early and be first in line for pre-launch pricing.
+          </p>
+        </div>
+        <Link
+          href="/tag/upcoming"
+          className="hidden md:flex items-center gap-3 px-6 py-3 border border-zinc-200 rounded-full hover:bg-black hover:text-white hover:border-black transition-all group whitespace-nowrap"
+        >
+          View All Upcoming
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </Link>
       </div>
 
-      {/* Scrollable Container */}
+      {/* Horizontal scroll container */}
       <div
         ref={containerRef}
         className="flex gap-8 overflow-x-auto pb-12 px-6 snap-x snap-mandatory scrollbar-hide"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        <div className="w-0 md:w-[calc((100vw-80rem)/2)] shrink-0" /> {/* Left Spacer for large screens */}
+        <div className="w-0 md:w-[calc((100vw-80rem)/2)] shrink-0" />
 
         {properties.slice(0, 6).map((property) => (
-          <Link
-            key={property.id}
-            href={`/projects/${property.slug}`}
-          >
+          <Link key={property.id} href={`/projects/${property.slug}`}>
             <div className="panel relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] h-[500px] shrink-0 snap-center rounded-2xl overflow-hidden group cursor-pointer">
               <Image
-                src={property.image || "/images/project-1.jpg"}
+                src={"/images/project-1.jpg"}
                 alt={property.title}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+
+              {/* Tags ribbon */}
+              {property.Tags && property.Tags.length > 0 && (
+                <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                  {property.Tags.slice(0, 2).map(tag => (
+                    <span
+                      key={tag.slug}
+                      className="text-xs font-bold px-3 py-1 rounded-full"
+                      style={{
+                        background: `${tag.color || "#F59E0B"}22`,
+                        color: tag.color || "#F59E0B",
+                        border: `1px solid ${tag.color || "#F59E0B"}60`,
+                        backdropFilter: "blur(8px)",
+                      }}
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
+              )}
 
               <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                 <div className="bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded inline-block mb-3">
@@ -65,10 +92,11 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
                   <MapPin className="w-4 h-4 text-gold" />
                   <span>{property.Location?.name || "India"}</span>
                 </div>
-                <p className="text-white/60 mb-6 line-clamp-2">
-                  Experience the epitome of luxury with our upcoming masterpiece in {property.Location?.name || "India"}.
-                </p>
-
+                {property.priceMin && (
+                  <p className="text-gold text-sm font-semibold mb-4">
+                    Starting ₹ {(property.priceMin / 10_000_000).toFixed(1)} Cr
+                  </p>
+                )}
                 <button className="flex items-center gap-2 text-white font-medium border-b border-gold pb-1 hover:text-gold transition-colors">
                   Register Interest <ArrowRight className="w-4 h-4" />
                 </button>
@@ -77,11 +105,11 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
           </Link>
         ))}
 
-        <div className="w-6 md:w-[calc((100vw-80rem)/2)] shrink-0" /> {/* Right Spacer */}
+        <div className="w-6 md:w-[calc((100vw-80rem)/2)] shrink-0" />
       </div>
 
-      {/* Progress Bar */}
-      <div className="max-w-7xl mx-auto px-6 mt-8">
+      {/* Scroll progress */}
+      <div className="max-w-7xl mx-auto px-6 mt-2">
         <div className="h-1 bg-zinc-200 rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-gold"
@@ -93,30 +121,37 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
           <span>{properties.length} PROJECTS</span>
         </div>
       </div>
+
+      {/* Mobile CTA */}
+      <div className="mt-8 px-6 md:hidden">
+        <Link
+          href="/tag/upcoming"
+          className="flex items-center justify-center gap-3 px-6 py-3 border border-zinc-200 rounded-full hover:bg-black hover:text-white hover:border-black transition-all group w-full"
+        >
+          View All Upcoming
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </Link>
+      </div>
     </section>
   );
 }
 
-// Main export - handles client-side rendering
+// Main export — defers to client after hydration (useScroll requirement)
 export function UpcomingProjects({ properties }: UpcomingProjectsProps) {
   const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  useEffect(() => { setIsClient(true); }, []);
 
-  if (!properties || properties.length === 0) {
-    return null;
-  }
+  if (!properties || properties.length === 0) return null;
 
-  // Don't render component with useScroll until client hydration is complete
   if (!isClient) {
     return (
       <section id="upcoming-projects" className="py-24 bg-transparent overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 mb-12">
-          <h4 className="text-gold font-medium tracking-[0.2em] mb-3 uppercase text-sm">
-            Future Living
-          </h4>
+          <div className="flex items-center gap-2 mb-3">
+            <Calendar className="w-4 h-4 text-gold" />
+            <h4 className="text-gold font-medium tracking-[0.2em] uppercase text-sm">Future Living</h4>
+          </div>
           <h2 className="text-4xl md:text-5xl font-serif font-bold text-black leading-tight">
             Upcoming <span className="text-gold-dark">Launches</span>
           </h2>
@@ -125,6 +160,5 @@ export function UpcomingProjects({ properties }: UpcomingProjectsProps) {
     );
   }
 
-  // Only render the content component on client
   return <UpcomingProjectsContent properties={properties} />;
 }

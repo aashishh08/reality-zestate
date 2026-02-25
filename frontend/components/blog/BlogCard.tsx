@@ -50,7 +50,7 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
     : '';
 
   const categoryName = post.category?.name ?? 'Real Estate';
-  const authorName = post.author?.name ?? 'Opulnz Abode';
+  const authorName = post.author?.name ?? 'Superluxere';
   const readTime = post.readTime ?? 1;
 
   if (featured) {

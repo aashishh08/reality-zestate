@@ -24,7 +24,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const category = getCategoryBySlug(slug);
-  
+
   if (!category) {
     return {
       title: "Category Not Found",
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: category.metaTitle,
     description: category.metaDescription,
-    keywords: [category.title, "luxury real estate", "premium properties", "Opulnz Abode"],
+    keywords: [category.title, "luxury real estate", "premium properties", "Superluxere"],
     openGraph: {
       title: category.metaTitle,
       description: category.metaDescription,
@@ -56,46 +56,46 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   return (
     <main className="min-h-screen bg-white">
       <Header />
-      
+
       {/* Hero Section */}
-      <CategoryHero 
+      <CategoryHero
         title={category.heroTitle}
         subtitle={category.heroSubtitle}
         backgroundImage={`/images/category-${slug}.jpg`}
       />
-      
+
       {/* Introduction with Breadcrumbs */}
-      <CategoryIntro 
-        text={category.introText} 
+      <CategoryIntro
+        text={category.introText}
         categoryTitle={category.title}
       />
-      
+
       {/* City-wise Projects */}
       {category.citySections && category.citySections.length > 0 && (
         <CategoryCityProjects citySections={category.citySections} />
       )}
-      
+
       {/* Features/USP */}
       {category.features && category.features.length > 0 && (
         <CategoryFeatures features={category.features} />
       )}
-      
+
       {/* Content Sections */}
       {category.contentSections && category.contentSections.length > 0 && (
         <CategoryContent sections={category.contentSections} />
       )}
-      
+
       {/* Special Offer */}
       {category.specialOffer && (
         <CategoryOffer offer={category.specialOffer} />
       )}
-      
+
       {/* Lead Generation Form */}
-      <LeadForm 
+      <LeadForm
         offerTitle={category.specialOffer?.title}
         offerValidTill={category.specialOffer?.validTill}
       />
-      
+
       <Footer />
       <FloatingActions />
     </main>

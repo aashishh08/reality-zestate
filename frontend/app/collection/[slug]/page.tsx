@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: CollectionPageProps) {
   }
 
   return {
-    title: `${collection.title} | Opulnz Abode`,
+    title: `${collection.title} | Superluxere`,
     description: collection.description || `Luxury ${collection.type} in ${collection.location}`,
   };
 }

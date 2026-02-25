@@ -9,6 +9,8 @@ import { useApiCall } from "@/lib/hooks/useApiCall";
 
 interface ProjectBookingCTAProps {
   projectTitle: string;
+  propertyId?: string;
+  propertySlug?: string;
 }
 
 const contactCards = [
@@ -21,8 +23,8 @@ const contactCards = [
   {
     icon: Mail,
     label: "Email",
-    value: "info@opulnzabode.com",
-    href: "mailto:info@opulnzabode.com",
+    value: "info@superluxere.com",
+    href: "mailto:info@superluxere.com",
   },
   {
     icon: MapPin,
@@ -38,7 +40,7 @@ const contactCards = [
   },
 ];
 
-export function ProjectBookingCTA({ projectTitle }: ProjectBookingCTAProps) {
+export function ProjectBookingCTA({ projectTitle, propertyId, propertySlug }: ProjectBookingCTAProps) {
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
 
@@ -57,7 +59,8 @@ export function ProjectBookingCTA({ projectTitle }: ProjectBookingCTAProps) {
         name: form.name.trim(),
         email: form.email.trim(),
         phone: form.phone.trim(),
-        source: "site-visit-cta",
+        source: propertySlug ? `site-visit | ${propertySlug}` : 'site-visit-cta',
+        propertyId: propertyId || undefined,
       })
     );
   };

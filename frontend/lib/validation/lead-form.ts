@@ -47,7 +47,9 @@ const validationFunctions = {
     if (!value || !value.trim()) {
       return 'Phone number is required';
     }
-    if (!LEAD_FORM_VALIDATION.PHONE_REGEX.test(value)) {
+    // Strip all non-digit characters (+, spaces, dashes, parens) then count
+    const digits = value.replace(/\D/g, '');
+    if (digits.length !== LEAD_FORM_VALIDATION.PHONE_DIGIT_COUNT) {
       return 'Phone number must be 10 digits';
     }
     return null;

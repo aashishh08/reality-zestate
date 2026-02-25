@@ -28,7 +28,7 @@ export default (sequelize) => {
     authorName: {
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: 'Team Opulnz Abode',
+      defaultValue: 'Team Superluxere',
     },
     featuredImage: {
       type: DataTypes.STRING,

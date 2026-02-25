@@ -15,6 +15,7 @@ interface ProjectKeyTakeawaysProps {
 }
 
 export function ProjectKeyTakeaways({ takeaways, highlights }: ProjectKeyTakeawaysProps) {
+  const safeTakeaways = Array.isArray(takeaways) ? takeaways : [];
   const metaItems = highlights ? [
     highlights.landArea && { label: "Land Area", value: highlights.landArea, icon: "📐" },
     highlights.possession && { label: "Possession", value: highlights.possession, icon: "🗓️" },
@@ -58,7 +59,7 @@ export function ProjectKeyTakeaways({ takeaways, highlights }: ProjectKeyTakeawa
 
       {/* Takeaways List */}
       <div className="flex flex-col gap-3">
-        {takeaways.map((takeaway, index) => (
+        {safeTakeaways.map((takeaway, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, x: -20 }}

@@ -3,7 +3,7 @@
 import { useAdminAuth } from '@/lib/contexts/AdminAuthContext';
 import { ProtectedAdminRoute } from '@/components/admin/ProtectedAdminRoute';
 import { useRouter } from 'next/navigation';
-import { FileText, Plus, Edit2, Trash2, LogOut, Menu, X, Search, Eye, EyeOff } from 'lucide-react';
+import { FileText, LogOut, Menu, X, Plus, Eye, EyeOff, Trash2, Edit2, Search, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getAllBlogs, deleteBlog } from '@/lib/api/admin';
@@ -38,7 +38,7 @@ export default function BlogsListPage() {
   const loadBlogs = async () => {
     try {
       setLoading(true);
-      const response = await getAllBlogs(token!, { search });
+      const response: any = await getAllBlogs(token!, { search });
       setBlogs(response.data || []);
     } catch (err: any) {
       setError(err?.message || 'Failed to load blogs');
@@ -85,9 +85,8 @@ export default function BlogsListPage() {
       <div className="flex h-screen bg-gray-900">
         {/* Sidebar */}
         <div
-          className={`${
-            sidebarOpen ? 'w-64' : 'w-20'
-          } bg-gray-800 border-r border-gray-700 transition-all duration-300 flex flex-col`}
+          className={`${sidebarOpen ? 'w-64' : 'w-20'
+            } bg-gray-800 border-r border-gray-700 transition-all duration-300 flex flex-col`}
         >
           {/* Logo */}
           <div className="h-16 border-b border-gray-700 flex items-center justify-between px-4">
@@ -127,6 +126,13 @@ export default function BlogsListPage() {
             >
               <Plus className="w-5 h-5 flex-shrink-0" />
               {sidebarOpen && <span>Create Blog</span>}
+            </Link>
+            <Link
+              href="/admin/leads"
+              className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition"
+            >
+              <Users className="w-5 h-5 flex-shrink-0" />
+              {sidebarOpen && <span>Leads</span>}
             </Link>
           </nav>
 
@@ -224,11 +230,10 @@ export default function BlogsListPage() {
                         <td className="px-6 py-4 text-sm">
                           <button
                             onClick={() => handleTogglePublish(blog)}
-                            className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-medium transition ${
-                              blog.isPublished
-                                ? 'bg-green-500/20 text-green-500 hover:bg-green-500/30'
-                                : 'bg-blue-500/20 text-blue-500 hover:bg-blue-500/30'
-                            }`}
+                            className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-medium transition ${blog.isPublished
+                              ? 'bg-green-500/20 text-green-500 hover:bg-green-500/30'
+                              : 'bg-blue-500/20 text-blue-500 hover:bg-blue-500/30'
+                              }`}
                           >
                             {blog.isPublished ? (
                               <>

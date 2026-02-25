@@ -6,44 +6,75 @@ import { TrendingProjects } from "@/components/home/TrendingProjects";
 import { LocationCategories } from "@/components/home/LocationCategories";
 import { CityLocations } from "@/components/home/CityLocations";
 import { UpcomingProjects } from "@/components/home/UpcomingProjects";
+import { BrowseByDeveloper } from "@/components/home/BrowseByDeveloper";
+import { BrowseByProjectType } from "@/components/home/BrowseByProjectType";
 import { BoutiqueCollection } from "@/components/home/BoutiqueCollection";
-import { OpulnzExclusive } from "@/components/home/OpulnzExclusive";
+import { SuperluxereExclusive } from "@/components/home/OpulnzExclusive";
 import { LeadPopup } from "@/components/ui/LeadPopup";
-import { getProperties, getLocations, getDevelopers } from "@/lib";
+import { getProperties, getLocations, getDevelopers, getCategories } from "@/lib";
+import { fetchFromAPI } from "@/lib/api-client";
 
 // ISR: Revalidate every hour
 export const revalidate = 3600;
 
 async function getHomePageData() {
   try {
-    const [propertiesRes, locationsRes, developersRes] = await Promise.all([
-      getProperties({ limit: 12, offset: 0 }, 3600),
+    const [
+      trendingRes,
+      upcomingRes,
+      locationsRes,
+      developersRes,
+      categoriesRes,
+    ] = await Promise.all([
+      // Fetch tag-filtered trending properties
+      fetchFromAPI<any>("/properties?tags=trending&limit=8&isPublished=true", { next: { revalidate: 3600 } }),
+      // Fetch tag-filtered upcoming properties
+      fetchFromAPI<any>("/properties?tags=upcoming&limit=8&isPublished=true", { next: { revalidate: 3600 } }),
       getLocations({ limit: 20, offset: 0 }, 3600),
-      getDevelopers({ limit: 6, offset: 0 }, 3600),
+      getDevelopers({ limit: 12, offset: 0 }, 3600),
+      getCategories({ limit: 50, offset: 0 }, 3600),
     ]);
 
+    // Normalise varying response shapes
+    const normalise = (res: any) =>
+      Array.isArray(res) ? res : res?.data || [];
+
+    const trending = normalise(trendingRes);
+    const upcoming = normalise(upcomingRes);
+
+    // Fallback: if no tagged properties yet, show generic properties
+    const fallbackProps = trending.length || upcoming.length
+      ? null
+      : await getProperties({ limit: 12, offset: 0 }, 3600);
+
     return {
-      properties: Array.isArray(propertiesRes) ? propertiesRes : propertiesRes?.data || [],
-      locations: locationsRes?.data || locationsRes || [],
-      developers: Array.isArray(developersRes) ? developersRes : developersRes?.data || [],
+      trendingProperties: trending.length
+        ? trending
+        : normalise(fallbackProps),
+      upcomingProperties: upcoming.length
+        ? upcoming
+        : normalise(fallbackProps),
+      locations: normalise(locationsRes),
+      developers: normalise(developersRes),
+      categories: normalise(categoriesRes),
     };
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    if (process.env.NODE_ENV === 'development') {
-      console.error("[HomePage] Failed to fetch data:", errorMessage);
+    if (process.env.NODE_ENV === "development") {
+      console.error("[HomePage] Failed to fetch data:", error);
     }
-    
-    // Return empty arrays so homepage still renders
     return {
-      properties: [],
+      trendingProperties: [],
+      upcomingProperties: [],
       locations: [],
       developers: [],
+      categories: [],
     };
   }
 }
 
 export default async function Home() {
-  const { properties, locations, developers } = await getHomePageData();
+  const { trendingProperties, upcomingProperties, locations, developers, categories } =
+    await getHomePageData();
 
   return (
     <main className="min-h-screen relative selection:bg-gold selection:text-white">
@@ -52,17 +83,29 @@ export default async function Home() {
         <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
       </div>
 
-      <Header />
+      <Header locations={locations} developers={developers} categories={categories} />
       <Hero />
 
-      <TrendingProjects properties={properties} />
+      {/* 1. Trending — tag-filtered */}
+      <TrendingProjects properties={trendingProperties} />
+
+      {/* 2. Browse by Location — card grid */}
       <LocationCategories locations={locations} />
       <CityLocations locations={locations} />
-      <UpcomingProjects properties={properties} />
-      <BoutiqueCollection locations={locations} />
-      <OpulnzExclusive developers={developers} />
 
-      <Footer />
+      {/* 3. Upcoming Launches — tag-filtered */}
+      <UpcomingProjects properties={upcomingProperties} />
+
+      {/* 4. Browse by Developer */}
+      <BrowseByDeveloper developers={developers} />
+
+      {/* 5. Browse by Project Type (Categories) */}
+      <BrowseByProjectType categories={categories} />
+
+      <BoutiqueCollection locations={locations} />
+      <SuperluxereExclusive developers={developers} />
+
+      <Footer locations={locations} />
       <FloatingActions />
       <LeadPopup />
     </main>

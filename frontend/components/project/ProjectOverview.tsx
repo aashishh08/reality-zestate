@@ -13,6 +13,10 @@ interface ProjectOverviewProps {
 }
 
 export function ProjectOverview({ overview }: ProjectOverviewProps) {
+  if (!overview) return null;
+  const safeContent = Array.isArray(overview.content) ? overview.content : [];
+  const safeFeatures = Array.isArray(overview.features) ? overview.features : [];
+
   return (
     <section className="py-14 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
@@ -31,7 +35,7 @@ export function ProjectOverview({ overview }: ProjectOverviewProps) {
             <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
               <div className="h-[400px] overflow-y-auto pr-4 scrollbar-custom">
                 <div className="space-y-6 text-gray-700 leading-relaxed">
-                  {overview.content.map((paragraph, index) => (
+                  {safeContent.map((paragraph, index) => (
                     <motion.p
                       key={index}
                       initial={{ opacity: 0, y: 10 }}
@@ -49,7 +53,7 @@ export function ProjectOverview({ overview }: ProjectOverviewProps) {
           </motion.div>
 
           {/* Right: Project Image with Overlapping Key Features Card */}
-          {overview.features && overview.features.length > 0 && (
+          {safeFeatures.length > 0 && (
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -133,7 +137,7 @@ export function ProjectOverview({ overview }: ProjectOverviewProps) {
 
                     {/* Features List */}
                     <ul className="space-y-4">
-                      {overview.features.map((feature, index) => (
+                      {safeFeatures.map((feature, index) => (
                         <motion.li
                           key={index}
                           initial={{ opacity: 0, x: -20 }}

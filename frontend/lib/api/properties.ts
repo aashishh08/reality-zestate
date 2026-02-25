@@ -57,6 +57,14 @@ export interface Property {
     data: Record<string, any>;
   }>;
 
+  Tags?: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    color?: string;
+    icon?: string;
+  }>;
+
   createdAt?: string;
   updatedAt?: string;
 }
@@ -77,15 +85,15 @@ export interface PropertiesResponse {
 export async function getProperties(
   filters?: PropertyFilters,
   revalidate: number | false = 3600
-): Promise<Property[]> {
+): Promise<PropertiesResponse> {
   const queryString = buildQueryString(filters);
 
-  return fetchFromAPI<Property[]>(
+  return fetchFromAPI<PropertiesResponse>(
     `/properties${queryString}`,
     {
       method: 'GET',
       next: {
-        revalidate, // ISR revalidation
+        revalidate,
       },
     }
   );

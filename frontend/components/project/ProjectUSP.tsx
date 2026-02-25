@@ -10,6 +10,9 @@ interface ProjectUSPProps {
 }
 
 export function ProjectUSP({ usp, projectTitle }: ProjectUSPProps) {
+  const safeUsp = Array.isArray(usp) ? usp : [];
+  if (safeUsp.length === 0) return null;
+
   return (
     <section id="usp" className="py-14 bg-[#F5F5F0]">
       <div className="max-w-7xl mx-auto px-6">
@@ -23,7 +26,7 @@ export function ProjectUSP({ usp, projectTitle }: ProjectUSPProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {usp.map((point, index) => (
+          {safeUsp.map((point, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}

@@ -5,61 +5,62 @@ import Image from "next/image";
 import { BookOpen, Heart, ShoppingBag, MapPin, Plane, Map, Building2 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
+interface NearbyItem { name: string; distance?: string }
+interface NearbyCategory { category: string; icon?: string; items: NearbyItem[] }
+interface ConnectivityItem { place: string; icon?: string; time: string }
+
 interface ProjectLocationProps {
   location: {
     address?: string;
     mapImage?: string;
-    nearby: {
-      category: string;
-      icon?: string;
-      items: { name: string; distance?: string }[];
-    }[];
-    connectivity?: {
-      place: string;
-      icon?: string;
-      time: string;
-    }[];
+    nearby: NearbyCategory[];
+    connectivity?: ConnectivityItem[];
   };
 }
 
-const categoryIcons = {
+const categoryIcons: Record<string, React.ElementType> = {
   education: BookOpen,
   healthcare: Heart,
   shopping: ShoppingBag,
   default: MapPin,
 };
 
-const categoryColors = {
+const categoryColors: Record<string, string> = {
   education: "#3B82F6",
   healthcare: "#EF4444",
   shopping: "#A855F7",
   default: "#C9A961",
 };
 
-const connectivityIcons = {
+const connectivityIcons: Record<string, React.ElementType> = {
   airport: Plane,
   location: MapPin,
+  map: Map,
   building: Building2,
   default: MapPin,
 };
 
 export function ProjectLocation({ location }: ProjectLocationProps) {
+  // Graceful null guard
+  if (!location) return null;
+
+  const safeNearby: NearbyCategory[] = Array.isArray(location.nearby) ? location.nearby : [];
+  const safeConnectivity: ConnectivityItem[] = Array.isArray(location.connectivity) ? location.connectivity : [];
+
   return (
     <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center mb-16">
           <SectionHeading
             label="Prime Address"
-            description="Strategically located on Golf Course Road, offering unmatched connectivity to business districts, airports, and lifestyle destinations"
+            description="Strategically located, offering unmatched connectivity to business districts, airports, and lifestyle destinations"
           >
             Location Advantage
           </SectionHeading>
         </div>
 
-        {/* Content Grid */}
         <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Left - Map Image with Label */}
+          {/* Map Image */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -73,11 +74,7 @@ export function ProjectLocation({ location }: ProjectLocationProps) {
                 fill
                 className="object-cover"
               />
-              
-              {/* Dark Overlay */}
               <div className="absolute inset-0 bg-black/30" />
-              
-              {/* Location Label */}
               <div className="absolute top-6 left-6 bg-white rounded-lg p-4 shadow-lg max-w-xs">
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-lg bg-[#C9A961]/10 flex items-center justify-center shrink-0">
@@ -85,69 +82,73 @@ export function ProjectLocation({ location }: ProjectLocationProps) {
                   </div>
                   <div>
                     <p className="font-serif font-bold text-[#2C2416] text-base">
-                      {location.address || "Golf Course Road"}
+                      {location.address || "Prime Location"}
                     </p>
-                    <p className="text-xs text-gray-600">Sector 54, Gurgaon</p>
                   </div>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Right - Nearby Categories */}
+          {/* Nearby Categories */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             className="space-y-8"
           >
-            {location.nearby.map((category, categoryIndex) => {
-              const IconComponent = categoryIcons[category.icon as keyof typeof categoryIcons] || categoryIcons.default;
-              const iconColor = categoryColors[category.icon as keyof typeof categoryColors] || categoryColors.default;
-              
-              return (
-                <motion.div
-                  key={category.category}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: categoryIndex * 0.1 }}
-                >
-                  {/* Category Header */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <div
-                      className="w-8 h-8 rounded-lg flex items-center justify-center"
-                      style={{ backgroundColor: `${iconColor}15` }}
-                    >
-                      <IconComponent className="w-5 h-5" style={{ color: iconColor }} />
-                    </div>
-                    <h3 className="text-lg font-serif font-bold text-[#2C2416]">
-                      {category.category}
-                    </h3>
-                  </div>
+            {safeNearby.length === 0 ? (
+              <p className="text-gray-400 text-sm italic">No nearby places listed.</p>
+            ) : (
+              safeNearby.map((category, categoryIndex) => {
+                // Safe lookup: unknown icon key → falls back to default icon/color
+                const IconComponent: React.ElementType =
+                  (category.icon ? categoryIcons[category.icon] : null) ?? categoryIcons.default;
+                const iconColor: string =
+                  (category.icon ? categoryColors[category.icon] : null) ?? categoryColors.default;
+                const safeItems: NearbyItem[] = Array.isArray(category.items) ? category.items : [];
 
-                  {/* Items Grid */}
-                  <div className="grid grid-cols-2 gap-x-6 gap-y-3 pl-11">
-                    {category.items.map((item, index) => (
-                      <motion.div
-                        key={item.name}
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ delay: (categoryIndex * 0.1) + (index * 0.05) }}
-                        className="flex items-center gap-2"
+                return (
+                  <motion.div
+                    key={`${category.category}-${categoryIndex}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: categoryIndex * 0.1 }}
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center"
+                        style={{ backgroundColor: `${iconColor}15` }}
                       >
-                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: iconColor }} />
-                        <span className="text-sm text-gray-700 font-medium">{item.name}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              );
-            })}
+                        <IconComponent className="w-5 h-5" style={{ color: iconColor }} />
+                      </div>
+                      <h3 className="text-lg font-serif font-bold text-[#2C2416]">
+                        {category.category}
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-3 pl-11">
+                      {safeItems.map((item, index) => (
+                        <motion.div
+                          key={`${item.name || "item"}-${index}`}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: categoryIndex * 0.1 + index * 0.05 }}
+                          className="flex items-center gap-2"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: iconColor }} />
+                          <span className="text-sm text-gray-700 font-medium">{item.name}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                );
+              })
+            )}
           </motion.div>
         </div>
 
-        {/* Connectivity / Travel Time Section */}
-        {location.connectivity && location.connectivity.length > 0 && (
+        {/* Connectivity */}
+        {safeConnectivity.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -155,12 +156,13 @@ export function ProjectLocation({ location }: ProjectLocationProps) {
             className="mt-20 pt-20 border-t border-gray-200"
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {location.connectivity.map((item, index) => {
-                const IconComponent = connectivityIcons[item.icon as keyof typeof connectivityIcons] || connectivityIcons.default;
-                
+              {safeConnectivity.map((item, index) => {
+                const IconComponent: React.ElementType =
+                  (item.icon ? connectivityIcons[item.icon] : null) ?? connectivityIcons.default;
+
                 return (
                   <motion.div
-                    key={item.place}
+                    key={`${item.place || "place"}-${index}`}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}

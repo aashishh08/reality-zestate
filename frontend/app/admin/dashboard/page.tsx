@@ -5,7 +5,7 @@ import { ProtectedAdminRoute } from '@/components/admin/ProtectedAdminRoute';
 import { useRouter } from 'next/navigation';
 import {
   FileText, Plus, LogOut, Menu, X,
-  Eye, EyeOff, Edit2, TrendingUp, BookOpen, PenTool,
+  Eye, EyeOff, Edit2, TrendingUp, BookOpen, PenTool, Building2, Users,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
@@ -120,6 +120,14 @@ export default function AdminDashboardPage() {
               <TrendingUp className="w-5 h-5 flex-shrink-0" />
               {sidebarOpen && <span>Dashboard</span>}
             </Link>
+            <Link href="/admin/properties" className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition">
+              <Building2 className="w-5 h-5 flex-shrink-0" />
+              {sidebarOpen && <span>Properties</span>}
+            </Link>
+            <Link href="/admin/properties/create" className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition">
+              <Plus className="w-5 h-5 flex-shrink-0" />
+              {sidebarOpen && <span>Create Property</span>}
+            </Link>
             <Link href="/admin/blogs" className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition">
               <FileText className="w-5 h-5 flex-shrink-0" />
               {sidebarOpen && <span>Blogs</span>}
@@ -127,6 +135,10 @@ export default function AdminDashboardPage() {
             <Link href="/admin/blogs/create" className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition">
               <Plus className="w-5 h-5 flex-shrink-0" />
               {sidebarOpen && <span>Create Blog</span>}
+            </Link>
+            <Link href="/admin/leads" className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition">
+              <Users className="w-5 h-5 flex-shrink-0" />
+              {sidebarOpen && <span>Leads</span>}
             </Link>
           </nav>
 
@@ -234,11 +246,10 @@ export default function AdminDashboardPage() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-3 ml-4 flex-shrink-0">
-                        <span className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-xs font-medium ${
-                          blog.isPublished
-                            ? 'bg-green-500/15 text-green-400'
-                            : 'bg-blue-500/15 text-blue-400'
-                        }`}>
+                        <span className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-xs font-medium ${blog.isPublished
+                          ? 'bg-green-500/15 text-green-400'
+                          : 'bg-blue-500/15 text-blue-400'
+                          }`}>
                           {blog.isPublished ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
                           <span>{blog.isPublished ? 'Published' : 'Draft'}</span>
                         </span>

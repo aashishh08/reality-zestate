@@ -5,29 +5,14 @@ class PropertyController {
     const { slug, title, propertyType, developerId, locationId, status, priceMin, priceMax, isPublished } = req.body;
 
     if (!slug || !title || !propertyType || !developerId || !locationId) {
-      throw {
-        status: 400,
-        message: 'Missing required fields: slug, title, propertyType, developerId, locationId',
-      };
+      throw { status: 400, message: 'Missing required fields: slug, title, propertyType, developerId, locationId' };
     }
 
     const property = await propertyService.createProperty({
-      slug,
-      title,
-      propertyType,
-      developerId,
-      locationId,
-      status,
-      priceMin,
-      priceMax,
-      isPublished,
+      slug, title, propertyType, developerId, locationId, status, priceMin, priceMax, isPublished,
     });
 
-    res.status(201).json({
-      success: true,
-      data: property,
-      message: 'Property created successfully',
-    });
+    res.status(201).json({ success: true, data: property, message: 'Property created successfully' });
   }
 
   async updateProperty(req, res) {
@@ -35,67 +20,48 @@ class PropertyController {
     const { slug, title, propertyType, developerId, locationId, status, priceMin, priceMax, isPublished } = req.body;
 
     const property = await propertyService.updateProperty(id, {
-      slug,
-      title,
-      propertyType,
-      developerId,
-      locationId,
-      status,
-      priceMin,
-      priceMax,
-      isPublished,
+      slug, title, propertyType, developerId, locationId, status, priceMin, priceMax, isPublished,
     });
 
-    res.json({
-      success: true,
-      data: property,
-      message: 'Property updated successfully',
-    });
+    res.json({ success: true, data: property, message: 'Property updated successfully' });
   }
 
   async deleteProperty(req, res) {
-    const { id } = req.params;
-
-    await propertyService.deleteProperty(id);
-
-    res.json({
-      success: true,
-      message: 'Property deleted successfully',
-    });
+    await propertyService.deleteProperty(req.params.id);
+    res.json({ success: true, message: 'Property deleted successfully' });
   }
 
   async getPropertyBySlug(req, res) {
-    const { slug } = req.params;
-
-    const property = await propertyService.getPropertyBySlug(slug);
-
-    res.json({
-      success: true,
-      data: property,
-    });
+    const property = await propertyService.getPropertyBySlug(req.params.slug);
+    res.json({ success: true, data: property });
   }
 
   async listProperties(req, res) {
     const {
-      propertyType,
-      locationId,
-      developerId,
-      categoryIds,
-      priceMin,
-      priceMax,
-      isPublished,
-      limit = 10,
-      offset = 0,
+      propertyType, locationId, developerId, categoryIds,
+      tags,      // comma-separated slugs OR repeated: ?tags=upcoming&tags=featured
+      priceMin, priceMax, isPublished,
+      sort = 'newest',
+      limit = 10, offset = 0,
     } = req.query;
+
+    // Normalise tags: accept both "upcoming,trending" and ["upcoming","trending"]
+    const tagSlugs = tags
+      ? (Array.isArray(tags) ? tags : tags.split(',').map(s => s.trim())).filter(Boolean)
+      : undefined;
 
     const filters = {
       propertyType,
       locationId,
       developerId,
-      categoryIds: categoryIds ? (typeof categoryIds === 'string' ? [categoryIds] : categoryIds) : undefined,
+      categoryIds: categoryIds
+        ? (Array.isArray(categoryIds) ? categoryIds : [categoryIds])
+        : undefined,
+      tagSlugs,
       priceMin: priceMin ? parseFloat(priceMin) : undefined,
       priceMax: priceMax ? parseFloat(priceMax) : undefined,
-      isPublished: isPublished ? isPublished === 'true' : undefined,
+      isPublished: isPublished !== undefined ? isPublished === 'true' : undefined,
+      sort,
       limit,
       offset,
     };
@@ -114,42 +80,44 @@ class PropertyController {
   }
 
   async createPropertySections(req, res) {
-    const { id } = req.params;
     const { sections } = req.body;
+    if (!sections) throw { status: 400, message: 'Sections array is required' };
 
-    if (!sections) {
-      throw {
-        status: 400,
-        message: 'Sections array is required',
-      };
-    }
-
-    const createdSections = await propertyService.createPropertySections(id, sections);
-
-    res.status(201).json({
-      success: true,
-      data: createdSections,
-      message: 'Property sections created successfully',
-    });
+    const created = await propertyService.createPropertySections(req.params.id, sections);
+    res.status(201).json({ success: true, data: created, message: 'Property sections created successfully' });
   }
 
   async updatePropertySections(req, res) {
-    const { id } = req.params;
     const { sections } = req.body;
+    if (!sections) throw { status: 400, message: 'Sections array is required' };
 
-    if (!sections) {
-      throw {
-        status: 400,
-        message: 'Sections array is required',
-      };
-    }
+    const updated = await propertyService.updatePropertySections(req.params.id, sections);
+    res.json({ success: true, data: updated, message: 'Property sections updated successfully' });
+  }
 
-    const updatedSections = await propertyService.updatePropertySections(id, sections);
+  // ── Full property creation (core + sections + tags + categories) ──────────────
+  async createPropertyFull(req, res) {
+    const result = await propertyService.createPropertyFull(req.body);
+    res.status(201).json({
+      success: true,
+      data: result,
+      message: `Property "${result.property.title}" created successfully with ${result.sectionsCreated} section(s).`,
+    });
+  }
 
+  // ── Admin listing: all properties with section info ─────────────────────
+  async listAllProperties(req, res) {
+    const { isPublished, propertyType, limit = 100, offset = 0 } = req.query;
+    const result = await propertyService.listAllProperties({
+      isPublished: isPublished !== undefined ? isPublished === 'true' : undefined,
+      propertyType,
+      limit,
+      offset,
+    });
     res.json({
       success: true,
-      data: updatedSections,
-      message: 'Property sections updated successfully',
+      data: result.properties,
+      pagination: { total: result.total, limit: parseInt(limit, 10), offset: parseInt(offset, 10) },
     });
   }
 }

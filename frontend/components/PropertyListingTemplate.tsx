@@ -133,7 +133,7 @@ export function PropertyListingTemplate({
 
   // Calculate pagination state with safety checks
   const paginationData = data?.pagination || { limit: 12, offset: 0, total: 0 };
-  
+
   const pagination = {
     currentPage: Math.floor((paginationData.offset || 0) / (paginationData.limit || 12)) + 1,
     totalPages: Math.ceil((paginationData.total || 0) / (paginationData.limit || 12)),
@@ -322,16 +322,19 @@ export function PropertyListingTemplate({
                       slug: property.slug,
                       title: property.title,
                       propertyType: property.propertyType,
-                      priceMin: property.priceMin,
-                      priceMax: property.priceMax,
+                      priceMin: property.priceMin ?? undefined,
+                      priceMax: property.priceMax ?? undefined,
                       isPublished: true,
                       image: property.image || '/images/placeholder.jpg',
                       location: property.Location?.name || 'Unknown',
-                      price: `₹${property.priceMin.toLocaleString('en-IN')} - ₹${property.priceMax.toLocaleString('en-IN')}`,
+                      price: property.priceMin && property.priceMax
+                        ? `₹${property.priceMin.toLocaleString('en-IN')} - ₹${property.priceMax.toLocaleString('en-IN')}`
+                        : 'Price on Request',
                       category: 'Trending' as const,
                       Developer: property.Developer,
-                      Location: property.Location ? { ...property.Location, type: 'location' } : undefined,
+                      Location: property.Location ? { ...property.Location, type: 'city' } : undefined,
                       Categories: (property as any).Categories,
+                      Tags: (property as any).Tags,
                     };
 
                     return (

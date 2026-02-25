@@ -5,13 +5,13 @@ import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { Developer } from "@/lib";
 
-interface OpulnzExclusiveProps {
+interface SuperluxereExclusiveProps {
   developers: Developer[];
 }
 
-export function OpulnzExclusive({ developers }: OpulnzExclusiveProps) {
+export function SuperluxereExclusive({ developers }: SuperluxereExclusiveProps) {
   return (
-    <section id="opulnz-exclusive" className="relative py-32 px-6 bg-[#F5F5F0] text-foreground overflow-hidden">
+    <section id="superluxere-exclusive" className="relative py-32 px-6 bg-[#F5F5F0] text-foreground overflow-hidden">
       {/* Background with Overlay */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -37,7 +37,7 @@ export function OpulnzExclusive({ developers }: OpulnzExclusiveProps) {
             </div>
 
             <h2 className="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight text-black">
-              Opulnz <br />
+              Superluxere <br />
               <span className="text-gold-dark">Exclusive</span>
             </h2>
 

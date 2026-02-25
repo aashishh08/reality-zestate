@@ -71,7 +71,7 @@ function normalizeBlogPost(raw: Record<string, any>): BlogPost {
     title: raw.title,
     excerpt: raw.excerpt || autoExcerpt || raw.title,
     content: raw.content || '',
-    author: { name: raw.authorName || 'Team Opulnz Abode' },
+    author: { name: raw.authorName || 'Team Superluxere' },
     publishedAt: raw.createdAt,
     updatedAt: raw.updatedAt,
     featuredImage: raw.featuredImage || '',

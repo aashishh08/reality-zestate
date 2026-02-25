@@ -11,13 +11,19 @@ interface ProjectGalleryProps {
 }
 
 export function ProjectGallery({ images, videoUrl }: ProjectGalleryProps) {
+  const safeImages = Array.isArray(images) ? images : [];
+
   // Combine video and images - video comes first if it exists
-  const totalItems = (videoUrl ? 1 : 0) + images.length;
+  const totalItems = (videoUrl ? 1 : 0) + safeImages.length;
+
+  // Nothing to show at all
+  if (totalItems === 0) return null;
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [thumbnailScroll, setThumbnailScroll] = useState(0);
 
   const isVideo = videoUrl && selectedIndex === 0;
-  const currentImage = isVideo ? null : images[videoUrl ? selectedIndex - 1 : selectedIndex];
+  const currentImage = isVideo ? null : safeImages[videoUrl ? selectedIndex - 1 : selectedIndex];
 
   // Maximum visible thumbnails (3-4 depending on space)
   const maxVisibleThumbnails = 4;
@@ -37,7 +43,7 @@ export function ProjectGallery({ images, videoUrl }: ProjectGalleryProps) {
   const visibleThumbnails = totalItems;
   const thumbnailItems = [
     ...(videoUrl ? [{ type: "video", src: undefined }] : []),
-    ...images.map((img) => ({ type: "image", src: img })),
+    ...safeImages.map((img) => ({ type: "image", src: img })),
   ];
 
   return (
@@ -141,11 +147,10 @@ export function ProjectGallery({ images, videoUrl }: ProjectGalleryProps) {
                 <motion.button
                   key={index}
                   onClick={() => setSelectedIndex(index)}
-                  className={`relative aspect-video rounded-lg overflow-hidden transition-all shadow-md border-2 cursor-pointer group flex-shrink-0 ${
-                    selectedIndex === index
-                      ? "border-[#C9A961] ring-2 ring-[#C9A961] ring-offset-1 ring-offset-[#F5F0E8]"
-                      : "border-gray-200 hover:border-[#C9A961]/50"
-                  }`}
+                  className={`relative aspect-video rounded-lg overflow-hidden transition-all shadow-md border-2 cursor-pointer group flex-shrink-0 ${selectedIndex === index
+                    ? "border-[#C9A961] ring-2 ring-[#C9A961] ring-offset-1 ring-offset-[#F5F0E8]"
+                    : "border-gray-200 hover:border-[#C9A961]/50"
+                    }`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   initial={{ opacity: 0, scale: 0.9 }}

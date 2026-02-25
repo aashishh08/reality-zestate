@@ -3,7 +3,7 @@
 import { useAdminAuth } from '@/lib/contexts/AdminAuthContext';
 import { ProtectedAdminRoute } from '@/components/admin/ProtectedAdminRoute';
 import { useRouter, useParams } from 'next/navigation';
-import { FileText, LogOut, Menu, X, Save, EyeOff, AlertCircle, ArrowLeft, Plus } from 'lucide-react';
+import { FileText, LogOut, Menu, X, Save, EyeOff, AlertCircle, ArrowLeft, Plus, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getBlogById } from '@/lib/api/admin';
@@ -21,7 +21,7 @@ export default function EditBlogPage() {
   const [slug, setSlug] = useState('');
   const [content, setContent] = useState('');
   const [excerpt, setExcerpt] = useState('');
-  const [authorName, setAuthorName] = useState('Team Opulnz Abode');
+  const [authorName, setAuthorName] = useState('Team Superluxere');
   const [featuredImage, setFeaturedImage] = useState('');
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
@@ -47,7 +47,7 @@ export default function EditBlogPage() {
       setSlug(blog.slug || '');
       setContent(blog.content || '');
       setExcerpt(blog.excerpt || '');
-      setAuthorName(blog.authorName || 'Team Opulnz Abode');
+      setAuthorName(blog.authorName || 'Team Superluxere');
       setFeaturedImage(blog.featuredImage || '');
       setMetaTitle(blog.metaTitle || '');
       setMetaDescription(blog.metaDescription || '');
@@ -98,7 +98,7 @@ export default function EditBlogPage() {
           slug: slug.trim(),
           content: content.trim(),
           excerpt: excerpt.trim() || undefined,
-          authorName: authorName.trim() || 'Team Opulnz Abode',
+          authorName: authorName.trim() || 'Team Superluxere',
           featuredImage: featuredImage.trim() || undefined,
           metaTitle: metaTitle.trim() || undefined,
           metaDescription: metaDescription.trim() || undefined,
@@ -129,9 +129,8 @@ export default function EditBlogPage() {
       <div className="flex h-screen bg-gray-900">
         {/* Sidebar */}
         <div
-          className={`${
-            sidebarOpen ? 'w-64' : 'w-20'
-          } bg-gray-800 border-r border-gray-700 transition-all duration-300 flex flex-col`}
+          className={`${sidebarOpen ? 'w-64' : 'w-20'
+            } bg-gray-800 border-r border-gray-700 transition-all duration-300 flex flex-col`}
         >
           <div className="h-16 border-b border-gray-700 flex items-center justify-between px-4">
             <div className={`flex items-center space-x-3 ${!sidebarOpen && 'hidden'}`}>
@@ -169,6 +168,13 @@ export default function EditBlogPage() {
             >
               <Plus className="w-5 h-5 flex-shrink-0" />
               {sidebarOpen && <span>Create Blog</span>}
+            </Link>
+            <Link
+              href="/admin/leads"
+              className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition"
+            >
+              <Users className="w-5 h-5 flex-shrink-0" />
+              {sidebarOpen && <span>Leads</span>}
             </Link>
           </nav>
 

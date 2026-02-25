@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const { slug } = await params;
   try {
     const post = await getBlogBySlug(slug);
-    const metaTitle = post.seo?.metaTitle || `${post.title} | Opulnz Abode`;
+    const metaTitle = post.seo?.metaTitle || `${post.title} | Superluxere`;
     const metaDescription =
       post.seo?.metaDescription ||
       post.excerpt ||
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     return {
       title: metaTitle,
       description: metaDescription,
-      authors: [{ name: post.author?.name || 'Opulnz Abode' }],
+      authors: [{ name: post.author?.name || 'Superluxere' }],
       openGraph: {
         title: metaTitle,
         description: metaDescription,
@@ -68,7 +68,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         description: metaDescription,
       },
       alternates: {
-        canonical: `https://opulnzabode.com/blogs/${slug}`,
+        canonical: `https://superluxere.com/blogs/${slug}`,
       },
     };
   } catch {
@@ -110,16 +110,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const dateSource = post.publishedAt || post.createdAt || '';
   const formattedDate = dateSource
     ? new Date(dateSource).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
     : '';
 
   const toc = extractTOC(post.content || '');
   const contentWithIds = injectHeadingIds(post.content || '');
-  const shareUrl = `https://opulnzabode.com/blogs/${slug}`;
-  const authorName = post.author?.name || 'Team Opulnz Abode';
+  const shareUrl = `https://superluxere.com/blogs/${slug}`;
+  const authorName = post.author?.name || 'Team Superluxere';
   const readTime = post.readTime ?? 1;
 
   return (
@@ -392,7 +392,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             datePublished: post.createdAt,
             dateModified: post.updatedAt || post.createdAt,
             author: { '@type': 'Person', name: authorName },
-            publisher: { '@type': 'Organization', name: 'Opulnz Abode' },
+            publisher: { '@type': 'Organization', name: 'Superluxere' },
             mainEntityOfPage: { '@type': 'WebPage', '@id': shareUrl },
             keywords: (post.tags || []).join(', '),
           }),

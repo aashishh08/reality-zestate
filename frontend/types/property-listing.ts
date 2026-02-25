@@ -1,41 +1,85 @@
 /**
- * Types for property listing, filtering, and pagination
+ * Types for property listing, filtering, and pagination.
+ * Keep this file as the single source of truth for all listing-related shapes.
  */
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Shared sub-shapes
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface TagShape {
+  id: string;
+  name: string;
+  slug: string;
+  color?: string;
+  icon?: string;
+}
+
+export interface CategoryShape {
+  id: string;
+  name: string;
+  slug: string;
+  propertyType?: 'residential' | 'commercial';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Filters passed to the API
+// ─────────────────────────────────────────────────────────────────────────────
 
 export interface PropertyFilters {
   propertyType?: 'residential' | 'commercial';
   locationId?: string;
   developerId?: string;
-  categoryId?: string;
+  /** Array of category UUIDs — all matched properties must belong to ALL provided */
+  categoryIds?: string[];
+  /** Array of tag slugs — e.g. ['upcoming', 'featured'] */
+  tags?: string | string[];
   priceMin?: number;
   priceMax?: number;
+  sort?: 'newest' | 'price-asc' | 'price-desc' | 'name-asc';
+  /** @deprecated use `sort` */
   sortBy?: 'newest' | 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc';
+  isPublished?: boolean;
   limit?: number;
   offset?: number;
 }
 
-export interface PropertyListResponse {
-  data: Array<{
+// ─────────────────────────────────────────────────────────────────────────────
+// API response shape — matches what the backend always returns
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface PropertyItem {
+  id: string;
+  slug: string;
+  title: string;
+  status?: string;
+  propertyType: 'residential' | 'commercial';
+  priceMin?: number | null;
+  priceMax?: number | null;
+  isPublished?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  Developer?: {
     id: string;
+    name: string;
     slug: string;
-    title: string;
-    propertyType: 'residential' | 'commercial';
-    priceMin: number;
-    priceMax: number;
-    Developer?: {
-      id: string;
-      name: string;
-      slug: string;
-      logo?: string;
-    };
-    Location?: {
-      id: string;
-      name: string;
-      slug: string;
-    };
-    image?: string;
-    createdAt?: string;
-  }>;
+    logo?: string;
+  };
+  Location?: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+  /** Tags are always returned in listProperties responses after v2 */
+  Tags?: TagShape[];
+  /** Categories are returned when included */
+  Categories?: CategoryShape[];
+  /** Frontend-only convenience field added by data-fetching helpers */
+  image?: string;
+}
+
+export interface PropertyListResponse {
+  data: PropertyItem[];
   pagination: {
     limit: number;
     offset: number;
@@ -43,17 +87,17 @@ export interface PropertyListResponse {
   };
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Detailed entity shapes (for detail pages)
+// ─────────────────────────────────────────────────────────────────────────────
+
 export interface LocationDetail {
   id: string;
   name: string;
   slug: string;
   type: 'country' | 'state' | 'city' | 'locality' | 'sector';
   parentId?: string;
-  parent?: {
-    id: string;
-    name: string;
-    slug: string;
-  };
+  parent?: { id: string; name: string; slug: string };
   propertiesCount?: number;
 }
 
@@ -66,14 +110,19 @@ export interface DeveloperDetail {
   propertiesCount?: number;
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// UI helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
 export interface FilterOptions {
   propertyTypes: Array<{ value: string; label: string; count: number }>;
   priceRange: { min: number; max: number };
   categories: Array<{ id: string; name: string; count: number }>;
+  tags: Array<{ id: string; name: string; slug: string; count: number }>;
 }
 
 export interface SortOption {
-  value: PropertyFilters['sortBy'];
+  value: PropertyFilters['sort'];
   label: string;
 }
 

@@ -27,6 +27,7 @@ import ProjectNavigation from "@/components/project/ProjectNavigation";
 import { ProjectTeam } from "@/components/project/ProjectTeam";
 import { projects } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 
 /**
  * Fetch property data from backend or fallback to hardcoded data
@@ -62,7 +63,7 @@ export async function generateStaticParams() {
   try {
     // Fetch published properties from backend
     const backendProperties = await getProperties({ isPublished: true }, false);
-    const backendSlugs = backendProperties.map((p) => p.slug);
+    const backendSlugs = (backendProperties?.data ?? []).map((p) => p.slug);
 
     // Get hardcoded slugs as fallback
     const hardcodedSlugs = getAllProjectSlugs();
@@ -96,7 +97,7 @@ export async function generateMetadata({
 
   if (!project) {
     return {
-      title: "Project Not Found | Opulnz Abode",
+      title: "Project Not Found | Superluxere",
       description: "The requested property could not be found.",
     };
   }
@@ -106,7 +107,7 @@ export async function generateMetadata({
     || `Luxury ${project.type} in ${project.location}. ${project.price}`;
 
   return {
-    title: `${project.title} - ${project.location} | Opulnz Abode`,
+    title: `${project.title} - ${project.location} | Superluxere`,
     description,
     keywords: [
       project.title,
@@ -114,7 +115,7 @@ export async function generateMetadata({
       project.type || "residential",
       "luxury real estate",
       "premium properties",
-      "Opulnz Abode"
+      "Superluxere"
     ],
     openGraph: {
       title: project.title,
@@ -208,22 +209,32 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      {/* Investment Analysis - Always show if details exist */}
+      {/* Investment Analysis */}
       {details && (
-        <ProjectWhyInvest
-          reasons={details.whyInvest || []}
-          videoUrl={details.videoUrl}
-          detailedAnalysis={details.investmentAnalysis}
-          projectTitle={project.title}
-        />
+        <ErrorBoundary sectionName="Why Invest">
+          <ProjectWhyInvest
+            reasons={details.whyInvest || []}
+            videoUrl={details.videoUrl}
+            detailedAnalysis={details.investmentAnalysis}
+            projectTitle={project.title}
+            propertyId={project.id}
+            propertySlug={slug}
+          />
+        </ErrorBoundary>
       )}
 
       {/* Section Navigation */}
-      <ProjectSectionNavigation />
+      <ErrorBoundary sectionName="Section Navigation">
+        <ProjectSectionNavigation />
+      </ErrorBoundary>
 
       {/* Overview */}
       <div id="overview">
-        {details?.overview && <ProjectOverview overview={details.overview} />}
+        {details?.overview && (
+          <ErrorBoundary sectionName="Overview">
+            <ProjectOverview overview={details.overview} />
+          </ErrorBoundary>
+        )}
       </div>
 
       {/* Gallery Section */}
@@ -231,10 +242,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <section className="py-12 bg-white" id="gallery">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <SectionHeading centered={false} label="Visual Tour">Project Gallery</SectionHeading>
-            <ProjectGallery
-              images={details.gallery}
-              videoUrl={details.videoUrl}
-            />
+            <ErrorBoundary sectionName="Gallery">
+              <ProjectGallery
+                images={details.gallery}
+                videoUrl={details.videoUrl}
+              />
+            </ErrorBoundary>
           </div>
         </section>
       )}
@@ -243,47 +256,65 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.masterPlan && (
         <section id="masterplan" className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ProjectMasterPlan
-              masterPlanImage={details.masterPlan}
-              description={details.masterPlanDescription}
-            />
+            <ErrorBoundary sectionName="Master Plan">
+              <ProjectMasterPlan
+                masterPlanImage={details.masterPlan}
+                description={details.masterPlanDescription}
+              />
+            </ErrorBoundary>
           </div>
         </section>
       )}
 
       {/* Location Advantage */}
       <section id="location">
-        {details?.location && <ProjectLocation location={details.location} />}
+        {details?.location && (
+          <ErrorBoundary sectionName="Location">
+            <ProjectLocation location={details.location} />
+          </ErrorBoundary>
+        )}
       </section>
 
       {/* Book a Private Tour Banner */}
-      <ProjectBookingBanner projectTitle={project.title} />
+      <ProjectBookingBanner
+        projectTitle={project.title}
+        propertyId={project.id}
+        propertySlug={slug}
+      />
 
       {/* Amenities */}
       {details?.amenities && details.amenities.length > 0 && (
         <section id="amenities">
-          <ProjectAmenities amenities={details.amenities} />
+          <ErrorBoundary sectionName="Amenities">
+            <ProjectAmenities amenities={details.amenities} />
+          </ErrorBoundary>
         </section>
       )}
 
       {/* Residences (Floor Plans) */}
       {details?.floorPlans && details.floorPlans.length > 0 && (
         <section id="floorplans">
-          <ProjectFloorPlans floorPlans={details.floorPlans} />
+          <ErrorBoundary sectionName="Floor Plans">
+            <ProjectFloorPlans floorPlans={details.floorPlans} />
+          </ErrorBoundary>
         </section>
       )}
 
       {/* Payment Plans */}
       {details?.paymentPlans && details.paymentPlans.length > 0 && (
         <section id="paymentplans">
-          <ProjectPaymentPlan paymentPlans={details.paymentPlans} />
+          <ErrorBoundary sectionName="Payment Plans">
+            <ProjectPaymentPlan paymentPlans={details.paymentPlans} />
+          </ErrorBoundary>
         </section>
       )}
 
       {/* Design & Construction Team */}
       {details?.team && (
         <section id="team">
-          <ProjectTeam team={details.team} />
+          <ErrorBoundary sectionName="Team">
+            <ProjectTeam team={details.team} />
+          </ErrorBoundary>
         </section>
       )}
 
@@ -325,7 +356,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       )}
 
       {/* Contact Form #2 - Final */}
-      <ProjectBookingCTA projectTitle={project.title} />
+      <ProjectBookingCTA
+        projectTitle={project.title}
+        propertyId={project.id}
+        propertySlug={slug}
+      />
 
       <Footer />
       <FloatingActions />

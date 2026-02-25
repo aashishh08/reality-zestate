@@ -20,9 +20,9 @@ const pool = new Pool({
   database: process.env.DB_NAME || 'reality_estate_db',
 });
 
-const EMAIL    = 'admin@opulnz.com';
+const EMAIL = 'admin@superluxere.com';
 const PASSWORD = 'Admin@1234';
-const ROLE     = 'ADMIN';
+const ROLE = 'ADMIN';
 
 async function seedAdmin() {
   const client = await pool.connect();

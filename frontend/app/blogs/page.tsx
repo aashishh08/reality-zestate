@@ -22,7 +22,7 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
   let description = 'Explore expert insights, market trends, and guides on luxury real estate in India. Stay updated with the latest in premium properties and investment opportunities.';
 
   if (search) {
-    title = `Search Results for "${search}" - Blog | Opulnz Abode`;
+    title = `Search Results for "${search}" - Blog | Superluxere`;
     description = `Find articles related to "${search}" on luxury real estate, property investment, and market insights.`;
   }
 
@@ -33,10 +33,10 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
       title,
       description,
       type: 'website',
-      url: 'https://opulnzabode.com/blogs',
+      url: 'https://superluxere.com/blogs',
     },
     alternates: {
-      canonical: 'https://opulnzabode.com/blogs',
+      canonical: 'https://superluxere.com/blogs',
     },
   };
 }
@@ -66,7 +66,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <main className="min-h-screen bg-linear-to-b from-gray-50 to-white">
       {/* Navigation */}
-      <BlogNavigation 
+      <BlogNavigation
         categories={categories}
         currentCategory={searchParams.category}
         currentTag={searchParams.tag}
@@ -76,11 +76,11 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <section className="bg-linear-to-r from-amber-50 to-orange-50 py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-playfair font-bold text-gray-900 mb-6">
-            {searchParams.search 
+            {searchParams.search
               ? `Search Results for "${searchParams.search}"`
               : searchParams.category
-              ? categories.find(c => c.slug === searchParams.category)?.name || 'Blog'
-              : 'Luxury Real Estate Insights'}
+                ? categories.find(c => c.slug === searchParams.category)?.name || 'Blog'
+                : 'Luxury Real Estate Insights'}
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
             {searchParams.search
@@ -138,11 +138,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                       <Link
                         key={pageNum}
                         href={`/blogs?${new URLSearchParams({ ...searchParams, page: pageNum.toString() }).toString()}`}
-                        className={`w-10 h-10 flex items-center justify-center rounded-lg font-medium transition-colors ${
-                          page === pageNum
+                        className={`w-10 h-10 flex items-center justify-center rounded-lg font-medium transition-colors ${page === pageNum
                             ? 'bg-amber-500 text-white'
                             : 'bg-white border border-gray-300 hover:bg-gray-50'
-                        }`}
+                          }`}
                       >
                         {pageNum}
                       </Link>

@@ -23,8 +23,7 @@ export const LEAD_FORM_VALIDATION = {
   NAME_MIN_LENGTH: 2,
   NAME_MAX_LENGTH: 100,
   EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  PHONE_REGEX: /^[0-9]{10}$/, // 10-digit phone number
-  PHONE_LENGTH: 10,
+  PHONE_DIGIT_COUNT: 10, // exactly 10 digits (after stripping non-digits)
 } as const;
 
 // Error Messages
@@ -65,6 +64,6 @@ export const SCROLL_THRESHOLDS = {
 
 // Contact Information
 export const CONTACT_INFO = {
-  WHATSAPP_NUMBER: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+919999999999',
-  PHONE_NUMBER: process.env.NEXT_PUBLIC_PHONE_NUMBER || '+919999999999',
+  WHATSAPP_NUMBER: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+919654888862',
+  PHONE_NUMBER: process.env.NEXT_PUBLIC_PHONE_NUMBER || '+919654888862',
 } as const;

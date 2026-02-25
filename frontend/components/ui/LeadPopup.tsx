@@ -185,7 +185,7 @@ export function LeadPopup({ source = "lead-popup" }: { source?: string }) {
                         value={formData.phone}
                         onChange={handleChange}
                         className="w-full border-b border-zinc-200 py-2 focus:outline-none focus:border-gold transition-colors text-sm"
-                        placeholder="+91 99999 99999"
+                        placeholder="98765 43210"
                         required
                       />
                     </div>

@@ -6,18 +6,38 @@ import propertyController from '../controller/propertyController.js';
 
 const router = express.Router();
 
-// Public routes
-router.get('/:slug', async (req, res, next) => {
+// ── Named/specific routes MUST come before /:slug wildcard ─────────────────
+
+// Admin listing (with section counts)
+router.get('/admin', authMiddleware, async (req, res, next) => {
   try {
-    await propertyController.getPropertyBySlug(req, res);
+    await propertyController.listAllProperties(req, res);
   } catch (error) {
     next(error);
   }
 });
 
+// Full property creation (core + sections + tags + categories in one shot)
+router.post('/full', authMiddleware, async (req, res, next) => {
+  try {
+    await propertyController.createPropertyFull(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Public routes
 router.get('/', async (req, res, next) => {
   try {
     await propertyController.listProperties(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/:slug', async (req, res, next) => {
+  try {
+    await propertyController.getPropertyBySlug(req, res);
   } catch (error) {
     next(error);
   }

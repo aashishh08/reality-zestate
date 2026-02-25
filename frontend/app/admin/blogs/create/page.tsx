@@ -3,7 +3,7 @@
 import { useAdminAuth } from '@/lib/contexts/AdminAuthContext';
 import { ProtectedAdminRoute } from '@/components/admin/ProtectedAdminRoute';
 import { useRouter } from 'next/navigation';
-import { FileText, LogOut, Menu, X, Save, Eye, EyeOff, AlertCircle, ArrowLeft } from 'lucide-react';
+import { FileText, LogOut, Menu, X, Save, Eye, EyeOff, AlertCircle, ArrowLeft, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { createBlog } from '@/lib/api/blogs';
@@ -21,7 +21,7 @@ export default function CreateBlogPage() {
 
   // Rich meta fields
   const [excerpt, setExcerpt] = useState('');
-  const [authorName, setAuthorName] = useState('Team Opulnz Abode');
+  const [authorName, setAuthorName] = useState('Team Superluxere');
   const [featuredImage, setFeaturedImage] = useState('');
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
@@ -72,7 +72,7 @@ export default function CreateBlogPage() {
           slug: slug.trim(),
           content: content.trim(),
           excerpt: excerpt.trim() || undefined,
-          authorName: authorName.trim() || 'Team Opulnz Abode',
+          authorName: authorName.trim() || 'Team Superluxere',
           featuredImage: featuredImage.trim() || undefined,
           metaTitle: metaTitle.trim() || undefined,
           metaDescription: metaDescription.trim() || undefined,
@@ -103,9 +103,8 @@ export default function CreateBlogPage() {
       <div className="flex h-screen bg-gray-900">
         {/* Sidebar */}
         <div
-          className={`${
-            sidebarOpen ? 'w-64' : 'w-20'
-          } bg-gray-800 border-r border-gray-700 transition-all duration-300 flex flex-col`}
+          className={`${sidebarOpen ? 'w-64' : 'w-20'
+            } bg-gray-800 border-r border-gray-700 transition-all duration-300 flex flex-col`}
         >
           {/* Logo */}
           <div className="h-16 border-b border-gray-700 flex items-center justify-between px-4">
@@ -145,6 +144,13 @@ export default function CreateBlogPage() {
             >
               <FileText className="w-5 h-5 flex-shrink-0" />
               {sidebarOpen && <span>Create Blog</span>}
+            </Link>
+            <Link
+              href="/admin/leads"
+              className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition"
+            >
+              <Users className="w-5 h-5 flex-shrink-0" />
+              {sidebarOpen && <span>Leads</span>}
             </Link>
           </nav>
 
@@ -344,7 +350,7 @@ export default function CreateBlogPage() {
                     type="text"
                     value={metaTitle}
                     onChange={(e) => setMetaTitle(e.target.value)}
-                    placeholder="Elie Saab Noida: Where Art Collectors Store Their Collections | Opulnz"
+                    placeholder="Elie Saab Noida: Where Art Collectors Store Their Collections | Superluxere"
                     className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition"
                   />
                   <p className="text-xs text-gray-500 mt-1">

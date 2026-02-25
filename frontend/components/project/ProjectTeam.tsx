@@ -23,18 +23,29 @@ interface ProjectTeamProps {
   };
 }
 
-const roleIcons = {
+const roleIcons: Record<string, React.ElementType> = {
   architect: Building2,
   landscape: Palette,
   construction: Building2,
   default: Building2,
 };
 
-const colorMap = {
+// Named colors that come from the admin form or Excel → resolve to valid hex
+const colorMap: Record<string, string> = {
   blue: "#3B82F6",
   green: "#10B981",
   orange: "#F97316",
+  purple: "#8B5CF6",
+  red: "#EF4444",
+  gold: "#C9A961",
 };
+
+/** Accepts a hex value or a named color, always returns a valid CSS color string */
+function resolveColor(raw: string | undefined): string {
+  if (!raw) return "#3B82F6";
+  if (raw.startsWith("#")) return raw;
+  return colorMap[raw.toLowerCase()] ?? "#3B82F6";
+}
 
 export function ProjectTeam({ team }: ProjectTeamProps) {
   if (!team || !team.members || team.members.length === 0) return null;
@@ -54,64 +65,65 @@ export function ProjectTeam({ team }: ProjectTeamProps) {
 
         {/* Team Members Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          {team.members.map((member, index) => (
-            <motion.div
-              key={member.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow"
-            >
-              {/* Header Card with Color */}
-              <div
-                className="px-6 py-5 text-white"
-                style={{ backgroundColor: member.color }}
+          {team.members.map((member, index) => {
+            const resolvedColor = resolveColor(member.color);
+            const safeAchievements = Array.isArray(member.achievements) ? member.achievements : [];
+
+            return (
+              <motion.div
+                key={`${member.name}-${index}`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow"
               >
-                <div className="flex items-start gap-3 mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
-                    <Building2 className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider opacity-90">
-                      {member.role}
-                    </p>
-                    <h3 className="text-xl font-serif font-bold">{member.name}</h3>
+                <div
+                  className="px-6 py-5 text-white"
+                  style={{ backgroundColor: resolvedColor }}
+                >
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                      <Building2 className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider opacity-90">
+                        {member.role}
+                      </p>
+                      <h3 className="text-xl font-serif font-bold">{member.name}</h3>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Content Card */}
-              <div className="bg-white p-6">
-                <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                  {member.description}
-                </p>
-
-                {/* Key Achievements */}
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">
-                    Key Achievements
+                <div className="bg-white p-6">
+                  <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                    {member.description}
                   </p>
-                  <ul className="space-y-2.5">
-                    {member.achievements.map((achievement, idx) => (
-                      <motion.li
-                        key={idx}
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ delay: (index * 0.1) + (idx * 0.05) }}
-                        className="flex items-start gap-2 text-sm text-gray-700"
-                      >
-                        <span
-                          className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                          style={{ backgroundColor: member.color }}
-                        />
-                        <span>{achievement}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">
+                      Key Achievements
+                    </p>
+                    <ul className="space-y-2.5">
+                      {safeAchievements.map((achievement, idx) => (
+                        <motion.li
+                          key={idx}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 + idx * 0.05 }}
+                          className="flex items-start gap-2 text-sm text-gray-700"
+                        >
+                          <span
+                            className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                            style={{ backgroundColor: resolvedColor }}
+                          />
+                          <span>{achievement}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Highlights Section */}

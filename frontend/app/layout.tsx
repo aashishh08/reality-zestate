@@ -14,18 +14,18 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: {
-    default: "Opulnz Abode - Luxury Real Estate & Premium Properties",
-    template: "%s | Opulnz Abode"
+    default: "Superluxere - Luxury Real Estate & Premium Properties",
+    template: "%s | Superluxere"
   },
   description: "Discover curated luxury real estate properties in India. Trending projects, upcoming launches, and boutique collections. Your gateway to premium living.",
   keywords: ["luxury real estate", "premium properties", "luxury apartments", "penthouses", "villas", "Gurgaon", "Delhi", "Mumbai", "Bangalore"],
-  authors: [{ name: "Opulnz Abode" }],
+  authors: [{ name: "Superluxere" }],
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://opulnzabode.com",
-    siteName: "Opulnz Abode",
-    title: "Opulnz Abode - Luxury Real Estate & Premium Properties",
+    url: "https://superluxere.com",
+    siteName: "Superluxere",
+    title: "Superluxere - Luxury Real Estate & Premium Properties",
     description: "Discover curated luxury real estate properties in India.",
   },
   robots: {
