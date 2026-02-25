@@ -215,9 +215,27 @@ export async function up(queryInterface) {
       }
     );
   }
+
+  // ─── 7. Tags ─────────────────────────────────────────────────────────────
+  for (const tag of [
+    { name: 'Trending', slug: 'trending' },
+    { name: 'Upcoming', slug: 'upcoming' },
+    { name: 'Featured', slug: 'featured' },
+    { name: 'Best Seller', slug: 'best-seller' },
+  ]) {
+    await queryInterface.sequelize.query(
+      `INSERT INTO "tags" ("id", "name", "slug", "createdAt", "updatedAt")
+       VALUES (:id, :name, :slug, NOW(), NOW())
+       ON CONFLICT ("slug") DO UPDATE SET "name" = EXCLUDED."name", "updatedAt" = NOW()`,
+      {
+        replacements: { id: randomUUID(), name: tag.name, slug: tag.slug }
+      }
+    );
+  }
 }
 
 export async function down(queryInterface) {
+  await queryInterface.bulkDelete('tags', {}, {});
   await queryInterface.bulkDelete('categories', {}, {});
   await queryInterface.bulkDelete('developers', {}, {});
   await queryInterface.bulkDelete('locations', {}, {}); // cascades localities → cities → states → country

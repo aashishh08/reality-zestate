@@ -27,12 +27,17 @@ async function getHomePageData() {
       categoriesRes,
     ] = await Promise.all([
       // Fetch tag-filtered trending properties
-      fetchFromAPI<any>("/properties?tags=trending&limit=8&isPublished=true", { next: { revalidate: 3600 } }),
+      fetchFromAPI<any>("/properties?tags=trending&limit=8&isPublished=true", { next: { revalidate: 3600 } })
+        .catch(e => { console.error('Trending fetch failed:', e.message); return []; }),
       // Fetch tag-filtered upcoming properties
-      fetchFromAPI<any>("/properties?tags=upcoming&limit=8&isPublished=true", { next: { revalidate: 3600 } }),
-      getLocations({ limit: 20, offset: 0 }, 3600),
-      getDevelopers({ limit: 12, offset: 0 }, 3600),
-      getCategories({ limit: 50, offset: 0 }, 3600),
+      fetchFromAPI<any>("/properties?tags=upcoming&limit=8&isPublished=true", { next: { revalidate: 3600 } })
+        .catch(e => { console.error('Upcoming fetch failed:', e.message); return []; }),
+      getLocations({ limit: 20, offset: 0 }, 3600)
+        .catch(e => { console.error('Locations fetch failed:', e.message); return { data: [] }; }),
+      getDevelopers({ limit: 12, offset: 0 }, 3600)
+        .catch(e => { console.error('Developers fetch failed:', e.message); return { data: [] }; }),
+      getCategories({ limit: 50, offset: 0 }, 3600)
+        .catch(e => { console.error('Categories fetch failed:', e.message); return { data: [] }; }),
     ]);
 
     // Normalise varying response shapes
