@@ -21,7 +21,7 @@ services:
       - app_network
 
   backend:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: reality_estate_api
@@ -42,8 +42,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    volumes:
-      - ./backend/src:/app/src
+    # NOTE: Do NOT volume-mount ./backend/src in production.
+    # The image already contains the compiled src. Mounting would override it
+    # and cause bootstrap.js / migration paths to break.
     networks:
       - app_network
     restart: unless-stopped
@@ -60,10 +61,6 @@ services:
       - "3002:3002"
     depends_on:
       - backend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - /app/.next
     networks:
       - app_network
     restart: unless-stopped
@@ -74,4 +71,3 @@ volumes:
 networks:
   app_network:
     driver: bridge
-

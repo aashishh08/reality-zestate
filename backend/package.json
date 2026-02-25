@@ -6,12 +6,11 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "start": "node src/index.js",
+    "start": "node src/bootstrap.js",
     "db:migrate": "node src/scripts/migrate.js",
     "db:seed": "node src/scripts/seed.js",
-    "db:migrate:undo": "sequelize-cli db:migrate:undo",
-    "db:migrate:undo:all": "sequelize-cli db:migrate:undo:all",
-    "db:seed:undo": "sequelize-cli db:seed:undo:all"
+    "db:setup": "node src/scripts/migrate.js && node src/scripts/seed.js",
+    "db:migrate:undo:all": "sequelize-cli db:migrate:undo:all"
   },
   "keywords": [
     "backend",

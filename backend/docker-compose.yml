@@ -40,8 +40,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    volumes:
-      - ./src:/app/src
+    # NOTE: No src volume mount — bootstrap.js and the migrations live inside the image.
+    # Mounting src would override the container's code and break startup.
     networks:
       - app_network
     restart: unless-stopped

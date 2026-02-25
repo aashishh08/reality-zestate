@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Migration Script for ES Module Support
- * Handles database migrations with Sequelize in an ES Module environment
+ * Handles database migrations with Sequelize in an ES Module environment.
+ * Can be run directly (node src/scripts/migrate.js) or called programmatically.
  */
 
 import 'dotenv/config.js';
@@ -13,16 +14,8 @@ import config from '../config/env.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
-class MigrationRunner {
+export class MigrationRunner {
   constructor() {
-    console.log('🔧 Initializing Sequelize connection...');
-    console.log('DB Config:', {
-      host: config.database.host,
-      port: config.database.port,
-      database: config.database.name,
-      user: config.database.user,
-    });
-
     this.sequelize = new Sequelize({
       username: config.database.user,
       password: config.database.password,
@@ -30,7 +23,7 @@ class MigrationRunner {
       host: config.database.host,
       port: config.database.port,
       dialect: 'postgres',
-      logging: console.log,
+      logging: (msg) => console.log(`[migrate] ${msg}`),
     });
   }
 
@@ -59,8 +52,15 @@ class MigrationRunner {
   }
 
   async runMigrations() {
+    console.log('🔧 Starting database migrations...');
+    console.log('DB Config:', {
+      host: config.database.host,
+      port: config.database.port,
+      database: config.database.name,
+      user: config.database.user,
+    });
+
     try {
-      console.log('Testing database connection...');
       await this.sequelize.authenticate();
       console.log('✅ Database connection established');
 
@@ -74,11 +74,11 @@ class MigrationRunner {
       );
 
       if (pendingMigrations.length === 0) {
-        console.log('✅ No pending migrations');
+        console.log('✅ No pending migrations — database is up to date');
         return;
       }
 
-      console.log(`\nRunning ${pendingMigrations.length} migration(s)...\n`);
+      console.log(`\nRunning ${pendingMigrations.length} pending migration(s)...\n`);
 
       for (const migration of pendingMigrations) {
         console.log(`== ${migration}: migrating =======`);
@@ -87,30 +87,35 @@ class MigrationRunner {
           const queryInterface = this.sequelize.getQueryInterface();
           await up(queryInterface, this.sequelize.constructor);
 
+          // PostgreSQL uses $1 positional parameters, NOT ? placeholders
           await this.sequelize.query(
-            'INSERT INTO "SequelizeMeta" ("name") VALUES (?)',
-            { replacements: [migration] }
+            'INSERT INTO "SequelizeMeta" ("name") VALUES ($1)',
+            { bind: [migration] }
           );
 
           console.log(`✅ ${migration}: migrated\n`);
         } catch (error) {
-          console.error(`❌ ${migration}: failed`);
+          console.error(`❌ ${migration}: FAILED`);
           console.error(error.message);
-          process.exit(1);
+          console.error(error.stack);
+          throw error;
         }
       }
 
       console.log('✅ All migrations completed successfully!');
-      process.exit(0);
-    } catch (error) {
-      console.error('❌ Migration failed:', error.message);
-      console.error(error.stack);
-      process.exit(1);
     } finally {
       await this.sequelize.close();
     }
   }
 }
 
-const runner = new MigrationRunner();
-runner.runMigrations();
+// Allow running directly: node src/scripts/migrate.js
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  const runner = new MigrationRunner();
+  runner.runMigrations()
+    .then(() => process.exit(0))
+    .catch((err) => {
+      console.error('❌ Migration failed:', err.message);
+      process.exit(1);
+    });
+}

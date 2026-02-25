@@ -15,9 +15,9 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false,
     },
     role: {
-      type: Sequelize.ENUM('SUPER_ADMIN'),
+      type: Sequelize.ENUM('SUPER_ADMIN', 'ADMIN', 'EDITOR', 'VIEWER'),
       allowNull: false,
-      defaultValue: 'SUPER_ADMIN',
+      defaultValue: 'VIEWER',
     },
     createdAt: {
       type: Sequelize.DATE,

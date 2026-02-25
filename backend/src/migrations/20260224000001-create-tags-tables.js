@@ -28,7 +28,7 @@ export async function up(queryInterface, Sequelize) {
         slug: {
             type: Sequelize.STRING,
             allowNull: false,
-            unique: true,
+            // unique constraint is added below via addIndex to give it a stable name
         },
         description: {
             type: Sequelize.TEXT,

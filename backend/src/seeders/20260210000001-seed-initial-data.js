@@ -1,202 +1,197 @@
 /**
- * Seed data for Locations, Developers, Categories, and Properties
+ * Seed: Reference Data
+ * Seeds the foundational lookup data needed before any property can be created
+ * through the admin panel.
+ *
+ * Location hierarchy (4 levels):
+ *   country → state → city → locality
+ *
+ * Properties are NOT seeded — they are created through the admin panel.
  */
 
 import { randomUUID } from 'crypto';
 
-export async function up(queryInterface, Sequelize) {
-  // 1. Create India location (Country)
-  const indiaId = randomUUID();
-  await queryInterface.bulkInsert('locations', [{
-    id: indiaId,
-    name: 'India',
-    slug: 'india',
-    type: 'country',
-    parentId: null,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }]);
+// Helper to build and insert a location, returning its id
+async function insertLocation(queryInterface, { name, slug, type, parentId }) {
+  const id = randomUUID();
+  await queryInterface.bulkInsert('locations', [
+    { id, name, slug, type, parentId, createdAt: new Date(), updatedAt: new Date() },
+  ]);
+  return id;
+}
 
-  // 2. Create States
-  const states = [
-    { name: 'Delhi', slug: 'delhi', parentId: indiaId },
-    { name: 'Maharashtra', slug: 'maharashtra', parentId: indiaId },
-    { name: 'Haryana', slug: 'haryana', parentId: indiaId },
-    { name: 'Karnataka', slug: 'karnataka', parentId: indiaId },
-  ];
+export async function up(queryInterface) {
+  // ─── 1. Country ────────────────────────────────────────────────────────────
+  const indiaId = await insertLocation(queryInterface, {
+    name: 'India', slug: 'india', type: 'country', parentId: null,
+  });
 
-  const stateIds = {};
-  for (const state of states) {
-    const id = randomUUID();
-    await queryInterface.bulkInsert('locations', [{
-      id,
-      name: state.name,
-      slug: state.slug,
-      type: 'state',
-      parentId: state.parentId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }]);
-    stateIds[state.slug] = id;
+  // ─── 2. States ─────────────────────────────────────────────────────────────
+  const S = {}; // stateIds keyed by slug
+
+  for (const state of [
+    { name: 'Haryana', slug: 'haryana' },
+    { name: 'Uttar Pradesh', slug: 'uttar-pradesh' },
+    { name: 'Delhi', slug: 'delhi' },
+    { name: 'Maharashtra', slug: 'maharashtra' },
+    { name: 'Karnataka', slug: 'karnataka' },
+    { name: 'Telangana', slug: 'telangana' },
+    { name: 'Tamil Nadu', slug: 'tamil-nadu' },
+    { name: 'Rajasthan', slug: 'rajasthan' },
+    { name: 'Gujarat', slug: 'gujarat' },
+    { name: 'Punjab', slug: 'punjab' },
+  ]) {
+    S[state.slug] = await insertLocation(queryInterface, {
+      ...state, type: 'state', parentId: indiaId,
+    });
   }
 
-  // 3. Create Cities
-  const cities = [
-    { name: 'New Delhi', slug: 'new-delhi', parentId: stateIds['delhi'] },
-    { name: 'Gurgaon', slug: 'gurgaon', parentId: stateIds['haryana'] },
-    { name: 'Noida', slug: 'noida', parentId: stateIds['haryana'] },
-    { name: 'Mumbai', slug: 'mumbai', parentId: stateIds['maharashtra'] },
-    { name: 'Bangalore', slug: 'bangalore', parentId: stateIds['karnataka'] },
-    { name: 'Pune', slug: 'pune', parentId: stateIds['maharashtra'] },
-  ];
+  // ─── 3. Cities ─────────────────────────────────────────────────────────────
+  const C = {}; // cityIds keyed by slug
 
-  const cityIds = {};
-  for (const city of cities) {
-    const id = randomUUID();
-    await queryInterface.bulkInsert('locations', [{
-      id,
-      name: city.name,
-      slug: city.slug,
-      type: 'city',
-      parentId: city.parentId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }]);
-    cityIds[city.slug] = id;
+  for (const city of [
+    // Delhi NCR
+    { name: 'Gurgaon', slug: 'gurgaon', state: 'haryana' },
+    { name: 'Noida', slug: 'noida', state: 'uttar-pradesh' },
+    { name: 'Greater Noida', slug: 'greater-noida', state: 'uttar-pradesh' },
+    { name: 'New Delhi', slug: 'new-delhi', state: 'delhi' },
+    { name: 'Faridabad', slug: 'faridabad', state: 'haryana' },
+    { name: 'Ghaziabad', slug: 'ghaziabad', state: 'uttar-pradesh' },
+
+    // Maharashtra
+    { name: 'Mumbai', slug: 'mumbai', state: 'maharashtra' },
+    { name: 'Pune', slug: 'pune', state: 'maharashtra' },
+    { name: 'Thane', slug: 'thane', state: 'maharashtra' },
+    { name: 'Navi Mumbai', slug: 'navi-mumbai', state: 'maharashtra' },
+
+    // South India
+    { name: 'Bangalore', slug: 'bangalore', state: 'karnataka' },
+    { name: 'Hyderabad', slug: 'hyderabad', state: 'telangana' },
+    { name: 'Chennai', slug: 'chennai', state: 'tamil-nadu' },
+
+    // Others
+    { name: 'Jaipur', slug: 'jaipur', state: 'rajasthan' },
+    { name: 'Ahmedabad', slug: 'ahmedabad', state: 'gujarat' },
+    { name: 'Chandigarh', slug: 'chandigarh', state: 'punjab' },
+  ]) {
+    C[city.slug] = await insertLocation(queryInterface, {
+      name: city.name, slug: city.slug, type: 'city', parentId: S[city.state],
+    });
   }
 
-  // 4. Create Developers
-  const developers = [
-    { name: 'DLF', slug: 'dlf', logo: null },
-    { name: 'Emaar', slug: 'emaar', logo: null },
-    { name: 'Godrej', slug: 'godrej', logo: null },
-    { name: 'Lodha', slug: 'lodha', logo: null },
-    { name: 'Mahindra Lifespace', slug: 'mahindra-lifespace', logo: null },
-  ];
+  // ─── 4. Localities (Sub-locations within cities) ────────────────────────────
 
-  const developerIds = {};
-  for (const developer of developers) {
-    const id = randomUUID();
-    await queryInterface.bulkInsert('developers', [{
-      id,
-      name: developer.name,
-      slug: developer.slug,
-      logo: developer.logo,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }]);
-    developerIds[developer.slug] = id;
+  // ── Gurgaon micro-markets ───────────────────────────────────────────────────
+  for (const locality of [
+    { name: 'Golf Course Road (GCR)', slug: 'golf-course-road' },
+    { name: 'Golf Course Road Extension (GCRE)', slug: 'golf-course-road-extension' },
+    { name: 'Dwarka Expressway (DWAY)', slug: 'dwarka-expressway' },
+    { name: 'Southern Periphery Road (SPR)', slug: 'southern-periphery-road' },
+    { name: 'Sohna Road', slug: 'sohna-road' },
+    { name: 'MG Road', slug: 'mg-road-gurgaon' },
+    { name: 'NH-48 (Delhi-Jaipur Highway)', slug: 'nh-48-gurgaon' },
+    { name: 'Sector 56', slug: 'sector-56-gurgaon' },
+    { name: 'Sector 65', slug: 'sector-65-gurgaon' },
+    { name: 'Sector 82', slug: 'sector-82-gurgaon' },
+    { name: 'Sector 84', slug: 'sector-84-gurgaon' },
+    { name: 'Sector 92', slug: 'sector-92-gurgaon' },
+    { name: 'Sector 102', slug: 'sector-102-gurgaon' },
+    { name: 'Sector 108', slug: 'sector-108-gurgaon' },
+    { name: 'Sector 113', slug: 'sector-113-gurgaon' },
+  ]) {
+    await insertLocation(queryInterface, {
+      ...locality, type: 'locality', parentId: C['gurgaon'],
+    });
   }
 
-  // 5. Create Categories
-  const categories = [
-    { name: 'Luxury', slug: 'luxury', propertyType: 'residential', parentId: null },
-    { name: 'Affordable', slug: 'affordable', propertyType: 'residential', parentId: null },
-    { name: 'Commercial', slug: 'commercial', propertyType: 'commercial', parentId: null },
-    { name: 'Senior Living', slug: 'senior-living', propertyType: 'residential', parentId: null },
-  ];
-
-  const categoryIds = {};
-  for (const category of categories) {
-    const id = randomUUID();
-    await queryInterface.bulkInsert('categories', [{
-      id,
-      name: category.name,
-      slug: category.slug,
-      propertyType: category.propertyType,
-      parentId: category.parentId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }]);
-    categoryIds[category.slug] = id;
+  // ── Noida sectors ───────────────────────────────────────────────────────────
+  for (const locality of [
+    { name: 'Sector 44', slug: 'sector-44-noida' },
+    { name: 'Sector 75', slug: 'sector-75-noida' },
+    { name: 'Sector 76', slug: 'sector-76-noida' },
+    { name: 'Sector 77', slug: 'sector-77-noida' },
+    { name: 'Sector 78', slug: 'sector-78-noida' },
+    { name: 'Sector 93', slug: 'sector-93-noida' },
+    { name: 'Sector 128', slug: 'sector-128-noida' },
+    { name: 'Sector 137', slug: 'sector-137-noida' },
+    { name: 'Sector 143', slug: 'sector-143-noida' },
+    { name: 'Sector 150', slug: 'sector-150-noida' },
+    { name: 'Expressway', slug: 'noida-expressway' },
+  ]) {
+    await insertLocation(queryInterface, {
+      ...locality, type: 'locality', parentId: C['noida'],
+    });
   }
 
-  // 6. Create Properties
-  const properties = [
-    {
-      slug: 'dlf-prime-gurgaon',
-      title: 'DLF Prime',
-      propertyType: 'residential',
-      developerId: developerIds['dlf'],
-      locationId: cityIds['gurgaon'],
-      priceMin: 10000000,
-      priceMax: 50000000,
-      isPublished: true,
-    },
-    {
-      slug: 'emaar-elements-delhi',
-      title: 'Emaar Elements',
-      propertyType: 'residential',
-      developerId: developerIds['emaar'],
-      locationId: cityIds['new-delhi'],
-      priceMin: 15000000,
-      priceMax: 75000000,
-      isPublished: true,
-    },
-    {
-      slug: 'godrej-aqua-mumbai',
-      title: 'Godrej Aqua',
-      propertyType: 'residential',
-      developerId: developerIds['godrej'],
-      locationId: cityIds['mumbai'],
-      priceMin: 20000000,
-      priceMax: 100000000,
-      isPublished: true,
-    },
-    {
-      slug: 'lodha-park-mumbai',
-      title: 'Lodha Park',
-      propertyType: 'residential',
-      developerId: developerIds['lodha'],
-      locationId: cityIds['mumbai'],
-      priceMin: 18000000,
-      priceMax: 85000000,
-      isPublished: true,
-    },
-    {
-      slug: 'mahindra-origins-pune',
-      title: 'Mahindra Origins',
-      propertyType: 'residential',
-      developerId: developerIds['mahindra-lifespace'],
-      locationId: cityIds['pune'],
-      priceMin: 8000000,
-      priceMax: 35000000,
-      isPublished: true,
-    },
-    {
-      slug: 'dlf-cyber-hub-gurgaon',
-      title: 'DLF Cyber Hub',
-      propertyType: 'commercial',
-      developerId: developerIds['dlf'],
-      locationId: cityIds['gurgaon'],
-      priceMin: 50000000,
-      priceMax: 200000000,
-      isPublished: true,
-    },
-  ];
+  // ── Greater Noida localities ────────────────────────────────────────────────
+  for (const locality of [
+    { name: 'Greater Noida West', slug: 'greater-noida-west' },
+    { name: 'Knowledge Park', slug: 'knowledge-park' },
+    { name: 'Yamuna Expressway', slug: 'yamuna-expressway' },
+    { name: 'Sector Mu', slug: 'sector-mu-greater-noida' },
+    { name: 'Sector Pi', slug: 'sector-pi-greater-noida' },
+    { name: 'Sector Omicron', slug: 'sector-omicron' },
+  ]) {
+    await insertLocation(queryInterface, {
+      ...locality, type: 'locality', parentId: C['greater-noida'],
+    });
+  }
 
-  for (const property of properties) {
-    await queryInterface.bulkInsert('properties', [{
-      id: randomUUID(),
-      slug: property.slug,
-      title: property.title,
-      propertyType: property.propertyType,
-      developerId: property.developerId,
-      locationId: property.locationId,
-      status: 'active',
-      priceMin: property.priceMin,
-      priceMax: property.priceMax,
-      isPublished: property.isPublished,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }]);
+  // ─── 5. Developers (Builders) ──────────────────────────────────────────────
+  for (const dev of [
+    { name: 'DLF', slug: 'dlf' },
+    { name: 'Max Estates', slug: 'max-estates' },
+    { name: 'Experion', slug: 'experion' },
+    { name: 'Eldeco', slug: 'eldeco' },
+    { name: 'Conscient', slug: 'conscient' },
+    { name: 'Kreeva', slug: 'kreeva' },
+    { name: 'Godrej Properties', slug: 'godrej-properties' },
+    { name: 'Oberoi Realty', slug: 'oberoi-realty' },
+    { name: 'Adani Realty', slug: 'adani-realty' },
+    { name: 'AIPL', slug: 'aipl' },
+    { name: 'Prestige Group', slug: 'prestige-group' },
+    { name: 'M3M India', slug: 'm3m-india' },
+    { name: 'Smartworld Developers', slug: 'smartworld-developers' },
+    { name: 'Shapoorji Pallonji', slug: 'shapoorji-pallonji' },
+    { name: 'Eldeco Terra Grande', slug: 'eldeco-terra-grande' },
+  ]) {
+    await queryInterface.bulkInsert('developers', [
+      {
+        id: randomUUID(), name: dev.name, slug: dev.slug, logo: null,
+        createdAt: new Date(), updatedAt: new Date()
+      },
+    ]);
+  }
+
+  // ─── 6. Categories ─────────────────────────────────────────────────────────
+  for (const cat of [
+    // Residential
+    { name: 'Luxury', slug: 'luxury', propertyType: 'residential' },
+    { name: 'Ultra Luxury', slug: 'ultra-luxury', propertyType: 'residential' },
+    { name: 'Affordable', slug: 'affordable', propertyType: 'residential' },
+    { name: 'Mid Segment', slug: 'mid-segment', propertyType: 'residential' },
+    { name: 'Senior Living', slug: 'senior-living', propertyType: 'residential' },
+    { name: 'Plotted', slug: 'plotted', propertyType: 'residential' },
+    { name: 'Villa', slug: 'villa', propertyType: 'residential' },
+    // Commercial
+    { name: 'Commercial', slug: 'commercial', propertyType: 'commercial' },
+    { name: 'Office Space', slug: 'office-space', propertyType: 'commercial' },
+    { name: 'Retail', slug: 'retail', propertyType: 'commercial' },
+    { name: 'Co-working', slug: 'co-working', propertyType: 'commercial' },
+    { name: 'Industrial', slug: 'industrial', propertyType: 'commercial' },
+  ]) {
+    await queryInterface.bulkInsert('categories', [
+      {
+        id: randomUUID(), name: cat.name, slug: cat.slug,
+        propertyType: cat.propertyType, parentId: null,
+        createdAt: new Date(), updatedAt: new Date()
+      },
+    ]);
   }
 }
 
 export async function down(queryInterface) {
-  // Delete in reverse order of creation
-  await queryInterface.bulkDelete('properties', {}, {});
   await queryInterface.bulkDelete('categories', {}, {});
   await queryInterface.bulkDelete('developers', {}, {});
-  await queryInterface.bulkDelete('locations', {}, {});
+  await queryInterface.bulkDelete('locations', {}, {}); // cascades localities → cities → states → country
 }

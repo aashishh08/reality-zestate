@@ -18,6 +18,32 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.TEXT,
       allowNull: false,
     },
+    excerpt: {
+      type: Sequelize.TEXT,
+      allowNull: true,
+    },
+    authorName: {
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: 'Team Superluxere',
+    },
+    featuredImage: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    metaTitle: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    metaDescription: {
+      type: Sequelize.TEXT,
+      allowNull: true,
+    },
+    tags: {
+      type: Sequelize.ARRAY(Sequelize.STRING),
+      allowNull: true,
+      defaultValue: [],
+    },
     isPublished: {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
@@ -35,6 +61,7 @@ export async function up(queryInterface, Sequelize) {
   });
 
   await queryInterface.addIndex('blogs', ['slug']);
+  await queryInterface.addIndex('blogs', ['isPublished']);
 }
 
 export async function down(queryInterface) {
