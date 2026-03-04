@@ -57,14 +57,16 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const page = parseInt(searchParamsObj.page || '1');
   const pageSize = 9;
 
-  // Always fetch fresh — force-dynamic at page level handles this
+  // Cache data for 60s at the fetch layer (Next.js data cache).
+  // The route stays dynamic (searchParams), but the underlying API call
+  // is shared across requests within the same 60s window.
   const blogResponse = await getBlogs(
     {
       limit: pageSize,
       offset: (page - 1) * pageSize,
       search: searchParamsObj.search,
     },
-    false // no caching
+    60
   );
 
   const posts = blogResponse.data || [];
@@ -109,7 +111,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             {/* Featured Post (first post on first page) */}
             {page === 1 && !searchParamsObj.category && !searchParamsObj.tag && !searchParamsObj.search && (
               <div className="mb-16">
-                <BlogCard post={posts[0]} featured />
+                <BlogCard post={posts[0]} featured priority />
               </div>
             )}
 

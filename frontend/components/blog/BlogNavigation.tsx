@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search, Filter } from 'lucide-react';
 import { BlogCategory } from '@/types/blog';
 
@@ -12,13 +13,14 @@ interface BlogNavigationProps {
 }
 
 export default function BlogNavigation({ categories, currentCategory, currentTag }: BlogNavigationProps) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `/blogs?search=${encodeURIComponent(searchQuery)}`;
+      router.push(`/blogs?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 

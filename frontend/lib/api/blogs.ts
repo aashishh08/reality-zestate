@@ -58,12 +58,19 @@ export interface BlogsResponse {
  * All missing fields are derived from what IS available.
  */
 function normalizeBlogPost(raw: Record<string, any>): BlogPost {
-  const plainText = (raw.content || '').replace(/<[^>]+>/g, '').trim();
-  const wordCount = plainText.split(/\s+/).filter(Boolean).length;
+  // Sample only the first 2 000 characters to estimate word count —
+  // avoids running a regex over a potentially large HTML document.
+  const sample = (raw.content || '').substring(0, 2000).replace(/<[^>]+>/g, '').trim();
+  const sampleWordCount = sample.split(/\s+/).filter(Boolean).length;
+  // Scale estimate if content is longer than the sample window.
+  const contentLen = (raw.content || '').length;
+  const wordCount = contentLen > 2000
+    ? Math.round(sampleWordCount * (contentLen / 2000))
+    : sampleWordCount;
 
-  // Use stored excerpt if present, otherwise auto-generate from content
+  // Use stored excerpt if present, otherwise auto-generate from sample
   const autoExcerpt =
-    plainText.length > 160 ? plainText.substring(0, 157) + '...' : plainText;
+    sample.length > 160 ? sample.substring(0, 157) + '...' : sample;
 
   return {
     id: raw.id,

@@ -9,16 +9,21 @@ import { BlogPost } from '@/types/blog';
 interface BlogCardProps {
   post: BlogPost;
   featured?: boolean;
+  priority?: boolean;
 }
 
 function CoverImage({
   src,
   alt,
   className,
+  priority,
+  sizes,
 }: {
   src: string;
   alt: string;
   className?: string;
+  priority?: boolean;
+  sizes?: string;
 }) {
   const [imgError, setImgError] = useState(false);
 
@@ -30,6 +35,8 @@ function CoverImage({
         fill
         className={className}
         onError={() => setImgError(true)}
+        priority={priority}
+        sizes={sizes}
       />
     );
   }
@@ -39,7 +46,7 @@ function CoverImage({
   );
 }
 
-export default function BlogCard({ post, featured = false }: BlogCardProps) {
+export default function BlogCard({ post, featured = false, priority = false }: BlogCardProps) {
   const dateSource = post.publishedAt || post.createdAt || '';
   const formattedDate = dateSource
     ? new Date(dateSource).toLocaleDateString('en-US', {
@@ -65,6 +72,8 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
                 src={post.featuredImage}
                 alt={post.title}
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
+                priority={priority}
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               <div className="absolute top-4 left-4 z-20">
                 <span className="px-4 py-2 bg-amber-500 text-white text-sm font-semibold rounded-full">
@@ -130,6 +139,7 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
             src={post.featuredImage}
             alt={post.title}
             className="object-cover group-hover:scale-110 transition-transform duration-500"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
           <div className="absolute top-4 right-4">
             <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-semibold rounded-full">
