@@ -289,20 +289,22 @@ export default function CreatePropertyPage() {
                                             <Input label="Property Title *" value={basic.title} onChange={e => setBasic(b => ({ ...b, title: e.target.value }))} placeholder="e.g. Mahindra Origins Pune" />
                                             <Input label="Slug *" value={basic.slug} onChange={e => setBasic(b => ({ ...b, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') }))} placeholder="e.g. mahindra-origins-pune" />
                                         </div>
-                                        <div className="grid grid-cols-3 gap-4">
+                                        <div className="grid grid-cols-2 gap-4">
                                             <Select label="Property Type *" value={basic.propertyType} onChange={e => setBasic(b => ({ ...b, propertyType: e.target.value as any }))}>
                                                 <option value="residential">Residential</option>
                                                 <option value="commercial">Commercial</option>
                                             </Select>
-                                            <Select label="Status" value={basic.status} onChange={e => setBasic(b => ({ ...b, status: e.target.value }))}>
-                                                <option value="draft">Draft</option>
-                                                <option value="published">Published</option>
-                                                <option value="upcoming">Upcoming</option>
-                                                <option value="sold_out">Sold Out</option>
-                                            </Select>
                                             <div className="flex flex-col justify-end">
                                                 <label className="flex items-center space-x-2 cursor-pointer mt-1">
-                                                    <input type="checkbox" checked={basic.isPublished} onChange={e => setBasic(b => ({ ...b, isPublished: e.target.checked }))} className="w-4 h-4 accent-amber-500" />
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={basic.isPublished}
+                                                        onChange={e => {
+                                                            const pub = e.target.checked;
+                                                            setBasic(b => ({ ...b, isPublished: pub, status: pub ? 'published' : 'draft' }));
+                                                        }}
+                                                        className="w-4 h-4 accent-amber-500"
+                                                    />
                                                     <span className="text-sm text-gray-300">Published (live)</span>
                                                 </label>
                                             </div>

@@ -76,6 +76,9 @@ async function getHomePageData() {
   }
 }
 
+import { TrustedPartnerships } from "@/components/home/TrustedPartnerships";
+import { ResourcesInsights } from "@/components/home/ResourcesInsights";
+
 export default async function Home() {
   const { trendingProperties, upcomingProperties, locations, developers, categories } =
     await getHomePageData();
@@ -105,6 +108,11 @@ export default async function Home() {
 
 
       <BoutiqueCollection locations={locations} />
+
+      <TrustedPartnerships />
+
+      <ResourcesInsights />
+
       <SuperluxereExclusive developers={developers} />
 
       <Footer locations={locations} />

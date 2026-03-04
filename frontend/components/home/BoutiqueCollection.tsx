@@ -21,13 +21,36 @@ export function BoutiqueCollection({ locations }: BoutiqueCollectionProps) {
   return (
     <section id="boutique-projects" className="py-24 px-6 bg-transparent">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h4 className="text-gold font-medium tracking-[0.2em] mb-3 uppercase text-sm">
+        <div className="text-center mb-16 px-4">
+          <motion.h4
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-gold font-medium tracking-[0.3em] mb-4 uppercase text-xs sm:text-sm"
+          >
             Rare & Remarkable
-          </h4>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-black">
-            Boutique <span className="text-gold-dark">Collection</span>
-          </h2>
+          </motion.h4>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-6xl font-serif font-bold text-black mb-6 leading-tight"
+          >
+            Boutique <span className="text-gold">Collection</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="text-zinc-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+          >
+            A curated selection of the most exquisite, one-of-a-kind properties for those who seek the extraordinary.
+          </motion.p>
         </div>
 
         {/* Full Bento Grid Layout for Boutique Collection */}

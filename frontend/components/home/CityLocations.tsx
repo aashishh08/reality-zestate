@@ -37,24 +37,38 @@ export function CityLocations({ locations }: CityLocationsProps) {
   return (
     <section className="py-24 bg-[#F5F5F0]">
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h4 className="text-gold font-medium tracking-[0.2em] mb-3 uppercase text-sm">
+        <div className="text-center mb-16 px-4">
+          <motion.h4
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-gold font-medium tracking-[0.3em] mb-4 uppercase text-xs sm:text-sm"
+          >
             Find Your Dream Home
-          </h4>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-black leading-tight">
-            Browse by <span className="text-gold-dark">Location</span>
-          </h2>
-          <p className="mt-4 text-zinc-600 max-w-2xl mx-auto">
+          </motion.h4>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-6xl font-serif font-bold text-black mb-6 leading-tight"
+          >
+            Browse by <span className="text-gold">Location</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="text-zinc-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+          >
             Explore our exclusive properties across India's most prime locations,
             offering the best in luxury and connectivity.
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
         {/* Grid Layout - Scalable for more locations */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

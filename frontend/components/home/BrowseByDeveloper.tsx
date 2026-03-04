@@ -28,32 +28,37 @@ export function BrowseByDeveloper({ developers }: BrowseByDeveloperProps) {
         <section className="py-24 bg-[#F5F5F0]">
             <div className="max-w-7xl mx-auto px-6">
                 {/* Section header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    viewport={{ once: true }}
-                    className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6"
-                >
-                    <div>
-                        <h4 className="text-gold font-medium tracking-[0.2em] mb-3 uppercase text-sm">
-                            Trusted Names
-                        </h4>
-                        <h2 className="text-4xl md:text-5xl font-serif font-bold text-black leading-tight">
-                            Browse by <span className="text-gold-dark">Developer</span>
-                        </h2>
-                        <p className="mt-4 text-zinc-600 max-w-xl">
-                            Explore premium properties from India's most celebrated and trusted real-estate developers.
-                        </p>
-                    </div>
-                    <Link
-                        href="/projects"
-                        className="hidden md:flex items-center gap-3 px-6 py-3 border border-zinc-200 rounded-full hover:bg-black hover:text-white hover:border-black transition-all group whitespace-nowrap"
+                <div className="text-center mb-16 px-4">
+                    <motion.h4
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        viewport={{ once: true }}
+                        className="text-gold font-medium tracking-[0.3em] mb-4 uppercase text-xs sm:text-sm"
                     >
-                        All Developers
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                </motion.div>
+                        Trusted Names
+                    </motion.h4>
+
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.1 }}
+                        viewport={{ once: true }}
+                        className="text-4xl md:text-6xl font-serif font-bold text-black mb-6 leading-tight"
+                    >
+                        Browse by <span className="text-gold">Developer</span>
+                    </motion.h2>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        viewport={{ once: true }}
+                        className="text-zinc-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+                    >
+                        Explore premium properties from India&apos;s most celebrated and trusted real-estate developers.
+                    </motion.p>
+                </div>
 
                 {/* Developer grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6">

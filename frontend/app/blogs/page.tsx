@@ -5,18 +5,21 @@ import BlogCard from '@/components/blog/BlogCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
+type SearchParamsShape = {
+  category?: string;
+  tag?: string;
+  search?: string;
+  page?: string;
+};
+
 interface BlogPageProps {
-  searchParams: {
-    category?: string;
-    tag?: string;
-    search?: string;
-    page?: string;
-  };
+  searchParams: Promise<SearchParamsShape> | SearchParamsShape;
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ searchParams }: BlogPageProps): Promise<Metadata> {
-  const search = searchParams.search;
+  const resolvedParams = await Promise.resolve(searchParams);
+  const search = resolvedParams?.search;
 
   let title = 'Blog - Luxury Real Estate Insights & Guides';
   let description = 'Explore expert insights, market trends, and guides on luxury real estate in India. Stay updated with the latest in premium properties and investment opportunities.';
@@ -42,7 +45,16 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
 }
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
-  const page = parseInt(searchParams.page || '1');
+  // Next.js 15+: searchParams is a Promise; await it before use
+  const resolvedParams: SearchParamsShape = await Promise.resolve(searchParams);
+  const searchParamsObj: SearchParamsShape = {
+    ...(resolvedParams?.category ? { category: String(resolvedParams.category) } : {}),
+    ...(resolvedParams?.tag ? { tag: String(resolvedParams.tag) } : {}),
+    ...(resolvedParams?.search ? { search: String(resolvedParams.search) } : {}),
+    ...(resolvedParams?.page ? { page: String(resolvedParams.page) } : {}),
+  };
+
+  const page = parseInt(searchParamsObj.page || '1');
   const pageSize = 9;
 
   // Always fetch fresh — force-dynamic at page level handles this
@@ -50,7 +62,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     {
       limit: pageSize,
       offset: (page - 1) * pageSize,
-      search: searchParams.search,
+      search: searchParamsObj.search,
     },
     false // no caching
   );
@@ -68,22 +80,22 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       {/* Navigation */}
       <BlogNavigation
         categories={categories}
-        currentCategory={searchParams.category}
-        currentTag={searchParams.tag}
+        currentCategory={searchParamsObj.category}
+        currentTag={searchParamsObj.tag}
       />
 
       {/* Hero Section */}
       <section className="bg-linear-to-r from-amber-50 to-orange-50 py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-playfair font-bold text-gray-900 mb-6">
-            {searchParams.search
-              ? `Search Results for "${searchParams.search}"`
-              : searchParams.category
-                ? categories.find(c => c.slug === searchParams.category)?.name || 'Blog'
+            {searchParamsObj.search
+              ? `Search Results for "${searchParamsObj.search}"`
+              : searchParamsObj.category
+                ? categories.find(c => c.slug === searchParamsObj.category)?.name || 'Blog'
                 : 'Luxury Real Estate Insights'}
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-            {searchParams.search
+            {searchParamsObj.search
               ? `Found ${total} article${total !== 1 ? 's' : ''} matching your search`
               : 'Expert insights, market trends, and guides to help you navigate the world of luxury real estate'}
           </p>
@@ -95,7 +107,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         {hasPosts ? (
           <>
             {/* Featured Post (first post on first page) */}
-            {page === 1 && !searchParams.category && !searchParams.tag && !searchParams.search && (
+            {page === 1 && !searchParamsObj.category && !searchParamsObj.tag && !searchParamsObj.search && (
               <div className="mb-16">
                 <BlogCard post={posts[0]} featured />
               </div>
@@ -103,7 +115,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
             {/* Regular Posts Grid */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.slice(page === 1 && !searchParams.category && !searchParams.tag && !searchParams.search ? 1 : 0).map((post) => (
+              {posts.slice(page === 1 && !searchParamsObj.category && !searchParamsObj.tag && !searchParamsObj.search ? 1 : 0).map((post) => (
                 <BlogCard key={post.id} post={post} />
               ))}
             </div>
@@ -113,7 +125,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               <div className="mt-16 flex items-center justify-center space-x-4">
                 {page > 1 && (
                   <Link
-                    href={`/blogs?${new URLSearchParams({ ...searchParams, page: (page - 1).toString() }).toString()}`}
+                    href={`/blogs?${new URLSearchParams({ ...searchParamsObj, page: (page - 1).toString() }).toString()}`}
                     className="flex items-center space-x-2 px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -137,7 +149,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     return (
                       <Link
                         key={pageNum}
-                        href={`/blogs?${new URLSearchParams({ ...searchParams, page: pageNum.toString() }).toString()}`}
+                        href={`/blogs?${new URLSearchParams({ ...searchParamsObj, page: pageNum.toString() }).toString()}`}
                         className={`w-10 h-10 flex items-center justify-center rounded-lg font-medium transition-colors ${page === pageNum
                             ? 'bg-amber-500 text-white'
                             : 'bg-white border border-gray-300 hover:bg-gray-50'
@@ -151,7 +163,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
                 {page < totalPages && (
                   <Link
-                    href={`/blogs?${new URLSearchParams({ ...searchParams, page: (page + 1).toString() }).toString()}`}
+                    href={`/blogs?${new URLSearchParams({ ...searchParamsObj, page: (page + 1).toString() }).toString()}`}
                     className="flex items-center space-x-2 px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     <span>Next</span>

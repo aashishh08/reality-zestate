@@ -38,20 +38,37 @@ export function LocationCategories({ locations }: LocationCategoriesProps) {
   return (
     <section className="py-24 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h4 className="text-gold font-medium tracking-[0.2em] mb-3 uppercase text-sm">
+        <div className="text-center mb-16 px-4">
+          <motion.h4
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-gold font-medium tracking-[0.3em] mb-4 uppercase text-xs sm:text-sm"
+          >
             Explore by Category
-          </h4>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-black leading-tight">
-            Curated <span className="text-gold-dark">Collections</span>
-          </h2>
-        </motion.div>
+          </motion.h4>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-6xl font-serif font-bold text-black mb-6 leading-tight"
+          >
+            Curated <span className="text-gold">Collections</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="text-zinc-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+          >
+            Discover exclusive properties categorized by their unique appeal and lifestyle offerings.
+          </motion.p>
+        </div>
 
         {/* Bento Grid Layout - Uneven & Dynamic */}
         <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-none md:grid-rows-2 gap-4 h-auto md:h-[700px]">

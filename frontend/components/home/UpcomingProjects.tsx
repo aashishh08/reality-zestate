@@ -18,28 +18,36 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
 
   return (
     <section id="upcoming-projects" className="py-24 bg-transparent overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Calendar className="w-4 h-4 text-gold" />
-            <h4 className="text-gold font-medium tracking-[0.2em] uppercase text-sm">
-              Future Living
-            </h4>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-black leading-tight">
-            Upcoming <span className="text-gold-dark">Launches</span>
-          </h2>
-          <p className="mt-3 text-zinc-500 max-w-md">
-            Register your interest early and be first in line for pre-launch pricing.
-          </p>
-        </div>
-        <Link
-          href="/tag/upcoming"
-          className="hidden md:flex items-center gap-3 px-6 py-3 border border-zinc-200 rounded-full hover:bg-black hover:text-white hover:border-black transition-all group whitespace-nowrap"
+      <div className="text-center mb-16 px-4 max-w-7xl mx-auto">
+        <motion.h4
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-gold font-medium tracking-[0.3em] mb-4 uppercase text-xs sm:text-sm"
         >
-          View All Upcoming
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-        </Link>
+          Future Living
+        </motion.h4>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          viewport={{ once: true }}
+          className="text-4xl md:text-6xl font-serif font-bold text-black mb-6 leading-tight"
+        >
+          Upcoming <span className="text-gold">Launches</span>
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="text-zinc-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+        >
+          Register your interest early and be first in line for pre-launch pricing on the most anticipated luxury developments.
+        </motion.p>
       </div>
 
       {/* Horizontal scroll container */}
@@ -147,14 +155,16 @@ export function UpcomingProjects({ properties }: UpcomingProjectsProps) {
   if (!isClient) {
     return (
       <section id="upcoming-projects" className="py-24 bg-transparent overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 mb-12">
-          <div className="flex items-center gap-2 mb-3">
-            <Calendar className="w-4 h-4 text-gold" />
-            <h4 className="text-gold font-medium tracking-[0.2em] uppercase text-sm">Future Living</h4>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-black leading-tight">
-            Upcoming <span className="text-gold-dark">Launches</span>
+        <div className="text-center mb-16 px-4 max-w-7xl mx-auto">
+          <h4 className="text-gold font-medium tracking-[0.3em] mb-4 uppercase text-xs sm:text-sm">
+            Future Living
+          </h4>
+          <h2 className="text-4xl md:text-6xl font-serif font-bold text-black mb-6 leading-tight">
+            Upcoming <span className="text-gold">Launches</span>
           </h2>
+          <p className="text-zinc-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+            Register your interest early and be first in line for pre-launch pricing on the most anticipated luxury developments.
+          </p>
         </div>
       </section>
     );
