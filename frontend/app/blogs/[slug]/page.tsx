@@ -76,15 +76,6 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 }
 
-export async function generateStaticParams() {
-  try {
-    const response = await getBlogs({ limit: 20 }, 3600);
-    return (response.data || []).map((post) => ({ slug: post.slug }));
-  } catch {
-    return [];
-  }
-}
-
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
