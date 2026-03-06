@@ -12,40 +12,79 @@ interface BlogPostPageProps {
 }
 
 // ─── Strip full HTML document wrappers from blog content ─────────────────────
-// Blogs stored in the DB sometimes contain a full HTML document (with <html>,
-// <head>, <body>, <style> … tags). Injecting a complete document into a React
-// page via dangerouslySetInnerHTML breaks the DOM — the browser silently
-// terminates the outer <body> when it hits the inner </body></html>, so only
-// the CTA/More-Articles sections (which appear *after* the content div) remain
-// visible. This function extracts just the meaningful inner body content.
+// Blog content stored in the DB may be a full HTML document (with <html>,
+// <head>, <body>, <style> tags). Injecting that via dangerouslySetInnerHTML
+// breaks the React DOM — the browser terminates the outer <body> when it
+// encounters the inner </body></html>, causing CTA/More-Articles sections to
+// appear at the TOP of the page instead of below the article.
+//
+// We use string split/indexOf instead of regex because regex with [\s\S]*?
+// can silently fail on large HTML strings (24 kb+) in some JS engines.
 function sanitizeContent(html: string): string {
   if (!html) return '';
 
   let result = html;
 
-  // 1. If a <body>…</body> block exists, use only its contents
-  const bodyMatch = result.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-  if (bodyMatch) {
-    result = bodyMatch[1];
+  // ── Step 1: Extract just the <body>…</body> inner content if present ─────
+  const bodyOpenIdx = result.search(/<body[\s>]/i);
+  if (bodyOpenIdx !== -1) {
+    // Find the end of the opening <body ...> tag
+    const bodyTagEnd = result.indexOf('>', bodyOpenIdx) + 1;
+    const bodyCloseIdx = result.toLowerCase().lastIndexOf('</body>');
+    if (bodyCloseIdx !== -1 && bodyCloseIdx > bodyTagEnd) {
+      result = result.slice(bodyTagEnd, bodyCloseIdx);
+    } else {
+      // Has <body> open but no close — take everything after the open tag
+      result = result.slice(bodyTagEnd);
+    }
   } else {
-    // 2. No <body> tag — strip any leading <html>/<head> open tags and
-    //    trailing </html>/</body> close tags
-    result = result
-      .replace(/<html[^>]*>/gi, '')
-      .replace(/<\/html>/gi, '')
-      .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '')
-      .replace(/<\/body>/gi, '');
+    // No <body> open tag — strip any stray closing document tags at the end.
+    // The content may be valid HTML fragment ending with </body></html>.
+    const bodyCloseIdx = result.toLowerCase().lastIndexOf('</body>');
+    if (bodyCloseIdx !== -1) {
+      result = result.slice(0, bodyCloseIdx);
+    }
+    const htmlCloseIdx = result.toLowerCase().lastIndexOf('</html>');
+    if (htmlCloseIdx !== -1) {
+      result = result.slice(0, htmlCloseIdx);
+    }
   }
 
-  // 3. Remove any <style>…</style> blocks that snuck in (they would apply
-  //    globally and potentially override page styles)
-  result = result.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+  // ── Step 2: Remove <head>…</head> if it snuck into the fragment ──────────
+  // Use a simple split approach for reliability on large content.
+  const headOpenLower = result.toLowerCase().indexOf('<head');
+  if (headOpenLower !== -1) {
+    const headCloseIdx = result.toLowerCase().indexOf('</head>');
+    if (headCloseIdx !== -1) {
+      result = result.slice(0, headOpenLower) + result.slice(headCloseIdx + 7);
+    }
+  }
 
-  // 4. Remove <script>…</script> blocks for security
-  result = result.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+  // ── Step 3: Remove <html …> and </html> wrapper tags ────────────────────
+  result = result
+    .replace(/<html[^>]*>/gi, '')
+    .replace(/<\/html>/gi, '');
+
+  // ── Step 4: Remove <style>…</style> blocks (prevent global style leakage) ─
+  // Split on <style to avoid regex on large strings
+  while (result.toLowerCase().includes('<style')) {
+    const styleOpen = result.toLowerCase().indexOf('<style');
+    const styleClose = result.toLowerCase().indexOf('</style>', styleOpen);
+    if (styleClose === -1) break; // malformed — leave it, don't loop forever
+    result = result.slice(0, styleOpen) + result.slice(styleClose + 8);
+  }
+
+  // ── Step 5: Remove <script>…</script> blocks (security) ─────────────────
+  while (result.toLowerCase().includes('<script')) {
+    const scriptOpen = result.toLowerCase().indexOf('<script');
+    const scriptClose = result.toLowerCase().indexOf('</script>', scriptOpen);
+    if (scriptClose === -1) break;
+    result = result.slice(0, scriptOpen) + result.slice(scriptClose + 9);
+  }
 
   return result.trim();
 }
+
 
 // ─── Auto-generate TOC from <h2> tags in HTML content ────────────────────────
 function extractTOC(html: string): { id: string; text: string }[] {
