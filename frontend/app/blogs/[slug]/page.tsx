@@ -11,6 +11,42 @@ interface BlogPostPageProps {
   };
 }
 
+// ─── Strip full HTML document wrappers from blog content ─────────────────────
+// Blogs stored in the DB sometimes contain a full HTML document (with <html>,
+// <head>, <body>, <style> … tags). Injecting a complete document into a React
+// page via dangerouslySetInnerHTML breaks the DOM — the browser silently
+// terminates the outer <body> when it hits the inner </body></html>, so only
+// the CTA/More-Articles sections (which appear *after* the content div) remain
+// visible. This function extracts just the meaningful inner body content.
+function sanitizeContent(html: string): string {
+  if (!html) return '';
+
+  let result = html;
+
+  // 1. If a <body>…</body> block exists, use only its contents
+  const bodyMatch = result.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+  if (bodyMatch) {
+    result = bodyMatch[1];
+  } else {
+    // 2. No <body> tag — strip any leading <html>/<head> open tags and
+    //    trailing </html>/</body> close tags
+    result = result
+      .replace(/<html[^>]*>/gi, '')
+      .replace(/<\/html>/gi, '')
+      .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '')
+      .replace(/<\/body>/gi, '');
+  }
+
+  // 3. Remove any <style>…</style> blocks that snuck in (they would apply
+  //    globally and potentially override page styles)
+  result = result.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+
+  // 4. Remove <script>…</script> blocks for security
+  result = result.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+
+  return result.trim();
+}
+
 // ─── Auto-generate TOC from <h2> tags in HTML content ────────────────────────
 function extractTOC(html: string): { id: string; text: string }[] {
   const matches = [...html.matchAll(/<h2[^>]*>(.*?)<\/h2>/gi)];
@@ -47,7 +83,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     const metaDescription =
       post.seo?.metaDescription ||
       post.excerpt ||
-      post.content?.replace(/<[^>]+>/g, '').substring(0, 160) ||
+      sanitizeContent(post.content || '').replace(/<[^>]+>/g, '').substring(0, 160) ||
       post.title;
 
     return {
@@ -107,8 +143,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     })
     : '';
 
-  const toc = extractTOC(post.content || '');
-  const contentWithIds = injectHeadingIds(post.content || '');
+  const cleanContent = sanitizeContent(post.content || '');
+  const toc = extractTOC(cleanContent);
+  const contentWithIds = injectHeadingIds(cleanContent);
   const shareUrl = `https://superluxere.com/blogs/${slug}`;
   const authorName = post.author?.name || 'Team Superluxere';
   const readTime = post.readTime ?? 1;
@@ -378,7 +415,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
             headline: post.title,
-            description: post.excerpt || post.content?.replace(/<[^>]+>/g, '').substring(0, 160),
+            description: post.excerpt || cleanContent.replace(/<[^>]+>/g, '').substring(0, 160),
             image: post.featuredImage || undefined,
             datePublished: post.createdAt,
             dateModified: post.updatedAt || post.createdAt,
