@@ -104,6 +104,13 @@ function stripDocumentWrappers(html: string): string {
     result = result.slice(0, so) + result.slice(sc + 9);
   }
 
+  // ── Final hard-strip: remove any stray closing document tags the above
+  // logic may have missed (e.g. <body> with attributes containing '>',
+  // content that only has </body></html> with no opening <body> tag, etc).
+  // </body> and </html> are NEVER valid inside an HTML fragment — safe to
+  // strip unconditionally.
+  result = result.replace(/<\/body>/gi, '').replace(/<\/html>/gi, '');
+
   return result.trim();
 }
 

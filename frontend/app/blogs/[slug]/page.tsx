@@ -82,6 +82,14 @@ function sanitizeContent(html: string): string {
     result = result.slice(0, scriptOpen) + result.slice(scriptClose + 9);
   }
 
+  // ── Step 6: Final hard-strip — remove any stray closing document tags the
+  // above steps may have missed (e.g. <body> tag with attributes containing
+  // '>', content with </body></html> but no opening <body>, large strings
+  // where indexOf logic falls through silently, etc).
+  // </body> and </html> are NEVER valid inside an HTML fragment — global
+  // removal is always safe and prevents browser DOM poisoning.
+  result = result.replace(/<\/body>/gi, '').replace(/<\/html>/gi, '');
+
   return result.trim();
 }
 
