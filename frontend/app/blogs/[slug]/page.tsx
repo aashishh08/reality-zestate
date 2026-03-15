@@ -13,7 +13,7 @@ interface BlogPostPageProps {
 
 // ─── Auto-generate TOC from <h2> tags in HTML content ────────────────────────
 function extractTOC(html: string): { id: string; text: string }[] {
-  const matches = [...html.matchAll(/<h2[^>]*>(.*?)<\/h2>/gis)];
+  const matches = [...html.matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/gi)];
   return matches.map((m) => {
     const text = m[1].replace(/<[^>]+>/g, '').trim();
     const id = text
@@ -27,7 +27,7 @@ function extractTOC(html: string): { id: string; text: string }[] {
 
 // ─── Inject ids into <h2> headings so TOC anchors work ───────────────────────
 function injectHeadingIds(html: string): string {
-  return html.replace(/<h2([^>]*)>(.*?)<\/h2>/gis, (_match, attrs, inner) => {
+  return html.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi, (_match, attrs, inner) => {
     const text = inner.replace(/<[^>]+>/g, '').trim();
     const id = text
       .toLowerCase()
@@ -254,7 +254,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 prose-blockquote:italic prose-blockquote:text-gray-700 prose-blockquote:rounded-r-lg
                 prose-table:border-collapse prose-th:bg-amber-50 prose-th:p-3 prose-td:p-3 prose-td:border prose-td:border-gray-200"
               dangerouslySetInnerHTML={{ __html: contentWithIds }}
-            />
+            >
+            </div>
 
             {/* Tags */}
             {(post.tags || []).length > 0 && (
