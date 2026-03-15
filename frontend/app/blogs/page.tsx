@@ -74,7 +74,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   const [locationsRes, developersRes, categoriesRes, blogResponse] = await Promise.all([
     getLocations({ limit: 20, offset: 0 }, 3600).catch(() => ({ data: [] })),
-    getDevelopers({ limit: 12, offset: 0 }, 3600).catch(() => ({ data: [] })),
+    getDevelopers({ limit: 12, offset: 0 }, 3600).catch(() => []),
     getCategories({ limit: 50, offset: 0 }, 3600).catch(() => ({ data: [] })),
     // Cache data for 60s at the fetch layer (Next.js data cache).
     getBlogs(
@@ -100,7 +100,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       {/* Site-wide nav */}
       <Header
         locations={locationsRes.data || []}
-        developers={developersRes.data || []}
+        developers={Array.isArray(developersRes) ? developersRes : []}
         categories={categoriesRes.data || []}
       />
 
@@ -275,6 +275,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   );
 }
 
-// searchParams makes this page dynamically rendered; removing force-dynamic lets
-// individual data fetches use their own revalidation windows instead of no-store.
-export const revalidate = 60;
+// searchParams makes this page dynamically rendered.
+// export const revalidate conflicts with searchParams in Next.js 15 (DYNAMIC_SERVER_USAGE).
+// Individual fetches retain their own revalidation windows (3600s nav, 60s blogs).
+export const dynamic = 'force-dynamic';
