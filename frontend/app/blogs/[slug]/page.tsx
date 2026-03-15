@@ -53,6 +53,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     return {
       title: metaTitle,
       description: metaDescription,
+      keywords: post.tags?.length ? post.tags : ['luxury real estate', 'India', 'property investment'],
       authors: [{ name: post.author?.name || 'Superluxere' }],
       openGraph: {
         title: metaTitle,
@@ -60,12 +61,19 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         type: 'article',
         publishedTime: post.createdAt,
         modifiedTime: post.updatedAt,
-        images: post.featuredImage ? [{ url: post.featuredImage }] : [],
+        locale: 'en_IN',
+        siteName: 'Superluxere',
+        images: post.featuredImage
+          ? [{ url: post.featuredImage, width: 1200, height: 630, alt: post.title }]
+          : [{ url: 'https://superluxere.com/images/luxury-living.jpg', width: 1200, height: 630, alt: 'Superluxere' }],
       },
       twitter: {
         card: 'summary_large_image',
         title: metaTitle,
         description: metaDescription,
+        images: post.featuredImage
+          ? [post.featuredImage]
+          : ['https://superluxere.com/images/luxury-living.jpg'],
       },
       alternates: {
         canonical: `https://superluxere.com/blogs/${slug}`,
@@ -388,22 +396,48 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </section>
       )}
 
-      {/* JSON-LD Structured Data */}
+      {/* JSON-LD — BlogPosting */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
+            '@id': shareUrl,
+            url: shareUrl,
             headline: post.title,
             description: post.excerpt || cleanContent.replace(/<[^>]+>/g, '').substring(0, 160),
-            image: post.featuredImage || undefined,
+            image: post.featuredImage || 'https://superluxere.com/images/luxury-living.jpg',
             datePublished: post.createdAt,
             dateModified: post.updatedAt || post.createdAt,
             author: { '@type': 'Person', name: authorName },
-            publisher: { '@type': 'Organization', name: 'Superluxere' },
+            publisher: {
+              '@type': 'Organization',
+              name: 'Superluxere',
+              url: 'https://superluxere.com',
+              logo: { '@type': 'ImageObject', url: 'https://superluxere.com/images/luxury-living.jpg' },
+            },
             mainEntityOfPage: { '@type': 'WebPage', '@id': shareUrl },
             keywords: (post.tags || []).join(', '),
+            wordCount: cleanContent.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length,
+            articleSection: post.category?.name || 'Real Estate',
+            inLanguage: 'en-IN',
+          }),
+        }}
+      />
+
+      {/* JSON-LD — BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://superluxere.com' },
+              { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://superluxere.com/blogs' },
+              { '@type': 'ListItem', position: 3, name: post.title, item: shareUrl },
+            ],
           }),
         }}
       />
@@ -411,4 +445,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   );
 }
 
-export const dynamic = 'force-dynamic';
+// ISR: cache each blog post page for 5 minutes.
+// getBlogBySlug also uses next: { revalidate: 300 } so both layers stay in sync.
+export const revalidate = 300;

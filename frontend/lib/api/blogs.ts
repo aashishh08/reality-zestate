@@ -134,14 +134,15 @@ export async function getBlogs(
 
 /**
  * Get blog by slug
- * Used for SSR pages (always fresh)
+ * Cached for 5 minutes (ISR-compatible). Admin edits use the write API directly
+ * so stale reads here are acceptable for public-facing pages.
  */
 export async function getBlogBySlug(slug: string): Promise<BlogPost> {
   const raw = await fetchFromAPI<Record<string, any>>(
     `/blogs/${slug}`,
     {
       method: 'GET',
-      cache: 'no-store',
+      next: { revalidate: 300 },
     }
   );
 

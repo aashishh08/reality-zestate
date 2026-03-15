@@ -19,6 +19,8 @@ interface BlogPageProps {
   searchParams: Promise<SearchParamsShape> | SearchParamsShape;
 }
 
+const OG_FALLBACK_IMAGE = 'https://superluxere.com/images/luxury-living.jpg';
+
 // Generate metadata for SEO
 export async function generateMetadata({ searchParams }: BlogPageProps): Promise<Metadata> {
   const resolvedParams = await Promise.resolve(searchParams);
@@ -35,11 +37,21 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
   return {
     title,
     description,
+    keywords: ['luxury real estate blog', 'real estate insights India', 'property investment guide', 'luxury properties Gurgaon', 'real estate market trends'],
     openGraph: {
       title,
       description,
       type: 'website',
       url: 'https://superluxere.com/blogs',
+      locale: 'en_IN',
+      siteName: 'Superluxere',
+      images: [{ url: OG_FALLBACK_IMAGE, width: 1200, height: 630, alt: 'Superluxere Luxury Real Estate Blog' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [OG_FALLBACK_IMAGE],
     },
     alternates: {
       canonical: 'https://superluxere.com/blogs',
@@ -235,10 +247,34 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       </section>
       </div>
 
+      {/* ItemList JSON-LD — helps Google and AI tools understand this is a structured content collection */}
+      {posts.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'ItemList',
+              name: 'Luxury Real Estate Insights — Superluxere Blog',
+              description: 'Expert articles on luxury real estate trends, investment guides, and market analysis in India.',
+              url: 'https://superluxere.com/blogs',
+              numberOfItems: posts.length,
+              itemListElement: posts.map((post, index) => ({
+                '@type': 'ListItem',
+                position: (page - 1) * pageSize + index + 1,
+                url: `https://superluxere.com/blogs/${post.slug}`,
+                name: post.title,
+              })),
+            }),
+          }}
+        />
+      )}
+
       <LeadPopup />
     </main>
   );
 }
 
-// Always render fresh so newly published blogs appear immediately
-export const dynamic = 'force-dynamic';
+// searchParams makes this page dynamically rendered; removing force-dynamic lets
+// individual data fetches use their own revalidation windows instead of no-store.
+export const revalidate = 60;

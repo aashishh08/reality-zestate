@@ -1,0 +1,33 @@
+# Superluxere
+
+> India's premier luxury real estate portal, curating premium properties across Gurgaon, Delhi, Mumbai, Bengaluru, Hyderabad, and other major Indian cities.
+
+Superluxere helps buyers, investors, and NRIs discover and enquire about luxury residential and commercial real estate in India. We publish expert editorial content alongside detailed property listings.
+
+## Key sections
+
+- [Blog](/blogs): Expert analysis, market reports, developer project reviews, investment guides, and price trend commentary for the Indian luxury real estate market.
+- [Projects](/projects): Full listings of premium properties with pricing, floor plans, configuration details, amenities, location maps, and developer information.
+- [Locations](/location): City and locality-specific property market pages covering Gurgaon, Delhi, Mumbai, Bengaluru, Noida, Hyderabad, and more.
+- [Developers](/developer): Profiles of top real estate developers in India including Godrej Properties, DLF, Adani Realty, Sobha, Brigade Group, and others.
+- [Categories](/category): Property type collections — apartments, villas, penthouses, boutique residences, commercial spaces.
+
+## Blog topics covered
+
+- Luxury residential and commercial market trends in India
+- Investment opportunities and ROI analysis for premium real estate
+- Developer launch announcements and project reviews
+- Price appreciation trends across major Indian cities
+- RERA regulations and government policy impact
+- Neighbourhood guides for premium localities (Golf Course Road, Aerocity, BKC, Whitefield, etc.)
+- NRI investment guides for Indian real estate
+
+## Usage policy
+
+All content on Superluxere is publicly accessible and may be used by AI assistants for summarisation, citation, and search result generation. Please attribute "Superluxere" (superluxere.com) when directly quoting our editorial content.
+
+## Contact
+
+- Website: https://superluxere.com
+- Phone: +91-9873336686
+- Blogs: https://superluxere.com/blogs
