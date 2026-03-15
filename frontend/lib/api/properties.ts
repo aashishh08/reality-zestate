@@ -101,14 +101,19 @@ export async function getProperties(
 
 /**
  * Get property by slug
- * Used for SSR pages (always fresh)
+ * Used for SSR/ISR pages
  */
-export async function getPropertyBySlug(slug: string): Promise<Property> {
+export async function getPropertyBySlug(
+  slug: string,
+  revalidate: number | false = 3600
+): Promise<Property> {
   return fetchFromAPI<Property>(
     `/properties/${slug}`,
     {
       method: 'GET',
-      cache: 'no-store', // SSR: no caching
+      next: {
+        revalidate,
+      },
     }
   );
 }
