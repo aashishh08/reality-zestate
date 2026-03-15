@@ -66,4 +66,7 @@ export const SCROLL_THRESHOLDS = {
 export const CONTACT_INFO = {
   WHATSAPP_NUMBER: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+919654888862',
   PHONE_NUMBER: process.env.NEXT_PUBLIC_PHONE_NUMBER || '+919654888862',
+  EMAIL: 'info@superluxere.com',
+  ADDRESS: 'Golf Course Road, Sector 54, Gurgaon',
+  HOURS: 'Mon - Sun: 10:00 AM – 7:00 PM',
 } as const;

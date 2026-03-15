@@ -119,16 +119,43 @@ export interface Project extends Property {
         time: string;
       }[];
     };
-    usp?: string[];
     gallery?: string[];
-    keyTakeaways?: string[];
+    keyTakeaways?: {
+      status?: string;
+      type?: string;
+      area?: string;
+      configuration?: string;
+      sizes?: string;
+      towers?: string;
+      floors?: string;
+      totalUnits?: string;
+      clubhouse?: string;
+      priceRange?: string;
+      reraNo?: string;
+      launchDate?: string;
+      possessionDate?: string;
+      phases?: string;
+      developer?: string;
+      address?: string;
+    };
     whyInvest?: string[] | Array<{ title: string; subtitle: string; icon?: string }>;
     investmentAnalysis?: string;
-    videoUrl?: string;
-    specifications?: {
-      category: string;
-      items: string[];
+    whyInvestStats?: {
+      annualAppreciation?: string;
+      rentalYield?: string;
+      preLaunchGain?: string;
+    };
+    amenitiesStats?: {
+      clubhouseSqFt?: string;
+      amenitiesCount?: string;
+      swimmingPools?: string;
+      diningOptions?: string;
+    };
+    floorPlanDescriptionSections?: {
+      heading: string;
+      body: string;
     }[];
+    videoUrl?: string;
     paymentPlans?: {
       title: string;
       type: string;
@@ -154,14 +181,4 @@ export interface Project extends Property {
       }[];
     };
   };
-}
-
-// Location Type for display
-export interface LocationDisplay {
-  id: string;
-  name: string;
-  title: string;
-  subtitle: string;
-  image: string;
-  slug: string;
 }

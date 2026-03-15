@@ -47,19 +47,6 @@ const DEFAULT_OVERVIEW_CONTENT = [
   "Offers a perfect blend of comfort and sophistication.",
 ];
 
-const DEFAULT_LOCATION = {
-  address: "Prime Location",
-  mapImage: "/images/grand-arch-location.jpg",
-  nearby: [
-    { category: "Educational Institutions", icon: "education", items: [{ name: "Delhi Public School" }, { name: "Heritage School" }] },
-    { category: "Healthcare Facilities", icon: "healthcare", items: [{ name: "Apollo Hospital" }, { name: "Fortis Healthcare" }] },
-    { category: "Shopping & Entertainment", icon: "shopping", items: [{ name: "Central Mall" }, { name: "Ambience Mall" }] },
-  ],
-  connectivity: [
-    { place: "IGI Airport", icon: "airport", time: "20 mins" },
-    { place: "Business District", icon: "building", time: "15 mins" },
-  ],
-};
 
 const DEFAULT_TEAM = {
   members: [
@@ -136,7 +123,6 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
   const intro = safe("intro");
   const highlights = safe("highlights");
   const overview = safe("overview");
-  const keyTakeaways = safe("keyTakeaways");
   const gallery = safe("gallery");
   const amenities = safe("amenities");
   const floorPlans = safe("floorPlans");
@@ -146,9 +132,6 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
   const masterPlan = safe("masterPlan");
   const faqs = safe("faqs");
   const team = safe("team");
-  const usp = safe("usp");
-  const specs = safe("specifications");
-
   // Normalise whyInvest reasons: ensure every item has a valid `icon` key
   // (only the 4 keys in iconMap are valid; anything else → 'trending' as safe fallback)
   const VALID_WHY_ICONS = new Set(['location', 'award', 'trending', 'calendar']);
@@ -159,13 +142,30 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
     icon: VALID_WHY_ICONS.has(r.icon) ? r.icon : 'trending',
   }));
 
+  const whyInvestStats = {
+    annualAppreciation: typeof whyInvest.stats?.annualAppreciation === 'string' ? whyInvest.stats.annualAppreciation : '12-15%',
+    rentalYield: typeof whyInvest.stats?.rentalYield === 'string' ? whyInvest.stats.rentalYield : '3.5-4.5%',
+    preLaunchGain: typeof whyInvest.stats?.preLaunchGain === 'string' ? whyInvest.stats.preLaunchGain : '25-30%',
+  };
+
+  const amenitiesStats = {
+    clubhouseSqFt:  typeof amenities.stats?.clubhouseSqFt === 'string'  ? amenities.stats.clubhouseSqFt  : '100K',
+    amenitiesCount: typeof amenities.stats?.amenitiesCount === 'string' ? amenities.stats.amenitiesCount : '25+',
+    swimmingPools:  typeof amenities.stats?.swimmingPools === 'string'  ? amenities.stats.swimmingPools  : '5',
+    diningOptions:  typeof amenities.stats?.diningOptions === 'string'  ? amenities.stats.diningOptions  : '5',
+  };
+
+  const floorPlanDescriptionSections: { heading: string; body: string }[] =
+    Array.isArray(floorPlans.descriptionSections) && floorPlans.descriptionSections.length
+      ? floorPlans.descriptionSections
+      : [];
+
   return {
     heroImage: hero.image || "/images/project-1.jpg",
     subtitle: hero.subtitle || "Luxury Development",
-    videoUrl: hero.videoUrl || "https://www.youtube.com/embed/ScMzIvxBSi4",
+    videoUrl: hero.videoUrl || undefined,
 
-    introText: intro.text
-      || "Discover premium living at its finest with world-class amenities, strategic location and architectural excellence.",
+    introText: intro.text || undefined,
 
     highlights: {
       landArea: highlights.landArea || "N/A",
@@ -184,11 +184,35 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
         : ["Premium Construction", "World-class Amenities", "Excellent Connectivity", "Luxury Lifestyle"],
     },
 
-    keyTakeaways: keyTakeaways.takeaways?.length ? keyTakeaways.takeaways : [],
+    keyTakeaways: (() => {
+      const kt = safe("keyTakeaways");
+      // Support both old format { takeaways: string[] } and new structured format
+      const hasStructuredData = kt.status || kt.type || kt.area || kt.configuration ||
+        kt.sizes || kt.towers || kt.floors || kt.totalUnits || kt.clubhouse ||
+        kt.priceRange || kt.reraNo || kt.launchDate || kt.possessionDate ||
+        kt.phases || kt.developer || kt.address;
+      if (!hasStructuredData) return undefined;
+      return {
+        status: typeof kt.status === 'string' ? kt.status : undefined,
+        type: typeof kt.type === 'string' ? kt.type : undefined,
+        area: typeof kt.area === 'string' ? kt.area : undefined,
+        configuration: typeof kt.configuration === 'string' ? kt.configuration : undefined,
+        sizes: typeof kt.sizes === 'string' ? kt.sizes : undefined,
+        towers: typeof kt.towers === 'string' ? kt.towers : undefined,
+        floors: typeof kt.floors === 'string' ? kt.floors : undefined,
+        totalUnits: typeof kt.totalUnits === 'string' ? kt.totalUnits : undefined,
+        clubhouse: typeof kt.clubhouse === 'string' ? kt.clubhouse : undefined,
+        priceRange: typeof kt.priceRange === 'string' ? kt.priceRange : undefined,
+        reraNo: typeof kt.reraNo === 'string' ? kt.reraNo : undefined,
+        launchDate: typeof kt.launchDate === 'string' ? kt.launchDate : undefined,
+        possessionDate: typeof kt.possessionDate === 'string' ? kt.possessionDate : undefined,
+        phases: typeof kt.phases === 'string' ? kt.phases : undefined,
+        developer: typeof kt.developer === 'string' ? kt.developer : undefined,
+        address: typeof kt.address === 'string' ? kt.address : undefined,
+      };
+    })(),
 
-    gallery: gallery.images?.length
-      ? gallery.images
-      : ["/images/project-1.jpg", "/images/project-2.jpg", "/images/project-3.jpg", "/images/project-4.jpg"],
+    gallery: gallery.images?.length ? gallery.images : undefined,
 
     amenities: amenities.items?.length
       ? amenities.items.map((a: any) => ({ name: a.name, icon: a.icon || "🏢", image: a.image || "/images/project-1.jpg" }))
@@ -212,22 +236,20 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
         nearby: location.nearby || [],
         connectivity: location.connectivity || [],
       }
-      : DEFAULT_LOCATION,
+      : undefined,
 
-    masterPlan: masterPlan.image || "/images/project-1.jpg",
+    masterPlan: masterPlan.image || undefined,
     masterPlanDescription: masterPlan.description || [],
 
-    faqs: faqs.faqs?.length ? faqs.faqs : DEFAULT_FAQS,
+    faqs: faqs.faqs?.length ? faqs.faqs : undefined,
 
     team: team.members?.length
       ? { members: team.members, highlights: team.highlights || [] }
       : DEFAULT_TEAM,
 
-    usp: usp.items?.length
-      ? usp.items
-      : ["Premium Location", "World-Class Amenities", "Expert Construction", "Investment Potential"],
-
-    specifications: specs.specifications?.length ? specs.specifications : [],
+    whyInvestStats,
+    amenitiesStats,
+    floorPlanDescriptionSections: floorPlanDescriptionSections.length ? floorPlanDescriptionSections : undefined,
   };
 }
 

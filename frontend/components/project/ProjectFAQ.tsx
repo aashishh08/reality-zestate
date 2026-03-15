@@ -63,58 +63,11 @@ function FAQItem({ faq, index, columnOffset }: { faq: FAQ; index: number; column
   );
 }
 
-const FALLBACK_FAQS: FAQ[] = [
-  {
-    question: "What is the total area of the project?",
-    answer: "The project spans across a large land area with ample open green spaces, landscaped gardens, and world-class amenities designed for a premium lifestyle.",
-  },
-  {
-    question: "What configurations are available?",
-    answer: "The project offers multiple configurations ranging from 2 BHK to 4+ BHK residences, each designed with premium finishes and modern layouts to suit diverse family needs.",
-  },
-  {
-    question: "What is the possession timeline?",
-    answer: "Possession is planned as per the RERA-approved timeline. Please contact our sales team for the latest updates on construction progress and exact possession dates.",
-  },
-  {
-    question: "Is the project RERA registered?",
-    answer: "Yes, the project is fully RERA registered and compliant with all applicable real estate regulations, ensuring full transparency and buyer protection.",
-  },
-  {
-    question: "What are the parking provisions?",
-    answer: "Each unit comes with dedicated covered parking. Additional visitor parking is available within the premises. EV charging points are also planned for future readiness.",
-  },
-  {
-    question: "What payment plans are available?",
-    answer: "We offer flexible payment options including construction-linked plans, down payment schemes, and bank-approved home loan assistance through leading financial institutions.",
-  },
-  {
-    question: "Are home loans available for this project?",
-    answer: "Yes, home loans are available from all major banks and NBFCs. Our relationship managers can assist you in selecting the best financing option suited to your profile.",
-  },
-  {
-    question: "What security features are included?",
-    answer: "The project includes 24/7 multi-tier security with CCTV surveillance, access-controlled entry, video door phones, trained security personnel, and a dedicated concierge service.",
-  },
-  {
-    question: "Is the project eco-friendly and sustainable?",
-    answer: "Yes, the project incorporates sustainable features such as rainwater harvesting, solar panels for common areas, energy-efficient lighting, and an organic waste composting system.",
-  },
-  {
-    question: "How can I book a site visit?",
-    answer: "You can schedule a site visit by contacting our sales team via phone or the enquiry form on this page. Our advisors will coordinate a convenient time for a guided tour.",
-  },
-];
-
 export function ProjectFAQ({ faqs }: ProjectFAQProps) {
-  // Merge provided FAQs with fallback to always have exactly 10
-  const merged = [
-    ...(faqs || []),
-    ...FALLBACK_FAQS,
-  ].slice(0, 10);
+  const displayFaqs = (faqs || []).slice(0, 10);
 
-  const leftColumn = merged.slice(0, 5);
-  const rightColumn = merged.slice(5, 10);
+  const leftColumn = displayFaqs.slice(0, 5);
+  const rightColumn = displayFaqs.slice(5, 10);
 
   return (
     <section className="py-12 bg-white">

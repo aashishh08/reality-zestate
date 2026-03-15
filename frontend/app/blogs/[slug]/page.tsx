@@ -3,100 +3,17 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getBlogBySlug, getBlogs, BlogPost } from '@/lib/api/blogs';
+import { sanitizeHtml } from '@/lib/utils/sanitize-html';
 import { Calendar, Clock, User, ArrowLeft, Share2, Facebook, Twitter, Linkedin, ArrowRight } from 'lucide-react';
 
 interface BlogPostPageProps {
-  params: {
-    slug: string;
-  };
-}
-
-// ─── Strip full HTML document wrappers from blog content ─────────────────────
-// Blog content stored in the DB may be a full HTML document (with <html>,
-// <head>, <body>, <style> tags). Injecting that via dangerouslySetInnerHTML
-// breaks the React DOM — the browser terminates the outer <body> when it
-// encounters the inner </body></html>, causing CTA/More-Articles sections to
-// appear at the TOP of the page instead of below the article.
-//
-// We use string split/indexOf instead of regex because regex with [\s\S]*?
-// can silently fail on large HTML strings (24 kb+) in some JS engines.
-function sanitizeContent(html: string): string {
-  if (!html) return '';
-
-  let result = html;
-
-  // ── Step 1: Extract just the <body>…</body> inner content if present ─────
-  const bodyOpenIdx = result.search(/<body[\s>]/i);
-  if (bodyOpenIdx !== -1) {
-    // Find the end of the opening <body ...> tag
-    const bodyTagEnd = result.indexOf('>', bodyOpenIdx) + 1;
-    const bodyCloseIdx = result.toLowerCase().lastIndexOf('</body>');
-    if (bodyCloseIdx !== -1 && bodyCloseIdx > bodyTagEnd) {
-      result = result.slice(bodyTagEnd, bodyCloseIdx);
-    } else {
-      // Has <body> open but no close — take everything after the open tag
-      result = result.slice(bodyTagEnd);
-    }
-  } else {
-    // No <body> open tag — strip any stray closing document tags at the end.
-    // The content may be valid HTML fragment ending with </body></html>.
-    const bodyCloseIdx = result.toLowerCase().lastIndexOf('</body>');
-    if (bodyCloseIdx !== -1) {
-      result = result.slice(0, bodyCloseIdx);
-    }
-    const htmlCloseIdx = result.toLowerCase().lastIndexOf('</html>');
-    if (htmlCloseIdx !== -1) {
-      result = result.slice(0, htmlCloseIdx);
-    }
-  }
-
-  // ── Step 2: Remove <head>…</head> if it snuck into the fragment ──────────
-  // Use a simple split approach for reliability on large content.
-  const headOpenLower = result.toLowerCase().indexOf('<head');
-  if (headOpenLower !== -1) {
-    const headCloseIdx = result.toLowerCase().indexOf('</head>');
-    if (headCloseIdx !== -1) {
-      result = result.slice(0, headOpenLower) + result.slice(headCloseIdx + 7);
-    }
-  }
-
-  // ── Step 3: Remove <html …> and </html> wrapper tags ────────────────────
-  result = result
-    .replace(/<html[^>]*>/gi, '')
-    .replace(/<\/html>/gi, '');
-
-  // ── Step 4: Remove <style>…</style> blocks (prevent global style leakage) ─
-  // Split on <style to avoid regex on large strings
-  while (result.toLowerCase().includes('<style')) {
-    const styleOpen = result.toLowerCase().indexOf('<style');
-    const styleClose = result.toLowerCase().indexOf('</style>', styleOpen);
-    if (styleClose === -1) break; // malformed — leave it, don't loop forever
-    result = result.slice(0, styleOpen) + result.slice(styleClose + 8);
-  }
-
-  // ── Step 5: Remove <script>…</script> blocks (security) ─────────────────
-  while (result.toLowerCase().includes('<script')) {
-    const scriptOpen = result.toLowerCase().indexOf('<script');
-    const scriptClose = result.toLowerCase().indexOf('</script>', scriptOpen);
-    if (scriptClose === -1) break;
-    result = result.slice(0, scriptOpen) + result.slice(scriptClose + 9);
-  }
-
-  // ── Step 6: Final hard-strip — remove any stray closing document tags the
-  // above steps may have missed (e.g. <body> tag with attributes containing
-  // '>', content with </body></html> but no opening <body>, large strings
-  // where indexOf logic falls through silently, etc).
-  // </body> and </html> are NEVER valid inside an HTML fragment — global
-  // removal is always safe and prevents browser DOM poisoning.
-  result = result.replace(/<\/body>/gi, '').replace(/<\/html>/gi, '');
-
-  return result.trim();
+  params: Promise<{ slug: string }>;
 }
 
 
 // ─── Auto-generate TOC from <h2> tags in HTML content ────────────────────────
 function extractTOC(html: string): { id: string; text: string }[] {
-  const matches = [...html.matchAll(/<h2[^>]*>(.*?)<\/h2>/gi)];
+  const matches = [...html.matchAll(/<h2[^>]*>(.*?)<\/h2>/gis)];
   return matches.map((m) => {
     const text = m[1].replace(/<[^>]+>/g, '').trim();
     const id = text
@@ -110,7 +27,7 @@ function extractTOC(html: string): { id: string; text: string }[] {
 
 // ─── Inject ids into <h2> headings so TOC anchors work ───────────────────────
 function injectHeadingIds(html: string): string {
-  return html.replace(/<h2([^>]*)>(.*?)<\/h2>/gi, (_match, attrs, inner) => {
+  return html.replace(/<h2([^>]*)>(.*?)<\/h2>/gis, (_match, attrs, inner) => {
     const text = inner.replace(/<[^>]+>/g, '').trim();
     const id = text
       .toLowerCase()
@@ -130,7 +47,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     const metaDescription =
       post.seo?.metaDescription ||
       post.excerpt ||
-      sanitizeContent(post.content || '').replace(/<[^>]+>/g, '').substring(0, 160) ||
+      sanitizeHtml(post.content || '').replace(/<[^>]+>/g, '').substring(0, 160) ||
       post.title;
 
     return {
@@ -163,7 +80,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
 
-  let post: BlogPost;
+  let post: BlogPost | undefined;
   try {
     post = await getBlogBySlug(slug);
   } catch {
@@ -190,7 +107,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     })
     : '';
 
-  const cleanContent = sanitizeContent(post.content || '');
+  const cleanContent = sanitizeHtml(post.content || '');
   const toc = extractTOC(cleanContent);
   const contentWithIds = injectHeadingIds(cleanContent);
   const shareUrl = `https://superluxere.com/blogs/${slug}`;

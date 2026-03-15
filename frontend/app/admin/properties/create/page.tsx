@@ -17,9 +17,18 @@ import { AdminSidebar } from '@/components/admin/AdminSidebar';
 
 // ─── Step definitions ─────────────────────────────────────────────────────────
 const STEPS = [
-    'Basic Info', 'Hero & Intro', 'Highlights & Overview',
-    'Takeaways & Gallery', 'Amenities & Floor Plans',
-    'Payment & Investment', 'Location', 'FAQs, Team & More',
+    'Basic Info',             // step 0  – meta (slug, title, developer…)
+    'Hero & Intro',           // step 1  → Hero · Intro Text · Highlights bar
+    'Key Takeaways',          // step 2  → 16 structured spec fields
+    'Why Invest',             // step 3  → Reasons + long-form analysis
+    'Overview',               // step 4  → Heading + content paragraphs + features
+    'Gallery',                // step 5  → Image URLs
+    'Master Plan',            // step 6  → Master plan image + description bullets
+    'Location',               // step 7  → Address · map · nearby · connectivity
+    'Amenities & Floor Plans',// step 8  → Amenities + Floor Plans
+    'Payment Plans',          // step 9  → Payment plan items
+    'Team',                   // step 10 → Team members + team highlights
+    'FAQs & More',            // step 11 → FAQs
 ];
 
 // ─── Small reusable UI pieces ─────────────────────────────────────────────────
@@ -90,12 +99,17 @@ export default function CreatePropertyPage() {
     const [hero, setHero] = useState({ heroImage: '', subtitle: '', videoUrl: '' });
     const [intro, setIntro] = useState({ introText: '' });
 
-    // ── Step 3: Highlights & Overview ────────────────────────────────────────────
+    // ── Step 3: Highlights, Key Takeaways & Overview ──────────────────────────────
     const [highlights, setHighlights] = useState({ landArea: '', possession: '', rera: '', configuration: '', priceRange: '', totalUnits: '' });
+    const [keyTakeaways, setKeyTakeaways] = useState({
+        status: '', type: '', area: '', configuration: '', sizes: '',
+        towers: '', floors: '', totalUnits: '', clubhouse: '',
+        priceRange: '', reraNo: '', launchDate: '', possessionDate: '',
+        phases: '', developer: '', address: '',
+    });
     const [overview, setOverview] = useState({ heading: '', content: ['', ''], features: ['', ''] });
 
-    // ── Step 4: Takeaways & Gallery ──────────────────────────────────────────────
-    const [takeaways, setTakeaways] = useState(['']);
+    // ── Step 4: Gallery ───────────────────────────────────────────────────────
     const [gallery, setGallery] = useState(['']);
 
     // ── Step 5: Amenities & Floor Plans ──────────────────────────────────────────
@@ -117,8 +131,16 @@ export default function CreatePropertyPage() {
     const [faqs, setFaqs] = useState([{ question: '', answer: '', category: '' }]);
     const [teamMembers, setTeamMembers] = useState([{ role: '', name: '', color: '#3B82F6', description: '', achievements: [''] }]);
     const [teamHighlights, setTeamHighlights] = useState([{ title: '', subtitle: '' }]);
-    const [usp, setUsp] = useState(['']);
-    const [specs, setSpecs] = useState([{ category: '', items: ['', ''] }]);
+    const [whyInvestStats, setWhyInvestStats] = useState({
+        annualAppreciation: '12-15%', rentalYield: '3.5-4.5%', preLaunchGain: '25-30%',
+    });
+    const [amenitiesStats, setAmenitiesStats] = useState({
+        clubhouseSqFt: '100K', amenitiesCount: '25+', swimmingPools: '5', diningOptions: '5',
+    });
+    const [floorPlanDescSections, setFloorPlanDescSections] = useState([
+        { heading: 'Premium Design', body: '' },
+        { heading: 'Smart Layouts', body: '' },
+    ]);
 
     // ── Load reference data ──────────────────────────────────────────────────────
     useEffect(() => {
@@ -140,27 +162,29 @@ export default function CreatePropertyPage() {
             sec.push({ type: 'intro', title: 'Intro', order: order++, data: { text: intro.introText } });
         if (highlights.landArea || highlights.rera || highlights.possession)
             sec.push({ type: 'highlights', title: 'Highlights', order: order++, data: { ...highlights } });
+        // Key Takeaways: only include if at least one field is filled
+        const ktData: Record<string, string> = {};
+        Object.entries(keyTakeaways).forEach(([k, v]) => { if (v.trim()) ktData[k] = v.trim(); });
+        if (Object.keys(ktData).length > 0)
+            sec.push({ type: 'keyTakeaways', title: 'Key Takeaways', order: order++, data: ktData });
         const contentArr = overview.content.filter(Boolean);
         if (contentArr.length)
             sec.push({ type: 'overview', title: 'Overview', order: order++, data: { heading: overview.heading, content: contentArr, features: overview.features.filter(Boolean) } });
-        const tkArr = takeaways.filter(Boolean);
-        if (tkArr.length)
-            sec.push({ type: 'keyTakeaways', title: 'Key Takeaways', order: order++, data: { takeaways: tkArr } });
         const gallArr = gallery.filter(Boolean);
         if (gallArr.length)
             sec.push({ type: 'gallery', title: 'Gallery', order: order++, data: { images: gallArr } });
         const amenArr = amenities.filter(a => a.name);
         if (amenArr.length)
-            sec.push({ type: 'amenities', title: 'Amenities', order: order++, data: { items: amenArr.map(a => ({ name: a.name, icon: a.icon, image: a.imageUrl })) } });
+            sec.push({ type: 'amenities', title: 'Amenities', order: order++, data: { items: amenArr.map(a => ({ name: a.name, icon: a.icon, image: a.imageUrl })), stats: amenitiesStats } });
         const fpArr = floorPlans.filter(f => f.type);
         if (fpArr.length)
-            sec.push({ type: 'floorPlans', title: 'Floor Plans', order: order++, data: { plans: fpArr.map(f => ({ type: f.type, superArea: f.superArea, price: f.price, image: f.imageUrl })) } });
+            sec.push({ type: 'floorPlans', title: 'Floor Plans', order: order++, data: { plans: fpArr.map(f => ({ type: f.type, superArea: f.superArea, price: f.price, image: f.imageUrl })), descriptionSections: floorPlanDescSections.filter(s => s.heading) } });
         const ppArr = paymentPlans.filter(p => p.title);
         if (ppArr.length)
             sec.push({ type: 'paymentPlans', title: 'Payment Plans', order: order++, data: { plans: ppArr } });
         const wiArr = whyInvest.filter(w => w.title);
         if (wiArr.length || investmentText)
-            sec.push({ type: 'whyInvest', title: 'Why Invest', order: order++, data: { reasons: wiArr, analysis: investmentText } });
+            sec.push({ type: 'whyInvest', title: 'Why Invest', order: order++, data: { reasons: wiArr, analysis: investmentText, stats: whyInvestStats } });
         if (locSection.address || nearby.some(n => n.category) || connectivity.some(c => c.place))
             sec.push({ type: 'location', title: 'Location', order: order++, data: { address: locSection.address, mapImage: locSection.mapImage, nearby: nearby.filter(n => n.category).map(n => ({ category: n.category, icon: n.icon, items: n.items.filter(Boolean).map(name => ({ name })) })), connectivity: connectivity.filter(c => c.place) } });
         if (masterPlan.imageUrl)
@@ -171,14 +195,8 @@ export default function CreatePropertyPage() {
         const membArr = teamMembers.filter(m => m.role);
         if (membArr.length)
             sec.push({ type: 'team', title: 'Team', order: order++, data: { members: membArr.map(m => ({ ...m, achievements: m.achievements.filter(Boolean) })), highlights: teamHighlights.filter(th => th.title) } });
-        const uspArr = usp.filter(Boolean);
-        if (uspArr.length)
-            sec.push({ type: 'usp', title: 'USP', order: order++, data: { items: uspArr } });
-        const specArr = specs.filter(s => s.category);
-        if (specArr.length)
-            sec.push({ type: 'specifications', title: 'Specifications', order: order++, data: { specifications: specArr.map(s => ({ category: s.category, items: s.items.filter(Boolean) })) } });
         return sec;
-    }, [hero, intro, highlights, overview, takeaways, gallery, amenities, floorPlans, paymentPlans, whyInvest, investmentText, locSection, nearby, connectivity, masterPlan, faqs, teamMembers, teamHighlights, usp, specs]);
+    }, [hero, intro, highlights, keyTakeaways, overview, gallery, amenities, floorPlans, paymentPlans, whyInvest, investmentText, locSection, nearby, connectivity, masterPlan, faqs, teamMembers, teamHighlights, whyInvestStats, amenitiesStats, floorPlanDescSections]);
 
     // ── Submit ───────────────────────────────────────────────────────────────────
     const handleSubmit = async () => {
@@ -360,7 +378,7 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* STEP 2: Hero & Intro */}
+                            {/* ── STEP 2: Hero & Intro (+ Highlights bar) ─────────────────── */}
                             {step === 1 && (
                                 <div className="space-y-6">
                                     <SectionCard title="🏠 Hero Section">
@@ -368,16 +386,11 @@ export default function CreatePropertyPage() {
                                         <Input label="Subtitle" value={hero.subtitle} onChange={e => setHero(h => ({ ...h, subtitle: e.target.value }))} placeholder="Premium Residences in the Heart of Pune" />
                                         <Input label="Video URL (YouTube embed)" value={hero.videoUrl} onChange={e => setHero(h => ({ ...h, videoUrl: e.target.value }))} placeholder="https://www.youtube.com/embed/..." />
                                     </SectionCard>
-                                    <SectionCard title="📝 Introduction">
+                                    <SectionCard title="📝 Introduction Text">
                                         <Textarea label="Introduction Text" value={intro.introText} onChange={e => setIntro({ introText: e.target.value })} placeholder="Write a compelling introduction for this property..." />
                                     </SectionCard>
-                                </div>
-                            )}
-
-                            {/* STEP 3: Highlights & Overview */}
-                            {step === 2 && (
-                                <div className="space-y-6">
-                                    <SectionCard title="✨ Highlights">
+                                    <SectionCard title="✨ Highlights (Quick-Stat Bar)">
+                                        <p className="text-xs text-gray-500 -mt-1">These 6 values appear in the stat bar directly beneath the hero image.</p>
                                         <div className="grid grid-cols-2 gap-4">
                                             <Input label="Land Area" value={highlights.landArea} onChange={e => setHighlights(h => ({ ...h, landArea: e.target.value }))} placeholder="20 Acres" />
                                             <Input label="Possession Date" value={highlights.possession} onChange={e => setHighlights(h => ({ ...h, possession: e.target.value }))} placeholder="Dec 2027" />
@@ -387,140 +400,43 @@ export default function CreatePropertyPage() {
                                             <Input label="Total Units" value={highlights.totalUnits} onChange={e => setHighlights(h => ({ ...h, totalUnits: e.target.value }))} placeholder="1200" />
                                         </div>
                                     </SectionCard>
-                                    <SectionCard title="📋 Overview">
-                                        <Input label="Heading" value={overview.heading} onChange={e => setOverview(o => ({ ...o, heading: e.target.value }))} placeholder="Overview of the Project" />
-                                        <div>
-                                            <div className="flex items-center justify-between mb-2">
-                                                <label className="text-xs text-gray-400 font-medium">Content Paragraphs</label>
-                                                <AddBtn label="Add Paragraph" onClick={() => setOverview(o => ({ ...o, content: [...o.content, ''] }))} />
-                                            </div>
-                                            <div className="space-y-2">
-                                                {overview.content.map((c, i) => (
-                                                    <div key={i} className="flex gap-2">
-                                                        <textarea value={c} onChange={e => setOverview(o => ({ ...o, content: o.content.map((x, j) => j === i ? e.target.value : x) }))}
-                                                            rows={2} placeholder={`Paragraph ${i + 1}...`} className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-none" />
-                                                        {overview.content.length > 1 && <RemoveBtn onClick={() => setOverview(o => ({ ...o, content: o.content.filter((_, j) => j !== i) }))} />}
-                                                    </div>
-                                                ))}
-                                            </div>
+                                </div>
+                            )}
+
+                            {/* ── STEP 3: Key Takeaways ────────────────────────────────────── */}
+                            {step === 2 && (
+                                <div className="space-y-6">
+                                    <SectionCard title="📋 Key Takeaways">
+                                        <p className="text-xs text-gray-500 -mt-1">Fill only the fields that apply. Empty fields are hidden on the property page.</p>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <Input label="Status" value={keyTakeaways.status} onChange={e => setKeyTakeaways(k => ({ ...k, status: e.target.value }))} placeholder="Upon Request / Under Construction" />
+                                            <Input label="Type" value={keyTakeaways.type} onChange={e => setKeyTakeaways(k => ({ ...k, type: e.target.value }))} placeholder="Residential / Commercial" />
+                                            <Input label="Area" value={keyTakeaways.area} onChange={e => setKeyTakeaways(k => ({ ...k, area: e.target.value }))} placeholder="12 Acres" />
+                                            <Input label="Configuration" value={keyTakeaways.configuration} onChange={e => setKeyTakeaways(k => ({ ...k, configuration: e.target.value }))} placeholder="3 BHK & 4 BHK" />
+                                            <Input label="Sizes" value={keyTakeaways.sizes} onChange={e => setKeyTakeaways(k => ({ ...k, sizes: e.target.value }))} placeholder="2200 sq.ft – 2966 sq.ft" />
+                                            <Input label="Towers" value={keyTakeaways.towers} onChange={e => setKeyTakeaways(k => ({ ...k, towers: e.target.value }))} placeholder="4 Towers" />
+                                            <Input label="Floors" value={keyTakeaways.floors} onChange={e => setKeyTakeaways(k => ({ ...k, floors: e.target.value }))} placeholder="G+42" />
+                                            <Input label="Total Units" value={keyTakeaways.totalUnits} onChange={e => setKeyTakeaways(k => ({ ...k, totalUnits: e.target.value }))} placeholder="~750 Units" />
+                                            <Input label="Clubhouse" value={keyTakeaways.clubhouse} onChange={e => setKeyTakeaways(k => ({ ...k, clubhouse: e.target.value }))} placeholder="75,000 sq.ft" />
+                                            <Input label="Price Range" value={keyTakeaways.priceRange} onChange={e => setKeyTakeaways(k => ({ ...k, priceRange: e.target.value }))} placeholder="₹5.50 Cr – ₹7.42 Cr" />
+                                            <Input label="Rera No." value={keyTakeaways.reraNo} onChange={e => setKeyTakeaways(k => ({ ...k, reraNo: e.target.value }))} placeholder="RERA Applied / GGM/650/382/2022/111" />
+                                            <Input label="Launch Date" value={keyTakeaways.launchDate} onChange={e => setKeyTakeaways(k => ({ ...k, launchDate: e.target.value }))} placeholder="April 2026" />
+                                            <Input label="Possession Date" value={keyTakeaways.possessionDate} onChange={e => setKeyTakeaways(k => ({ ...k, possessionDate: e.target.value }))} placeholder="Dec 2030" />
+                                            <Input label="Phases" value={keyTakeaways.phases} onChange={e => setKeyTakeaways(k => ({ ...k, phases: e.target.value }))} placeholder="Phase 1 / 2 Phases" />
+                                            <Input label="Developer" value={keyTakeaways.developer} onChange={e => setKeyTakeaways(k => ({ ...k, developer: e.target.value }))} placeholder="Sobha Limited" />
                                         </div>
-                                        <div>
-                                            <div className="flex items-center justify-between mb-2">
-                                                <label className="text-xs text-gray-400 font-medium">Feature Bullets</label>
-                                                <AddBtn label="Add Feature" onClick={() => setOverview(o => ({ ...o, features: [...o.features, ''] }))} />
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-2">
-                                                {overview.features.map((f, i) => (
-                                                    <div key={i} className="flex gap-2">
-                                                        <input value={f} onChange={e => setOverview(o => ({ ...o, features: o.features.map((x, j) => j === i ? e.target.value : x) }))}
-                                                            placeholder={`Feature ${i + 1}`} className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                        {overview.features.length > 1 && <RemoveBtn onClick={() => setOverview(o => ({ ...o, features: o.features.filter((_, j) => j !== i) }))} />}
-                                                    </div>
-                                                ))}
-                                            </div>
+                                        <div className="mt-2">
+                                            <Input label="Address (full width)" value={keyTakeaways.address} onChange={e => setKeyTakeaways(k => ({ ...k, address: e.target.value }))} placeholder="Sector 63A, Golf Course Extension Road, Gurgaon" />
                                         </div>
                                     </SectionCard>
                                 </div>
                             )}
 
-                            {/* STEP 4: Takeaways & Gallery */}
+                            {/* ── STEP 4: Why Invest ───────────────────────────────────────── */}
                             {step === 3 && (
                                 <div className="space-y-6">
-                                    <SectionCard title="🎯 Key Takeaways">
-                                        <div className="space-y-2">
-                                            {takeaways.map((t, i) => (
-                                                <div key={i} className="flex gap-2">
-                                                    <input value={t} onChange={e => updateItem(setTakeaways, i, e.target.value)} placeholder={`Takeaway ${i + 1}`}
-                                                        className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    {takeaways.length > 1 && <RemoveBtn onClick={() => removeItem(setTakeaways, i)} />}
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <AddBtn label="Add Takeaway" onClick={() => addItem(setTakeaways, '')} />
-                                    </SectionCard>
-                                    <SectionCard title="🖼️ Gallery Images">
-                                        <div className="space-y-2">
-                                            {gallery.map((g, i) => (
-                                                <div key={i} className="flex gap-2">
-                                                    <input value={g} onChange={e => updateItem(setGallery, i, e.target.value)} placeholder="/images/gallery-1.jpg"
-                                                        className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    {gallery.length > 1 && <RemoveBtn onClick={() => removeItem(setGallery, i)} />}
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <AddBtn label="Add Image URL" onClick={() => addItem(setGallery, '')} />
-                                    </SectionCard>
-                                </div>
-                            )}
-
-                            {/* STEP 5: Amenities & Floor Plans */}
-                            {step === 4 && (
-                                <div className="space-y-6">
-                                    <SectionCard title="🏊 Amenities">
-                                        <div className="space-y-3">
-                                            {amenities.map((a, i) => (
-                                                <div key={i} className="grid grid-cols-3 gap-2 items-center">
-                                                    <input value={a.name} onChange={e => updateItemField(setAmenities, i, 'name', e.target.value)} placeholder="Swimming Pool"
-                                                        className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    <input value={a.icon} onChange={e => updateItemField(setAmenities, i, 'icon', e.target.value)} placeholder="🏊 or icon key"
-                                                        className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    <div className="flex gap-2">
-                                                        <input value={a.imageUrl} onChange={e => updateItemField(setAmenities, i, 'imageUrl', e.target.value)} placeholder="/images/pool.jpg"
-                                                            className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                        {amenities.length > 1 && <RemoveBtn onClick={() => removeItem(setAmenities, i)} />}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div className="flex items-center space-x-2 text-xs text-gray-500 mt-1"><span>Name · Icon · Image URL</span></div>
-                                        <AddBtn label="Add Amenity" onClick={() => addItem(setAmenities, { name: '', icon: '', imageUrl: '' })} />
-                                    </SectionCard>
-                                    <SectionCard title="📐 Floor Plans">
-                                        <div className="space-y-3">
-                                            {floorPlans.map((f, i) => (
-                                                <div key={i} className="grid grid-cols-4 gap-2 items-center">
-                                                    <input value={f.type} onChange={e => updateItemField(setFloorPlans, i, 'type', e.target.value)} placeholder="2 BHK"
-                                                        className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    <input value={f.superArea} onChange={e => updateItemField(setFloorPlans, i, 'superArea', e.target.value)} placeholder="1050 sq.ft"
-                                                        className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    <input value={f.price} onChange={e => updateItemField(setFloorPlans, i, 'price', e.target.value)} placeholder="₹ 1.5 Cr"
-                                                        className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    <div className="flex gap-2">
-                                                        <input value={f.imageUrl} onChange={e => updateItemField(setFloorPlans, i, 'imageUrl', e.target.value)} placeholder="/images/plan.jpg"
-                                                            className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                        {floorPlans.length > 1 && <RemoveBtn onClick={() => removeItem(setFloorPlans, i)} />}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div className="text-xs text-gray-500">Type · Super Area · Price · Image URL</div>
-                                        <AddBtn label="Add Floor Plan" onClick={() => addItem(setFloorPlans, { type: '', superArea: '', price: '', imageUrl: '' })} />
-                                    </SectionCard>
-                                </div>
-                            )}
-
-                            {/* STEP 6: Payment Plans & Why Invest */}
-                            {step === 5 && (
-                                <div className="space-y-6">
-                                    <SectionCard title="💳 Payment Plans">
-                                        <div className="space-y-4">
-                                            {paymentPlans.map((p, i) => (
-                                                <div key={i} className="bg-gray-900 rounded-xl p-4 space-y-3 relative">
-                                                    {paymentPlans.length > 1 && <div className="absolute top-3 right-3"><RemoveBtn onClick={() => removeItem(setPaymentPlans, i)} /></div>}
-                                                    <div className="grid grid-cols-2 gap-3">
-                                                        <input value={p.title} onChange={e => updateItemField(setPaymentPlans, i, 'title', e.target.value)} placeholder="10-90 Construction Linked Plan"
-                                                            className="px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                        <input value={p.type} onChange={e => updateItemField(setPaymentPlans, i, 'type', e.target.value)} placeholder="CLP / DP / No EMI…"
-                                                            className="px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    </div>
-                                                    <textarea value={p.description} onChange={e => updateItemField(setPaymentPlans, i, 'description', e.target.value)} rows={2} placeholder="Description of this payment plan…"
-                                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-none" />
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <AddBtn label="Add Payment Plan" onClick={() => addItem(setPaymentPlans, { title: '', type: '', description: '' })} />
-                                    </SectionCard>
-                                    <SectionCard title="📈 Why Invest">
+                                    <SectionCard title="📈 Why Invest — Reason Cards">
+                                        <p className="text-xs text-gray-500 -mt-1">Icon options: <code className="text-amber-400">location · award · trending · calendar</code></p>
                                         <div className="space-y-3">
                                             {whyInvest.map((w, i) => (
                                                 <div key={i} className="grid grid-cols-3 gap-2 items-center">
@@ -537,13 +453,102 @@ export default function CreatePropertyPage() {
                                             ))}
                                         </div>
                                         <AddBtn label="Add Reason" onClick={() => addItem(setWhyInvest, { title: '', subtitle: '', icon: '' })} />
-                                        <Textarea label="Investment Analysis (long-form)" value={investmentText} onChange={e => setInvestmentText(e.target.value)} placeholder="Detailed investment analysis paragraph…" />
+                                        <Textarea label="Investment Analysis (long-form paragraph)" value={investmentText} onChange={e => setInvestmentText(e.target.value)} placeholder="Detailed investment analysis paragraph…" />
+                                    </SectionCard>
+                                    <SectionCard title="📊 Investment Statistics">
+                                        <p className="text-xs text-gray-500 -mt-1">These 3 stat cards appear in the Why Invest section.</p>
+                                        <div className="grid grid-cols-3 gap-4">
+                                            <Input label="Annual Appreciation %" value={whyInvestStats.annualAppreciation} onChange={e => setWhyInvestStats(s => ({ ...s, annualAppreciation: e.target.value }))} placeholder="12-15%" />
+                                            <Input label="Rental Yield %" value={whyInvestStats.rentalYield} onChange={e => setWhyInvestStats(s => ({ ...s, rentalYield: e.target.value }))} placeholder="3.5-4.5%" />
+                                            <Input label="Pre-Launch Gain %" value={whyInvestStats.preLaunchGain} onChange={e => setWhyInvestStats(s => ({ ...s, preLaunchGain: e.target.value }))} placeholder="25-30%" />
+                                        </div>
                                     </SectionCard>
                                 </div>
                             )}
 
-                            {/* STEP 7: Location */}
+                            {/* ── STEP 5: Overview ──────────────────────────────────────────── */}
+                            {step === 4 && (
+                                <div className="space-y-6">
+                                    <SectionCard title="📋 Project Overview">
+                                        <Input label="Section Heading" value={overview.heading} onChange={e => setOverview(o => ({ ...o, heading: e.target.value }))} placeholder="Overview of the Project" />
+                                        <div>
+                                            <div className="flex items-center justify-between mb-2">
+                                                <label className="text-xs text-gray-400 font-medium">Content Paragraphs</label>
+                                                <AddBtn label="Add Paragraph" onClick={() => setOverview(o => ({ ...o, content: [...o.content, ''] }))} />
+                                            </div>
+                                            <div className="space-y-2">
+                                                {overview.content.map((c, i) => (
+                                                    <div key={i} className="flex gap-2">
+                                                        <textarea value={c} onChange={e => setOverview(o => ({ ...o, content: o.content.map((x, j) => j === i ? e.target.value : x) }))}
+                                                            rows={2} placeholder={`Paragraph ${i + 1}…`} className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-none" />
+                                                        {overview.content.length > 1 && <RemoveBtn onClick={() => setOverview(o => ({ ...o, content: o.content.filter((_, j) => j !== i) }))} />}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center justify-between mb-2">
+                                                <label className="text-xs text-gray-400 font-medium">Feature Bullet Points</label>
+                                                <AddBtn label="Add Feature" onClick={() => setOverview(o => ({ ...o, features: [...o.features, ''] }))} />
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                {overview.features.map((f, i) => (
+                                                    <div key={i} className="flex gap-2">
+                                                        <input value={f} onChange={e => setOverview(o => ({ ...o, features: o.features.map((x, j) => j === i ? e.target.value : x) }))}
+                                                            placeholder={`Feature ${i + 1}`} className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                        {overview.features.length > 1 && <RemoveBtn onClick={() => setOverview(o => ({ ...o, features: o.features.filter((_, j) => j !== i) }))} />}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </SectionCard>
+                                </div>
+                            )}
+
+                            {/* ── STEP 6: Gallery ───────────────────────────────────────────── */}
+                            {step === 5 && (
+                                <div className="space-y-6">
+                                    <SectionCard title="🖼️ Gallery Images">
+                                        <div className="space-y-2">
+                                            {gallery.map((g, i) => (
+                                                <div key={i} className="flex gap-2">
+                                                    <input value={g} onChange={e => updateItem(setGallery, i, e.target.value)} placeholder="/images/gallery-1.jpg"
+                                                        className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                    {gallery.length > 1 && <RemoveBtn onClick={() => removeItem(setGallery, i)} />}
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <AddBtn label="Add Image URL" onClick={() => addItem(setGallery, '')} />
+                                    </SectionCard>
+                                </div>
+                            )}
+
+                            {/* ── STEP 7: Master Plan ───────────────────────────────────────── */}
                             {step === 6 && (
+                                <div className="space-y-6">
+                                    <SectionCard title="🗺️ Master Plan">
+                                        <Input label="Master Plan Image URL" value={masterPlan.imageUrl} onChange={e => setMasterPlan(m => ({ ...m, imageUrl: e.target.value }))} placeholder="/images/masterplan.jpg" />
+                                        <div>
+                                            <div className="flex items-center justify-between mb-2">
+                                                <label className="text-xs text-gray-400 font-medium">Description Bullet Points</label>
+                                                <AddBtn label="Add" onClick={() => setMasterPlan(m => ({ ...m, descriptions: [...m.descriptions, ''] }))} />
+                                            </div>
+                                            <div className="space-y-2">
+                                                {masterPlan.descriptions.map((d, i) => (
+                                                    <div key={i} className="flex gap-2">
+                                                        <input value={d} onChange={e => setMasterPlan(m => ({ ...m, descriptions: m.descriptions.map((x, j) => j === i ? e.target.value : x) }))}
+                                                            placeholder={`Description point ${i + 1}`} className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                        {masterPlan.descriptions.length > 1 && <RemoveBtn onClick={() => setMasterPlan(m => ({ ...m, descriptions: m.descriptions.filter((_, j) => j !== i) }))} />}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </SectionCard>
+                                </div>
+                            )}
+
+                            {/* ── STEP 8: Location ──────────────────────────────────────────── */}
+                            {step === 7 && (
                                 <div className="space-y-6">
                                     <SectionCard title="📍 Location Details">
                                         <Input label="Full Address" value={locSection.address} onChange={e => setLocSection(l => ({ ...l, address: e.target.value }))} placeholder="Maan, Hinjewadi Phase II, Pune – 411057" />
@@ -594,74 +599,181 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* STEP 8: Master Plan, FAQs, Team, USP, Specs */}
-                            {step === 7 && (
+                            {/* ── STEP 9: Amenities & Floor Plans ──────────────────────────── */}
+                            {step === 8 && (
                                 <div className="space-y-6">
-                                    <SectionCard title="🗺️ Master Plan">
-                                        <Input label="Master Plan Image URL" value={masterPlan.imageUrl} onChange={e => setMasterPlan(m => ({ ...m, imageUrl: e.target.value }))} placeholder="/images/masterplan.jpg" />
-                                        <div>
-                                            <div className="flex items-center justify-between mb-2">
-                                                <label className="text-xs text-gray-400 font-medium">Descriptions</label>
-                                                <AddBtn label="Add" onClick={() => setMasterPlan(m => ({ ...m, descriptions: [...m.descriptions, ''] }))} />
-                                            </div>
-                                            <div className="space-y-2">
-                                                {masterPlan.descriptions.map((d, i) => (
-                                                    <div key={i} className="flex gap-2">
-                                                        <input value={d} onChange={e => setMasterPlan(m => ({ ...m, descriptions: m.descriptions.map((x, j) => j === i ? e.target.value : x) }))}
-                                                            placeholder={`Description point ${i + 1}`} className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                        {masterPlan.descriptions.length > 1 && <RemoveBtn onClick={() => setMasterPlan(m => ({ ...m, descriptions: m.descriptions.filter((_, j) => j !== i) }))} />}
+                                    <SectionCard title="🏊 Amenities">
+                                        <div className="space-y-3">
+                                            {amenities.map((a, i) => (
+                                                <div key={i} className="grid grid-cols-3 gap-2 items-center">
+                                                    <input value={a.name} onChange={e => updateItemField(setAmenities, i, 'name', e.target.value)} placeholder="Swimming Pool"
+                                                        className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                    <input value={a.icon} onChange={e => updateItemField(setAmenities, i, 'icon', e.target.value)} placeholder="🏊 or icon key"
+                                                        className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                    <div className="flex gap-2">
+                                                        <input value={a.imageUrl} onChange={e => updateItemField(setAmenities, i, 'imageUrl', e.target.value)} placeholder="/images/pool.jpg"
+                                                            className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                        {amenities.length > 1 && <RemoveBtn onClick={() => removeItem(setAmenities, i)} />}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="flex items-center space-x-2 text-xs text-gray-500 mt-1"><span>Name · Icon · Image URL</span></div>
+                                        <AddBtn label="Add Amenity" onClick={() => addItem(setAmenities, { name: '', icon: '', imageUrl: '' })} />
+                                    </SectionCard>
+                                    <SectionCard title="📐 Floor Plans">
+                                        <div className="space-y-3">
+                                            {floorPlans.map((f, i) => (
+                                                <div key={i} className="grid grid-cols-4 gap-2 items-center">
+                                                    <input value={f.type} onChange={e => updateItemField(setFloorPlans, i, 'type', e.target.value)} placeholder="2 BHK"
+                                                        className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                    <input value={f.superArea} onChange={e => updateItemField(setFloorPlans, i, 'superArea', e.target.value)} placeholder="1050 sq.ft"
+                                                        className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                    <input value={f.price} onChange={e => updateItemField(setFloorPlans, i, 'price', e.target.value)} placeholder="₹ 1.5 Cr"
+                                                        className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                    <div className="flex gap-2">
+                                                        <input value={f.imageUrl} onChange={e => updateItemField(setFloorPlans, i, 'imageUrl', e.target.value)} placeholder="/images/plan.jpg"
+                                                            className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                        {floorPlans.length > 1 && <RemoveBtn onClick={() => removeItem(setFloorPlans, i)} />}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="text-xs text-gray-500">Type · Super Area · Price · Image URL</div>
+                                        <AddBtn label="Add Floor Plan" onClick={() => addItem(setFloorPlans, { type: '', superArea: '', price: '', imageUrl: '' })} />
+                                    </SectionCard>
+                                    <SectionCard title="📊 Amenities Stats Bar">
+                                        <p className="text-xs text-gray-500 -mt-1">4 numbers shown in the dark bar at the bottom of the Amenities section.</p>
+                                        <div className="grid grid-cols-4 gap-4">
+                                            <Input label="Clubhouse Sq Ft" value={amenitiesStats.clubhouseSqFt} onChange={e => setAmenitiesStats(s => ({ ...s, clubhouseSqFt: e.target.value }))} placeholder="100K" />
+                                            <Input label="Total Amenities" value={amenitiesStats.amenitiesCount} onChange={e => setAmenitiesStats(s => ({ ...s, amenitiesCount: e.target.value }))} placeholder="25+" />
+                                            <Input label="Swimming Pools" value={amenitiesStats.swimmingPools} onChange={e => setAmenitiesStats(s => ({ ...s, swimmingPools: e.target.value }))} placeholder="5" />
+                                            <Input label="Dining Options" value={amenitiesStats.diningOptions} onChange={e => setAmenitiesStats(s => ({ ...s, diningOptions: e.target.value }))} placeholder="5" />
+                                        </div>
+                                    </SectionCard>
+                                    <SectionCard title="📝 Floor Plan Descriptions">
+                                        <p className="text-xs text-gray-500 -mt-1">Scrollable description sections below the floor plan image.</p>
+                                        <div className="space-y-3">
+                                            {floorPlanDescSections.map((s, i) => (
+                                                <div key={i} className="bg-gray-900 rounded-xl p-3 space-y-2 relative">
+                                                    {floorPlanDescSections.length > 1 && <div className="absolute top-2 right-2"><RemoveBtn onClick={() => removeItem(setFloorPlanDescSections, i)} /></div>}
+                                                    <input value={s.heading} onChange={e => updateItemField(setFloorPlanDescSections, i, 'heading', e.target.value)} placeholder="Section Heading"
+                                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                    <textarea value={s.body} onChange={e => updateItemField(setFloorPlanDescSections, i, 'body', e.target.value)} rows={2} placeholder="Description body…"
+                                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-none" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <AddBtn label="Add Description Section" onClick={() => addItem(setFloorPlanDescSections, { heading: '', body: '' })} />
+                                    </SectionCard>
+                                </div>
+                            )}
+
+                            {/* ── STEP 10: Payment Plans ────────────────────────────────────── */}
+                            {step === 9 && (
+                                <div className="space-y-6">
+                                    <SectionCard title="💳 Payment Plans">
+                                        <div className="space-y-4">
+                                            {paymentPlans.map((p, i) => (
+                                                <div key={i} className="bg-gray-900 rounded-xl p-4 space-y-3 relative">
+                                                    {paymentPlans.length > 1 && <div className="absolute top-3 right-3"><RemoveBtn onClick={() => removeItem(setPaymentPlans, i)} /></div>}
+                                                    <div className="grid grid-cols-2 gap-3">
+                                                        <input value={p.title} onChange={e => updateItemField(setPaymentPlans, i, 'title', e.target.value)} placeholder="10-90 Construction Linked Plan"
+                                                            className="px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                        <input value={p.type} onChange={e => updateItemField(setPaymentPlans, i, 'type', e.target.value)} placeholder="CLP / DP / No EMI…"
+                                                            className="px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                    </div>
+                                                    <textarea value={p.description} onChange={e => updateItemField(setPaymentPlans, i, 'description', e.target.value)} rows={2} placeholder="Description of this payment plan…"
+                                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-none" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <AddBtn label="Add Payment Plan" onClick={() => addItem(setPaymentPlans, { title: '', type: '', description: '' })} />
+                                    </SectionCard>
+                                </div>
+                            )}
+
+                            {/* ── STEP 11: Team ─────────────────────────────────────────────── */}
+                            {step === 10 && (
+                                <div className="space-y-6">
+                                    <SectionCard title="👷 Design & Construction Team">
+                                        <div className="space-y-4">
+                                            {teamMembers.map((m, i) => (
+                                                <div key={i} className="bg-gray-900 rounded-xl p-4 space-y-3 relative">
+                                                    {teamMembers.length > 1 && <div className="absolute top-3 right-3"><RemoveBtn onClick={() => removeItem(setTeamMembers, i)} /></div>}
+                                                    <div className="grid grid-cols-2 gap-3">
+                                                        <Input label="Role" value={m.role} onChange={e => updateItemField(setTeamMembers, i, 'role', e.target.value)} placeholder="Architect" />
+                                                        <Input label="Name / Firm" value={m.name} onChange={e => updateItemField(setTeamMembers, i, 'name', e.target.value)} placeholder="Renowned Architecture Firm" />
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-3 items-start">
+                                                        <Select label="Card Colour" value={m.color} onChange={e => updateItemField(setTeamMembers, i, 'color', e.target.value)}>
+                                                            <option value="#3B82F6">Blue</option>
+                                                            <option value="#10B981">Green</option>
+                                                            <option value="#F97316">Orange</option>
+                                                            <option value="#8B5CF6">Purple</option>
+                                                            <option value="#EF4444">Red</option>
+                                                            <option value="#C9A961">Gold</option>
+                                                        </Select>
+                                                        <Input label="Short Description" value={m.description} onChange={e => updateItemField(setTeamMembers, i, 'description', e.target.value)} placeholder="Experienced architects bringing international standards." />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs text-gray-400 mb-1 font-medium">Key Achievements</label>
+                                                        <div className="space-y-2">
+                                                            {m.achievements.map((ach, j) => (
+                                                                <div key={j} className="flex gap-2">
+                                                                    <input value={ach} onChange={e => setTeamMembers(prev => prev.map((x, xi) => xi === i ? { ...x, achievements: x.achievements.map((it, ji) => ji === j ? e.target.value : it) } : x))}
+                                                                        placeholder={`Achievement ${j + 1}`} className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                                    {m.achievements.length > 1 && <RemoveBtn onClick={() => setTeamMembers(prev => prev.map((x, xi) => xi === i ? { ...x, achievements: x.achievements.filter((_, ji) => ji !== j) } : x))} />}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                        <button type="button" onClick={() => setTeamMembers(prev => prev.map((x, xi) => xi === i ? { ...x, achievements: [...x.achievements, ''] } : x))}
+                                                            className="text-xs text-amber-400 hover:text-amber-300 transition mt-2">+ Add achievement</button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <AddBtn label="Add Team Member" onClick={() => addItem(setTeamMembers, { role: '', name: '', color: '#3B82F6', description: '', achievements: [''] })} />
+
+                                        <div className="mt-6 border-t border-gray-700/60 pt-4">
+                                            <h4 className="text-white font-medium text-sm mb-3">Team Highlights (the dark stat row at the bottom)</h4>
+                                            <div className="space-y-3">
+                                                {teamHighlights.map((th, i) => (
+                                                    <div key={i} className="flex gap-2 relative pr-8">
+                                                        <input value={th.title} onChange={e => updateItemField(setTeamHighlights, i, 'title', e.target.value)} placeholder="Highlight Title"
+                                                            className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                        <input value={th.subtitle} onChange={e => updateItemField(setTeamHighlights, i, 'subtitle', e.target.value)} placeholder="Highlight Subtitle"
+                                                            className="flex-[2] px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                        {teamHighlights.length > 1 && <div className="absolute right-0 top-2"><RemoveBtn onClick={() => removeItem(setTeamHighlights, i)} /></div>}
                                                     </div>
                                                 ))}
                                             </div>
+                                            <div className="mt-2">
+                                                <AddBtn label="Add Highlight" onClick={() => addItem(setTeamHighlights, { title: '', subtitle: '' })} />
+                                            </div>
                                         </div>
                                     </SectionCard>
+                                </div>
+                            )}
+
+                            {/* ── STEP 12: FAQs & More (FAQs · USP · Specs) ────────────────── */}
+                            {step === 11 && (
+                                <div className="space-y-6">
                                     <SectionCard title="❓ FAQs">
                                         <div className="space-y-4">
                                             {faqs.map((f, i) => (
                                                 <div key={i} className="bg-gray-900 rounded-xl p-4 space-y-2 relative">
                                                     {faqs.length > 1 && <div className="absolute top-3 right-3"><RemoveBtn onClick={() => removeItem(setFaqs, i)} /></div>}
-                                                    <input value={f.question} onChange={e => updateItemField(setFaqs, i, 'question', e.target.value)} placeholder="Question" className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    <textarea value={f.answer} onChange={e => updateItemField(setFaqs, i, 'answer', e.target.value)} rows={2} placeholder="Answer" className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-none" />
-                                                    <input value={f.category} onChange={e => updateItemField(setFaqs, i, 'category', e.target.value)} placeholder="Category (e.g. General)" className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                    <input value={f.question} onChange={e => updateItemField(setFaqs, i, 'question', e.target.value)} placeholder="Question"
+                                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                    <textarea value={f.answer} onChange={e => updateItemField(setFaqs, i, 'answer', e.target.value)} rows={2} placeholder="Answer"
+                                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-none" />
+                                                    <input value={f.category} onChange={e => updateItemField(setFaqs, i, 'category', e.target.value)} placeholder="Category (e.g. General)"
+                                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
                                                 </div>
                                             ))}
                                         </div>
                                         <AddBtn label="Add FAQ" onClick={() => addItem(setFaqs, { question: '', answer: '', category: '' })} />
-                                    </SectionCard>
-                                    <SectionCard title="⭐ USP">
-                                        <div className="space-y-2">
-                                            {usp.map((u, i) => (
-                                                <div key={i} className="flex gap-2">
-                                                    <input value={u} onChange={e => updateItem(setUsp, i, e.target.value)} placeholder="Low-Density – Only 8 Towers on 20 Acres"
-                                                        className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    {usp.length > 1 && <RemoveBtn onClick={() => removeItem(setUsp, i)} />}
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <AddBtn label="Add USP" onClick={() => addItem(setUsp, '')} />
-                                    </SectionCard>
-                                    <SectionCard title="🔧 Specifications">
-                                        <div className="space-y-4">
-                                            {specs.map((s, i) => (
-                                                <div key={i} className="bg-gray-900 rounded-xl p-4 space-y-2 relative">
-                                                    {specs.length > 1 && <div className="absolute top-3 right-3"><RemoveBtn onClick={() => removeItem(setSpecs, i)} /></div>}
-                                                    <input value={s.category} onChange={e => updateItemField(setSpecs, i, 'category', e.target.value)} placeholder="Category (e.g. Structure)"
-                                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    <div className="space-y-2">
-                                                        {s.items.map((item, j) => (
-                                                            <div key={j} className="flex gap-2">
-                                                                <input value={item} onChange={e => setSpecs(prev => prev.map((x, xi) => xi === i ? { ...x, items: x.items.map((it, ji) => ji === j ? e.target.value : it) } : x))}
-                                                                    placeholder={`Item ${j + 1}`} className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                                {s.items.length > 1 && <RemoveBtn onClick={() => setSpecs(prev => prev.map((x, xi) => xi === i ? { ...x, items: x.items.filter((_, ji) => ji !== j) } : x))} />}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                    <button type="button" onClick={() => setSpecs(prev => prev.map((x, xi) => xi === i ? { ...x, items: [...x.items, ''] } : x))}
-                                                        className="text-xs text-amber-400 hover:text-amber-300 transition">+ Add item</button>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <AddBtn label="Add Category" onClick={() => addItem(setSpecs, { category: '', items: ['', ''] })} />
                                     </SectionCard>
                                 </div>
                             )}

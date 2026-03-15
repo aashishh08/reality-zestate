@@ -13,9 +13,29 @@ interface ProjectFloorPlansProps {
     price: string;
     image: string;
   }[];
+  descriptionSections?: { heading: string; body: string }[];
 }
 
-export function ProjectFloorPlans({ floorPlans }: ProjectFloorPlansProps) {
+const DEFAULT_FLOOR_PLAN_DESCRIPTIONS = [
+  {
+    heading: "Premium Design",
+    body: "Each floor plan is meticulously designed by award-winning architects to maximize natural light, ventilation, and living space. Every detail has been considered to ensure optimal comfort and functionality for modern luxury living.",
+  },
+  {
+    heading: "Smart Layouts",
+    body: "Open-plan living areas seamlessly blend with private spaces, creating flexible layouts that adapt to your lifestyle. High ceilings and expansive windows provide panoramic views while maintaining optimal privacy and security.",
+  },
+  {
+    heading: "Sustainable Features",
+    body: "Smart home integration, energy-efficient systems, and sustainable materials throughout. Every residence incorporates cutting-edge technology while maintaining the timeless elegance and sophistication expected in luxury living.",
+  },
+  {
+    heading: "Perfect Proportions",
+    body: "Spacious bedrooms with walk-in closets, luxurious bathrooms with premium fixtures, and entertainment spaces designed for hosting. Every corner reflects the commitment to excellence and attention to detail that defines this exclusive community.",
+  },
+];
+
+export function ProjectFloorPlans({ floorPlans, descriptionSections }: ProjectFloorPlansProps) {
   const safePlans = Array.isArray(floorPlans) && floorPlans.length > 0 ? floorPlans : null;
   const [activeTab, setActiveTab] = useState(0);
 
@@ -123,30 +143,15 @@ export function ProjectFloorPlans({ floorPlans }: ProjectFloorPlansProps) {
         >
           <div className="h-[300px] overflow-y-auto pr-4 custom-scrollbar">
             <div className="space-y-8">
-              <div>
-                <h4 className="text-lg font-semibold text-[#2C2416] mb-3">Premium Design</h4>
-                <p className="text-gray-700 leading-relaxed text-sm">
-                  Each floor plan is meticulously designed by award-winning architects to maximize natural light, ventilation, and living space. Every detail has been considered to ensure optimal comfort and functionality for modern luxury living.
-                </p>
-              </div>
-              <div>
-                <h4 className="text-lg font-semibold text-[#2C2416] mb-3">Smart Layouts</h4>
-                <p className="text-gray-700 leading-relaxed text-sm">
-                  Open-plan living areas seamlessly blend with private spaces, creating flexible layouts that adapt to your lifestyle. High ceilings and expansive windows provide panoramic views while maintaining optimal privacy and security.
-                </p>
-              </div>
-              <div>
-                <h4 className="text-lg font-semibold text-[#2C2416] mb-3">Sustainable Features</h4>
-                <p className="text-gray-700 leading-relaxed text-sm">
-                  Smart home integration, energy-efficient systems, and sustainable materials throughout. Every residence incorporates cutting-edge technology while maintaining the timeless elegance and sophistication expected in luxury living.
-                </p>
-              </div>
-              <div>
-                <h4 className="text-lg font-semibold text-[#2C2416] mb-3">Perfect Proportions</h4>
-                <p className="text-gray-700 leading-relaxed text-sm">
-                  Spacious bedrooms with walk-in closets, luxurious bathrooms with premium fixtures, and entertainment spaces designed for hosting. Every corner reflects the commitment to excellence and attention to detail that defines this exclusive community.
-                </p>
-              </div>
+              {(descriptionSections && descriptionSections.length > 0
+                ? descriptionSections
+                : DEFAULT_FLOOR_PLAN_DESCRIPTIONS
+              ).map((section, i) => (
+                <div key={i}>
+                  <h4 className="text-lg font-semibold text-[#2C2416] mb-3">{section.heading}</h4>
+                  <p className="text-gray-700 leading-relaxed text-sm">{section.body}</p>
+                </div>
+              ))}
             </div>
           </div>
         </motion.div>

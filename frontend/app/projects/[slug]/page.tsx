@@ -11,7 +11,6 @@ import { ProjectOverview } from "@/components/project/ProjectOverview";
 import { ProjectAmenities } from "@/components/project/ProjectAmenities";
 import { ProjectFloorPlans } from "@/components/project/ProjectFloorPlans";
 import { ProjectLocation } from "@/components/project/ProjectLocation";
-import { ProjectUSP } from "@/components/project/ProjectUSP";
 import { ProjectFAQ } from "@/components/project/ProjectFAQ";
 import { ProjectMasterPlan } from "@/components/project/ProjectMasterPlan";
 import { ProjectPaymentPlan } from "@/components/project/ProjectPaymentPlan";
@@ -23,7 +22,6 @@ import { ProjectBookingBanner } from "@/components/project/ProjectBookingBanner"
 import { ProjectWhyInvest } from "@/components/project/ProjectWhyInvest";
 import { ProjectSimilar } from "@/components/project/ProjectSimilar";
 import { ProjectSectionNavigation } from "@/components/project/ProjectSectionNavigation";
-import ProjectNavigation from "@/components/project/ProjectNavigation";
 import { ProjectTeam } from "@/components/project/ProjectTeam";
 import { projects } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -179,35 +177,32 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      {/* Key Takeaways Section - Before Why Invest */}
+      {/* Key Takeaways Section */}
       {details?.keyTakeaways && (
         <section className="py-12 bg-[#F5F0E8]" id="key-takeaways">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <SectionHeading label="Highlights">Key Takeaways</SectionHeading>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-8 items-stretch">
               {/* Left Side - Image */}
-              <div className="relative rounded-2xl overflow-hidden shadow-lg h-[450px]">
+              <div className="relative rounded-2xl overflow-hidden shadow-lg min-h-[320px]">
                 <img
                   src={details.gallery?.[0] || details.heroImage || "/images/project-1.jpg"}
                   alt="Project Details"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 />
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
               </div>
 
-              {/* Right Side - Key Takeaways Box */}
-              <div>
-                <ProjectKeyTakeaways
-                  takeaways={details.keyTakeaways}
-                  highlights={details.highlights}
-                />
+              {/* Right Side - Key Takeaways Cards */}
+              <div className="flex flex-col">
+                <ProjectKeyTakeaways data={details.keyTakeaways} />
               </div>
             </div>
           </div>
         </section>
       )}
+
 
       {/* Investment Analysis */}
       {details && (
@@ -219,6 +214,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             projectTitle={project.title}
             propertyId={project.id}
             propertySlug={slug}
+            whyInvestStats={details.whyInvestStats}
           />
         </ErrorBoundary>
       )}
@@ -286,7 +282,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.amenities && details.amenities.length > 0 && (
         <section id="amenities">
           <ErrorBoundary sectionName="Amenities">
-            <ProjectAmenities amenities={details.amenities} />
+            <ProjectAmenities amenities={details.amenities} amenitiesStats={details.amenitiesStats} />
           </ErrorBoundary>
         </section>
       )}
@@ -295,7 +291,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.floorPlans && details.floorPlans.length > 0 && (
         <section id="floorplans">
           <ErrorBoundary sectionName="Floor Plans">
-            <ProjectFloorPlans floorPlans={details.floorPlans} />
+            <ProjectFloorPlans floorPlans={details.floorPlans} descriptionSections={details.floorPlanDescriptionSections} />
           </ErrorBoundary>
         </section>
       )}
@@ -320,32 +316,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* FAQs */}
       <section id="faqs">
-        {details && details.faqs && details.faqs.length > 0 ? (
+        {details?.faqs && details.faqs.length > 0 && (
           <ProjectFAQ faqs={details.faqs} />
-        ) : details ? (
-          <ProjectFAQ faqs={[
-            {
-              question: "What is the project about?",
-              answer: "This is a premium residential development featuring ultra-luxury apartments with world-class amenities and strategic location.",
-              category: "General"
-            },
-            {
-              question: "What are the available unit configurations?",
-              answer: "We offer multiple configurations ranging from 2 BHK to 4+ BHK units, each designed with premium finishes and modern amenities.",
-              category: "Units"
-            },
-            {
-              question: "What are the payment options?",
-              answer: "We provide flexible payment plans including construction-linked, down payment, and progressive payment options to suit your needs.",
-              category: "Payment"
-            },
-            {
-              question: "When is the possession timeline?",
-              answer: "The project is planned for possession within the specified timeline. Contact our sales team for detailed information.",
-              category: "Possession"
-            }
-          ]} />
-        ) : null}
+        )}
       </section>
 
       {/* Similar Properties */}

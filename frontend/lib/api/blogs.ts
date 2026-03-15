@@ -4,6 +4,7 @@
  */
 
 import { fetchFromAPI, buildQueryString } from '../api-client';
+import { sanitizeHtml } from '../utils/sanitize-html';
 
 export interface BlogFilters {
   limit?: number;
@@ -52,67 +53,6 @@ export interface BlogsResponse {
   };
 }
 
-/**
- * Strips full HTML document wrappers from blog content.
- * Content authored in rich-text editors (e.g. Genspark) is sometimes saved
- * as a complete HTML document. This function extracts just the body fragment
- * using indexOf/slice instead of regex so it works reliably on large strings.
- */
-function stripDocumentWrappers(html: string): string {
-  if (!html) return '';
-  let result = html;
-
-  // If a <body …> open tag exists, extract its inner content
-  const bodyOpenIdx = result.search(/<body[\s>]/i);
-  if (bodyOpenIdx !== -1) {
-    const bodyTagEnd = result.indexOf('>', bodyOpenIdx) + 1;
-    const bodyCloseIdx = result.toLowerCase().lastIndexOf('</body>');
-    result = bodyCloseIdx > bodyTagEnd
-      ? result.slice(bodyTagEnd, bodyCloseIdx)
-      : result.slice(bodyTagEnd);
-  } else {
-    // No opening <body> — trim any trailing </body> / </html>
-    const bc = result.toLowerCase().lastIndexOf('</body>');
-    if (bc !== -1) result = result.slice(0, bc);
-    const hc = result.toLowerCase().lastIndexOf('</html>');
-    if (hc !== -1) result = result.slice(0, hc);
-  }
-
-  // Remove <head>…</head> if present
-  const headOpen = result.toLowerCase().indexOf('<head');
-  if (headOpen !== -1) {
-    const headClose = result.toLowerCase().indexOf('</head>');
-    if (headClose !== -1) result = result.slice(0, headOpen) + result.slice(headClose + 7);
-  }
-
-  // Remove <html …> / </html> wrapper tags
-  result = result.replace(/<html[^>]*>/gi, '').replace(/<\/html>/gi, '');
-
-  // Remove <style> blocks (they would apply globally and override page styles)
-  while (result.toLowerCase().includes('<style')) {
-    const so = result.toLowerCase().indexOf('<style');
-    const sc = result.toLowerCase().indexOf('</style>', so);
-    if (sc === -1) break;
-    result = result.slice(0, so) + result.slice(sc + 8);
-  }
-
-  // Remove <script> blocks for security
-  while (result.toLowerCase().includes('<script')) {
-    const so = result.toLowerCase().indexOf('<script');
-    const sc = result.toLowerCase().indexOf('</script>', so);
-    if (sc === -1) break;
-    result = result.slice(0, so) + result.slice(sc + 9);
-  }
-
-  // ── Final hard-strip: remove any stray closing document tags the above
-  // logic may have missed (e.g. <body> with attributes containing '>',
-  // content that only has </body></html> with no opening <body> tag, etc).
-  // </body> and </html> are NEVER valid inside an HTML fragment — safe to
-  // strip unconditionally.
-  result = result.replace(/<\/body>/gi, '').replace(/<\/html>/gi, '');
-
-  return result.trim();
-}
 
 /**
  * Maps raw backend blog records (which only contain id/title/slug/content/
@@ -121,7 +61,7 @@ function stripDocumentWrappers(html: string): string {
  */
 function normalizeBlogPost(raw: Record<string, any>): BlogPost {
   // Strip any full-document HTML wrappers before processing the content.
-  const cleanContent = stripDocumentWrappers(raw.content || '');
+  const cleanContent = sanitizeHtml(raw.content || '');
 
   // Sample only the first 2 000 characters to estimate word count —
   // avoids running a regex over a potentially large HTML document.

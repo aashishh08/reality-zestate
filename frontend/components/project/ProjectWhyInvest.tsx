@@ -22,6 +22,11 @@ interface ProjectWhyInvestProps {
   projectTitle?: string;
   propertyId?: string;
   propertySlug?: string;
+  whyInvestStats?: {
+    annualAppreciation?: string;
+    rentalYield?: string;
+    preLaunchGain?: string;
+  };
 }
 
 const iconMap = {
@@ -31,7 +36,7 @@ const iconMap = {
   calendar: Calendar,
 };
 
-export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectTitle = "Project", propertyId, propertySlug }: ProjectWhyInvestProps) {
+export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectTitle = "Project", propertyId, propertySlug, whyInvestStats }: ProjectWhyInvestProps) {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -200,7 +205,9 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
                 transition={{ delay: 0.1 }}
                 className="bg-[#1A1A2E] rounded-xl p-6 text-center"
               >
-                <p className="text-[#C9A961] text-2xl font-bold mb-2">12-15%</p>
+                <p className="text-[#C9A961] text-2xl font-bold mb-2">
+                  {whyInvestStats?.annualAppreciation ?? '12-15%'}
+                </p>
                 <p className="text-gray-300 text-sm font-medium">Annual Appreciation</p>
               </motion.div>
 
@@ -210,7 +217,9 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
                 transition={{ delay: 0.2 }}
                 className="bg-[#1A1A2E] rounded-xl p-6 text-center"
               >
-                <p className="text-[#C9A961] text-2xl font-bold mb-2">3.5-4.5%</p>
+                <p className="text-[#C9A961] text-2xl font-bold mb-2">
+                  {whyInvestStats?.rentalYield ?? '3.5-4.5%'}
+                </p>
                 <p className="text-gray-300 text-sm font-medium">Rental Yield</p>
               </motion.div>
 
@@ -220,7 +229,9 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
                 transition={{ delay: 0.3 }}
                 className="bg-[#1A1A2E] rounded-xl p-6 text-center"
               >
-                <p className="text-[#C9A961] text-2xl font-bold mb-2">25-30%</p>
+                <p className="text-[#C9A961] text-2xl font-bold mb-2">
+                  {whyInvestStats?.preLaunchGain ?? '25-30%'}
+                </p>
                 <p className="text-gray-300 text-sm font-medium">Pre-Launch Gain</p>
               </motion.div>
             </div>

@@ -23,19 +23,19 @@ const contactCards = [
   {
     icon: Mail,
     label: "Email",
-    value: "info@superluxere.com",
-    href: "mailto:info@superluxere.com",
+    value: CONTACT_INFO.EMAIL,
+    href: `mailto:${CONTACT_INFO.EMAIL}`,
   },
   {
     icon: MapPin,
     label: "Address",
-    value: "Golf Course Road, Sector 54, Gurgaon",
+    value: CONTACT_INFO.ADDRESS,
     href: "#location",
   },
   {
     icon: Clock,
     label: "Working Hours",
-    value: "Mon - Sun: 10:00 AM – 7:00 PM",
+    value: CONTACT_INFO.HOURS,
     href: null,
   },
 ];
