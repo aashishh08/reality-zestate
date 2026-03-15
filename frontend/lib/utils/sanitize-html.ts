@@ -68,5 +68,22 @@ export function sanitizeHtml(html: string): string {
     .replace(/<\s*html[^>]*>/gi, '')       // opening <html ...>
     .replace(/<!DOCTYPE[^>]*>/gi, '');     // any remaining DOCTYPE
 
+  // Step 7: Remove trailing unbalanced </div> tags.
+  // AI-generated content often wraps everything in a <div class="container"> inside
+  // <body>. After the body wrapper is stripped, its closing </div> is left behind.
+  // An extra </div> in dangerouslySetInnerHTML consumes the prose wrapper's closing
+  // tag, causing the Tags / CTA sections to be injected inside the prose div in the
+  // browser DOM — triggering a React hydration mismatch on SSR.
+  const openDivs  = (result.match(/<div[\s>]/gi) || []).length;
+  const closeDivs = (result.match(/<\/div\s*>/gi) || []).length;
+  let excess = closeDivs - openDivs;
+  while (excess > 0) {
+    const last = result.lastIndexOf('</div');
+    if (last === -1) break;
+    const end = result.indexOf('>', last) + 1;
+    result = result.slice(0, last) + result.slice(end);
+    excess--;
+  }
+
   return result.trim();
 }
