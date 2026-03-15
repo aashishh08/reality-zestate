@@ -13,19 +13,23 @@ export function sanitizeHtml(html: string): string {
 
   let result = html;
 
+  // Step 0: Strip <!DOCTYPE ...>
+  result = result.replace(/<!DOCTYPE[^>]*>/gi, '');
+
   // Step 1: Extract <body>…</body> inner content if present
+  // /<body[\s>]/i catches <body>, <body class="">, <body\n>, etc.
   const bodyOpenIdx = result.search(/<body[\s>]/i);
   if (bodyOpenIdx !== -1) {
     const bodyTagEnd = result.indexOf('>', bodyOpenIdx) + 1;
-    const bodyCloseIdx = result.toLowerCase().lastIndexOf('</body>');
+    const bodyCloseIdx = result.toLowerCase().lastIndexOf('</body');
     result = (bodyCloseIdx !== -1 && bodyCloseIdx > bodyTagEnd)
       ? result.slice(bodyTagEnd, bodyCloseIdx)
       : result.slice(bodyTagEnd);
   } else {
     // No opening <body> — strip any trailing closing document tags
-    const bc = result.toLowerCase().lastIndexOf('</body>');
+    const bc = result.toLowerCase().lastIndexOf('</body');
     if (bc !== -1) result = result.slice(0, bc);
-    const hc = result.toLowerCase().lastIndexOf('</html>');
+    const hc = result.toLowerCase().lastIndexOf('</html');
     if (hc !== -1) result = result.slice(0, hc);
   }
 
@@ -37,7 +41,7 @@ export function sanitizeHtml(html: string): string {
   }
 
   // Step 3: Remove <html …> / </html>
-  result = result.replace(/<html[^>]*>/gi, '').replace(/<\/html>/gi, '');
+  result = result.replace(/<\s*html[^>]*>/gi, '').replace(/<\s*\/\s*html[^>]*>/gi, '');
 
   // Step 4: Remove <style>…</style> blocks (prevent global style leakage)
   while (result.toLowerCase().includes('<style')) {
@@ -55,14 +59,14 @@ export function sanitizeHtml(html: string): string {
     result = result.slice(0, so) + result.slice(sc + 9);
   }
 
-  // Step 6: Final hard-strip — remove ALL remaining body/html tags.
-  // <body …> opening tags are stripped here in addition to closing tags.
-  // Stray opening <body> tags are never valid in an HTML fragment and can
-  // cause browser styling anomalies from body-level CSS rules.
+  // Step 6: Nuclear final strip — catches ALL whitespace variants.
+  // <\s*\/\s*body handles </body>, < /body>, </ body>, </body >, </body\n>, etc.
   result = result
-    .replace(/<body[^>]*>/gi, '')
-    .replace(/<\/body>/gi, '')
-    .replace(/<\/html>/gi, '');
+    .replace(/<\s*body[^>]*>/gi, '')       // opening <body ...>
+    .replace(/<\s*\/\s*body[^>]*>/gi, '')  // closing </body> ALL variants
+    .replace(/<\s*\/\s*html[^>]*>/gi, '')  // closing </html> ALL variants
+    .replace(/<\s*html[^>]*>/gi, '')       // opening <html ...>
+    .replace(/<!DOCTYPE[^>]*>/gi, '');     // any remaining DOCTYPE
 
   return result.trim();
 }

@@ -77,6 +77,16 @@ function normalizeBlogPost(raw: Record<string, any>): BlogPost {
   const autoExcerpt =
     sample.length > 160 ? sample.substring(0, 157) + '...' : sample;
 
+  if (process.env.NODE_ENV !== 'production' || process.env.BLOG_DEBUG === '1') {
+    const raw_ = raw.content || '';
+    console.log('[blog:normalizeBlogPost] slug=', raw.slug);
+    console.log('[blog:normalizeBlogPost] raw content length=', raw_.length);
+    console.log('[blog:normalizeBlogPost] raw first 300=', raw_.slice(0, 300));
+    console.log('[blog:normalizeBlogPost] has </body>=', /<\/body/i.test(raw_));
+    console.log('[blog:normalizeBlogPost] has </html>=', /<\/html/i.test(raw_));
+    console.log('[blog:normalizeBlogPost] after sanitize </body>=', /<\/body/i.test(cleanContent));
+  }
+
   return {
     id: raw.id,
     slug: raw.slug,

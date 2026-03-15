@@ -110,6 +110,22 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const cleanContent = sanitizeHtml(post.content || '');
   const toc = extractTOC(cleanContent);
   const contentWithIds = injectHeadingIds(cleanContent);
+
+  if (process.env.NODE_ENV !== 'production' || process.env.BLOG_DEBUG === '1') {
+    console.log('[blog:page] slug=', slug);
+    console.log('[blog:page] cleanContent length=', cleanContent.length);
+    console.log('[blog:page] cleanContent first 300=', cleanContent.slice(0, 300));
+    console.log('[blog:page] dangerous tags in cleanContent:', {
+      body: /<\/?\s*body/i.test(cleanContent),
+      html: /<\/?\s*html/i.test(cleanContent),
+      doctype: /<!doctype/i.test(cleanContent),
+    });
+    console.log('[blog:page] dangerous tags in contentWithIds:', {
+      body: /<\/?\s*body/i.test(contentWithIds),
+      html: /<\/?\s*html/i.test(contentWithIds),
+    });
+  }
+
   const shareUrl = `https://superluxere.com/blogs/${slug}`;
   const authorName = post.author?.name || 'Team Superluxere';
   const readTime = post.readTime ?? 1;

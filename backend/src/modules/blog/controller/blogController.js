@@ -1,4 +1,4 @@
-import blogService from '../service/blogService.js';
+import blogService, { stripHtmlDocumentWrapper } from '../service/blogService.js';
 
 class BlogController {
   async createBlog(req, res) {
@@ -17,7 +17,7 @@ class BlogController {
     const blog = await blogService.createBlog({
       title,
       slug,
-      content,
+      content: stripHtmlDocumentWrapper(content),
       isPublished: isPublished || false,
       excerpt: excerpt || null,
       authorName: authorName || 'Team Superluxere',
@@ -44,7 +44,7 @@ class BlogController {
     const blog = await blogService.updateBlog(id, {
       title,
       slug,
-      content,
+      content: content !== undefined ? stripHtmlDocumentWrapper(content) : undefined,
       isPublished,
       excerpt,
       authorName,
