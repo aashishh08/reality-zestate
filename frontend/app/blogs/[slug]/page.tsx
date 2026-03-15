@@ -153,7 +153,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </span>
                 ))}
               </div>
-              <h1 className="text-3xl md:text-5xl font-playfair font-bold text-white leading-tight">
+              <h1 className="text-2xl md:text-4xl font-playfair font-bold text-white leading-tight">
                 {post.title}
               </h1>
             </div>
@@ -169,7 +169,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </span>
               ))}
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-gray-900 leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-4xl font-playfair font-bold text-gray-900 leading-tight">
               {post.title}
             </h1>
           </div>
@@ -257,8 +257,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <div
               className="prose prose-lg max-w-none
                 prose-headings:font-playfair prose-headings:font-bold prose-headings:text-gray-900
-                prose-h2:text-3xl prose-h2:mt-14 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-amber-200
-                prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-amber-800
+                prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-amber-200
+                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-amber-800
                 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
                 prose-a:text-amber-700 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
                 prose-strong:text-gray-900 prose-strong:font-semibold
