@@ -1,11 +1,10 @@
 'use strict';
 
-module.exports = {
-    async up(queryInterface, Sequelize) {
-        const transaction = await queryInterface.sequelize.transaction();
-        try {
-            // 1. Update The Grand Arch
-            await queryInterface.sequelize.query(`
+export const up = async (queryInterface, Sequelize) => {
+  const transaction = await queryInterface.sequelize.transaction();
+  try {
+    // 1. Update The Grand Arch
+    await queryInterface.sequelize.query(`
         UPDATE property_sections
         SET data = '{
           "status":         "Active / Ready to Move",
@@ -32,8 +31,8 @@ module.exports = {
         AND type = 'keyTakeaways';
       `, { transaction });
 
-            // 2. Sobha Crescent
-            await queryInterface.sequelize.query(`
+    // 2. Sobha Crescent
+    await queryInterface.sequelize.query(`
         DO $$
         DECLARE
           v_property_id UUID;
@@ -107,18 +106,18 @@ module.exports = {
         END $$;
       `, { transaction });
 
-            await transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
-    },
+    await transaction.commit();
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
+  }
+};
 
-    async down(queryInterface, Sequelize) {
-        // Revert to typical string array layout
-        const transaction = await queryInterface.sequelize.transaction();
-        try {
-            await queryInterface.sequelize.query(`
+export const down = async (queryInterface, Sequelize) => {
+  // Revert to typical string array layout
+  const transaction = await queryInterface.sequelize.transaction();
+  try {
+    await queryInterface.sequelize.query(`
         UPDATE property_sections
         SET data = '{
           "takeaways": [
@@ -131,10 +130,9 @@ module.exports = {
         "updatedAt" = NOW()
         WHERE type = 'keyTakeaways';
       `, { transaction });
-            await transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
-    }
-};
+    await transaction.commit();
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
+  }
+}
