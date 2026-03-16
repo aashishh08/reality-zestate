@@ -29,7 +29,7 @@ services:
       NODE_ENV: production
       PORT: 4002
       DB_HOST: postgres
-      DB_PORT: 5433
+      DB_PORT: 5432
       DB_USER: reality_estate_user
       DB_PASSWORD: reality_estate_password
       DB_NAME: reality_estate_db
