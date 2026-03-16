@@ -12,6 +12,7 @@ import {
     Building2, Plus, ChevronRight, ChevronLeft, CheckCircle2, XCircle, RefreshCw, Trash2, Eye, Loader2, AlertTriangle,
 } from 'lucide-react';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
+import { ImageUploadInput } from '@/components/admin/ImageUploadInput';
 
 // ─── Step definitions (mirrors create page) ───────────────────────────────────
 const STEPS = [
@@ -634,7 +635,7 @@ export default function EditPropertyPage() {
                             {step === 1 && (
                                 <div className="space-y-6">
                                     <SectionCard title="🏠 Hero Section">
-                                        <Input label="Hero Image URL" value={hero.heroImage} onChange={e => setHero(h => ({ ...h, heroImage: e.target.value }))} placeholder="/images/hero.jpg" />
+                                        <ImageUploadInput label="Hero Image URL" value={hero.heroImage} onChange={url => setHero(h => ({ ...h, heroImage: url }))} placeholder="/images/hero.jpg" />
                                         <Input label="Subtitle" value={hero.subtitle} onChange={e => setHero(h => ({ ...h, subtitle: e.target.value }))} placeholder="Premium Residences in the Heart of Pune" />
                                         <Input label="Video URL (YouTube embed)" value={hero.videoUrl} onChange={e => setHero(h => ({ ...h, videoUrl: e.target.value }))} placeholder="https://www.youtube.com/embed/..." />
                                     </SectionCard>
@@ -789,9 +790,14 @@ export default function EditPropertyPage() {
                                     <SectionCard title="🖼️ Gallery Images">
                                         <div className="space-y-2">
                                             {gallery.map((g, i) => (
-                                                <div key={i} className="flex gap-2">
-                                                    <input value={g} onChange={e => updateItem(setGallery, i, e.target.value)} placeholder="/images/gallery-1.jpg"
-                                                        className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                <div key={i} className="flex gap-2 items-center">
+                                                    <ImageUploadInput
+                                                        value={g}
+                                                        onChange={url => updateItem(setGallery, i, url)}
+                                                        placeholder="/images/gallery-1.jpg"
+                                                        showPreview={false}
+                                                        className="flex-1"
+                                                    />
                                                     {gallery.length > 1 && <RemoveBtn onClick={() => removeItem(setGallery, i)} />}
                                                 </div>
                                             ))}
@@ -805,7 +811,7 @@ export default function EditPropertyPage() {
                             {step === 6 && (
                                 <div className="space-y-6">
                                     <SectionCard title="🗺️ Master Plan">
-                                        <Input label="Master Plan Image URL" value={masterPlan.imageUrl} onChange={e => setMasterPlan(m => ({ ...m, imageUrl: e.target.value }))} placeholder="/images/masterplan.jpg" />
+                                        <ImageUploadInput label="Master Plan Image URL" value={masterPlan.imageUrl} onChange={url => setMasterPlan(m => ({ ...m, imageUrl: url }))} placeholder="/images/masterplan.jpg" />
                                         <div className="space-y-1">
                                             <div className="flex items-center justify-between mb-1">
                                                 <label className="text-xs text-gray-400 font-medium">
@@ -835,7 +841,7 @@ export default function EditPropertyPage() {
                                 <div className="space-y-6">
                                     <SectionCard title="📍 Location Details">
                                         <Input label="Full Address" value={locSection.address} onChange={e => setLocSection(l => ({ ...l, address: e.target.value }))} placeholder="Maan, Hinjewadi Phase II, Pune – 411057" />
-                                        <Input label="Map Image URL" value={locSection.mapImage} onChange={e => setLocSection(l => ({ ...l, mapImage: e.target.value }))} placeholder="/images/map.jpg" />
+                                        <ImageUploadInput label="Map Image URL" value={locSection.mapImage} onChange={url => setLocSection(l => ({ ...l, mapImage: url }))} placeholder="/images/map.jpg" />
                                     </SectionCard>
                                     <SectionCard title="🏢 Nearby Places">
                                         <div className="space-y-4">
@@ -934,9 +940,14 @@ export default function EditPropertyPage() {
                                                             className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
                                                         <input value={a.icon} onChange={e => setCustomAmenities(prev => prev.map((x, j) => j === i ? { ...x, icon: e.target.value } : x))} placeholder="Emoji e.g. 🌟"
                                                             className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                        <div className="flex gap-2">
-                                                            <input value={a.imageUrl} onChange={e => setCustomAmenities(prev => prev.map((x, j) => j === i ? { ...x, imageUrl: e.target.value } : x))} placeholder="/images/amenity.jpg (optional)"
-                                                                className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                        <div className="flex gap-2 items-center">
+                                                            <ImageUploadInput
+                                                                value={a.imageUrl}
+                                                                onChange={url => setCustomAmenities(prev => prev.map((x, j) => j === i ? { ...x, imageUrl: url } : x))}
+                                                                placeholder="/images/amenity.jpg"
+                                                                showPreview={false}
+                                                                className="flex-1"
+                                                            />
                                                             {customAmenities.length > 1 && <RemoveBtn onClick={() => setCustomAmenities(prev => prev.filter((_, j) => j !== i))} />}
                                                         </div>
                                                     </div>
@@ -955,9 +966,14 @@ export default function EditPropertyPage() {
                                                         className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
                                                     <input value={f.price} onChange={e => updateItemField(setFloorPlans, i, 'price', e.target.value)} placeholder="₹ 1.5 Cr"
                                                         className="px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    <div className="flex gap-2">
-                                                        <input value={f.imageUrl} onChange={e => updateItemField(setFloorPlans, i, 'imageUrl', e.target.value)} placeholder="/images/plan.jpg"
-                                                            className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
+                                                    <div className="flex gap-2 items-center">
+                                                        <ImageUploadInput
+                                                            value={f.imageUrl}
+                                                            onChange={url => updateItemField(setFloorPlans, i, 'imageUrl', url)}
+                                                            placeholder="/images/plan.jpg"
+                                                            showPreview={false}
+                                                            className="flex-1"
+                                                        />
                                                         {floorPlans.length > 1 && <RemoveBtn onClick={() => removeItem(setFloorPlans, i)} />}
                                                     </div>
                                                 </div>

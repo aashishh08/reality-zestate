@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { createBlog } from '@/lib/api/blogs';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
+import { ImageUploadInput } from '@/components/admin/ImageUploadInput';
 
 export default function CreateBlogPage() {
   const router = useRouter();
@@ -248,24 +249,18 @@ export default function CreateBlogPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="featuredImage" className="block text-sm font-medium text-gray-300 mb-2">Featured Image URL</label>
-                  <input
+                  <label htmlFor="featuredImage" className="block text-sm font-medium text-gray-300 mb-2">Featured Image</label>
+                  <ImageUploadInput
                     id="featuredImage"
-                    type="url"
                     value={featuredImage}
-                    onChange={(e) => setFeaturedImage(e.target.value)}
-                    placeholder="https://images.unsplash.com/photo-..."
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition"
+                    onChange={setFeaturedImage}
+                    placeholder="https://images.unsplash.com/photo-... or upload below"
+                    showPreview={true}
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Paste a full image URL. Shown as the hero image on the blog post and thumbnail on listing cards.
+                    Paste a URL or click Upload to choose a file. Shown as hero image and listing thumbnail.
                     If blank, an amber gradient is shown.
                   </p>
-                  {featuredImage && (
-                    <div className="mt-2 relative h-32 rounded-lg overflow-hidden border border-gray-700">
-                      <img src={featuredImage} alt="preview" className="w-full h-full object-cover" />
-                    </div>
-                  )}
                 </div>
               </div>
 

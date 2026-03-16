@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { getBlogById } from '@/lib/api/admin';
 import { updateBlog } from '@/lib/api/blogs';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
+import { ImageUploadInput } from '@/components/admin/ImageUploadInput';
 
 export default function EditBlogPage() {
   const router = useRouter();
@@ -235,15 +236,14 @@ export default function EditBlogPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="featuredImage" className="block text-sm font-medium text-gray-300 mb-2">Featured Image URL</label>
-                    <input id="featuredImage" type="url" value={featuredImage} onChange={(e) => setFeaturedImage(e.target.value)}
-                      placeholder="https://..."
-                      className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition" />
-                    {featuredImage && (
-                      <div className="mt-2 relative h-32 rounded-lg overflow-hidden border border-gray-700">
-                        <img src={featuredImage} alt="preview" className="w-full h-full object-cover" />
-                      </div>
-                    )}
+                    <label htmlFor="featuredImage" className="block text-sm font-medium text-gray-300 mb-2">Featured Image</label>
+                    <ImageUploadInput
+                      id="featuredImage"
+                      value={featuredImage}
+                      onChange={setFeaturedImage}
+                      placeholder="https://... or upload below"
+                      showPreview={true}
+                    />
                   </div>
                 </div>
 
