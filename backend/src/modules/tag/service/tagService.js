@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { Tag, PropertyTag, Property, Developer, Location, sequelize } from '../../../models/index.js';
+import { Tag, PropertyTag, Property, Developer, Location, Category, sequelize } from '../../../models/index.js';
 
 class TagService {
     // ── CRUD ────────────────────────────────────────────────────────────────────
@@ -95,6 +95,7 @@ class TagService {
             include: [
                 { model: Developer },
                 { model: Location },
+                { model: Category, through: { attributes: [] } },
                 {
                     model: Tag,
                     as: 'Tags',

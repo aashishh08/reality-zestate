@@ -105,6 +105,22 @@ class PropertyController {
     });
   }
 
+  // ── Get full property by ID for admin editing ────────────────────────────────
+  async getPropertyFullById(req, res) {
+    const property = await propertyService.getPropertyFullById(req.params.id);
+    res.json({ success: true, data: property });
+  }
+
+  // ── Full property update (core + sections + tags + categories) ────────────────
+  async updatePropertyFull(req, res) {
+    const result = await propertyService.updatePropertyFull(req.params.id, req.body);
+    res.json({
+      success: true,
+      data: result,
+      message: `Property "${result.property.title}" updated successfully with ${result.sectionsUpdated} section(s).`,
+    });
+  }
+
   // ── Admin listing: all properties with section info ─────────────────────
   async listAllProperties(req, res) {
     const { isPublished, propertyType, limit = 100, offset = 0 } = req.query;

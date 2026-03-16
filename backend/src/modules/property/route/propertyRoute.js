@@ -26,6 +26,24 @@ router.post('/full', authMiddleware, async (req, res, next) => {
   }
 });
 
+// Full property update (core + sections + tags + categories in one shot)
+router.put('/full/:id', authMiddleware, async (req, res, next) => {
+  try {
+    await propertyController.updatePropertyFull(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get a single property by ID for admin editing (includes all sections, tags, categories)
+router.get('/admin/:id', authMiddleware, async (req, res, next) => {
+  try {
+    await propertyController.getPropertyFullById(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Public routes
 router.get('/', async (req, res, next) => {
   try {

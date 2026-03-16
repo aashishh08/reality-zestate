@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import {
     Building2, Plus, TrendingUp, FileText, LogOut, Menu, X,
     Eye, EyeOff, Trash2, ExternalLink, RefreshCw, Search, Filter,
-    Home, CheckCircle2, XCircle, Layers, Users,
+    Home, CheckCircle2, XCircle, Layers, Users, Pencil,
 } from 'lucide-react';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 
@@ -228,6 +228,15 @@ export default function AdminPropertiesPage() {
                                                     {p.isPublished ? <CheckCircle2 className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
                                                     <span>{p.isPublished ? 'Published' : 'Draft'}</span>
                                                 </span>
+
+                                                {/* Edit */}
+                                                <Link
+                                                    href={`/admin/properties/${p.id}/edit`}
+                                                    title="Edit property"
+                                                    className="p-1.5 text-gray-500 hover:text-amber-400 transition"
+                                                >
+                                                    <Pencil className="w-4 h-4" />
+                                                </Link>
 
                                                 {/* Toggle publish */}
                                                 <button

@@ -47,7 +47,8 @@ export async function fetchCategoryProperties(
   categoryId: string,
   filters?: Omit<PropertyFilters, 'categoryId'>,
 ): Promise<PropertyListResponse> {
-  return fetchFromAPI<PropertyListResponse>(`/properties${buildQueryString({ categoryId, ...filters })}`);
+  const response = await fetchFromAPI<any>(`/properties${buildQueryString({ categoryIds: [categoryId], ...filters })}`);
+  return normaliseListResponse(response, filters);
 }
 
 export async function fetchProperties(filters: PropertyFilters): Promise<PropertyListResponse> {

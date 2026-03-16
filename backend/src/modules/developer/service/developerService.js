@@ -1,4 +1,4 @@
-import { Developer, Property, Location, Category } from '../../../models/index.js';
+import { Developer, Property, Location, Category, Tag } from '../../../models/index.js';
 
 class DeveloperService {
   async getDeveloperById(id) {
@@ -44,6 +44,7 @@ class DeveloperService {
         { model: Developer },
         { model: Location },
         { model: Category, through: { attributes: [] } },
+        { model: Tag, as: 'Tags', through: { attributes: [] } },
       ],
       limit: parseInt(limit, 10),
       offset: parseInt(offset, 10),

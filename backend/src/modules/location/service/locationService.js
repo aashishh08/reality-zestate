@@ -1,4 +1,4 @@
-import { Location, Property, Developer, Category } from '../../../models/index.js';
+import { Location, Property, Developer, Category, Tag } from '../../../models/index.js';
 
 class LocationService {
   async getLocationById(id) {
@@ -67,6 +67,7 @@ class LocationService {
         { model: Developer },
         { model: Location },
         { model: Category, through: { attributes: [] } },
+        { model: Tag, as: 'Tags', through: { attributes: [] } },
       ],
       limit: parseInt(limit, 10),
       offset: parseInt(offset, 10),

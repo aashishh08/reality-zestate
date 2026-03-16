@@ -1,40 +1,37 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAdminAuth } from '@/lib/contexts/AdminAuthContext';
 import { ProtectedAdminRoute } from '@/components/admin/ProtectedAdminRoute';
 import {
-    createPropertyFull, fetchDevelopers, fetchLocations, fetchTags, fetchCategories,
+    updatePropertyFull, fetchAdminPropertyById, fetchDevelopers, fetchLocations, fetchTags, fetchCategories,
     RefDeveloper, RefLocation, RefTag, RefCategory, SectionPayload,
 } from '@/lib/api/properties-admin';
 import {
-    Building2, Plus, TrendingUp, FileText, LogOut, Menu, X, Home,
-    ChevronRight, ChevronLeft, CheckCircle2, XCircle, RefreshCw, Trash2, Eye,
+    Building2, Plus, ChevronRight, ChevronLeft, CheckCircle2, XCircle, RefreshCw, Trash2, Eye, Loader2, AlertTriangle,
 } from 'lucide-react';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 
-
-// ─── Step definitions ─────────────────────────────────────────────────────────
+// ─── Step definitions (mirrors create page) ───────────────────────────────────
 const STEPS = [
-    'Basic Info',             // step 0  – meta (slug, title, developer…)
-    'Hero & Intro',           // step 1  → Hero · Intro Text · Highlights bar
-    'Key Takeaways',          // step 2  → 16 structured spec fields
-    'Why Invest',             // step 3  → Reasons + long-form analysis
-    'Overview',               // step 4  → Heading + content paragraphs + features
-    'Gallery',                // step 5  → Image URLs
-    'Master Plan',            // step 6  → Master plan image + description bullets
-    'Location',               // step 7  → Address · map · nearby · connectivity
-    'Amenities & Floor Plans',// step 8  → Amenities + Floor Plans
-    'Payment Plans',          // step 9  → Payment plan items
-    'Team',                   // step 10 → Team members + team highlights
-    'FAQs & More',            // step 11 → FAQs
+    'Basic Info',
+    'Hero & Intro',
+    'Key Takeaways',
+    'Why Invest',
+    'Overview',
+    'Gallery',
+    'Master Plan',
+    'Location',
+    'Amenities & Floor Plans',
+    'Payment Plans',
+    'Team',
+    'FAQs & More',
 ];
 
 // ─── Preset Amenities Catalog ─────────────────────────────────────────────────
 type PresetAmenity = { name: string; icon: string; category: string };
 const PRESET_AMENITIES: PresetAmenity[] = [
-    // Sports & Fitness
     { name: 'Swimming Pool', icon: '🏊', category: 'Sports & Fitness' },
     { name: 'Gymnasium', icon: '💪', category: 'Sports & Fitness' },
     { name: 'Tennis Court', icon: '🎾', category: 'Sports & Fitness' },
@@ -46,7 +43,6 @@ const PRESET_AMENITIES: PresetAmenity[] = [
     { name: 'Cycling Track', icon: '🚴', category: 'Sports & Fitness' },
     { name: 'Jogging Track', icon: '🏃', category: 'Sports & Fitness' },
     { name: 'Indoor Games Room', icon: '🎮', category: 'Sports & Fitness' },
-    // Leisure & Entertainment
     { name: 'Clubhouse', icon: '🏛️', category: 'Leisure & Entertainment' },
     { name: 'Party Lawn', icon: '🎉', category: 'Leisure & Entertainment' },
     { name: 'Amphitheatre', icon: '🎭', category: 'Leisure & Entertainment' },
@@ -55,18 +51,15 @@ const PRESET_AMENITIES: PresetAmenity[] = [
     { name: 'Board Games Lounge', icon: '♟️', category: 'Leisure & Entertainment' },
     { name: 'Rooftop Lounge', icon: '🌆', category: 'Leisure & Entertainment' },
     { name: 'Sky Deck', icon: '🌤️', category: 'Leisure & Entertainment' },
-    // Kids & Family
     { name: "Children's Play Area", icon: '🎪', category: 'Kids & Family' },
     { name: 'Kids Pool', icon: '🛁', category: 'Kids & Family' },
     { name: 'Creche / Day Care', icon: '👶', category: 'Kids & Family' },
     { name: 'Teen Zone', icon: '🎵', category: 'Kids & Family' },
-    // Wellness & Spa
     { name: 'Spa & Wellness Centre', icon: '💆', category: 'Wellness & Spa' },
     { name: 'Sauna', icon: '🧖', category: 'Wellness & Spa' },
     { name: 'Steam Room', icon: '💨', category: 'Wellness & Spa' },
     { name: 'Jacuzzi', icon: '🛀', category: 'Wellness & Spa' },
     { name: 'Salon & Grooming', icon: '💇', category: 'Wellness & Spa' },
-    // Nature & Outdoors
     { name: 'Landscaped Gardens', icon: '🌳', category: 'Nature & Outdoors' },
     { name: 'Terrace Garden', icon: '🌿', category: 'Nature & Outdoors' },
     { name: 'Reflexology Path', icon: '🪨', category: 'Nature & Outdoors' },
@@ -74,12 +67,10 @@ const PRESET_AMENITIES: PresetAmenity[] = [
     { name: 'Senior Citizen Seating Area', icon: '🪑', category: 'Nature & Outdoors' },
     { name: 'Pet Park', icon: '🐾', category: 'Nature & Outdoors' },
     { name: 'Barbeque Area', icon: '🔥', category: 'Nature & Outdoors' },
-    // Dining & Retail
     { name: 'Café / Coffee Shop', icon: '☕', category: 'Dining & Retail' },
     { name: 'Restaurant', icon: '🍽️', category: 'Dining & Retail' },
     { name: 'Convenience Store', icon: '🛒', category: 'Dining & Retail' },
     { name: 'ATM', icon: '🏧', category: 'Dining & Retail' },
-    // Safety & Infrastructure
     { name: '24/7 Security', icon: '🔒', category: 'Safety & Infrastructure' },
     { name: 'CCTV Surveillance', icon: '📷', category: 'Safety & Infrastructure' },
     { name: 'Power Backup', icon: '⚡', category: 'Safety & Infrastructure' },
@@ -93,7 +84,7 @@ const PRESET_AMENITIES: PresetAmenity[] = [
     { name: 'Intercom Facility', icon: '📞', category: 'Safety & Infrastructure' },
     { name: 'Video Door Phone', icon: '📹', category: 'Safety & Infrastructure' },
 ];
-// Group amenities by category for display
+const PRESET_NAMES = new Set(PRESET_AMENITIES.map(a => a.name));
 const AMENITY_CATEGORIES = Array.from(new Set(PRESET_AMENITIES.map(a => a.category)));
 
 // ─── Small reusable UI pieces ─────────────────────────────────────────────────
@@ -138,10 +129,15 @@ const RemoveBtn = ({ onClick }: { onClick: () => void }) => (
 );
 
 // ─── Main page ────────────────────────────────────────────────────────────────
-export default function CreatePropertyPage() {
+export default function EditPropertyPage() {
+    const params = useParams();
+    const propertyId = params.id as string;
     const router = useRouter();
-    const { token, user, logout } = useAdminAuth();
+    const { token } = useAdminAuth();
+
     const [step, setStep] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState('');
     const [saving, setSaving] = useState(false);
     const [done, setDone] = useState<any>(null);
     const [formError, setFormError] = useState('');
@@ -152,19 +148,15 @@ export default function CreatePropertyPage() {
     const [tags, setTags] = useState<RefTag[]>([]);
     const [categories, setCategories] = useState<RefCategory[]>([]);
 
-    // ── Step 1: Basic Info ───────────────────────────────────────────────────────
+    // ── Form state (identical shape to create page) ──────────────────────────
     const [basic, setBasic] = useState({
         slug: '', title: '', propertyType: 'residential' as 'residential' | 'commercial',
         developerId: '', locationId: '', status: 'draft',
         priceMin: '', priceMax: '', isPublished: false,
         tagSlugs: [] as string[], categorySlugs: [] as string[],
     });
-
-    // ── Step 2: Hero & Intro ─────────────────────────────────────────────────────
     const [hero, setHero] = useState({ heroImage: '', subtitle: '', videoUrl: '' });
     const [intro, setIntro] = useState({ introText: '' });
-
-    // ── Step 3: Highlights, Key Takeaways & Overview ──────────────────────────────
     const [highlights, setHighlights] = useState({ landArea: '', possession: '', rera: '', configuration: '', priceRange: '', totalUnits: '' });
     const [keyTakeaways, setKeyTakeaways] = useState({
         status: '', type: '', area: '', configuration: '', sizes: '',
@@ -173,61 +165,212 @@ export default function CreatePropertyPage() {
         phases: '', developer: '', address: '',
     });
     const [overview, setOverview] = useState({ heading: '', content: [''], features: ['', ''] });
-
-    // ── Step 4: Gallery ───────────────────────────────────────────────────────
     const [gallery, setGallery] = useState(['']);
-
-    // ── Step 5: Amenities & Floor Plans ──────────────────────────────────────────
-    // selectedPresetAmenities: Set of amenity names from the preset catalog that are checked
     const [selectedPresetAmenities, setSelectedPresetAmenities] = useState<Set<string>>(new Set());
-    // customAmenities: additional amenities not in the preset list
     const [customAmenities, setCustomAmenities] = useState([{ name: '', icon: '', imageUrl: '' }]);
-
-    // Derived: the actual amenities array used in buildSections() is the union of preset + custom
-    const amenities = [
-        ...PRESET_AMENITIES.filter(a => selectedPresetAmenities.has(a.name)).map(a => ({ name: a.name, icon: a.icon, imageUrl: '' })),
-        ...customAmenities.filter(a => a.name.trim()),
-    ];
-
     const [floorPlans, setFloorPlans] = useState([{ type: '', superArea: '', price: '', imageUrl: '' }]);
-
-    // ── Step 6: Payment Plans & Why Invest ───────────────────────────────────────
     const [paymentPlans, setPaymentPlans] = useState([{ title: '', type: '', description: '' }]);
     const [whyInvest, setWhyInvest] = useState([{ title: '', subtitle: '', icon: '' }]);
     const [investmentText, setInvestmentText] = useState('');
-
-    // ── Step 7: Location ─────────────────────────────────────────────────────────
     const [locSection, setLocSection] = useState({ address: '', mapImage: '' });
     const [nearby, setNearby] = useState([{ category: '', icon: '', items: ['', ''] }]);
     const [connectivity, setConnectivity] = useState([{ place: '', icon: '', time: '' }]);
-
-    // ── Step 8: FAQs / Team / USP / Specs / MasterPlan ───────────────────────────
     const [masterPlan, setMasterPlan] = useState({ imageUrl: '', description: '' });
     const [faqs, setFaqs] = useState([{ question: '', answer: '', category: '' }]);
     const [teamMembers, setTeamMembers] = useState([{ role: '', name: '', color: '#3B82F6', description: '', achievements: [''] }]);
     const [teamHighlights, setTeamHighlights] = useState([{ title: '', subtitle: '' }]);
-    const [whyInvestStats, setWhyInvestStats] = useState({
-        annualAppreciation: '12-15%', rentalYield: '3.5-4.5%', preLaunchGain: '25-30%',
-    });
-    const [amenitiesStats, setAmenitiesStats] = useState({
-        clubhouseSqFt: '100K', amenitiesCount: '25+', swimmingPools: '5', diningOptions: '5',
-    });
+    const [whyInvestStats, setWhyInvestStats] = useState({ annualAppreciation: '12-15%', rentalYield: '3.5-4.5%', preLaunchGain: '25-30%' });
+    const [amenitiesStats, setAmenitiesStats] = useState({ clubhouseSqFt: '100K', amenitiesCount: '25+', swimmingPools: '5', diningOptions: '5' });
     const [floorPlanDescSections, setFloorPlanDescSections] = useState([
         { heading: 'Premium Design', body: '' },
         { heading: 'Smart Layouts', body: '' },
     ]);
 
-    // ── Load reference data ──────────────────────────────────────────────────────
+    // ── Load reference data + property ───────────────────────────────────────
     useEffect(() => {
-        fetchDevelopers().then(setDevelopers).catch(() => { });
-        fetchLocations().then(setLocations).catch(() => { });
-        fetchTags().then(setTags).catch(() => { });
-        fetchCategories().then(setCategories).catch(() => { });
-    }, []);
+        if (!token || !propertyId) return;
 
-    const handleLogout = () => { logout(); router.push('/admin/login'); };
+        Promise.all([
+            fetchDevelopers(),
+            fetchLocations(),
+            fetchTags(),
+            fetchCategories(),
+            fetchAdminPropertyById(propertyId, token),
+        ])
+            .then(([devs, locs, tgs, cats, property]) => {
+                setDevelopers(devs);
+                setLocations(locs);
+                setTags(tgs);
+                setCategories(cats);
+                hydrateForm(property);
+            })
+            .catch(err => setLoadError(err.message || 'Failed to load property'))
+            .finally(() => setLoading(false));
+    }, [token, propertyId]);
 
-    // ── Build sections array from all step data ──────────────────────────────────
+    // ── Hydrate all form state from the fetched property ────────────────────
+    function hydrateForm(p: Awaited<ReturnType<typeof fetchAdminPropertyById>>) {
+        // Core fields
+        setBasic({
+            slug: p.slug,
+            title: p.title,
+            propertyType: p.propertyType,
+            developerId: p.developerId,
+            locationId: p.locationId,
+            status: p.status,
+            priceMin: p.priceMin != null ? String(p.priceMin) : '',
+            priceMax: p.priceMax != null ? String(p.priceMax) : '',
+            isPublished: p.isPublished,
+            tagSlugs: p.Tags?.map(t => t.slug) ?? [],
+            categorySlugs: p.Categories?.map(c => c.slug) ?? [],
+        });
+
+        // Map sections by type
+        const sections = p.PropertySections ?? [];
+        for (const sec of sections) {
+            const d = sec.data as Record<string, any>;
+            switch (sec.type) {
+                case 'heroImage':
+                    setHero({ heroImage: d.image ?? '', subtitle: d.subtitle ?? '', videoUrl: d.videoUrl ?? '' });
+                    break;
+                case 'intro':
+                    setIntro({ introText: d.text ?? '' });
+                    break;
+                case 'highlights':
+                    setHighlights({
+                        landArea: d.landArea ?? '', possession: d.possession ?? '',
+                        rera: d.rera ?? '', configuration: d.configuration ?? '',
+                        priceRange: d.priceRange ?? '', totalUnits: d.totalUnits ?? '',
+                    });
+                    break;
+                case 'keyTakeaways':
+                    setKeyTakeaways({
+                        status: d.status ?? '', type: d.type ?? '', area: d.area ?? '',
+                        configuration: d.configuration ?? '', sizes: d.sizes ?? '',
+                        towers: d.towers ?? '', floors: d.floors ?? '', totalUnits: d.totalUnits ?? '',
+                        clubhouse: d.clubhouse ?? '', priceRange: d.priceRange ?? '',
+                        reraNo: d.reraNo ?? '', launchDate: d.launchDate ?? '',
+                        possessionDate: d.possessionDate ?? '', phases: d.phases ?? '',
+                        developer: d.developer ?? '', address: d.address ?? '',
+                    });
+                    break;
+                case 'overview':
+                    setOverview({
+                        heading: d.heading ?? '',
+                        content: d.content?.length ? d.content : [''],
+                        features: d.features?.length ? d.features : ['', ''],
+                    });
+                    break;
+                case 'gallery':
+                    setGallery(d.images?.length ? d.images : ['']);
+                    break;
+                case 'amenities': {
+                    const items: { name: string; icon: string; image?: string }[] = d.items ?? [];
+                    const presetNames = new Set<string>();
+                    const custom: { name: string; icon: string; imageUrl: string }[] = [];
+                    for (const item of items) {
+                        if (PRESET_NAMES.has(item.name)) {
+                            presetNames.add(item.name);
+                        } else {
+                            custom.push({ name: item.name, icon: item.icon ?? '', imageUrl: item.image ?? '' });
+                        }
+                    }
+                    setSelectedPresetAmenities(presetNames);
+                    setCustomAmenities(custom.length ? custom : [{ name: '', icon: '', imageUrl: '' }]);
+                    if (d.stats) setAmenitiesStats({
+                        clubhouseSqFt: d.stats.clubhouseSqFt ?? '100K',
+                        amenitiesCount: d.stats.amenitiesCount ?? '25+',
+                        swimmingPools: d.stats.swimmingPools ?? '5',
+                        diningOptions: d.stats.diningOptions ?? '5',
+                    });
+                    break;
+                }
+                case 'floorPlans':
+                    setFloorPlans(
+                        d.plans?.length
+                            ? d.plans.map((f: any) => ({ type: f.type ?? '', superArea: f.superArea ?? '', price: f.price ?? '', imageUrl: f.image ?? '' }))
+                            : [{ type: '', superArea: '', price: '', imageUrl: '' }],
+                    );
+                    setFloorPlanDescSections(
+                        d.descriptionSections?.length
+                            ? d.descriptionSections
+                            : [{ heading: 'Premium Design', body: '' }, { heading: 'Smart Layouts', body: '' }],
+                    );
+                    break;
+                case 'paymentPlans':
+                    setPaymentPlans(
+                        d.plans?.length
+                            ? d.plans.map((p: any) => ({ title: p.title ?? '', type: p.type ?? '', description: p.description ?? '' }))
+                            : [{ title: '', type: '', description: '' }],
+                    );
+                    break;
+                case 'whyInvest':
+                    setWhyInvest(
+                        d.reasons?.length
+                            ? d.reasons.map((r: any) => ({ title: r.title ?? '', subtitle: r.subtitle ?? '', icon: r.icon ?? '' }))
+                            : [{ title: '', subtitle: '', icon: '' }],
+                    );
+                    setInvestmentText(d.analysis ?? '');
+                    if (d.stats) setWhyInvestStats({
+                        annualAppreciation: d.stats.annualAppreciation ?? '12-15%',
+                        rentalYield: d.stats.rentalYield ?? '3.5-4.5%',
+                        preLaunchGain: d.stats.preLaunchGain ?? '25-30%',
+                    });
+                    break;
+                case 'location':
+                    setLocSection({ address: d.address ?? '', mapImage: d.mapImage ?? '' });
+                    setNearby(
+                        d.nearby?.length
+                            ? d.nearby.map((n: any) => ({
+                                category: n.category ?? '',
+                                icon: n.icon ?? '',
+                                items: n.items?.length ? n.items.map((i: any) => i.name ?? i) : ['', ''],
+                            }))
+                            : [{ category: '', icon: '', items: ['', ''] }],
+                    );
+                    setConnectivity(
+                        d.connectivity?.length
+                            ? d.connectivity.map((c: any) => ({ place: c.place ?? '', icon: c.icon ?? '', time: c.time ?? '' }))
+                            : [{ place: '', icon: '', time: '' }],
+                    );
+                    break;
+                case 'masterPlan':
+                    setMasterPlan({ imageUrl: d.image ?? '', description: typeof d.description === 'string' ? d.description : '' });
+                    break;
+                case 'faqs':
+                    setFaqs(
+                        d.faqs?.length
+                            ? d.faqs.map((f: any) => ({ question: f.question ?? '', answer: f.answer ?? '', category: f.category ?? '' }))
+                            : [{ question: '', answer: '', category: '' }],
+                    );
+                    break;
+                case 'team':
+                    setTeamMembers(
+                        d.members?.length
+                            ? d.members.map((m: any) => ({
+                                role: m.role ?? '', name: m.name ?? '',
+                                color: m.color ?? '#3B82F6', description: m.description ?? '',
+                                achievements: m.achievements?.length ? m.achievements : [''],
+                            }))
+                            : [{ role: '', name: '', color: '#3B82F6', description: '', achievements: [''] }],
+                    );
+                    setTeamHighlights(
+                        d.highlights?.length
+                            ? d.highlights.map((h: any) => ({ title: h.title ?? '', subtitle: h.subtitle ?? '' }))
+                            : [{ title: '', subtitle: '' }],
+                    );
+                    break;
+            }
+        }
+    }
+
+    // ── Derived: union of preset + custom amenities ──────────────────────────
+    const amenities = [
+        ...PRESET_AMENITIES.filter(a => selectedPresetAmenities.has(a.name)).map(a => ({ name: a.name, icon: a.icon, imageUrl: '' })),
+        ...customAmenities.filter(a => a.name.trim()),
+    ];
+
+    // ── Build sections (identical to create page) ────────────────────────────
     const buildSections = useCallback((): SectionPayload[] => {
         const sec: SectionPayload[] = [];
         let order = 0;
@@ -237,7 +380,6 @@ export default function CreatePropertyPage() {
             sec.push({ type: 'intro', title: 'Intro', order: order++, data: { text: intro.introText } });
         if (highlights.landArea || highlights.rera || highlights.possession)
             sec.push({ type: 'highlights', title: 'Highlights', order: order++, data: { ...highlights } });
-        // Key Takeaways: only include if at least one field is filled
         const ktData: Record<string, string> = {};
         Object.entries(keyTakeaways).forEach(([k, v]) => { if (v.trim()) ktData[k] = v.trim(); });
         if (Object.keys(ktData).length > 0)
@@ -273,12 +415,12 @@ export default function CreatePropertyPage() {
         return sec;
     }, [hero, intro, highlights, keyTakeaways, overview, gallery, selectedPresetAmenities, customAmenities, floorPlans, paymentPlans, whyInvest, investmentText, locSection, nearby, connectivity, masterPlan, faqs, teamMembers, teamHighlights, whyInvestStats, amenitiesStats, floorPlanDescSections]);
 
-    // ── Submit ───────────────────────────────────────────────────────────────────
+    // ── Submit ───────────────────────────────────────────────────────────────
     const handleSubmit = async () => {
         if (!token) return;
         setFormError(''); setSaving(true);
         try {
-            const result = await createPropertyFull({
+            const result = await updatePropertyFull(propertyId, {
                 ...basic,
                 priceMin: basic.priceMin ? Number(basic.priceMin) : null,
                 priceMax: basic.priceMax ? Number(basic.priceMax) : null,
@@ -286,18 +428,52 @@ export default function CreatePropertyPage() {
             }, token);
             setDone(result);
         } catch (e: any) {
-            setFormError(e.message || 'Failed to create property');
-        } finally { setSaving(false); }
+            setFormError(e.message || 'Failed to update property');
+        } finally {
+            setSaving(false);
+        }
     };
 
-    // ── List helpers ─────────────────────────────────────────────────────────────
+    // ── List helpers ─────────────────────────────────────────────────────────
     const addItem = (setter: any, newItem: any) => setter((prev: any[]) => [...prev, newItem]);
     const removeItem = (setter: any, idx: number) => setter((prev: any[]) => prev.filter((_: any, i: number) => i !== idx));
     const updateItem = (setter: any, idx: number, val: any) => setter((prev: any[]) => prev.map((x: any, i: number) => i === idx ? val : x));
     const updateItemField = (setter: any, idx: number, field: string, val: string) =>
         setter((prev: any[]) => prev.map((x: any, i: number) => i === idx ? { ...x, [field]: val } : x));
 
-    // ── Done screen ──────────────────────────────────────────────────────────────
+    // ── Loading screen ───────────────────────────────────────────────────────
+    if (loading) {
+        return (
+            <ProtectedAdminRoute>
+                <div className="flex h-screen bg-gray-900 items-center justify-center">
+                    <div className="text-center space-y-3">
+                        <Loader2 className="w-8 h-8 text-amber-500 animate-spin mx-auto" />
+                        <p className="text-gray-400 text-sm">Loading property…</p>
+                    </div>
+                </div>
+            </ProtectedAdminRoute>
+        );
+    }
+
+    // ── Load error screen ────────────────────────────────────────────────────
+    if (loadError) {
+        return (
+            <ProtectedAdminRoute>
+                <div className="flex h-screen bg-gray-900 items-center justify-center p-8">
+                    <div className="max-w-md w-full bg-gray-800 rounded-2xl border border-red-500/30 p-8 text-center space-y-4">
+                        <AlertTriangle className="w-10 h-10 text-red-400 mx-auto" />
+                        <h2 className="text-white font-bold text-lg">Failed to Load Property</h2>
+                        <p className="text-gray-400 text-sm">{loadError}</p>
+                        <Link href="/admin/properties" className="inline-block px-5 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded-xl text-sm font-semibold transition">
+                            Back to Properties
+                        </Link>
+                    </div>
+                </div>
+            </ProtectedAdminRoute>
+        );
+    }
+
+    // ── Success screen ───────────────────────────────────────────────────────
     if (done) {
         return (
             <ProtectedAdminRoute>
@@ -307,13 +483,13 @@ export default function CreatePropertyPage() {
                             <CheckCircle2 className="w-8 h-8 text-emerald-400" />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-bold text-white">Property Created!</h2>
-                            <p className="text-gray-400 mt-2 text-sm">{done.message || `"${done.data?.property?.title}" is ready.`}</p>
+                            <h2 className="text-2xl font-bold text-white">Property Updated!</h2>
+                            <p className="text-gray-400 mt-2 text-sm">{done.message || `"${done.data?.property?.title}" has been saved.`}</p>
                         </div>
                         <div className="bg-gray-900 rounded-xl p-4 text-left space-y-2">
                             <InfoRow label="Title" value={done.data?.property?.title} />
                             <InfoRow label="Slug" value={done.data?.property?.slug} mono />
-                            <InfoRow label="Sections" value={`${done.data?.sectionsCreated} created`} />
+                            <InfoRow label="Sections" value={`${done.data?.sectionsUpdated} saved`} />
                             <InfoRow label="Status" value={done.data?.property?.isPublished ? '✅ Published' : '📝 Draft'} />
                         </div>
                         <div className="flex gap-3 justify-center flex-wrap">
@@ -321,9 +497,9 @@ export default function CreatePropertyPage() {
                                 className="flex items-center space-x-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-white rounded-xl text-sm font-semibold transition">
                                 <Eye className="w-4 h-4" /><span>View Property</span>
                             </a>
-                            <button onClick={() => { setDone(null); setStep(0); setBasic({ slug: '', title: '', propertyType: 'residential', developerId: '', locationId: '', status: 'draft', priceMin: '', priceMax: '', isPublished: false, tagSlugs: [], categorySlugs: [] }); }}
+                            <button onClick={() => setDone(null)}
                                 className="px-5 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded-xl text-sm font-semibold transition">
-                                Create Another
+                                Continue Editing
                             </button>
                             <Link href="/admin/properties"
                                 className="px-5 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded-xl text-sm font-semibold transition">
@@ -342,13 +518,14 @@ export default function CreatePropertyPage() {
 
                 <AdminSidebar />
 
-                {/* Main */}
                 <div className="flex-1 flex flex-col overflow-hidden">
                     {/* Header */}
                     <div className="h-16 bg-gray-800 border-b border-gray-700 flex items-center justify-between px-8 flex-shrink-0">
                         <div className="flex items-center space-x-3">
                             <Building2 className="w-5 h-5 text-amber-500" />
-                            <h1 className="text-xl font-bold text-white">Create Property</h1>
+                            <Link href="/admin/properties" className="text-gray-400 hover:text-white text-sm transition">Properties</Link>
+                            <span className="text-gray-600">/</span>
+                            <h1 className="text-xl font-bold text-white">Edit Property</h1>
                             <span className="text-gray-500 text-sm">— {STEPS[step]}</span>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -374,7 +551,7 @@ export default function CreatePropertyPage() {
                     <div className="flex-1 overflow-y-auto">
                         <div className="max-w-4xl mx-auto p-8 space-y-6">
 
-                            {/* STEP 1: Basic Info */}
+                            {/* ── STEP 0: Basic Info ─────────────────────────────────────── */}
                             {step === 0 && (
                                 <div className="space-y-6">
                                     <SectionCard title="🏠 Core Details">
@@ -431,7 +608,7 @@ export default function CreatePropertyPage() {
                                                         </button>
                                                     );
                                                 })}
-                                                {tags.length === 0 && <p className="text-gray-500 text-xs">No tags found. Create tags via the API first.</p>}
+                                                {tags.length === 0 && <p className="text-gray-500 text-xs">No tags found.</p>}
                                             </div>
                                         </div>
                                         <div>
@@ -453,7 +630,7 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* ── STEP 2: Hero & Intro (+ Highlights bar) ─────────────────── */}
+                            {/* ── STEP 1: Hero & Intro ───────────────────────────────────── */}
                             {step === 1 && (
                                 <div className="space-y-6">
                                     <SectionCard title="🏠 Hero Section">
@@ -478,14 +655,14 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* ── STEP 3: Key Takeaways ────────────────────────────────────── */}
+                            {/* ── STEP 2: Key Takeaways ──────────────────────────────────── */}
                             {step === 2 && (
                                 <div className="space-y-6">
                                     <SectionCard title="📋 Key Takeaways">
                                         <p className="text-xs text-gray-500 -mt-1">Fill only the fields that apply. Empty fields are hidden on the property page.</p>
                                         <div className="grid grid-cols-2 gap-4">
-                                            <Input label="Status" value={keyTakeaways.status} onChange={e => setKeyTakeaways(k => ({ ...k, status: e.target.value }))} placeholder="Upon Request / Under Construction" />
-                                            <Input label="Type" value={keyTakeaways.type} onChange={e => setKeyTakeaways(k => ({ ...k, type: e.target.value }))} placeholder="Residential / Commercial" />
+                                            <Input label="Status" value={keyTakeaways.status} onChange={e => setKeyTakeaways(k => ({ ...k, status: e.target.value }))} placeholder="Under Construction" />
+                                            <Input label="Type" value={keyTakeaways.type} onChange={e => setKeyTakeaways(k => ({ ...k, type: e.target.value }))} placeholder="Residential" />
                                             <Input label="Area" value={keyTakeaways.area} onChange={e => setKeyTakeaways(k => ({ ...k, area: e.target.value }))} placeholder="12 Acres" />
                                             <Input label="Configuration" value={keyTakeaways.configuration} onChange={e => setKeyTakeaways(k => ({ ...k, configuration: e.target.value }))} placeholder="3 BHK & 4 BHK" />
                                             <Input label="Sizes" value={keyTakeaways.sizes} onChange={e => setKeyTakeaways(k => ({ ...k, sizes: e.target.value }))} placeholder="2200 sq.ft – 2966 sq.ft" />
@@ -494,10 +671,10 @@ export default function CreatePropertyPage() {
                                             <Input label="Total Units" value={keyTakeaways.totalUnits} onChange={e => setKeyTakeaways(k => ({ ...k, totalUnits: e.target.value }))} placeholder="~750 Units" />
                                             <Input label="Clubhouse" value={keyTakeaways.clubhouse} onChange={e => setKeyTakeaways(k => ({ ...k, clubhouse: e.target.value }))} placeholder="75,000 sq.ft" />
                                             <Input label="Price Range" value={keyTakeaways.priceRange} onChange={e => setKeyTakeaways(k => ({ ...k, priceRange: e.target.value }))} placeholder="₹5.50 Cr – ₹7.42 Cr" />
-                                            <Input label="Rera No." value={keyTakeaways.reraNo} onChange={e => setKeyTakeaways(k => ({ ...k, reraNo: e.target.value }))} placeholder="RERA Applied / GGM/650/382/2022/111" />
+                                            <Input label="Rera No." value={keyTakeaways.reraNo} onChange={e => setKeyTakeaways(k => ({ ...k, reraNo: e.target.value }))} placeholder="RERA Applied" />
                                             <Input label="Launch Date" value={keyTakeaways.launchDate} onChange={e => setKeyTakeaways(k => ({ ...k, launchDate: e.target.value }))} placeholder="April 2026" />
                                             <Input label="Possession Date" value={keyTakeaways.possessionDate} onChange={e => setKeyTakeaways(k => ({ ...k, possessionDate: e.target.value }))} placeholder="Dec 2030" />
-                                            <Input label="Phases" value={keyTakeaways.phases} onChange={e => setKeyTakeaways(k => ({ ...k, phases: e.target.value }))} placeholder="Phase 1 / 2 Phases" />
+                                            <Input label="Phases" value={keyTakeaways.phases} onChange={e => setKeyTakeaways(k => ({ ...k, phases: e.target.value }))} placeholder="Phase 1" />
                                             <Input label="Developer" value={keyTakeaways.developer} onChange={e => setKeyTakeaways(k => ({ ...k, developer: e.target.value }))} placeholder="Sobha Limited" />
                                         </div>
                                         <div className="mt-2">
@@ -507,7 +684,7 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* ── STEP 4: Why Invest ───────────────────────────────────────── */}
+                            {/* ── STEP 3: Why Invest ─────────────────────────────────────── */}
                             {step === 3 && (
                                 <div className="space-y-6">
                                     <SectionCard title="📈 Why Invest — Reason Cards">
@@ -528,47 +705,26 @@ export default function CreatePropertyPage() {
                                             ))}
                                         </div>
                                         <AddBtn label="Add Reason" onClick={() => addItem(setWhyInvest, { title: '', subtitle: '', icon: '' })} />
-                                        {/* Investment Analysis — long-form, supports HTML */}
                                         <div>
                                             <div className="flex items-center justify-between mb-1">
                                                 <label className="block text-xs text-gray-400 font-medium">
                                                     Investment Analysis <span className="text-amber-400">(long-form · HTML supported)</span>
                                                 </label>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        const el = document.getElementById('inv-preview');
-                                                        if (el) el.classList.toggle('hidden');
-                                                    }}
-                                                    className="text-xs text-amber-400 hover:text-amber-300 transition underline"
-                                                >
+                                                <button type="button" onClick={() => { const el = document.getElementById('inv-preview'); if (el) el.classList.toggle('hidden'); }}
+                                                    className="text-xs text-amber-400 hover:text-amber-300 transition underline">
                                                     Toggle HTML preview
                                                 </button>
                                             </div>
-                                            <textarea
-                                                value={investmentText}
-                                                onChange={e => setInvestmentText(e.target.value)}
-                                                rows={10}
-                                                placeholder={`Write long-form investment analysis here.\n\nSupports plain text (paragraphs separated by blank lines) OR HTML tags:\n<h2>Why Invest?</h2>\n<p>This development...</p>\n<ul><li>Strong returns</li></ul>`}
-                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono"
-                                            />
-                                            {/* Live preview */}
+                                            <textarea value={investmentText} onChange={e => setInvestmentText(e.target.value)} rows={10}
+                                                placeholder={`Write long-form investment analysis here.\n\nSupports plain text or HTML:\n<h2>Why Invest?</h2>\n<p>This development...</p>`}
+                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono" />
                                             <div id="inv-preview" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-64 overflow-y-auto">
                                                 <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">HTML Preview</p>
                                                 {investmentText ? (
-                                                    /<[a-z][\s\S]*>/i.test(investmentText) ? (
-                                                        <div
-                                                            className="text-gray-700 text-sm leading-relaxed prose-preview"
-                                                            dangerouslySetInnerHTML={{ __html: investmentText }}
-                                                        />
-                                                    ) : (
-                                                        <div className="space-y-3 text-gray-700 text-sm leading-relaxed">
-                                                            {investmentText.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
-                                                        </div>
-                                                    )
-                                                ) : (
-                                                    <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>
-                                                )}
+                                                    /<[a-z][\s\S]*>/i.test(investmentText)
+                                                        ? <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: investmentText }} />
+                                                        : <div className="space-y-3 text-gray-700 text-sm leading-relaxed">{investmentText.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}</div>
+                                                ) : <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>}
                                             </div>
                                         </div>
                                     </SectionCard>
@@ -583,46 +739,29 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* ── STEP 5: Overview ──────────────────────────────────────────── */}
+                            {/* ── STEP 4: Overview ───────────────────────────────────────── */}
                             {step === 4 && (
                                 <div className="space-y-6">
                                     <SectionCard title="📋 Project Overview">
                                         <Input label="Section Heading" value={overview.heading} onChange={e => setOverview(o => ({ ...o, heading: e.target.value }))} placeholder="Overview of the Project" />
-                                        {/* Single HTML-aware content block */}
                                         <div className="space-y-1">
                                             <div className="flex items-center justify-between mb-1">
                                                 <label className="text-xs text-gray-400 font-medium">
-                                                    Content <span className="text-amber-400">(HTML supported — use tags for structure)</span>
+                                                    Content <span className="text-amber-400">(HTML supported)</span>
                                                 </label>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        const el = document.getElementById('ov-preview-0');
-                                                        if (el) el.classList.toggle('hidden');
-                                                    }}
-                                                    className="text-xs text-amber-400 hover:text-amber-300 transition underline"
-                                                >
-                                                    Toggle preview
-                                                </button>
+                                                <button type="button" onClick={() => { const el = document.getElementById('ov-preview-0'); if (el) el.classList.toggle('hidden'); }}
+                                                    className="text-xs text-amber-400 hover:text-amber-300 transition underline">Toggle preview</button>
                                             </div>
-                                            <textarea
-                                                value={overview.content[0] ?? ''}
-                                                onChange={e => setOverview(o => ({ ...o, content: [e.target.value] }))}
-                                                rows={12}
-                                                placeholder={`Write the full overview here — plain text or HTML:\n\n<h3>About the Project</h3>\n<p>This development...</p>\n<ul>\n  <li>Feature one</li>\n  <li>Feature two</li>\n</ul>`}
-                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono"
-                                            />
+                                            <textarea value={overview.content[0] ?? ''} onChange={e => setOverview(o => ({ ...o, content: [e.target.value] }))} rows={12}
+                                                placeholder={`Write the full overview here — plain text or HTML:\n\n<h3>About the Project</h3>\n<p>This development...</p>`}
+                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono" />
                                             <div id="ov-preview-0" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-64 overflow-y-auto">
                                                 <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Preview</p>
-                                                {overview.content[0] ? (
-                                                    overview.content[0].includes('<') ? (
-                                                        <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: overview.content[0] }} />
-                                                    ) : (
-                                                        <p className="text-gray-700 text-sm leading-relaxed">{overview.content[0]}</p>
-                                                    )
-                                                ) : (
-                                                    <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>
-                                                )}
+                                                {overview.content[0]
+                                                    ? overview.content[0].includes('<')
+                                                        ? <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: overview.content[0] }} />
+                                                        : <p className="text-gray-700 text-sm leading-relaxed">{overview.content[0]}</p>
+                                                    : <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>}
                                             </div>
                                         </div>
                                         <div>
@@ -644,7 +783,7 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* ── STEP 6: Gallery ───────────────────────────────────────────── */}
+                            {/* ── STEP 5: Gallery ────────────────────────────────────────── */}
                             {step === 5 && (
                                 <div className="space-y-6">
                                     <SectionCard title="🖼️ Gallery Images">
@@ -662,55 +801,36 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* ── STEP 7: Master Plan ───────────────────────────────────────── */}
+                            {/* ── STEP 6: Master Plan ────────────────────────────────────── */}
                             {step === 6 && (
                                 <div className="space-y-6">
                                     <SectionCard title="🗺️ Master Plan">
                                         <Input label="Master Plan Image URL" value={masterPlan.imageUrl} onChange={e => setMasterPlan(m => ({ ...m, imageUrl: e.target.value }))} placeholder="/images/masterplan.jpg" />
-                                        {/* Single HTML-aware description */}
                                         <div className="space-y-1">
                                             <div className="flex items-center justify-between mb-1">
                                                 <label className="text-xs text-gray-400 font-medium">
-                                                    Description <span className="text-amber-400">(HTML supported — use tags for structure)</span>
+                                                    Description <span className="text-amber-400">(HTML supported)</span>
                                                 </label>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        const el = document.getElementById('mp-preview');
-                                                        if (el) el.classList.toggle('hidden');
-                                                    }}
-                                                    className="text-xs text-amber-400 hover:text-amber-300 transition underline"
-                                                >
-                                                    Toggle preview
-                                                </button>
+                                                <button type="button" onClick={() => { const el = document.getElementById('mp-preview'); if (el) el.classList.toggle('hidden'); }}
+                                                    className="text-xs text-amber-400 hover:text-amber-300 transition underline">Toggle preview</button>
                                             </div>
-                                            <textarea
-                                                value={masterPlan.description}
-                                                onChange={e => setMasterPlan(m => ({ ...m, description: e.target.value }))}
-                                                rows={12}
-                                                placeholder={`Describe the master plan — plain text or HTML:\n\n<h3>Thoughtfully Designed Layout</h3>\n<p>The master plan showcases...</p>\n<ul>\n  <li>Green corridors</li>\n  <li>Wide internal roads</li>\n</ul>`}
-                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono"
-                                            />
+                                            <textarea value={masterPlan.description} onChange={e => setMasterPlan(m => ({ ...m, description: e.target.value }))} rows={12}
+                                                placeholder={`Describe the master plan — plain text or HTML:\n\n<h3>Thoughtfully Designed Layout</h3>\n<p>The master plan showcases...</p>`}
+                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono" />
                                             <div id="mp-preview" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-64 overflow-y-auto">
                                                 <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Preview</p>
-                                                {masterPlan.description ? (
-                                                    masterPlan.description.includes('<') ? (
-                                                        <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: masterPlan.description }} />
-                                                    ) : (
-                                                        <div className="space-y-3 text-gray-700 text-sm leading-relaxed">
-                                                            {masterPlan.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
-                                                        </div>
-                                                    )
-                                                ) : (
-                                                    <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>
-                                                )}
+                                                {masterPlan.description
+                                                    ? masterPlan.description.includes('<')
+                                                        ? <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: masterPlan.description }} />
+                                                        : <div className="space-y-3 text-gray-700 text-sm leading-relaxed">{masterPlan.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}</div>
+                                                    : <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>}
                                             </div>
                                         </div>
                                     </SectionCard>
                                 </div>
                             )}
 
-                            {/* ── STEP 8: Location ──────────────────────────────────────────── */}
+                            {/* ── STEP 7: Location ───────────────────────────────────────── */}
                             {step === 7 && (
                                 <div className="space-y-6">
                                     <SectionCard title="📍 Location Details">
@@ -762,11 +882,10 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* ── STEP 9: Amenities & Floor Plans ──────────────────────────── */}
+                            {/* ── STEP 8: Amenities & Floor Plans ───────────────────────── */}
                             {step === 8 && (
                                 <div className="space-y-6">
                                     <SectionCard title="🏊 Amenities">
-                                        {/* ── Selected count ── */}
                                         <div className="flex items-center justify-between -mt-1">
                                             <p className="text-xs text-gray-400">
                                                 Check all amenities available at this property.
@@ -775,15 +894,10 @@ export default function CreatePropertyPage() {
                                                 </span>
                                             </p>
                                             {selectedPresetAmenities.size > 0 && (
-                                                <button type="button"
-                                                    onClick={() => setSelectedPresetAmenities(new Set())}
-                                                    className="text-xs text-red-400 hover:text-red-300 transition">
-                                                    Clear all
-                                                </button>
+                                                <button type="button" onClick={() => setSelectedPresetAmenities(new Set())}
+                                                    className="text-xs text-red-400 hover:text-red-300 transition">Clear all</button>
                                             )}
                                         </div>
-
-                                        {/* ── Preset amenities by category ── */}
                                         <div className="space-y-5">
                                             {AMENITY_CATEGORIES.map(cat => (
                                                 <div key={cat}>
@@ -792,28 +906,18 @@ export default function CreatePropertyPage() {
                                                         {PRESET_AMENITIES.filter(a => a.category === cat).map(amenity => {
                                                             const isChecked = selectedPresetAmenities.has(amenity.name);
                                                             return (
-                                                                <button
-                                                                    key={amenity.name}
-                                                                    type="button"
+                                                                <button key={amenity.name} type="button"
                                                                     onClick={() => {
                                                                         setSelectedPresetAmenities(prev => {
                                                                             const next = new Set(prev);
-                                                                            if (isChecked) next.delete(amenity.name);
-                                                                            else next.add(amenity.name);
+                                                                            if (isChecked) next.delete(amenity.name); else next.add(amenity.name);
                                                                             return next;
                                                                         });
                                                                     }}
-                                                                    className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-left text-xs font-medium transition-all ${
-                                                                        isChecked
-                                                                            ? 'bg-amber-500/20 border-amber-500/60 text-amber-300 shadow-sm shadow-amber-500/10'
-                                                                            : 'bg-gray-900 border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-200'
-                                                                    }`}
-                                                                >
+                                                                    className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-left text-xs font-medium transition-all ${isChecked ? 'bg-amber-500/20 border-amber-500/60 text-amber-300 shadow-sm shadow-amber-500/10' : 'bg-gray-900 border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-200'}`}>
                                                                     <span className="text-base flex-shrink-0">{amenity.icon}</span>
                                                                     <span className="leading-tight">{amenity.name}</span>
-                                                                    {isChecked && (
-                                                                        <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 ml-auto flex-shrink-0" />
-                                                                    )}
+                                                                    {isChecked && <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 ml-auto flex-shrink-0" />}
                                                                 </button>
                                                             );
                                                         })}
@@ -821,8 +925,6 @@ export default function CreatePropertyPage() {
                                                 </div>
                                             ))}
                                         </div>
-
-                                        {/* ── Custom amenities ── */}
                                         <div className="pt-3 border-t border-gray-700/60">
                                             <p className="text-xs font-semibold text-gray-400 mb-2">➕ Custom Amenities (not in the list above)</p>
                                             <div className="space-y-2">
@@ -891,7 +993,7 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* ── STEP 10: Payment Plans ────────────────────────────────────── */}
+                            {/* ── STEP 9: Payment Plans ──────────────────────────────────── */}
                             {step === 9 && (
                                 <div className="space-y-6">
                                     <SectionCard title="💳 Payment Plans">
@@ -915,7 +1017,7 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* ── STEP 11: Team ─────────────────────────────────────────────── */}
+                            {/* ── STEP 10: Team ──────────────────────────────────────────── */}
                             {step === 10 && (
                                 <div className="space-y-6">
                                     <SectionCard title="👷 Design & Construction Team">
@@ -956,7 +1058,6 @@ export default function CreatePropertyPage() {
                                             ))}
                                         </div>
                                         <AddBtn label="Add Team Member" onClick={() => addItem(setTeamMembers, { role: '', name: '', color: '#3B82F6', description: '', achievements: [''] })} />
-
                                         <div className="mt-6 border-t border-gray-700/60 pt-4">
                                             <h4 className="text-white font-medium text-sm mb-3">Team Highlights (the dark stat row at the bottom)</h4>
                                             <div className="space-y-3">
@@ -978,7 +1079,7 @@ export default function CreatePropertyPage() {
                                 </div>
                             )}
 
-                            {/* ── STEP 12: FAQs & More (FAQs · USP · Specs) ────────────────── */}
+                            {/* ── STEP 11: FAQs ──────────────────────────────────────────── */}
                             {step === 11 && (
                                 <div className="space-y-6">
                                     <SectionCard title="❓ FAQs">
@@ -1026,8 +1127,9 @@ export default function CreatePropertyPage() {
                                 ) : (
                                     <button type="button" onClick={handleSubmit} disabled={saving}
                                         className="flex items-center space-x-2 px-8 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white rounded-xl text-sm font-bold transition">
-                                        {saving ? <><RefreshCw className="w-4 h-4 animate-spin" /><span>Creating…</span></>
-                                            : <><CheckCircle2 className="w-4 h-4" /><span>Create Property</span></>}
+                                        {saving
+                                            ? <><RefreshCw className="w-4 h-4 animate-spin" /><span>Saving…</span></>
+                                            : <><CheckCircle2 className="w-4 h-4" /><span>Save Changes</span></>}
                                     </button>
                                 )}
                             </div>

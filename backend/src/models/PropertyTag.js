@@ -10,14 +10,30 @@ export default (sequelize) => {
         propertyId: {
             type: DataTypes.UUID,
             allowNull: false,
+            references: {
+                model: 'properties',
+                key: 'id',
+            },
+            onDelete: 'CASCADE',
         },
         tagId: {
             type: DataTypes.UUID,
             allowNull: false,
+            references: {
+                model: 'tags',
+                key: 'id',
+            },
+            onDelete: 'CASCADE',
         },
     }, {
         tableName: 'property_tags',
         timestamps: true,
+        indexes: [
+            {
+                unique: true,
+                fields: ['propertyId', 'tagId'],
+            },
+        ],
     });
 
     return PropertyTag;

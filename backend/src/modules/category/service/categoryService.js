@@ -1,4 +1,4 @@
-import { Category, Property, Developer, Location } from '../../../models/index.js';
+import { Category, Property, Developer, Location, Tag } from '../../../models/index.js';
 
 class CategoryService {
   async getCategoryById(id) {
@@ -67,6 +67,7 @@ class CategoryService {
           where: { id: categoryId },
           through: { attributes: [] },
         },
+        { model: Tag, as: 'Tags', through: { attributes: [] } },
       ],
       limit: parseInt(limit, 10),
       offset: parseInt(offset, 10),

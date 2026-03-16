@@ -118,6 +118,39 @@ export async function togglePublishProperty(
     });
 }
 
+/** Fetch a single property by ID with all sections, tags, and categories (for edit form). */
+export async function fetchAdminPropertyById(
+    id: string,
+    token: string,
+): Promise<{
+    id: string; slug: string; title: string;
+    propertyType: 'residential' | 'commercial';
+    status: string; priceMin: number | null; priceMax: number | null;
+    isPublished: boolean;
+    developerId: string; locationId: string;
+    Developer?: { id: string; name: string };
+    Location?: { id: string; name: string };
+    Tags?: { id: string; name: string; slug: string }[];
+    Categories?: { id: string; name: string; slug: string }[];
+    PropertySections?: { id: string; type: string; title: string; order: number; isVisible: boolean; data: Record<string, any> }[];
+}> {
+    const result = await authFetch<any>(`/properties/admin/${id}`, token);
+    return result.data;
+}
+
+/** Atomic full property update: core fields + all sections + tags + categories. */
+export async function updatePropertyFull(
+    id: string,
+    payload: CreatePropertyFullPayload,
+    token: string,
+): Promise<{ success: boolean; data: any; message: string }> {
+    return authFetch<any>(`/properties/full/${id}`, token, {
+        method: 'PUT',
+        body: JSON.stringify(payload),
+    }) as Promise<{ success: boolean; data: any; message: string }>;
+}
+
+
 // ─── Reference data (developers / locations / tags / categories) ─────────────
 
 export interface RefDeveloper { id: string; name: string; slug: string }

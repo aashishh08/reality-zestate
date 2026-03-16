@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { Property, Developer, Location, Category, PropertySection, Tag, PropertyCategory, sequelize } from '../../../models/index.js';
+import { Property, Developer, Location, Category, PropertySection, Tag, PropertyCategory, PropertyTag, sequelize } from '../../../models/index.js';
 import tagService from '../../tag/service/tagService.js';
 
 class PropertyService {
@@ -12,6 +12,93 @@ class PropertyService {
     if (!property) throw { status: 404, message: 'Property not found' };
     await property.update(data);
     return property;
+  }
+
+  async getPropertyFullById(id) {
+    const property = await Property.findByPk(id, {
+      include: [
+        { model: Developer },
+        { model: Location },
+        { model: PropertySection, order: [['order', 'ASC']] },
+        { model: Category, through: { attributes: [] } },
+        { model: Tag, as: 'Tags', through: { attributes: [] } },
+      ],
+    });
+    if (!property) throw { status: 404, message: 'Property not found' };
+    return property;
+  }
+
+  async updatePropertyFull(id, data) {
+    const {
+      slug, title, propertyType, developerId, locationId,
+      status, priceMin, priceMax, isPublished,
+      tagSlugs = [], categorySlugs = [],
+      sections = [],
+    } = data;
+
+    const property = await Property.findByPk(id);
+    if (!property) throw { status: 404, message: 'Property not found' };
+
+    const transaction = await sequelize.transaction();
+    try {
+      // Update core fields
+      const updateData = {};
+      if (slug !== undefined) updateData.slug = slug;
+      if (title !== undefined) updateData.title = title;
+      if (propertyType !== undefined) updateData.propertyType = propertyType;
+      if (developerId !== undefined) updateData.developerId = developerId;
+      if (locationId !== undefined) updateData.locationId = locationId;
+      if (status !== undefined) updateData.status = status;
+      if (priceMin !== undefined) updateData.priceMin = priceMin ? parseFloat(priceMin) : null;
+      if (priceMax !== undefined) updateData.priceMax = priceMax ? parseFloat(priceMax) : null;
+      if (isPublished !== undefined) updateData.isPublished = isPublished;
+      await property.update(updateData, { transaction });
+
+      // Replace all sections
+      await PropertySection.destroy({ where: { propertyId: id }, transaction });
+      if (sections.length > 0) {
+        await PropertySection.bulkCreate(
+          sections.map((s, i) => ({
+            propertyId: id,
+            type: s.type,
+            title: s.title,
+            order: s.order ?? i,
+            isVisible: s.isVisible ?? true,
+            data: s.data,
+          })),
+          { transaction },
+        );
+      }
+
+      // Replace tags
+      await tagService.replaceTagsForProperty(id, tagSlugs, transaction);
+
+      // Replace categories
+      await PropertyCategory.destroy({ where: { propertyId: id }, transaction });
+      if (categorySlugs.length) {
+        const cats = await Category.findAll({ where: { slug: categorySlugs } });
+        const found = new Set(cats.map(c => c.slug));
+        const missing = categorySlugs.filter(s => !found.has(s));
+        if (missing.length) throw { status: 400, message: `Unknown category slugs: ${missing.join(', ')}` };
+        await PropertyCategory.bulkCreate(
+          cats.map(cat => ({ propertyId: id, categoryId: cat.id })),
+          { transaction, ignoreDuplicates: true },
+        );
+      }
+
+      await transaction.commit();
+
+      return {
+        property: { id: property.id, slug: property.slug, title: property.title, isPublished: property.isPublished },
+        sectionsUpdated: sections.length,
+        sectionTypes: sections.map(s => s.type),
+        tagsApplied: tagSlugs,
+        categoriesApplied: categorySlugs,
+      };
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
   }
 
   async deleteProperty(id) {
@@ -91,7 +178,7 @@ class PropertyService {
       }
 
       if (tags.length === 1) {
-        // Simple case — one tag
+        // Simple case — one tag: use a required join with WHERE
         include.push({
           model: Tag,
           as: 'Tags',
@@ -100,18 +187,25 @@ class PropertyService {
           required: true,
         });
       } else {
-        // AND across multiple tags: filter after findAndCountAll via HAVING
-        // We join all tags (no WHERE) then post-filter by count
-        include.push({
-          model: Tag,
-          as: 'Tags',
-          where: { id: { [Op.in]: tags.map(t => t.id) } },
-          through: { attributes: [] },
-          required: true,
-        });
-        // Note: Sequelize's distinct + HAVING for multi-tag AND is complex;
-        // We filter in JS for small tag arrays (usually 1–3 slugs).
-        // For scale, a raw SQL subquery could be introduced later.
+        // AND across multiple tags: set-intersect propertyIds per tag so
+        // pagination counts are correct (avoids JS post-filter off-by-N bug).
+        let matchingIds = null;
+        for (const tag of tags) {
+          const rows = await PropertyTag.findAll({
+            where: { tagId: tag.id },
+            attributes: ['propertyId'],
+            raw: true,
+          });
+          const ids = new Set(rows.map(r => r.propertyId));
+          matchingIds = matchingIds === null
+            ? ids
+            : new Set([...matchingIds].filter(id => ids.has(id)));
+        }
+        if (!matchingIds || matchingIds.size === 0) {
+          return { total: 0, properties: [] };
+        }
+        where.id = { [Op.in]: [...matchingIds] };
+        include.push({ model: Tag, as: 'Tags', through: { attributes: [] } });
       }
     } else {
       // Always include Tags so callers receive them without a second query
@@ -136,12 +230,7 @@ class PropertyService {
       distinct: true,
     });
 
-    // Post-filter for multi-tag AND (see comment above)
-    const properties = tagSlugs?.length > 1
-      ? rows.filter(p => tagSlugs.every(s => p.Tags?.some(t => t.slug === s)))
-      : rows;
-
-    return { total: count, properties };
+    return { total: count, properties: rows };
   }
 
   async createPropertySections(propertyId, sections) {
@@ -276,6 +365,8 @@ class PropertyService {
         { model: Developer },
         { model: Location },
         { model: PropertySection, attributes: ['id', 'type'] },
+        { model: Category, through: { attributes: [] } },
+        { model: Tag, as: 'Tags', through: { attributes: [] } },
       ],
       limit: parseInt(limit, 10),
       offset: parseInt(offset, 10),
