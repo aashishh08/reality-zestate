@@ -59,6 +59,10 @@ services:
       NODE_ENV: production
     ports:
       - "3002:3002"
+    volumes:
+      # Mount uploads directory so files persist across container restarts
+      # and are stored on the host filesystem (repo)
+      - ./frontend/public/uploads:/app/public/uploads
     depends_on:
       - backend
     networks:
