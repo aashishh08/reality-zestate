@@ -104,7 +104,7 @@ export interface Project extends Property {
       image: string;
     }[];
     masterPlan?: string;
-    masterPlanDescription?: string[];
+    masterPlanDescription?: string;
     location?: {
       address?: string;
       mapImage?: string;

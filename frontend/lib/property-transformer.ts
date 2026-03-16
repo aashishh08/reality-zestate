@@ -239,7 +239,12 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
       : undefined,
 
     masterPlan: masterPlan.image || undefined,
-    masterPlanDescription: masterPlan.description || [],
+    masterPlanDescription: (() => {
+      const d = masterPlan.description;
+      if (typeof d === 'string' && d) return d;
+      if (Array.isArray(d) && d.length) return d.join('\n\n'); // legacy array → join
+      return undefined;
+    })(),
 
     faqs: faqs.faqs?.length ? faqs.faqs : undefined,
 

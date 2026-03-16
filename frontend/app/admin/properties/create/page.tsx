@@ -107,7 +107,7 @@ export default function CreatePropertyPage() {
         priceRange: '', reraNo: '', launchDate: '', possessionDate: '',
         phases: '', developer: '', address: '',
     });
-    const [overview, setOverview] = useState({ heading: '', content: ['', ''], features: ['', ''] });
+    const [overview, setOverview] = useState({ heading: '', content: [''], features: ['', ''] });
 
     // ── Step 4: Gallery ───────────────────────────────────────────────────────
     const [gallery, setGallery] = useState(['']);
@@ -127,7 +127,7 @@ export default function CreatePropertyPage() {
     const [connectivity, setConnectivity] = useState([{ place: '', icon: '', time: '' }]);
 
     // ── Step 8: FAQs / Team / USP / Specs / MasterPlan ───────────────────────────
-    const [masterPlan, setMasterPlan] = useState({ imageUrl: '', descriptions: [''] });
+    const [masterPlan, setMasterPlan] = useState({ imageUrl: '', description: '' });
     const [faqs, setFaqs] = useState([{ question: '', answer: '', category: '' }]);
     const [teamMembers, setTeamMembers] = useState([{ role: '', name: '', color: '#3B82F6', description: '', achievements: [''] }]);
     const [teamHighlights, setTeamHighlights] = useState([{ title: '', subtitle: '' }]);
@@ -188,7 +188,7 @@ export default function CreatePropertyPage() {
         if (locSection.address || nearby.some(n => n.category) || connectivity.some(c => c.place))
             sec.push({ type: 'location', title: 'Location', order: order++, data: { address: locSection.address, mapImage: locSection.mapImage, nearby: nearby.filter(n => n.category).map(n => ({ category: n.category, icon: n.icon, items: n.items.filter(Boolean).map(name => ({ name })) })), connectivity: connectivity.filter(c => c.place) } });
         if (masterPlan.imageUrl)
-            sec.push({ type: 'masterPlan', title: 'Master Plan', order: order++, data: { image: masterPlan.imageUrl, description: masterPlan.descriptions.filter(Boolean) } });
+            sec.push({ type: 'masterPlan', title: 'Master Plan', order: order++, data: { image: masterPlan.imageUrl, description: masterPlan.description } });
         const faqArr = faqs.filter(f => f.question);
         if (faqArr.length)
             sec.push({ type: 'faqs', title: 'FAQs', order: order++, data: { faqs: faqArr } });
@@ -453,7 +453,49 @@ export default function CreatePropertyPage() {
                                             ))}
                                         </div>
                                         <AddBtn label="Add Reason" onClick={() => addItem(setWhyInvest, { title: '', subtitle: '', icon: '' })} />
-                                        <Textarea label="Investment Analysis (long-form paragraph)" value={investmentText} onChange={e => setInvestmentText(e.target.value)} placeholder="Detailed investment analysis paragraph…" />
+                                        {/* Investment Analysis — long-form, supports HTML */}
+                                        <div>
+                                            <div className="flex items-center justify-between mb-1">
+                                                <label className="block text-xs text-gray-400 font-medium">
+                                                    Investment Analysis <span className="text-amber-400">(long-form · HTML supported)</span>
+                                                </label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const el = document.getElementById('inv-preview');
+                                                        if (el) el.classList.toggle('hidden');
+                                                    }}
+                                                    className="text-xs text-amber-400 hover:text-amber-300 transition underline"
+                                                >
+                                                    Toggle HTML preview
+                                                </button>
+                                            </div>
+                                            <textarea
+                                                value={investmentText}
+                                                onChange={e => setInvestmentText(e.target.value)}
+                                                rows={10}
+                                                placeholder={`Write long-form investment analysis here.\n\nSupports plain text (paragraphs separated by blank lines) OR HTML tags:\n<h2>Why Invest?</h2>\n<p>This development...</p>\n<ul><li>Strong returns</li></ul>`}
+                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono"
+                                            />
+                                            {/* Live preview */}
+                                            <div id="inv-preview" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-64 overflow-y-auto">
+                                                <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">HTML Preview</p>
+                                                {investmentText ? (
+                                                    /<[a-z][\s\S]*>/i.test(investmentText) ? (
+                                                        <div
+                                                            className="text-gray-700 text-sm leading-relaxed prose-preview"
+                                                            dangerouslySetInnerHTML={{ __html: investmentText }}
+                                                        />
+                                                    ) : (
+                                                        <div className="space-y-3 text-gray-700 text-sm leading-relaxed">
+                                                            {investmentText.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                                                        </div>
+                                                    )
+                                                ) : (
+                                                    <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>
+                                                )}
+                                            </div>
+                                        </div>
                                     </SectionCard>
                                     <SectionCard title="📊 Investment Statistics">
                                         <p className="text-xs text-gray-500 -mt-1">These 3 stat cards appear in the Why Invest section.</p>
@@ -471,19 +513,41 @@ export default function CreatePropertyPage() {
                                 <div className="space-y-6">
                                     <SectionCard title="📋 Project Overview">
                                         <Input label="Section Heading" value={overview.heading} onChange={e => setOverview(o => ({ ...o, heading: e.target.value }))} placeholder="Overview of the Project" />
-                                        <div>
-                                            <div className="flex items-center justify-between mb-2">
-                                                <label className="text-xs text-gray-400 font-medium">Content Paragraphs</label>
-                                                <AddBtn label="Add Paragraph" onClick={() => setOverview(o => ({ ...o, content: [...o.content, ''] }))} />
+                                        {/* Single HTML-aware content block */}
+                                        <div className="space-y-1">
+                                            <div className="flex items-center justify-between mb-1">
+                                                <label className="text-xs text-gray-400 font-medium">
+                                                    Content <span className="text-amber-400">(HTML supported — use tags for structure)</span>
+                                                </label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const el = document.getElementById('ov-preview-0');
+                                                        if (el) el.classList.toggle('hidden');
+                                                    }}
+                                                    className="text-xs text-amber-400 hover:text-amber-300 transition underline"
+                                                >
+                                                    Toggle preview
+                                                </button>
                                             </div>
-                                            <div className="space-y-2">
-                                                {overview.content.map((c, i) => (
-                                                    <div key={i} className="flex gap-2">
-                                                        <textarea value={c} onChange={e => setOverview(o => ({ ...o, content: o.content.map((x, j) => j === i ? e.target.value : x) }))}
-                                                            rows={2} placeholder={`Paragraph ${i + 1}…`} className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-none" />
-                                                        {overview.content.length > 1 && <RemoveBtn onClick={() => setOverview(o => ({ ...o, content: o.content.filter((_, j) => j !== i) }))} />}
-                                                    </div>
-                                                ))}
+                                            <textarea
+                                                value={overview.content[0] ?? ''}
+                                                onChange={e => setOverview(o => ({ ...o, content: [e.target.value] }))}
+                                                rows={12}
+                                                placeholder={`Write the full overview here — plain text or HTML:\n\n<h3>About the Project</h3>\n<p>This development...</p>\n<ul>\n  <li>Feature one</li>\n  <li>Feature two</li>\n</ul>`}
+                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono"
+                                            />
+                                            <div id="ov-preview-0" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-64 overflow-y-auto">
+                                                <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Preview</p>
+                                                {overview.content[0] ? (
+                                                    overview.content[0].includes('<') ? (
+                                                        <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: overview.content[0] }} />
+                                                    ) : (
+                                                        <p className="text-gray-700 text-sm leading-relaxed">{overview.content[0]}</p>
+                                                    )
+                                                ) : (
+                                                    <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>
+                                                )}
                                             </div>
                                         </div>
                                         <div>
@@ -528,19 +592,43 @@ export default function CreatePropertyPage() {
                                 <div className="space-y-6">
                                     <SectionCard title="🗺️ Master Plan">
                                         <Input label="Master Plan Image URL" value={masterPlan.imageUrl} onChange={e => setMasterPlan(m => ({ ...m, imageUrl: e.target.value }))} placeholder="/images/masterplan.jpg" />
-                                        <div>
-                                            <div className="flex items-center justify-between mb-2">
-                                                <label className="text-xs text-gray-400 font-medium">Description Bullet Points</label>
-                                                <AddBtn label="Add" onClick={() => setMasterPlan(m => ({ ...m, descriptions: [...m.descriptions, ''] }))} />
+                                        {/* Single HTML-aware description */}
+                                        <div className="space-y-1">
+                                            <div className="flex items-center justify-between mb-1">
+                                                <label className="text-xs text-gray-400 font-medium">
+                                                    Description <span className="text-amber-400">(HTML supported — use tags for structure)</span>
+                                                </label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const el = document.getElementById('mp-preview');
+                                                        if (el) el.classList.toggle('hidden');
+                                                    }}
+                                                    className="text-xs text-amber-400 hover:text-amber-300 transition underline"
+                                                >
+                                                    Toggle preview
+                                                </button>
                                             </div>
-                                            <div className="space-y-2">
-                                                {masterPlan.descriptions.map((d, i) => (
-                                                    <div key={i} className="flex gap-2">
-                                                        <input value={d} onChange={e => setMasterPlan(m => ({ ...m, descriptions: m.descriptions.map((x, j) => j === i ? e.target.value : x) }))}
-                                                            placeholder={`Description point ${i + 1}`} className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                        {masterPlan.descriptions.length > 1 && <RemoveBtn onClick={() => setMasterPlan(m => ({ ...m, descriptions: m.descriptions.filter((_, j) => j !== i) }))} />}
-                                                    </div>
-                                                ))}
+                                            <textarea
+                                                value={masterPlan.description}
+                                                onChange={e => setMasterPlan(m => ({ ...m, description: e.target.value }))}
+                                                rows={12}
+                                                placeholder={`Describe the master plan — plain text or HTML:\n\n<h3>Thoughtfully Designed Layout</h3>\n<p>The master plan showcases...</p>\n<ul>\n  <li>Green corridors</li>\n  <li>Wide internal roads</li>\n</ul>`}
+                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono"
+                                            />
+                                            <div id="mp-preview" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-64 overflow-y-auto">
+                                                <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Preview</p>
+                                                {masterPlan.description ? (
+                                                    masterPlan.description.includes('<') ? (
+                                                        <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: masterPlan.description }} />
+                                                    ) : (
+                                                        <div className="space-y-3 text-gray-700 text-sm leading-relaxed">
+                                                            {masterPlan.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                                                        </div>
+                                                    )
+                                                ) : (
+                                                    <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>
+                                                )}
                                             </div>
                                         </div>
                                     </SectionCard>

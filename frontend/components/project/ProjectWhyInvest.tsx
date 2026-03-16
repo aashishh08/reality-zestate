@@ -179,21 +179,31 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
             {/* Scrollable Analysis Text */}
             <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
               <div className="h-[400px] overflow-y-auto pr-4 custom-scrollbar">
-                <div className="space-y-6 text-gray-700 leading-relaxed">
-                  {typeof analysisText === 'string' ? (
-                    analysisText.split('\n\n').map((paragraph, index) => (
+                {typeof analysisText === 'string' && /<[a-z][\s\S]*>/i.test(analysisText) ? (
+                  // Rich HTML content — render with scoped prose styles
+                  <div
+                    className="investment-analysis-prose text-gray-700 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: analysisText }}
+                  />
+                ) : typeof analysisText === 'string' ? (
+                  // Plain text — split on double newlines to create paragraphs
+                  <div className="space-y-6 text-gray-700 leading-relaxed">
+                    {analysisText.split('\n\n').map((paragraph, index) => (
                       <p key={index} className="text-[15px]">
                         {paragraph}
                       </p>
-                    ))
-                  ) : (
-                    safeReasons.map((reason, index) => (
+                    ))}
+                  </div>
+                ) : (
+                  // Fallback: string list of reasons
+                  <div className="space-y-6 text-gray-700 leading-relaxed">
+                    {safeReasons.map((reason, index) => (
                       <p key={index} className="text-[15px]">
                         {typeof reason === 'string' ? reason : `${reason.title}: ${reason.subtitle}`}
                       </p>
-                    ))
-                  )}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -399,6 +409,91 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: #A88B4A;
+        }
+
+        /* ── Rich HTML prose styles for investment analysis ── */
+        .investment-analysis-prose {
+          font-size: 15px;
+        }
+        .investment-analysis-prose p {
+          margin-bottom: 1.1rem;
+          line-height: 1.75;
+        }
+        .investment-analysis-prose h1,
+        .investment-analysis-prose h2,
+        .investment-analysis-prose h3,
+        .investment-analysis-prose h4 {
+          color: #2C2416;
+          font-weight: 700;
+          margin-top: 1.4rem;
+          margin-bottom: 0.5rem;
+          line-height: 1.3;
+        }
+        .investment-analysis-prose h1 { font-size: 1.35rem; }
+        .investment-analysis-prose h2 { font-size: 1.2rem; }
+        .investment-analysis-prose h3 { font-size: 1.05rem; }
+        .investment-analysis-prose h4 { font-size: 0.95rem; }
+        .investment-analysis-prose strong,
+        .investment-analysis-prose b {
+          color: #2C2416;
+          font-weight: 600;
+        }
+        .investment-analysis-prose em,
+        .investment-analysis-prose i {
+          font-style: italic;
+        }
+        .investment-analysis-prose ul {
+          list-style: disc;
+          padding-left: 1.4rem;
+          margin-bottom: 1rem;
+        }
+        .investment-analysis-prose ol {
+          list-style: decimal;
+          padding-left: 1.4rem;
+          margin-bottom: 1rem;
+        }
+        .investment-analysis-prose li {
+          margin-bottom: 0.35rem;
+          line-height: 1.65;
+        }
+        .investment-analysis-prose a {
+          color: #C9A961;
+          text-decoration: underline;
+        }
+        .investment-analysis-prose a:hover {
+          color: #A88B4A;
+        }
+        .investment-analysis-prose blockquote {
+          border-left: 3px solid #C9A961;
+          padding-left: 1rem;
+          margin: 1rem 0;
+          color: #555;
+          font-style: italic;
+        }
+        .investment-analysis-prose table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 1rem;
+          font-size: 0.875rem;
+        }
+        .investment-analysis-prose th,
+        .investment-analysis-prose td {
+          border: 1px solid #e5e5e5;
+          padding: 0.4rem 0.75rem;
+          text-align: left;
+        }
+        .investment-analysis-prose th {
+          background: #f9f6ef;
+          font-weight: 600;
+          color: #2C2416;
+        }
+        .investment-analysis-prose hr {
+          border: none;
+          border-top: 1px solid #e5e5e5;
+          margin: 1.25rem 0;
+        }
+        .investment-analysis-prose span[style] {
+          /* allow inline styles from the author */
         }
       `}</style>
     </section>

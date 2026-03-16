@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
+/** Returns true if the string contains at least one HTML tag. */
+const hasHtml = (s: string) => /<[a-z][\s\S]*>/i.test(s);
+
 interface ProjectOverviewProps {
   overview: {
     heading: string;
@@ -18,7 +21,8 @@ export function ProjectOverview({ overview }: ProjectOverviewProps) {
   const safeFeatures = Array.isArray(overview.features) ? overview.features : [];
 
   return (
-    <section className="py-14 bg-transparent">
+    <>
+      <section className="py-14 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Left: Scrollable Text Content */}
@@ -35,18 +39,32 @@ export function ProjectOverview({ overview }: ProjectOverviewProps) {
             <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
               <div className="h-[400px] overflow-y-auto pr-4 scrollbar-custom">
                 <div className="space-y-6 text-gray-700 leading-relaxed">
-                  {safeContent.map((paragraph, index) => (
-                    <motion.p
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      viewport={{ once: true }}
-                      className="text-[15px]"
-                    >
-                      {paragraph}
-                    </motion.p>
-                  ))}
+                  {safeContent.map((paragraph, index) =>
+                    hasHtml(paragraph) ? (
+                      // Rich HTML paragraph — render with scoped prose styles
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        viewport={{ once: true }}
+                        className="overview-prose text-[15px]"
+                        dangerouslySetInnerHTML={{ __html: paragraph }}
+                      />
+                    ) : (
+                      // Plain text paragraph
+                      <motion.p
+                        key={index}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        viewport={{ once: true }}
+                        className="text-[15px]"
+                      >
+                        {paragraph}
+                      </motion.p>
+                    )
+                  )}
                 </div>
               </div>
             </div>
@@ -182,5 +200,89 @@ export function ProjectOverview({ overview }: ProjectOverviewProps) {
         </div>
       </div>
     </section>
+
+      <style jsx>{`
+        /* ── Rich HTML prose styles for overview content paragraphs ── */
+        .overview-prose {
+          line-height: 1.75;
+        }
+        .overview-prose p {
+          margin-bottom: 1rem;
+        }
+        .overview-prose h1,
+        .overview-prose h2,
+        .overview-prose h3,
+        .overview-prose h4 {
+          color: #2C2416;
+          font-weight: 700;
+          margin-top: 1.3rem;
+          margin-bottom: 0.45rem;
+          line-height: 1.3;
+        }
+        .overview-prose h1 { font-size: 1.35rem; }
+        .overview-prose h2 { font-size: 1.2rem; }
+        .overview-prose h3 { font-size: 1.05rem; }
+        .overview-prose h4 { font-size: 0.95rem; }
+        .overview-prose strong,
+        .overview-prose b {
+          color: #2C2416;
+          font-weight: 600;
+        }
+        .overview-prose em,
+        .overview-prose i {
+          font-style: italic;
+        }
+        .overview-prose ul {
+          list-style: disc;
+          padding-left: 1.4rem;
+          margin-bottom: 1rem;
+        }
+        .overview-prose ol {
+          list-style: decimal;
+          padding-left: 1.4rem;
+          margin-bottom: 1rem;
+        }
+        .overview-prose li {
+          margin-bottom: 0.3rem;
+          line-height: 1.65;
+        }
+        .overview-prose a {
+          color: #C9A961;
+          text-decoration: underline;
+        }
+        .overview-prose a:hover {
+          color: #A88B4A;
+        }
+        .overview-prose blockquote {
+          border-left: 3px solid #C9A961;
+          padding-left: 1rem;
+          margin: 1rem 0;
+          color: #555;
+          font-style: italic;
+        }
+        .overview-prose table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 1rem;
+          font-size: 0.875rem;
+        }
+        .overview-prose th,
+        .overview-prose td {
+          border: 1px solid #e5e5e5;
+          padding: 0.4rem 0.75rem;
+          text-align: left;
+        }
+        .overview-prose th {
+          background: #f9f6ef;
+          font-weight: 600;
+          color: #2C2416;
+        }
+        .overview-prose hr {
+          border: none;
+          border-top: 1px solid #e5e5e5;
+          margin: 1.25rem 0;
+        }
+      `}</style>
+    </>
   );
 }

@@ -8,7 +8,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 
 interface ProjectMasterPlanProps {
     masterPlanImage: string;
-    description?: string[];
+    description?: string;
 }
 
 export function ProjectMasterPlan({ masterPlanImage, description }: ProjectMasterPlanProps) {
@@ -39,18 +39,20 @@ export function ProjectMasterPlan({ masterPlanImage, description }: ProjectMaste
     }, []);
 
     // Default description if none provided
-    const defaultDescription = [
-        "The master plan showcases a meticulously designed layout that maximizes open spaces while ensuring optimal utilization of the available land. Every element has been thoughtfully positioned to create a harmonious living environment.",
-        "The development features strategically planned zones including residential towers, recreational areas, landscaped gardens, and essential amenities. Wide internal roads ensure smooth connectivity throughout the project.",
-        "Special attention has been given to creating green corridors and open spaces that promote a healthy lifestyle. The layout ensures privacy for residents while fostering a sense of community through well-designed common areas.",
-        "State-of-the-art infrastructure including underground utilities, rainwater harvesting systems, and sustainable design elements are integrated seamlessly into the master plan, making this a truly modern and eco-friendly development."
-    ];
+    const defaultDescription = `The master plan showcases a meticulously designed layout that maximises open spaces while ensuring optimal utilisation of the available land. Every element has been thoughtfully positioned to create a harmonious living environment.
+
+The development features strategically planned zones including residential towers, recreational areas, landscaped gardens, and essential amenities. Wide internal roads ensure smooth connectivity throughout the project.
+
+Special attention has been given to creating green corridors and open spaces that promote a healthy lifestyle. The layout ensures privacy for residents while fostering a sense of community through well-designed common areas.
+
+State-of-the-art infrastructure including underground utilities, rainwater harvesting systems, and sustainable design elements are integrated seamlessly into the master plan, making this a truly modern and eco-friendly development.`;
 
     const safeImage = masterPlanImage || "/images/project-1.jpg";
-    const safeDescription = Array.isArray(description) && description.length > 0 ? description : defaultDescription;
-    const displayDescription = safeDescription;
+    const safeDescription = (typeof description === 'string' && description.trim()) ? description : defaultDescription;
+    const isHtml = /<[a-z][\s\S]*>/i.test(safeDescription);
 
     return (
+        <>
         <section className="py-14 bg-white" id="master-plan">
             <div className="max-w-7xl mx-auto px-6">
                 {/* Header */}
@@ -147,18 +149,29 @@ export function ProjectMasterPlan({ masterPlanImage, description }: ProjectMaste
                   [scrollbar-color:rgba(201,169,97,0.3)_transparent]
                 `}
                             >
-                                {displayDescription.map((paragraph, index) => (
-                                    <motion.p
-                                        key={index}
+                                {isHtml ? (
+                                    <motion.div
                                         initial={{ opacity: 0, y: 10 }}
                                         whileInView={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                                        transition={{ duration: 0.6 }}
                                         viewport={{ once: true }}
-                                        className="text-lg"
-                                    >
-                                        {paragraph}
-                                    </motion.p>
-                                ))}
+                                        className="masterplan-prose text-lg text-zinc-700 leading-relaxed"
+                                        dangerouslySetInnerHTML={{ __html: safeDescription }}
+                                    />
+                                ) : (
+                                    safeDescription.split('\n\n').map((paragraph, index) => (
+                                        <motion.p
+                                            key={index}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                                            viewport={{ once: true }}
+                                            className="text-lg"
+                                        >
+                                            {paragraph}
+                                        </motion.p>
+                                    ))
+                                )}
                             </div>
 
                             {/* Gradient Fade at Bottom */}
@@ -195,5 +208,31 @@ export function ProjectMasterPlan({ masterPlanImage, description }: ProjectMaste
                 </div>
             </div>
         </section>
+
+        <style jsx>{`
+          .masterplan-prose p { margin-bottom: 1.1rem; line-height: 1.75; }
+          .masterplan-prose h1, .masterplan-prose h2,
+          .masterplan-prose h3, .masterplan-prose h4 {
+            color: #2C2416; font-weight: 700;
+            margin-top: 1.4rem; margin-bottom: 0.5rem; line-height: 1.3;
+          }
+          .masterplan-prose h1 { font-size: 1.35rem; }
+          .masterplan-prose h2 { font-size: 1.2rem; }
+          .masterplan-prose h3 { font-size: 1.05rem; }
+          .masterplan-prose h4 { font-size: 0.95rem; }
+          .masterplan-prose strong, .masterplan-prose b { color: #2C2416; font-weight: 600; }
+          .masterplan-prose em, .masterplan-prose i { font-style: italic; }
+          .masterplan-prose ul { list-style: disc; padding-left: 1.4rem; margin-bottom: 1rem; }
+          .masterplan-prose ol { list-style: decimal; padding-left: 1.4rem; margin-bottom: 1rem; }
+          .masterplan-prose li { margin-bottom: 0.35rem; line-height: 1.65; }
+          .masterplan-prose a { color: #C9A961; text-decoration: underline; }
+          .masterplan-prose a:hover { color: #A88B4A; }
+          .masterplan-prose blockquote {
+            border-left: 3px solid #C9A961; padding-left: 1rem;
+            margin: 1rem 0; color: #555; font-style: italic;
+          }
+          .masterplan-prose hr { border: none; border-top: 1px solid #e5e5e5; margin: 1.25rem 0; }
+        `}</style>
+        </>
     );
 }
