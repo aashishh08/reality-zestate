@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
+// Force dynamic so Next.js never tries to statically generate this route
+export const dynamic = 'force-dynamic';
+
 const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads');
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
