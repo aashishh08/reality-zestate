@@ -9,7 +9,7 @@ RUN yarn install
 COPY . .
 
 ENV NODE_ENV=production
-ENV NEXT_PUBLIC_API_URL=http://backend:4002/api/v1
+ENV NEXT_PUBLIC_API_URL=https://api.superluxere.com/api/v1
 
 RUN yarn build
 
