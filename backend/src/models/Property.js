@@ -54,6 +54,18 @@ export default (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    seoTitle: {
+      type: DataTypes.STRING(90),
+      allowNull: true,
+    },
+    h1Heading: {
+      type: DataTypes.STRING(120),
+      allowNull: true,
+    },
+    metaDescription: {
+      type: DataTypes.STRING(158),
+      allowNull: true,
+    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,

@@ -99,7 +99,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
               className="max-w-4xl"
             >
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-4 leading-tight">
-                {project.title}
+                {project.h1Heading || project.title}
               </h1>
               <p className="text-xl md:text-2xl text-white/90 font-light mb-6">
                 {details.subtitle}

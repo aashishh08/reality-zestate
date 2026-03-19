@@ -32,6 +32,7 @@ class PropertyService {
     const {
       slug, title, propertyType, developerId, locationId,
       status, priceMin, priceMax, isPublished,
+      seoTitle, h1Heading, metaDescription,
       tagSlugs = [], categorySlugs = [],
       sections = [],
     } = data;
@@ -52,6 +53,9 @@ class PropertyService {
       if (priceMin !== undefined) updateData.priceMin = priceMin ? parseFloat(priceMin) : null;
       if (priceMax !== undefined) updateData.priceMax = priceMax ? parseFloat(priceMax) : null;
       if (isPublished !== undefined) updateData.isPublished = isPublished;
+      if (seoTitle !== undefined) updateData.seoTitle = seoTitle || null;
+      if (h1Heading !== undefined) updateData.h1Heading = h1Heading || null;
+      if (metaDescription !== undefined) updateData.metaDescription = metaDescription || null;
       await property.update(updateData, { transaction });
 
       // Replace all sections

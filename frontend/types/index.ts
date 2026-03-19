@@ -8,6 +8,9 @@ export interface Property {
   priceMax?: number | null;
   isPublished?: boolean;
   status?: 'draft' | 'published' | 'archived';
+  seoTitle?: string | null;
+  h1Heading?: string | null;
+  metaDescription?: string | null;
 
   Developer?: {
     id: string;

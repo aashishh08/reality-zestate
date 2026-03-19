@@ -103,12 +103,13 @@ export async function generateMetadata({
     };
   }
 
-  const description = project.details?.overview.content[0]
+  const description = project.metaDescription
+    || project.details?.overview.content[0]
     || project.description
     || `Luxury ${project.type} in ${project.location}. ${project.price}`;
 
   return {
-    title: `${project.title} - ${project.location} | Superluxere`,
+    title: `${project.seoTitle || project.title} - ${project.location} | Superluxere`,
     description,
     keywords: [
       project.title,

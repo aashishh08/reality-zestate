@@ -155,6 +155,7 @@ export default function EditPropertyPage() {
         developerId: '', locationId: '', status: 'draft',
         priceMin: '', priceMax: '', isPublished: false,
         tagSlugs: [] as string[], categorySlugs: [] as string[],
+        seoTitle: '', h1Heading: '', metaDescription: '',
     });
     const [hero, setHero] = useState({ heroImage: '', subtitle: '', videoUrl: '' });
     const [intro, setIntro] = useState({ introText: '' });
@@ -224,6 +225,9 @@ export default function EditPropertyPage() {
             isPublished: p.isPublished,
             tagSlugs: p.Tags?.map(t => t.slug) ?? [],
             categorySlugs: p.Categories?.map(c => c.slug) ?? [],
+            seoTitle: p.seoTitle ?? '',
+            h1Heading: p.h1Heading ?? '',
+            metaDescription: p.metaDescription ?? '',
         });
 
         // Map sections by type
@@ -626,6 +630,41 @@ export default function EditPropertyPage() {
                                                 })}
                                                 {categories.length === 0 && <p className="text-gray-500 text-xs">No categories found.</p>}
                                             </div>
+                                        </div>
+                                    </SectionCard>
+
+                                    <SectionCard title="🔍 SEO Settings">
+                                        <p className="text-xs text-gray-500 -mt-1">Overrides default SEO values for search engines. Leave blank to auto-generate from title.</p>
+                                        <div>
+                                            <label className="block text-xs text-gray-400 mb-1 font-medium">SEO Title Tag (max 90 chars)</label>
+                                            <input
+                                                value={basic.seoTitle}
+                                                onChange={e => setBasic(b => ({ ...b, seoTitle: e.target.value.slice(0, 90) }))}
+                                                placeholder="e.g. Mahindra Origins Pune | Luxury 3 & 4 BHK Apartments"
+                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition"
+                                            />
+                                            <p className="text-xs text-gray-500 mt-1 text-right">{basic.seoTitle.length}/90</p>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs text-gray-400 mb-1 font-medium">H1 Heading (max 120 chars)</label>
+                                            <input
+                                                value={basic.h1Heading}
+                                                onChange={e => setBasic(b => ({ ...b, h1Heading: e.target.value.slice(0, 120) }))}
+                                                placeholder="e.g. Mahindra Origins — 3 & 4 BHK on Dwarka Expressway"
+                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition"
+                                            />
+                                            <p className="text-xs text-gray-500 mt-1 text-right">{basic.h1Heading.length}/120</p>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs text-gray-400 mb-1 font-medium">Meta Description (max 158 chars)</label>
+                                            <textarea
+                                                value={basic.metaDescription}
+                                                onChange={e => setBasic(b => ({ ...b, metaDescription: e.target.value.slice(0, 158) }))}
+                                                placeholder="e.g. Discover Mahindra Origins Pune — premium 3 & 4 BHK residences on Dwarka Expressway. Book now."
+                                                rows={3}
+                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-none"
+                                            />
+                                            <p className="text-xs text-gray-500 mt-1 text-right">{basic.metaDescription.length}/158</p>
                                         </div>
                                     </SectionCard>
                                 </div>

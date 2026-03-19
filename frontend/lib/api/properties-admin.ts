@@ -21,6 +21,9 @@ export interface CreatePropertyFullPayload {
     priceMin?: number | null;
     priceMax?: number | null;
     isPublished?: boolean;
+    seoTitle?: string | null;
+    h1Heading?: string | null;
+    metaDescription?: string | null;
     // Relational
     tagSlugs?: string[];
     categorySlugs?: string[];
