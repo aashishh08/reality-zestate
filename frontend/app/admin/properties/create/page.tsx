@@ -499,7 +499,28 @@ export default function CreatePropertyPage() {
                                         <Input label="Video URL (YouTube embed)" value={hero.videoUrl} onChange={e => setHero(h => ({ ...h, videoUrl: e.target.value }))} placeholder="https://www.youtube.com/embed/..." />
                                     </SectionCard>
                                     <SectionCard title="📝 Introduction Text">
-                                        <Textarea label="Introduction Text" value={intro.introText} onChange={e => setIntro({ introText: e.target.value })} placeholder="Write a compelling introduction for this property..." />
+                                        <div className="space-y-1">
+                                            <div className="flex items-center justify-between mb-1">
+                                                <label className="block text-xs text-gray-400 font-medium">
+                                                    Introduction Text <span className="text-amber-400">(HTML supported)</span>
+                                                </label>
+                                                <button type="button" onClick={() => { const el = document.getElementById('intro-preview'); if (el) el.classList.toggle('hidden'); }}
+                                                    className="text-xs text-amber-400 hover:text-amber-300 transition underline">
+                                                    Toggle preview
+                                                </button>
+                                            </div>
+                                            <textarea value={intro.introText} onChange={e => setIntro({ introText: e.target.value })} rows={6}
+                                                placeholder={`Write a compelling introduction for this property.\n\nSupports plain text or HTML:\n<p>This development...</p>\n<p><strong>Highlight</strong> key details here.</p>`}
+                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono" />
+                                            <div id="intro-preview" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-64 overflow-y-auto">
+                                                <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Preview</p>
+                                                {intro.introText
+                                                    ? /<[a-z][\s\S]*>/i.test(intro.introText)
+                                                        ? <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: intro.introText }} />
+                                                        : <p className="text-gray-700 text-sm leading-relaxed">{intro.introText}</p>
+                                                    : <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>}
+                                            </div>
+                                        </div>
                                     </SectionCard>
                                     <SectionCard title="✨ Highlights (Quick-Stat Bar)">
                                         <p className="text-xs text-gray-500 -mt-1">These 6 values appear in the stat bar directly beneath the hero image.</p>
