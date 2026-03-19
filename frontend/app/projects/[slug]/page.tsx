@@ -1,5 +1,8 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+
+// Always fetch fresh data — admin updates must be visible immediately
+export const dynamic = 'force-dynamic';
 import { getProjectBySlug, getAllProjectSlugs } from "@/lib/data";
 import { getPropertyBySlug, getProperties } from "@/lib/api/properties";
 import { transformBackendPropertyToProject } from "@/lib/property-transformer";

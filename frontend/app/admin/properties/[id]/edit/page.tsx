@@ -379,7 +379,7 @@ export default function EditPropertyPage() {
             sec.push({ type: 'heroImage', title: 'Hero', order: order++, data: { image: hero.heroImage, subtitle: hero.subtitle, videoUrl: hero.videoUrl } });
         if (intro.introText)
             sec.push({ type: 'intro', title: 'Intro', order: order++, data: { text: intro.introText } });
-        if (highlights.landArea || highlights.rera || highlights.possession)
+        if (Object.values(highlights).some(v => v))
             sec.push({ type: 'highlights', title: 'Highlights', order: order++, data: { ...highlights } });
         const ktData: Record<string, string> = {};
         Object.entries(keyTakeaways).forEach(([k, v]) => { if (v.trim()) ktData[k] = v.trim(); });
@@ -394,10 +394,10 @@ export default function EditPropertyPage() {
         const amenArr = amenities.filter(a => a.name);
         if (amenArr.length)
             sec.push({ type: 'amenities', title: 'Amenities', order: order++, data: { items: amenArr.map(a => ({ name: a.name, icon: a.icon, image: a.imageUrl })), stats: amenitiesStats } });
-        const fpArr = floorPlans.filter(f => f.type);
+        const fpArr = floorPlans.filter(f => f.type || f.superArea || f.price || f.imageUrl);
         if (fpArr.length)
             sec.push({ type: 'floorPlans', title: 'Floor Plans', order: order++, data: { plans: fpArr.map(f => ({ type: f.type, superArea: f.superArea, price: f.price, image: f.imageUrl })), descriptionSections: floorPlanDescSections.filter(s => s.heading) } });
-        const ppArr = paymentPlans.filter(p => p.title);
+        const ppArr = paymentPlans.filter(p => p.title || p.description);
         if (ppArr.length)
             sec.push({ type: 'paymentPlans', title: 'Payment Plans', order: order++, data: { plans: ppArr } });
         const wiArr = whyInvest.filter(w => w.title);
@@ -407,7 +407,7 @@ export default function EditPropertyPage() {
             sec.push({ type: 'location', title: 'Location', order: order++, data: { address: locSection.address, mapImage: locSection.mapImage, nearby: nearby.filter(n => n.category).map(n => ({ category: n.category, icon: n.icon, items: n.items.filter(Boolean).map(name => ({ name })) })), connectivity: connectivity.filter(c => c.place) } });
         if (masterPlan.imageUrl)
             sec.push({ type: 'masterPlan', title: 'Master Plan', order: order++, data: { image: masterPlan.imageUrl, description: masterPlan.description } });
-        const faqArr = faqs.filter(f => f.question);
+        const faqArr = faqs.filter(f => f.question || f.answer);
         if (faqArr.length)
             sec.push({ type: 'faqs', title: 'FAQs', order: order++, data: { faqs: faqArr } });
         const membArr = teamMembers.filter(m => m.role);
