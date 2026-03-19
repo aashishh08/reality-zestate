@@ -37,7 +37,7 @@ import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
  */
 async function getPropertyData(slug: string) {
   try {
-    const backendProperty = await getPropertyBySlug(slug);
+    const backendProperty = await getPropertyBySlug(slug, false);
     return transformBackendPropertyToProject(backendProperty);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -125,9 +125,6 @@ export async function generateMetadata({
     },
   };
 }
-
-// ISR Configuration - Revalidate every hour
-export const revalidate = 3600;
 
 // Allow rendering pages for slugs not in generateStaticParams
 export const dynamicParams = true;
