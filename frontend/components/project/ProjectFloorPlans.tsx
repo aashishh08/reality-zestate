@@ -149,7 +149,10 @@ export function ProjectFloorPlans({ floorPlans, descriptionSections }: ProjectFl
               ).map((section, i) => (
                 <div key={i}>
                   <h4 className="text-lg font-semibold text-[#2C2416] mb-3">{section.heading}</h4>
-                  <p className="text-gray-700 leading-relaxed text-sm">{section.body}</p>
+                  <div 
+                    className="text-gray-700 leading-relaxed text-sm floor-plan-prose"
+                    dangerouslySetInnerHTML={{ __html: section.body }}
+                  />
                 </div>
               ))}
             </div>
@@ -158,6 +161,10 @@ export function ProjectFloorPlans({ floorPlans, descriptionSections }: ProjectFl
       </div>
 
       <style jsx>{`
+        .floor-plan-prose p { margin-bottom: 0.75rem; }
+        .floor-plan-prose ul { list-style: disc; padding-left: 1.25rem; margin-bottom: 0.75rem; }
+        .floor-plan-prose ol { list-style: decimal; padding-left: 1.25rem; margin-bottom: 0.75rem; }
+        .floor-plan-prose strong, .floor-plan-prose b { color: #2C2416; font-weight: 600; }
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;
         }

@@ -44,9 +44,10 @@ export function ProjectPaymentPlan({ paymentPlans }: ProjectPaymentPlanProps) {
               <h3 className="text-xl font-serif font-bold text-black mb-2">{plan.title}</h3>
               <p className="text-xs font-bold text-gold-dark uppercase tracking-wider mb-6">{plan.type}</p>
 
-              <p className="text-zinc-600 leading-relaxed text-sm">
-                {plan.description}
-              </p>
+              <div 
+                className="text-zinc-600 leading-relaxed text-sm payment-plan-prose"
+                dangerouslySetInnerHTML={{ __html: plan.description }}
+              />
 
               <div className="mt-8 pt-6 border-t border-zinc-200">
                 <button className="text-sm font-bold text-black uppercase tracking-wider hover:text-gold-dark transition-colors flex items-center gap-2">
@@ -57,6 +58,12 @@ export function ProjectPaymentPlan({ paymentPlans }: ProjectPaymentPlanProps) {
           ))}
         </div>
       </div>
+      <style jsx>{`
+        .payment-plan-prose p { margin-bottom: 0.5rem; }
+        .payment-plan-prose ul { list-style: disc; padding-left: 1.25rem; margin-bottom: 0.5rem; }
+        .payment-plan-prose ol { list-style: decimal; padding-left: 1.25rem; margin-bottom: 0.5rem; }
+        .payment-plan-prose a { color: #C9A961; text-decoration: underline; }
+      `}</style>
     </section>
   );
 }

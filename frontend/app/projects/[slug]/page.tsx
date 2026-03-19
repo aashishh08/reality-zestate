@@ -169,9 +169,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <section className="py-8 bg-[#F5F0E8]">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
-              <p className="text-[#2C2416] text-lg leading-relaxed text-center">
-                {details.introText}
-              </p>
+              <div 
+                className="text-[#2C2416] text-lg leading-relaxed text-center hero-intro-prose"
+                dangerouslySetInnerHTML={{ __html: details.introText }}
+              />
             </div>
           </div>
         </section>
@@ -337,6 +338,15 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       <Footer />
       <FloatingActions />
+      <style>{`
+        .hero-intro-prose p { margin-bottom: 1rem; }
+        .hero-intro-prose p:last-child { margin-bottom: 0; }
+        .hero-intro-prose h1, .hero-intro-prose h2, .hero-intro-prose h3 {
+          font-weight: 700; margin-bottom: 0.5rem;
+        }
+        .hero-intro-prose b, .hero-intro-prose strong { font-weight: 600; }
+        .hero-intro-prose a { color: #C9A961; text-decoration: underline; }
+      `}</style>
     </main>
   );
 }

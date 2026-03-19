@@ -57,12 +57,12 @@ services:
     environment:
       NEXT_PUBLIC_API_URL: https://api.superluxere.com/api/v1
       NODE_ENV: production
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME}
     ports:
       - "3002:3002"
-    volumes:
-      # Mount uploads directory so files persist across container restarts
-      # and are stored on the host filesystem (repo)
-      - ./frontend/public/uploads:/app/public/uploads
     depends_on:
       - backend
     networks:

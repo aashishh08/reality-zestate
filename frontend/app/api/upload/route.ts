@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
+import { uploadToS3 } from '../../../lib/s3';
 
 // Force dynamic so Next.js never tries to statically generate this route
 export const dynamic = 'force-dynamic';
 
-const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads');
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
 
@@ -35,12 +34,11 @@ export async function POST(request: NextRequest) {
       .slice(0, 60);
     const filename = `${Date.now()}-${baseName}${ext}`;
 
-    await mkdir(UPLOAD_DIR, { recursive: true });
-    await writeFile(path.join(UPLOAD_DIR, filename), buffer);
+    const url = await uploadToS3(buffer, `uploads/${filename}`, file.type);
 
-    return NextResponse.json({ url: `/uploads/${filename}` });
+    return NextResponse.json({ url });
   } catch (err: any) {
-    console.error('[upload] error:', err?.message ?? err, '| UPLOAD_DIR:', UPLOAD_DIR);
+    console.error('[upload] error:', err?.message ?? err);
     return NextResponse.json(
       { error: 'Upload failed', detail: err?.message ?? String(err) },
       { status: 500 }

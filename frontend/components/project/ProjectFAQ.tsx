@@ -53,9 +53,10 @@ function FAQItem({ faq, index, columnOffset }: { faq: FAQ; index: number; column
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-5 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4 ml-10">
-              {faq.answer}
-            </div>
+            <div 
+              className="px-5 pb-5 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4 ml-10 faq-prose"
+              dangerouslySetInnerHTML={{ __html: faq.answer }}
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -118,6 +119,13 @@ export function ProjectFAQ({ faqs }: ProjectFAQProps) {
           </a>
         </motion.div>
       </div>
+      <style jsx>{`
+        .faq-prose p { margin-bottom: 1rem; }
+        .faq-prose ul { list-style: disc; padding-left: 1.25rem; margin-bottom: 1rem; }
+        .faq-prose ol { list-style: decimal; padding-left: 1.25rem; margin-bottom: 1rem; }
+        .faq-prose a { color: #C9A961; text-decoration: underline; }
+        .faq-prose a:hover { color: #A88B4A; }
+      `}</style>
     </section>
   );
 }
