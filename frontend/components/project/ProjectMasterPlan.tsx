@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ChevronDown, Map } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { HtmlRenderer } from "@/components/ui/HtmlRenderer";
 
 interface ProjectMasterPlanProps {
     masterPlanImage: string;
@@ -49,7 +50,6 @@ State-of-the-art infrastructure including underground utilities, rainwater harve
 
     const safeImage = masterPlanImage || "/images/project-1.jpg";
     const safeDescription = (typeof description === 'string' && description.trim()) ? description : defaultDescription;
-    const isHtml = /<[a-z][\s\S]*>/i.test(safeDescription);
 
     return (
         <>
@@ -149,29 +149,8 @@ State-of-the-art infrastructure including underground utilities, rainwater harve
                   [scrollbar-color:rgba(201,169,97,0.3)_transparent]
                 `}
                             >
-                                {isHtml ? (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 10 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.6 }}
-                                        viewport={{ once: true }}
-                                        className="masterplan-prose text-lg text-zinc-700 leading-relaxed"
-                                        dangerouslySetInnerHTML={{ __html: safeDescription }}
-                                    />
-                                ) : (
-                                    safeDescription.split('\n\n').map((paragraph, index) => (
-                                        <motion.p
-                                            key={index}
-                                            initial={{ opacity: 0, y: 10 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                                            viewport={{ once: true }}
-                                            className="text-lg"
-                                        >
-                                            {paragraph}
-                                        </motion.p>
-                                    ))
-                                )}
+                                {/* Description rendered via shared HtmlRenderer */}
+                                <HtmlRenderer html={safeDescription} fontSize="text-lg" />
                             </div>
 
                             {/* Gradient Fade at Bottom */}
@@ -209,30 +188,6 @@ State-of-the-art infrastructure including underground utilities, rainwater harve
             </div>
         </section>
 
-        <style jsx>{`
-          .masterplan-prose p { margin-bottom: 1.1rem; line-height: 1.75; }
-          .masterplan-prose h1, .masterplan-prose h2,
-          .masterplan-prose h3, .masterplan-prose h4 {
-            color: #2C2416; font-weight: 700;
-            margin-top: 1.4rem; margin-bottom: 0.5rem; line-height: 1.3;
-          }
-          .masterplan-prose h1 { font-size: 1.35rem; }
-          .masterplan-prose h2 { font-size: 1.2rem; }
-          .masterplan-prose h3 { font-size: 1.05rem; }
-          .masterplan-prose h4 { font-size: 0.95rem; }
-          .masterplan-prose strong, .masterplan-prose b { color: #2C2416; font-weight: 600; }
-          .masterplan-prose em, .masterplan-prose i { font-style: italic; }
-          .masterplan-prose ul { list-style: disc; padding-left: 1.4rem; margin-bottom: 1rem; }
-          .masterplan-prose ol { list-style: decimal; padding-left: 1.4rem; margin-bottom: 1rem; }
-          .masterplan-prose li { margin-bottom: 0.35rem; line-height: 1.65; }
-          .masterplan-prose a { color: #C9A961; text-decoration: underline; }
-          .masterplan-prose a:hover { color: #A88B4A; }
-          .masterplan-prose blockquote {
-            border-left: 3px solid #C9A961; padding-left: 1rem;
-            margin: 1rem 0; color: #555; font-style: italic;
-          }
-          .masterplan-prose hr { border: none; border-top: 1px solid #e5e5e5; margin: 1.25rem 0; }
-        `}</style>
         </>
     );
 }

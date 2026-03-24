@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { ImageUploadInput } from '@/components/admin/ImageUploadInput';
+import { HtmlRenderer } from '@/components/ui/HtmlRenderer';
 
 // ─── Step definitions (mirrors create page) ───────────────────────────────────
 const STEPS = [
@@ -695,9 +696,7 @@ export default function EditPropertyPage() {
                                             <div id="intro-preview" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-64 overflow-y-auto">
                                                 <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Preview</p>
                                                 {intro.introText
-                                                    ? /<[a-z][\s\S]*>/i.test(intro.introText)
-                                                        ? <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: intro.introText }} />
-                                                        : <p className="text-gray-700 text-sm leading-relaxed">{intro.introText}</p>
+                                                    ? <HtmlRenderer html={intro.introText} fontSize="text-sm" />
                                                     : <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>}
                                             </div>
                                         </div>
@@ -781,11 +780,9 @@ export default function EditPropertyPage() {
                                                 className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono" />
                                             <div id="inv-preview" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-64 overflow-y-auto">
                                                 <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">HTML Preview</p>
-                                                {investmentText ? (
-                                                    /<[a-z][\s\S]*>/i.test(investmentText)
-                                                        ? <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: investmentText }} />
-                                                        : <div className="space-y-3 text-gray-700 text-sm leading-relaxed">{investmentText.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}</div>
-                                                ) : <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>}
+                                                {investmentText
+                                                    ? <HtmlRenderer html={investmentText} fontSize="text-sm" />
+                                                    : <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>}
                                             </div>
                                         </div>
                                     </SectionCard>
@@ -819,9 +816,7 @@ export default function EditPropertyPage() {
                                             <div id="ov-preview-0" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-64 overflow-y-auto">
                                                 <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Preview</p>
                                                 {overview.content[0]
-                                                    ? overview.content[0].includes('<')
-                                                        ? <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: overview.content[0] }} />
-                                                        : <p className="text-gray-700 text-sm leading-relaxed">{overview.content[0]}</p>
+                                                    ? <HtmlRenderer html={overview.content[0]} fontSize="text-sm" />
                                                     : <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>}
                                             </div>
                                         </div>
@@ -886,9 +881,7 @@ export default function EditPropertyPage() {
                                             <div id="mp-preview" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-64 overflow-y-auto">
                                                 <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Preview</p>
                                                 {masterPlan.description
-                                                    ? masterPlan.description.includes('<')
-                                                        ? <div className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: masterPlan.description }} />
-                                                        : <div className="space-y-3 text-gray-700 text-sm leading-relaxed">{masterPlan.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}</div>
+                                                    ? <HtmlRenderer html={masterPlan.description} fontSize="text-sm" />
                                                     : <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>}
                                             </div>
                                         </div>

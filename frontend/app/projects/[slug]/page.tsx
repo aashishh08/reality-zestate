@@ -29,6 +29,7 @@ import { ProjectTeam } from "@/components/project/ProjectTeam";
 import { projects } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
+import { HtmlRenderer } from "@/components/ui/HtmlRenderer";
 
 /**
  * Fetch property data from backend or fallback to hardcoded data
@@ -169,11 +170,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.introText && (
         <section className="py-8 bg-[#F5F0E8]">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
-              <div 
-                className="text-[#2C2416] text-lg leading-relaxed text-center hero-intro-prose"
-                dangerouslySetInnerHTML={{ __html: details.introText }}
-              />
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10 text-center">
+              <HtmlRenderer html={details.introText} fontSize="text-lg" className="text-[#2C2416]" />
             </div>
           </div>
         </section>
@@ -339,15 +337,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       <Footer />
       <FloatingActions />
-      <style>{`
-        .hero-intro-prose p { margin-bottom: 1rem; }
-        .hero-intro-prose p:last-child { margin-bottom: 0; }
-        .hero-intro-prose h1, .hero-intro-prose h2, .hero-intro-prose h3 {
-          font-weight: 700; margin-bottom: 0.5rem;
-        }
-        .hero-intro-prose b, .hero-intro-prose strong { font-weight: 600; }
-        .hero-intro-prose a { color: #C9A961; text-decoration: underline; }
-      `}</style>
     </main>
   );
 }
