@@ -164,6 +164,18 @@ export interface Project extends Property {
       type: string;
       description: string;
     }[];
+    sectionHeadings?: {
+      keyTakeaways?: string;
+      whyInvest?: string;
+      gallery?: string;
+      amenities?: string;
+      floorPlans?: string;
+      paymentPlans?: string;
+      location?: string;
+      masterPlan?: string;
+      faqs?: string;
+      team?: string;
+    };
     faqs?: {
       question: string;
       answer: string;

@@ -14,6 +14,7 @@ interface ProjectFloorPlansProps {
     image: string;
   }[];
   descriptionSections?: { heading: string; body: string }[];
+  heading?: string;
 }
 
 const DEFAULT_FLOOR_PLAN_DESCRIPTIONS = [
@@ -35,7 +36,7 @@ const DEFAULT_FLOOR_PLAN_DESCRIPTIONS = [
   },
 ];
 
-export function ProjectFloorPlans({ floorPlans, descriptionSections }: ProjectFloorPlansProps) {
+export function ProjectFloorPlans({ floorPlans, descriptionSections, heading = 'Sizes, Prices & Layouts' }: ProjectFloorPlansProps) {
   const safePlans = Array.isArray(floorPlans) && floorPlans.length > 0 ? floorPlans : null;
   const [activeTab, setActiveTab] = useState(0);
 
@@ -53,7 +54,7 @@ export function ProjectFloorPlans({ floorPlans, descriptionSections }: ProjectFl
             label="Configuration Options"
             description="Choose from our range of meticulously designed residences, each offering unparalleled luxury and comfort"
           >
-            Sizes, Prices <span className="text-[#C9A961]">&amp; Layouts</span>
+            {heading}
           </SectionHeading>
 
           {/* Type Switcher Tabs */}

@@ -10,9 +10,10 @@ interface ProjectPaymentPlanProps {
     type: string;
     description: string;
   }[];
+  heading?: string;
 }
 
-export function ProjectPaymentPlan({ paymentPlans }: ProjectPaymentPlanProps) {
+export function ProjectPaymentPlan({ paymentPlans, heading = 'Payment Plans' }: ProjectPaymentPlanProps) {
   const safePlans = Array.isArray(paymentPlans) ? paymentPlans : [];
 
   if (safePlans.length === 0) return null;
@@ -25,7 +26,7 @@ export function ProjectPaymentPlan({ paymentPlans }: ProjectPaymentPlanProps) {
             label="Flexible Options"
             description="Flexible payment options designed to suit your financial planning."
           >
-            Payment <span className="text-[#C9A961]">Plans</span>
+            {heading}
           </SectionHeading>
         </div>
 

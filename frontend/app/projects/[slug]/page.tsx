@@ -181,7 +181,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.keyTakeaways && (
         <section className="py-12 bg-[#F5F0E8]" id="key-takeaways">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <SectionHeading label="Highlights">Key Takeaways</SectionHeading>
+            <SectionHeading label="Highlights">{details.sectionHeadings?.keyTakeaways || 'Key Takeaways'}</SectionHeading>
 
             <div className="grid md:grid-cols-2 gap-8 items-stretch">
               {/* Left Side - Image */}
@@ -196,7 +196,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
               {/* Right Side - Key Takeaways Cards */}
               <div className="flex flex-col">
-                <ProjectKeyTakeaways data={details.keyTakeaways} />
+                <ProjectKeyTakeaways data={details.keyTakeaways} heading={details.sectionHeadings?.keyTakeaways} />
               </div>
             </div>
           </div>
@@ -214,6 +214,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             projectTitle={project.title}
             propertyId={project.id}
             propertySlug={slug}
+            heading={details.sectionHeadings?.whyInvest}
             whyInvestStats={details.whyInvestStats}
           />
         </ErrorBoundary>
@@ -237,7 +238,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.gallery && (
         <section className="py-12 bg-white" id="gallery">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <SectionHeading centered={false} label="Visual Tour">Project Gallery</SectionHeading>
+            <SectionHeading centered={false} label="Visual Tour">{details.sectionHeadings?.gallery || 'Project Gallery'}</SectionHeading>
             <ErrorBoundary sectionName="Gallery">
               <ProjectGallery
                 images={details.gallery}
@@ -256,6 +257,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               <ProjectMasterPlan
                 masterPlanImage={details.masterPlan}
                 description={details.masterPlanDescription}
+                heading={details.sectionHeadings?.masterPlan}
               />
             </ErrorBoundary>
           </div>
@@ -266,7 +268,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <section id="location">
         {details?.location && (
           <ErrorBoundary sectionName="Location">
-            <ProjectLocation location={details.location} />
+            <ProjectLocation location={details.location} heading={details.sectionHeadings?.location} />
           </ErrorBoundary>
         )}
       </section>
@@ -282,7 +284,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.amenities && details.amenities.length > 0 && (
         <section id="amenities">
           <ErrorBoundary sectionName="Amenities">
-            <ProjectAmenities amenities={details.amenities} amenitiesStats={details.amenitiesStats} />
+            <ProjectAmenities amenities={details.amenities} amenitiesStats={details.amenitiesStats} heading={details.sectionHeadings?.amenities} />
           </ErrorBoundary>
         </section>
       )}
@@ -291,7 +293,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.floorPlans && details.floorPlans.length > 0 && (
         <section id="floorplans">
           <ErrorBoundary sectionName="Floor Plans">
-            <ProjectFloorPlans floorPlans={details.floorPlans} descriptionSections={details.floorPlanDescriptionSections} />
+            <ProjectFloorPlans floorPlans={details.floorPlans} descriptionSections={details.floorPlanDescriptionSections} heading={details.sectionHeadings?.floorPlans} />
           </ErrorBoundary>
         </section>
       )}
@@ -300,7 +302,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.paymentPlans && details.paymentPlans.length > 0 && (
         <section id="paymentplans">
           <ErrorBoundary sectionName="Payment Plans">
-            <ProjectPaymentPlan paymentPlans={details.paymentPlans} />
+            <ProjectPaymentPlan paymentPlans={details.paymentPlans} heading={details.sectionHeadings?.paymentPlans} />
           </ErrorBoundary>
         </section>
       )}
@@ -309,7 +311,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.team && (
         <section id="team">
           <ErrorBoundary sectionName="Team">
-            <ProjectTeam team={details.team} />
+            <ProjectTeam team={details.team} heading={details.sectionHeadings?.team} />
           </ErrorBoundary>
         </section>
       )}
@@ -317,7 +319,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {/* FAQs */}
       <section id="faqs">
         {details?.faqs && details.faqs.length > 0 && (
-          <ProjectFAQ faqs={details.faqs} />
+          <ProjectFAQ faqs={details.faqs} heading={details.sectionHeadings?.faqs} />
         )}
       </section>
 

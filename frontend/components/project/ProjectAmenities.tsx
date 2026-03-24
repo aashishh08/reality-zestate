@@ -15,9 +15,10 @@ interface ProjectAmenitiesProps {
     swimmingPools?: string;
     diningOptions?: string;
   };
+  heading?: string;
 }
 
-export function ProjectAmenities({ amenities, amenitiesStats }: ProjectAmenitiesProps) {
+export function ProjectAmenities({ amenities, amenitiesStats, heading = 'Amenities' }: ProjectAmenitiesProps) {
   const safeAmenities = Array.isArray(amenities) ? amenities : [];
   const featuredImages = safeAmenities.filter(a => a.image && a.image.trim() !== '').slice(0, 2);
 
@@ -30,7 +31,7 @@ export function ProjectAmenities({ amenities, amenitiesStats }: ProjectAmenities
             label="World-Class Facilities"
             description="Experience a lifestyle of unparalleled luxury with our comprehensive range of world-class amenities designed for your comfort and well-being"
           >
-            Amenities
+            {heading}
           </SectionHeading>
         </div>
 

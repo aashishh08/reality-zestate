@@ -14,6 +14,7 @@ interface FAQ {
 
 interface ProjectFAQProps {
   faqs: FAQ[];
+  heading?: string;
 }
 
 function FAQItem({ faq, index, columnOffset }: { faq: FAQ; index: number; columnOffset: number }) {
@@ -64,7 +65,7 @@ function FAQItem({ faq, index, columnOffset }: { faq: FAQ; index: number; column
   );
 }
 
-export function ProjectFAQ({ faqs }: ProjectFAQProps) {
+export function ProjectFAQ({ faqs, heading = 'Frequently Asked Questions' }: ProjectFAQProps) {
   const displayFaqs = (faqs || []).slice(0, 10);
 
   const leftColumn = displayFaqs.slice(0, 5);
@@ -78,7 +79,7 @@ export function ProjectFAQ({ faqs }: ProjectFAQProps) {
             label="Got Questions?"
             description="Find answers to commonly asked questions about this project"
           >
-            Frequently Asked Questions
+            {heading}
           </SectionHeading>
         </div>
 

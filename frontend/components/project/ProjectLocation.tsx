@@ -16,6 +16,7 @@ interface ProjectLocationProps {
     nearby: NearbyCategory[];
     connectivity?: ConnectivityItem[];
   };
+  heading?: string;
 }
 
 const categoryIcons: Record<string, React.ElementType> = {
@@ -40,7 +41,7 @@ const connectivityIcons: Record<string, React.ElementType> = {
   default: MapPin,
 };
 
-export function ProjectLocation({ location }: ProjectLocationProps) {
+export function ProjectLocation({ location, heading = 'Location Advantage' }: ProjectLocationProps) {
   // Graceful null guard
   if (!location) return null;
 
@@ -55,7 +56,7 @@ export function ProjectLocation({ location }: ProjectLocationProps) {
             label="Prime Address"
             description="Strategically located, offering unmatched connectivity to business districts, airports, and lifestyle destinations"
           >
-            Location Advantage
+            {heading}
           </SectionHeading>
         </div>
 

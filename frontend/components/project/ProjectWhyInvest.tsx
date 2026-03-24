@@ -23,6 +23,7 @@ interface ProjectWhyInvestProps {
   projectTitle?: string;
   propertyId?: string;
   propertySlug?: string;
+  heading?: string;
   whyInvestStats?: {
     annualAppreciation?: string;
     rentalYield?: string;
@@ -37,7 +38,7 @@ const iconMap = {
   calendar: Calendar,
 };
 
-export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectTitle = "Project", propertyId, propertySlug, whyInvestStats }: ProjectWhyInvestProps) {
+export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectTitle = "Project", propertyId, propertySlug, heading, whyInvestStats }: ProjectWhyInvestProps) {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -124,7 +125,7 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
             label="Investment Opportunity"
             description={`Discover the compelling reasons why ${projectTitle} represents one of the finest investment opportunities in Gurgaon`}
           >
-            Why Invest in <span className="text-[#C9A961]">{projectTitle}</span>
+            {heading || <>Why Invest in <span className="text-[#C9A961]">{projectTitle}</span></>}
           </SectionHeading>
         </div>
 

@@ -23,6 +23,7 @@ export interface KeyTakeawaysData {
 
 interface ProjectKeyTakeawaysProps {
   data: KeyTakeawaysData;
+  heading?: string;
 }
 
 // Icon map — each field gets a relevant emoji icon
@@ -64,7 +65,7 @@ const FIELDS: { key: keyof KeyTakeawaysData; label: string }[] = [
   { key: "address", label: "Address" },
 ];
 
-export function ProjectKeyTakeaways({ data }: ProjectKeyTakeawaysProps) {
+export function ProjectKeyTakeaways({ data, heading = 'Key Takeaways' }: ProjectKeyTakeawaysProps) {
   // Only show fields that have a real value in the DB
   const cards = FIELDS.filter(
     (f) => data[f.key] && data[f.key] !== "" && data[f.key] !== "N/A"
@@ -80,7 +81,7 @@ export function ProjectKeyTakeaways({ data }: ProjectKeyTakeawaysProps) {
     <div className="bg-gradient-to-br from-[#2C2416] to-[#3D3021] rounded-2xl shadow-2xl overflow-hidden">
       {/* Header */}
       <div className="px-6 py-5 border-b border-[#C9A961]/30">
-        <h3 className="text-2xl font-serif text-[#C9A961]">Key Takeaways</h3>
+        <h3 className="text-2xl font-serif text-[#C9A961]">{heading}</h3>
         <p className="text-white/50 text-xs mt-1 uppercase tracking-widest">
           Essential project facts
         </p>

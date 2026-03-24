@@ -160,6 +160,12 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
       ? floorPlans.descriptionSections
       : [];
 
+  // Extract per-section custom headings stored in data.sectionHeading
+  const sh = (type: string) => {
+    const v = safe(type).sectionHeading;
+    return typeof v === 'string' && v ? v : undefined;
+  };
+
   return {
     heroImage: hero.image || "/images/project-1.jpg",
     subtitle: hero.subtitle || "Luxury Development",
@@ -255,6 +261,19 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
     whyInvestStats,
     amenitiesStats,
     floorPlanDescriptionSections: floorPlanDescriptionSections.length ? floorPlanDescriptionSections : undefined,
+
+    sectionHeadings: {
+      keyTakeaways: sh('keyTakeaways'),
+      whyInvest: sh('whyInvest'),
+      gallery: sh('gallery'),
+      amenities: sh('amenities'),
+      floorPlans: sh('floorPlans'),
+      paymentPlans: sh('paymentPlans'),
+      location: sh('location'),
+      masterPlan: sh('masterPlan'),
+      faqs: sh('faqs'),
+      team: sh('team'),
+    },
   };
 }
 

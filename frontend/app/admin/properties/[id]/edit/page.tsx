@@ -188,6 +188,18 @@ export default function EditPropertyPage() {
         { heading: 'Premium Design', body: '' },
         { heading: 'Smart Layouts', body: '' },
     ]);
+    const [sectionTitles, setSectionTitles] = useState({
+        keyTakeaways: 'Key Takeaways',
+        whyInvest: 'Why Invest',
+        gallery: 'Project Gallery',
+        amenities: 'Amenities',
+        floorPlans: 'Sizes, Prices & Layouts',
+        paymentPlans: 'Payment Plans',
+        location: 'Location Advantage',
+        masterPlan: 'Master Plan',
+        faqs: 'Frequently Asked Questions',
+        team: 'Design & Construction Team',
+    });
 
     // ── Load reference data + property ───────────────────────────────────────
     useEffect(() => {
@@ -233,8 +245,12 @@ export default function EditPropertyPage() {
 
         // Map sections by type
         const sections = p.PropertySections ?? [];
+        const headings: Partial<typeof sectionTitles> = {};
         for (const sec of sections) {
             const d = sec.data as Record<string, any>;
+            if (typeof d.sectionHeading === 'string' && d.sectionHeading) {
+                (headings as any)[sec.type] = d.sectionHeading;
+            }
             switch (sec.type) {
                 case 'heroImage':
                     setHero({ heroImage: d.image ?? '', subtitle: d.subtitle ?? '', videoUrl: d.videoUrl ?? '' });
@@ -368,6 +384,9 @@ export default function EditPropertyPage() {
                     break;
             }
         }
+        if (Object.keys(headings).length > 0) {
+            setSectionTitles(t => ({ ...t, ...headings }));
+        }
     }
 
     // ── Derived: union of preset + custom amenities ──────────────────────────
@@ -389,37 +408,37 @@ export default function EditPropertyPage() {
         const ktData: Record<string, string> = {};
         Object.entries(keyTakeaways).forEach(([k, v]) => { if (v.trim()) ktData[k] = v.trim(); });
         if (Object.keys(ktData).length > 0)
-            sec.push({ type: 'keyTakeaways', title: 'Key Takeaways', order: order++, data: ktData });
+            sec.push({ type: 'keyTakeaways', title: sectionTitles.keyTakeaways, order: order++, data: { ...ktData, sectionHeading: sectionTitles.keyTakeaways } });
         const contentArr = overview.content.filter(Boolean);
         if (contentArr.length)
             sec.push({ type: 'overview', title: 'Overview', order: order++, data: { heading: overview.heading, content: contentArr, features: overview.features.filter(Boolean) } });
         const gallArr = gallery.filter(Boolean);
         if (gallArr.length)
-            sec.push({ type: 'gallery', title: 'Gallery', order: order++, data: { images: gallArr } });
+            sec.push({ type: 'gallery', title: sectionTitles.gallery, order: order++, data: { images: gallArr, sectionHeading: sectionTitles.gallery } });
         const amenArr = amenities.filter(a => a.name);
         if (amenArr.length)
-            sec.push({ type: 'amenities', title: 'Amenities', order: order++, data: { items: amenArr.map(a => ({ name: a.name, icon: a.icon, image: a.imageUrl })), stats: amenitiesStats } });
+            sec.push({ type: 'amenities', title: sectionTitles.amenities, order: order++, data: { items: amenArr.map(a => ({ name: a.name, icon: a.icon, image: a.imageUrl })), stats: amenitiesStats, sectionHeading: sectionTitles.amenities } });
         const fpArr = floorPlans.filter(f => f.type || f.superArea || f.price || f.imageUrl);
         if (fpArr.length)
-            sec.push({ type: 'floorPlans', title: 'Floor Plans', order: order++, data: { plans: fpArr.map(f => ({ type: f.type, superArea: f.superArea, price: f.price, image: f.imageUrl })), descriptionSections: floorPlanDescSections.filter(s => s.heading) } });
+            sec.push({ type: 'floorPlans', title: sectionTitles.floorPlans, order: order++, data: { plans: fpArr.map(f => ({ type: f.type, superArea: f.superArea, price: f.price, image: f.imageUrl })), descriptionSections: floorPlanDescSections.filter(s => s.heading), sectionHeading: sectionTitles.floorPlans } });
         const ppArr = paymentPlans.filter(p => p.title || p.description);
         if (ppArr.length)
-            sec.push({ type: 'paymentPlans', title: 'Payment Plans', order: order++, data: { plans: ppArr } });
+            sec.push({ type: 'paymentPlans', title: sectionTitles.paymentPlans, order: order++, data: { plans: ppArr, sectionHeading: sectionTitles.paymentPlans } });
         const wiArr = whyInvest.filter(w => w.title);
         if (wiArr.length || investmentText)
-            sec.push({ type: 'whyInvest', title: 'Why Invest', order: order++, data: { reasons: wiArr, analysis: investmentText, stats: whyInvestStats } });
+            sec.push({ type: 'whyInvest', title: sectionTitles.whyInvest, order: order++, data: { reasons: wiArr, analysis: investmentText, stats: whyInvestStats, sectionHeading: sectionTitles.whyInvest } });
         if (locSection.address || nearby.some(n => n.category) || connectivity.some(c => c.place))
-            sec.push({ type: 'location', title: 'Location', order: order++, data: { address: locSection.address, mapImage: locSection.mapImage, nearby: nearby.filter(n => n.category).map(n => ({ category: n.category, icon: n.icon, items: n.items.filter(Boolean).map(name => ({ name })) })), connectivity: connectivity.filter(c => c.place) } });
+            sec.push({ type: 'location', title: sectionTitles.location, order: order++, data: { address: locSection.address, mapImage: locSection.mapImage, nearby: nearby.filter(n => n.category).map(n => ({ category: n.category, icon: n.icon, items: n.items.filter(Boolean).map(name => ({ name })) })), connectivity: connectivity.filter(c => c.place), sectionHeading: sectionTitles.location } });
         if (masterPlan.imageUrl)
-            sec.push({ type: 'masterPlan', title: 'Master Plan', order: order++, data: { image: masterPlan.imageUrl, description: masterPlan.description } });
+            sec.push({ type: 'masterPlan', title: sectionTitles.masterPlan, order: order++, data: { image: masterPlan.imageUrl, description: masterPlan.description, sectionHeading: sectionTitles.masterPlan } });
         const faqArr = faqs.filter(f => f.question || f.answer);
         if (faqArr.length)
-            sec.push({ type: 'faqs', title: 'FAQs', order: order++, data: { faqs: faqArr } });
+            sec.push({ type: 'faqs', title: sectionTitles.faqs, order: order++, data: { faqs: faqArr, sectionHeading: sectionTitles.faqs } });
         const membArr = teamMembers.filter(m => m.role);
         if (membArr.length)
-            sec.push({ type: 'team', title: 'Team', order: order++, data: { members: membArr.map(m => ({ ...m, achievements: m.achievements.filter(Boolean) })), highlights: teamHighlights.filter(th => th.title) } });
+            sec.push({ type: 'team', title: sectionTitles.team, order: order++, data: { members: membArr.map(m => ({ ...m, achievements: m.achievements.filter(Boolean) })), highlights: teamHighlights.filter(th => th.title), sectionHeading: sectionTitles.team } });
         return sec;
-    }, [hero, intro, highlights, keyTakeaways, overview, gallery, selectedPresetAmenities, customAmenities, floorPlans, paymentPlans, whyInvest, investmentText, locSection, nearby, connectivity, masterPlan, faqs, teamMembers, teamHighlights, whyInvestStats, amenitiesStats, floorPlanDescSections]);
+    }, [hero, intro, highlights, keyTakeaways, overview, gallery, selectedPresetAmenities, customAmenities, floorPlans, paymentPlans, whyInvest, investmentText, locSection, nearby, connectivity, masterPlan, faqs, teamMembers, teamHighlights, whyInvestStats, amenitiesStats, floorPlanDescSections, sectionTitles]);
 
     // ── Submit ───────────────────────────────────────────────────────────────
     const handleSubmit = async () => {
@@ -719,6 +738,7 @@ export default function EditPropertyPage() {
                             {step === 2 && (
                                 <div className="space-y-6">
                                     <SectionCard title="📋 Key Takeaways">
+                                        <Input label="Section Heading" value={sectionTitles.keyTakeaways} onChange={e => setSectionTitles(t => ({ ...t, keyTakeaways: e.target.value }))} placeholder="Key Takeaways" />
                                         <p className="text-xs text-gray-500 -mt-1">Fill only the fields that apply. Empty fields are hidden on the property page.</p>
                                         <div className="grid grid-cols-2 gap-4">
                                             <Input label="Status" value={keyTakeaways.status} onChange={e => setKeyTakeaways(k => ({ ...k, status: e.target.value }))} placeholder="Under Construction" />
@@ -748,6 +768,7 @@ export default function EditPropertyPage() {
                             {step === 3 && (
                                 <div className="space-y-6">
                                     <SectionCard title="📈 Why Invest — Reason Cards">
+                                        <Input label="Section Heading" value={sectionTitles.whyInvest} onChange={e => setSectionTitles(t => ({ ...t, whyInvest: e.target.value }))} placeholder="Why Invest" />
                                         <p className="text-xs text-gray-500 -mt-1">Icon options: <code className="text-amber-400">location · award · trending · calendar</code></p>
                                         <div className="space-y-3">
                                             {whyInvest.map((w, i) => (
@@ -843,6 +864,7 @@ export default function EditPropertyPage() {
                             {step === 5 && (
                                 <div className="space-y-6">
                                     <SectionCard title="🖼️ Gallery Images">
+                                        <Input label="Section Heading" value={sectionTitles.gallery} onChange={e => setSectionTitles(t => ({ ...t, gallery: e.target.value }))} placeholder="Project Gallery" />
                                         <div className="space-y-2">
                                             {gallery.map((g, i) => (
                                                 <div key={i} className="flex gap-2 items-center">
@@ -866,6 +888,7 @@ export default function EditPropertyPage() {
                             {step === 6 && (
                                 <div className="space-y-6">
                                     <SectionCard title="🗺️ Master Plan">
+                                        <Input label="Section Heading" value={sectionTitles.masterPlan} onChange={e => setSectionTitles(t => ({ ...t, masterPlan: e.target.value }))} placeholder="Master Plan" />
                                         <ImageUploadInput label="Master Plan Image URL" value={masterPlan.imageUrl} onChange={url => setMasterPlan(m => ({ ...m, imageUrl: url }))} placeholder="/images/masterplan.jpg" />
                                         <div className="space-y-1">
                                             <div className="flex items-center justify-between mb-1">
@@ -893,6 +916,7 @@ export default function EditPropertyPage() {
                             {step === 7 && (
                                 <div className="space-y-6">
                                     <SectionCard title="📍 Location Details">
+                                        <Input label="Section Heading" value={sectionTitles.location} onChange={e => setSectionTitles(t => ({ ...t, location: e.target.value }))} placeholder="Location Advantage" />
                                         <Input label="Full Address" value={locSection.address} onChange={e => setLocSection(l => ({ ...l, address: e.target.value }))} placeholder="Maan, Hinjewadi Phase II, Pune – 411057" />
                                         <ImageUploadInput label="Map Image URL" value={locSection.mapImage} onChange={url => setLocSection(l => ({ ...l, mapImage: url }))} placeholder="/images/map.jpg" />
                                     </SectionCard>
@@ -945,6 +969,7 @@ export default function EditPropertyPage() {
                             {step === 8 && (
                                 <div className="space-y-6">
                                     <SectionCard title="🏊 Amenities">
+                                        <Input label="Section Heading" value={sectionTitles.amenities} onChange={e => setSectionTitles(t => ({ ...t, amenities: e.target.value }))} placeholder="Amenities" />
                                         <div className="flex items-center justify-between -mt-1">
                                             <p className="text-xs text-gray-400">
                                                 Check all amenities available at this property.
@@ -1010,6 +1035,7 @@ export default function EditPropertyPage() {
                                         </div>
                                     </SectionCard>
                                     <SectionCard title="📐 Floor Plans">
+                                        <Input label="Section Heading" value={sectionTitles.floorPlans} onChange={e => setSectionTitles(t => ({ ...t, floorPlans: e.target.value }))} placeholder="Sizes, Prices & Layouts" />
                                         <div className="space-y-3">
                                             {floorPlans.map((f, i) => (
                                                 <div key={i} className="grid grid-cols-4 gap-2 items-center">
@@ -1066,6 +1092,7 @@ export default function EditPropertyPage() {
                             {step === 9 && (
                                 <div className="space-y-6">
                                     <SectionCard title="💳 Payment Plans">
+                                        <Input label="Section Heading" value={sectionTitles.paymentPlans} onChange={e => setSectionTitles(t => ({ ...t, paymentPlans: e.target.value }))} placeholder="Payment Plans" />
                                         <div className="space-y-4">
                                             {paymentPlans.map((p, i) => (
                                                 <div key={i} className="bg-gray-900 rounded-xl p-4 space-y-3 relative">
@@ -1090,6 +1117,7 @@ export default function EditPropertyPage() {
                             {step === 10 && (
                                 <div className="space-y-6">
                                     <SectionCard title="👷 Design & Construction Team">
+                                        <Input label="Section Heading" value={sectionTitles.team} onChange={e => setSectionTitles(t => ({ ...t, team: e.target.value }))} placeholder="Design & Construction Team" />
                                         <div className="space-y-4">
                                             {teamMembers.map((m, i) => (
                                                 <div key={i} className="bg-gray-900 rounded-xl p-4 space-y-3 relative">
@@ -1152,6 +1180,7 @@ export default function EditPropertyPage() {
                             {step === 11 && (
                                 <div className="space-y-6">
                                     <SectionCard title="❓ FAQs">
+                                        <Input label="Section Heading" value={sectionTitles.faqs} onChange={e => setSectionTitles(t => ({ ...t, faqs: e.target.value }))} placeholder="Frequently Asked Questions" />
                                         <div className="space-y-4">
                                             {faqs.map((f, i) => (
                                                 <div key={i} className="bg-gray-900 rounded-xl p-4 space-y-2 relative">

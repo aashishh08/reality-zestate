@@ -21,6 +21,7 @@ interface ProjectTeamProps {
       icon?: string;
     }[];
   };
+  heading?: string;
 }
 
 const roleIcons: Record<string, React.ElementType> = {
@@ -47,7 +48,7 @@ function resolveColor(raw: string | undefined): string {
   return colorMap[raw.toLowerCase()] ?? "#3B82F6";
 }
 
-export function ProjectTeam({ team }: ProjectTeamProps) {
+export function ProjectTeam({ team, heading = 'Design & Construction Team' }: ProjectTeamProps) {
   if (!team || !team.members || team.members.length === 0) return null;
 
   return (
@@ -59,7 +60,7 @@ export function ProjectTeam({ team }: ProjectTeamProps) {
             label="The Visionaries"
             description="World-class professionals coming together to create an architectural masterpiece"
           >
-            Design &amp; Construction Team
+            {heading}
           </SectionHeading>
         </div>
 

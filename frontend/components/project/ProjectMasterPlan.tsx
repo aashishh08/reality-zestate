@@ -10,9 +10,10 @@ import { HtmlRenderer } from "@/components/ui/HtmlRenderer";
 interface ProjectMasterPlanProps {
     masterPlanImage: string;
     description?: string;
+    heading?: string;
 }
 
-export function ProjectMasterPlan({ masterPlanImage, description }: ProjectMasterPlanProps) {
+export function ProjectMasterPlan({ masterPlanImage, description, heading = 'Master Plan' }: ProjectMasterPlanProps) {
     const [showScrollIndicator, setShowScrollIndicator] = useState(true);
     const contentRef = useRef<HTMLDivElement>(null);
 
@@ -61,7 +62,7 @@ State-of-the-art infrastructure including underground utilities, rainwater harve
                         label="Project Layout"
                         description="Explore the comprehensive layout and thoughtful design of our premium development"
                     >
-                        Master Plan
+                        {heading}
                     </SectionHeading>
                 </div>
 
