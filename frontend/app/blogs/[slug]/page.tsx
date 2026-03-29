@@ -154,13 +154,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-8 md:p-12">
             <div className="max-w-4xl mx-auto">
-              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-                {(post.tags || []).slice(0, 3).map((tag) => (
-                  <span key={tag} className="px-2.5 py-0.5 sm:px-3 sm:py-1 bg-amber-500/90 text-white text-xs font-semibold rounded-full">
-                    {tag}
+              {(post.tags || []).length > 0 && (
+                <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-4">
+                  {/* Mobile: first tag only, truncated */}
+                  <span className="sm:hidden inline-block px-2.5 py-0.5 bg-amber-500/90 text-white text-xs font-semibold rounded-full max-w-[180px] truncate">
+                    {post.tags[0]}
                   </span>
-                ))}
-              </div>
+                  {post.tags.length > 1 && (
+                    <span className="sm:hidden text-white/70 text-xs font-medium">
+                      +{post.tags.length - 1}
+                    </span>
+                  )}
+                  {/* Desktop: up to 3 tags */}
+                  {(post.tags || []).slice(0, 3).map((tag) => (
+                    <span key={tag} className="hidden sm:inline-block px-3 py-1 bg-amber-500/90 text-white text-xs font-semibold rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
               <h1 className="text-xl sm:text-2xl md:text-4xl font-playfair font-bold text-white leading-tight">
                 {post.title}
               </h1>
@@ -170,13 +182,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       ) : (
         <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-b border-amber-100 py-10 sm:py-14 px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-              {(post.tags || []).slice(0, 3).map((tag) => (
-                <span key={tag} className="px-2.5 py-0.5 sm:px-3 sm:py-1 bg-amber-100 text-amber-800 text-xs font-semibold rounded-full">
-                  {tag}
+            {(post.tags || []).length > 0 && (
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-4">
+                {/* Mobile: first tag only, truncated */}
+                <span className="sm:hidden inline-block px-2.5 py-0.5 bg-amber-100 text-amber-800 text-xs font-semibold rounded-full max-w-[180px] truncate">
+                  {post.tags[0]}
                 </span>
-              ))}
-            </div>
+                {post.tags.length > 1 && (
+                  <span className="sm:hidden text-amber-600 text-xs font-medium">
+                    +{post.tags.length - 1}
+                  </span>
+                )}
+                {/* Desktop: up to 3 tags */}
+                {(post.tags || []).slice(0, 3).map((tag) => (
+                  <span key={tag} className="hidden sm:inline-block px-3 py-1 bg-amber-100 text-amber-800 text-xs font-semibold rounded-full">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-playfair font-bold text-gray-900 leading-tight">
               {post.title}
             </h1>
