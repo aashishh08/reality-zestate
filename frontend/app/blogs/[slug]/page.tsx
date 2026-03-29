@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getBlogBySlug, getBlogs, BlogPost } from '@/lib/api/blogs';
 import { sanitizeHtml } from '@/lib/utils/sanitize-html';
-import { Calendar, Clock, User, ArrowLeft, Share2, Facebook, Twitter, Linkedin, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, User, ArrowLeft, Facebook, Twitter, Linkedin, ArrowRight } from 'lucide-react';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -143,7 +143,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       {/* ── Hero Image ────────────────────────────────────────────────────── */}
       {post.featuredImage ? (
-        <div className="relative w-full h-72 md:h-[480px] overflow-hidden">
+        <div className="relative w-full h-56 sm:h-72 md:h-[480px] overflow-hidden">
           <Image
             src={post.featuredImage}
             alt={post.title}
@@ -152,32 +152,32 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-8 md:p-12">
             <div className="max-w-4xl mx-auto">
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                 {(post.tags || []).slice(0, 3).map((tag) => (
-                  <span key={tag} className="px-3 py-1 bg-amber-500/90 text-white text-xs font-semibold rounded-full">
+                  <span key={tag} className="px-2.5 py-0.5 sm:px-3 sm:py-1 bg-amber-500/90 text-white text-xs font-semibold rounded-full">
                     {tag}
                   </span>
                 ))}
               </div>
-              <h1 className="text-2xl md:text-4xl font-playfair font-bold text-white leading-tight">
+              <h1 className="text-xl sm:text-2xl md:text-4xl font-playfair font-bold text-white leading-tight">
                 {post.title}
               </h1>
             </div>
           </div>
         </div>
       ) : (
-        <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-b border-amber-100 py-16 px-4">
+        <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-b border-amber-100 py-10 sm:py-14 px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
               {(post.tags || []).slice(0, 3).map((tag) => (
-                <span key={tag} className="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-semibold rounded-full">
+                <span key={tag} className="px-2.5 py-0.5 sm:px-3 sm:py-1 bg-amber-100 text-amber-800 text-xs font-semibold rounded-full">
                   {tag}
                 </span>
               ))}
             </div>
-            <h1 className="text-3xl md:text-4xl lg:text-4xl font-playfair font-bold text-gray-900 leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-playfair font-bold text-gray-900 leading-tight">
               {post.title}
             </h1>
           </div>
@@ -186,28 +186,29 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       {/* ── Back + Author byline ──────────────────────────────────────────── */}
       <div className="bg-gray-50 border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
           <Link
             href="/blogs"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors font-medium"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors font-medium text-sm sm:text-base"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Blog</span>
           </Link>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-            <div className="flex items-center space-x-1">
-              <User className="w-4 h-4 text-amber-600" />
+          {/* Meta chips — wrap on mobile, row on sm+ */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
+            <div className="flex items-center gap-1">
+              <User className="w-3.5 h-3.5 text-amber-600" />
               <span className="font-medium text-gray-800">{authorName}</span>
             </div>
             {formattedDate && (
-              <div className="flex items-center space-x-1">
-                <Calendar className="w-4 h-4 text-amber-600" />
+              <div className="flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-amber-600" />
                 <time dateTime={dateSource}>{formattedDate}</time>
               </div>
             )}
-            <div className="flex items-center space-x-1">
-              <Clock className="w-4 h-4 text-amber-600" />
+            <div className="flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5 text-amber-600" />
               <span>{readTime} min read</span>
             </div>
           </div>
@@ -215,49 +216,51 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </div>
 
       {/* ── Body: TOC + Article ───────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="lg:grid lg:grid-cols-[1fr_300px] lg:gap-12">
 
           {/* Article */}
           <article>
             {/* Excerpt / subtitle */}
             {post.excerpt && (
-              <p className="text-xl text-gray-600 font-medium leading-relaxed mb-10 pb-8 border-b border-gray-200">
+              <p className="text-base sm:text-xl text-gray-600 font-medium leading-relaxed mb-6 sm:mb-10 pb-6 sm:pb-8 border-b border-gray-200">
                 {post.excerpt}
               </p>
             )}
 
-            {/* Share bar */}
-            <div className="flex items-center justify-between mb-10 pb-6 border-b border-gray-200">
-              <span className="text-sm font-semibold text-gray-700">Share this article:</span>
-              <div className="flex items-center space-x-2">
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  aria-label="Share on Facebook"
-                >
-                  <Facebook className="w-5 h-5" />
-                </a>
-                <a
-                  href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(post.title)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 text-gray-500 hover:text-sky-500 hover:bg-sky-50 rounded-lg transition-colors"
-                  aria-label="Share on Twitter"
-                >
-                  <Twitter className="w-5 h-5" />
-                </a>
-                <a
-                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 text-gray-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
-                  aria-label="Share on LinkedIn"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
+            {/* Share bar — label stacks on mobile */}
+            <div className="mb-6 sm:mb-10 pb-4 sm:pb-6 border-b border-gray-200">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <span className="text-sm font-semibold text-gray-700">Share this article:</span>
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <a
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    aria-label="Share on Facebook"
+                  >
+                    <Facebook className="w-5 h-5" />
+                  </a>
+                  <a
+                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(post.title)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 text-gray-500 hover:text-sky-500 hover:bg-sky-50 rounded-lg transition-colors"
+                    aria-label="Share on Twitter"
+                  >
+                    <Twitter className="w-5 h-5" />
+                  </a>
+                  <a
+                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 text-gray-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                    aria-label="Share on LinkedIn"
+                  >
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -340,21 +343,22 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       {/* ── Other Blogs ──────────────────────────────────────────────────── */}
       {relatedPosts.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl md:text-3xl font-playfair font-bold text-gray-900">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+          <div className="flex items-center justify-between mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-playfair font-bold text-gray-900">
               More Articles
             </h2>
             <Link
               href="/blogs"
-              className="inline-flex items-center space-x-2 text-amber-700 font-semibold hover:underline text-sm"
+              className="inline-flex items-center gap-2 text-amber-700 font-semibold hover:underline text-xs sm:text-sm"
             >
               <span>View all</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* 1 col mobile → 3 col md */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             {relatedPosts.map((related) => {
               const relDateSource = related.publishedAt || related.createdAt || '';
               const relDate = relDateSource
@@ -364,7 +368,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               return (
                 <Link key={related.id} href={`/blogs/${related.slug}`} className="group block">
                   <article className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-                    <div className="relative h-44 overflow-hidden">
+                    <div className="relative h-40 sm:h-44 overflow-hidden">
                       {related.featuredImage ? (
                         <Image
                           src={related.featuredImage}
@@ -376,17 +380,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         <div className="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-500" />
                       )}
                     </div>
-                    <div className="p-5">
+                    <div className="p-4 sm:p-5">
                       {relDate && (
                         <p className="text-xs text-gray-500 mb-2 flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
                           {relDate}
                         </p>
                       )}
-                      <h3 className="font-playfair font-bold text-gray-900 text-base leading-snug line-clamp-2 group-hover:text-amber-700 transition-colors mb-2">
+                      <h3 className="font-playfair font-bold text-gray-900 text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-amber-700 transition-colors mb-2">
                         {related.title}
                       </h3>
-                      <p className="text-gray-500 text-sm line-clamp-2">{related.excerpt}</p>
+                      <p className="text-gray-500 text-xs sm:text-sm line-clamp-2">{related.excerpt}</p>
                     </div>
                   </article>
                 </Link>

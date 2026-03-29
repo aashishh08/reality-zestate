@@ -113,16 +113,16 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         />
 
       {/* Hero Section */}
-      <section className="bg-linear-to-r from-amber-50 to-orange-50 py-16 md:py-24">
+      <section className="bg-linear-to-r from-amber-50 to-orange-50 py-10 md:py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-playfair font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
             {searchParamsObj.search
               ? `Search Results for "${searchParamsObj.search}"`
               : searchParamsObj.category
                 ? categories.find(c => c.slug === searchParamsObj.category)?.name || 'Blog'
                 : 'Luxury Real Estate Insights'}
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
             {searchParamsObj.search
               ? `Found ${total} article${total !== 1 ? 's' : ''} matching your search`
               : 'Expert insights, market trends, and guides to help you navigate the world of luxury real estate'}
@@ -131,18 +131,18 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       </section>
 
       {/* Blog Posts */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
         {hasPosts ? (
           <>
             {/* Featured Post (first post on first page) */}
             {page === 1 && !searchParamsObj.category && !searchParamsObj.tag && !searchParamsObj.search && (
-              <div className="mb-16">
+              <div className="mb-8 sm:mb-12 lg:mb-16">
                 <BlogCard post={posts[0]} featured priority />
               </div>
             )}
 
-            {/* Regular Posts Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Regular Posts Grid: 1 col mobile → 2 col sm → 3 col lg */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {posts.slice(page === 1 && !searchParamsObj.category && !searchParamsObj.tag && !searchParamsObj.search ? 1 : 0).map((post) => (
                 <BlogCard key={post.id} post={post} />
               ))}
@@ -150,18 +150,19 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="mt-16 flex items-center justify-center space-x-4">
+              <div className="mt-10 sm:mt-16 flex items-center justify-center gap-2 sm:gap-4 flex-wrap">
                 {page > 1 && (
                   <Link
                     href={`/blogs?${new URLSearchParams({ ...searchParamsObj, page: (page - 1).toString() }).toString()}`}
-                    className="flex items-center space-x-2 px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-1.5 px-4 sm:px-6 py-2.5 sm:py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base"
                   >
-                    <ChevronLeft className="w-5 h-5" />
-                    <span>Previous</span>
+                    <ChevronLeft className="w-4 h-4" />
+                    <span className="hidden sm:inline">Previous</span>
                   </Link>
                 )}
 
-                <div className="flex items-center space-x-2">
+                {/* Show fewer page buttons on mobile */}
+                <div className="flex items-center gap-1 sm:gap-2">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     let pageNum;
                     if (totalPages <= 5) {
@@ -174,14 +175,20 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                       pageNum = page - 2 + i;
                     }
 
+                    // On mobile: only show current ± 1
+                    const isMobileVisible = Math.abs(pageNum - page) <= 1;
+
                     return (
                       <Link
                         key={pageNum}
                         href={`/blogs?${new URLSearchParams({ ...searchParamsObj, page: pageNum.toString() }).toString()}`}
-                        className={`w-10 h-10 flex items-center justify-center rounded-lg font-medium transition-colors ${page === pageNum
+                        className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg font-medium transition-colors text-sm ${
+                          !isMobileVisible ? 'hidden sm:flex' : ''
+                        } ${
+                          page === pageNum
                             ? 'bg-amber-500 text-white'
                             : 'bg-white border border-gray-300 hover:bg-gray-50'
-                          }`}
+                        }`}
                       >
                         {pageNum}
                       </Link>
@@ -192,10 +199,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 {page < totalPages && (
                   <Link
                     href={`/blogs?${new URLSearchParams({ ...searchParamsObj, page: (page + 1).toString() }).toString()}`}
-                    className="flex items-center space-x-2 px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-1.5 px-4 sm:px-6 py-2.5 sm:py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base"
                   >
-                    <span>Next</span>
-                    <ChevronRight className="w-5 h-5" />
+                    <span className="hidden sm:inline">Next</span>
+                    <ChevronRight className="w-4 h-4" />
                   </Link>
                 )}
               </div>

@@ -105,6 +105,15 @@ body {
   .scrollbar-custom::-webkit-scrollbar-thumb:hover {
     background: #A88B4A;
   }
+
+  /* Hide scrollbar cross-browser (use on horizontal scroll strips) */
+  .no-scrollbar {
+    scrollbar-width: none;      /* Firefox */
+    -ms-overflow-style: none;   /* IE 10+ */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;              /* Chrome / Safari / Edge */
+  }
 }
 
 /* ── Shared HTML prose styles for all property detail sections ────────────
