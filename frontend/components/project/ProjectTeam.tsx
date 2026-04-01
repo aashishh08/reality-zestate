@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Building2, Palette, CheckCircle2 } from "lucide-react";
+import { Building2, Palette } from "lucide-react";
 
 interface TeamMember {
   role: string;
@@ -68,7 +68,6 @@ export function ProjectTeam({ team, heading = 'Design & Construction Team' }: Pr
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {team.members.map((member, index) => {
             const resolvedColor = resolveColor(member.color);
-            const safeAchievements = Array.isArray(member.achievements) ? member.achievements : [];
 
             return (
               <motion.div
@@ -95,33 +94,6 @@ export function ProjectTeam({ team, heading = 'Design & Construction Team' }: Pr
                   </div>
                 </div>
 
-                <div className="bg-white p-6">
-                  <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                    {member.description}
-                  </p>
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">
-                      Key Achievements
-                    </p>
-                    <ul className="space-y-2.5">
-                      {safeAchievements.map((achievement, idx) => (
-                        <motion.li
-                          key={idx}
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 + idx * 0.05 }}
-                          className="flex items-start gap-2 text-sm text-gray-700"
-                        >
-                          <span
-                            className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                            style={{ backgroundColor: resolvedColor }}
-                          />
-                          <span>{achievement}</span>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
               </motion.div>
             );
           })}
