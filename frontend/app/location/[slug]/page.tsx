@@ -10,7 +10,7 @@ import { PropertyListingTemplate } from '@/components/PropertyListingTemplate';
 import { LocationHero } from '@/components/location/LocationHero';
 import {
   fetchLocationDetail,
-  fetchLocationProperties,
+  fetchCityProperties,
   getAllLocationSlugs,
   getLocationBySlug,
 } from '@/lib/api/properties-listing';
@@ -85,18 +85,17 @@ export default async function LocationPage({
     notFound();
   }
 
-  // Fetch initial properties
-  const initialData = await fetchLocationProperties(location.id, {
+  // Fetch initial properties — filtered by citySlug (the URL slug IS the enum citySlug)
+  const initialData = await fetchCityProperties(slug, {
     limit: 12,
     offset: 0,
   });
 
   // Handler for fetching properties with filters
-  // This will be used by the template for filter/sort/pagination
   const handleFetchProperties = async (filters: PropertyFilters) => {
     'use server';
 
-    const result = await fetchLocationProperties(location.id, {
+    const result = await fetchCityProperties(slug, {
       ...filters,
       limit: filters.limit || 12,
       offset: filters.offset || 0,
@@ -122,7 +121,7 @@ export default async function LocationPage({
       heroComponent={<LocationHero location={location} />}
       sortOptions={sortOptions}
       showFilters={true}
-      contextFilters={{ locationId: location.id }}
+      contextFilters={{ citySlug: slug }}
       itemsPerPage={12}
       noResultsMessage={`No properties found in ${location.name}`}
     />

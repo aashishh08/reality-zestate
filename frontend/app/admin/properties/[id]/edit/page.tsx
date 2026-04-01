@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { useAdminAuth } from '@/lib/contexts/AdminAuthContext';
 import { ProtectedAdminRoute } from '@/components/admin/ProtectedAdminRoute';
 import {
-    updatePropertyFull, fetchAdminPropertyById, fetchDevelopers, fetchLocations, fetchTags, fetchCategories,
-    RefDeveloper, RefLocation, RefTag, RefCategory, SectionPayload,
+    updatePropertyFull, fetchAdminPropertyById, fetchTags, fetchCategories, fetchEnums,
+    RefTag, RefCategory, SectionPayload, EnumsData,
 } from '@/lib/api/properties-admin';
 import {
     Building2, Plus, ChevronRight, ChevronLeft, CheckCircle2, XCircle, RefreshCw, Trash2, Eye, Loader2, AlertTriangle,
@@ -145,15 +145,15 @@ export default function EditPropertyPage() {
     const [formError, setFormError] = useState('');
 
     // Reference data
-    const [developers, setDevelopers] = useState<RefDeveloper[]>([]);
-    const [locations, setLocations] = useState<RefLocation[]>([]);
     const [tags, setTags] = useState<RefTag[]>([]);
     const [categories, setCategories] = useState<RefCategory[]>([]);
+    const [enums, setEnums] = useState<EnumsData>({ cities: [], localities: [], developers: [] });
 
     // ── Form state (identical shape to create page) ──────────────────────────
     const [basic, setBasic] = useState({
         slug: '', title: '', propertyType: 'residential' as 'residential' | 'commercial',
-        developerId: '', locationId: '', status: 'draft',
+        status: 'draft',
+        citySlug: '', localitySlug: '', developerSlug: '',
         priceMin: '', priceMax: '', isPublished: false,
         tagSlugs: [] as string[], categorySlugs: [] as string[],
         seoTitle: '', h1Heading: '', metaDescription: '',
@@ -205,16 +205,14 @@ export default function EditPropertyPage() {
     useEffect(() => {
         if (!token || !propertyId) return;
 
+        fetchEnums().then(setEnums).catch(() => { });
+
         Promise.all([
-            fetchDevelopers(),
-            fetchLocations(),
             fetchTags(),
             fetchCategories(),
             fetchAdminPropertyById(propertyId, token),
         ])
-            .then(([devs, locs, tgs, cats, property]) => {
-                setDevelopers(devs);
-                setLocations(locs);
+            .then(([tgs, cats, property]) => {
                 setTags(tgs);
                 setCategories(cats);
                 hydrateForm(property);
@@ -230,9 +228,10 @@ export default function EditPropertyPage() {
             slug: p.slug,
             title: p.title,
             propertyType: p.propertyType,
-            developerId: p.developerId,
-            locationId: p.locationId,
             status: p.status,
+            citySlug: p.citySlug ?? '',
+            localitySlug: p.localitySlug ?? '',
+            developerSlug: p.developerSlug ?? '',
             priceMin: p.priceMin != null ? String(p.priceMin) : '',
             priceMax: p.priceMax != null ? String(p.priceMax) : '',
             isPublished: p.isPublished,
@@ -604,16 +603,45 @@ export default function EditPropertyPage() {
                                                 </label>
                                             </div>
                                         </div>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <Select label="Developer *" value={basic.developerId} onChange={e => setBasic(b => ({ ...b, developerId: e.target.value }))}>
-                                                <option value="">— Select Developer —</option>
-                                                {developers.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
-                                            </Select>
-                                            <Select label="Location *" value={basic.locationId} onChange={e => setBasic(b => ({ ...b, locationId: e.target.value }))}>
-                                                <option value="">— Select Location —</option>
-                                                {locations.map(l => <option key={l.id} value={l.id}>{l.name} ({l.type})</option>)}
-                                            </Select>
+                                        {/* ── Enum Slug Classification ───────────────────── */}
+                                        <div className="pt-2 border-t border-gray-700/50">
+                                            <p className="text-xs text-amber-400 font-semibold mb-3">📍 City, Locality &amp; Developer Classification</p>
+                                            <div className="grid grid-cols-3 gap-4">
+                                                <Select
+                                                    label="City *"
+                                                    value={basic.citySlug}
+                                                    onChange={e => setBasic(b => ({ ...b, citySlug: e.target.value, localitySlug: '' }))}
+                                                >
+                                                    <option value="">— Select City —</option>
+                                                    {enums.cities.map(c => <option key={c.slug} value={c.slug}>{c.label}</option>)}
+                                                </Select>
+                                                <Select
+                                                    label="Locality *"
+                                                    value={basic.localitySlug}
+                                                    onChange={e => setBasic(b => ({ ...b, localitySlug: e.target.value }))}
+                                                    disabled={!basic.citySlug}
+                                                >
+                                                    <option value="">{basic.citySlug ? '— Select Locality —' : '← Pick a city first'}</option>
+                                                    {enums.localities
+                                                        .filter(l => l.city === basic.citySlug)
+                                                        .map(l => <option key={l.slug} value={l.slug}>{l.label}</option>)}
+                                                </Select>
+                                                <Select
+                                                    label="Developer (Enum) *"
+                                                    value={basic.developerSlug}
+                                                    onChange={e => setBasic(b => ({ ...b, developerSlug: e.target.value }))}
+                                                >
+                                                    <option value="">— Select Developer —</option>
+                                                    {enums.developers.map(d => <option key={d.slug} value={d.slug}>{d.label}</option>)}
+                                                </Select>
+                                            </div>
+                                            {(basic.citySlug || basic.localitySlug || basic.developerSlug) && (
+                                                <p className="text-xs text-gray-500 mt-2">
+                                                    ✓ {[basic.developerSlug, basic.localitySlug, basic.citySlug].filter(Boolean).join(' · ')}
+                                                </p>
+                                            )}
                                         </div>
+
                                         <div className="grid grid-cols-2 gap-4">
                                             <Input label="Price Min (₹)" type="number" value={basic.priceMin} onChange={e => setBasic(b => ({ ...b, priceMin: e.target.value }))} placeholder="e.g. 15000000" />
                                             <Input label="Price Max (₹)" type="number" value={basic.priceMax} onChange={e => setBasic(b => ({ ...b, priceMax: e.target.value }))} placeholder="e.g. 35000000" />
@@ -1078,8 +1106,27 @@ export default function EditPropertyPage() {
                                                     {floorPlanDescSections.length > 1 && <div className="absolute top-2 right-2"><RemoveBtn onClick={() => removeItem(setFloorPlanDescSections, i)} /></div>}
                                                     <input value={s.heading} onChange={e => updateItemField(setFloorPlanDescSections, i, 'heading', e.target.value)} placeholder="Section Heading"
                                                         className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                    <textarea value={s.body} onChange={e => updateItemField(setFloorPlanDescSections, i, 'body', e.target.value)} rows={2} placeholder="Description body…"
-                                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-none" />
+                                                    <div className="space-y-1">
+                                                        <div className="flex items-center justify-between">
+                                                            <label className="text-xs text-gray-400 font-medium">
+                                                                Body <span className="text-amber-400">(HTML supported)</span>
+                                                            </label>
+                                                            <button type="button"
+                                                                onClick={() => { const el = document.getElementById(`fp-desc-preview-${i}`); if (el) el.classList.toggle('hidden'); }}
+                                                                className="text-xs text-amber-400 hover:text-amber-300 transition underline">
+                                                                Toggle preview
+                                                            </button>
+                                                        </div>
+                                                        <textarea value={s.body} onChange={e => updateItemField(setFloorPlanDescSections, i, 'body', e.target.value)} rows={4}
+                                                            placeholder={`Plain text or HTML:\n<p>Premium 3 BHK residences...</p>\n<ul>\n  <li>Spacious layouts</li>\n</ul>`}
+                                                            className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono" />
+                                                        <div id={`fp-desc-preview-${i}`} className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-48 overflow-y-auto">
+                                                            <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Preview</p>
+                                                            {s.body
+                                                                ? <HtmlRenderer html={s.body} fontSize="text-sm" />
+                                                                : <p className="text-gray-400 text-xs italic">Nothing to preview yet…</p>}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>

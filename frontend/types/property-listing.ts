@@ -28,12 +28,16 @@ export interface CategoryShape {
 
 export interface PropertyFilters {
   propertyType?: 'residential' | 'commercial';
-  locationId?: string;
-  developerId?: string;
-  /** Array of category UUIDs — all matched properties must belong to ALL provided */
+  /** Enum slug from enums.js — e.g. "gurgaon" */
+  citySlug?: string;
+  /** Enum slug from enums.js — e.g. "golf-course-road". Must belong to citySlug. */
+  localitySlug?: string;
+  /** Enum slug from enums.js — e.g. "dlf" */
+  developerSlug?: string;
+  /** Array of category UUIDs */
   categoryIds?: string[];
   /** Array of tag slugs — e.g. ['upcoming', 'featured'] */
-  tags?: string | string[];
+  tags?: string[];
   priceMin?: number;
   priceMax?: number;
   sort?: 'newest' | 'price-asc' | 'price-desc' | 'name-asc';

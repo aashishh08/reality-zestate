@@ -200,11 +200,13 @@ export default function AdminPropertiesPage() {
                                                     </p>
                                                     <div className="flex items-center space-x-3 mt-0.5">
                                                         <span className="text-xs font-mono text-gray-500">{p.slug}</span>
-                                                        <span className="text-xs text-gray-600">·</span>
-                                                        <span className="text-xs text-gray-500">{p.Developer?.name}</span>
-                                                        {p.Location && <>
+                                                        {p.developerSlug && <>
                                                             <span className="text-xs text-gray-600">·</span>
-                                                            <span className="text-xs text-gray-500">{p.Location.name}</span>
+                                                            <span className="text-xs text-gray-500">{p.developerSlug}</span>
+                                                        </>}
+                                                        {(p.localitySlug || p.citySlug) && <>
+                                                            <span className="text-xs text-gray-600">·</span>
+                                                            <span className="text-xs text-gray-500">{p.localitySlug || p.citySlug}</span>
                                                         </>}
                                                     </div>
                                                 </div>

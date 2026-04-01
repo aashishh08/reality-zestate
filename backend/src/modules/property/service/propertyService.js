@@ -1,6 +1,33 @@
 import { Op } from 'sequelize';
 import { Property, Developer, Location, Category, PropertySection, Tag, PropertyCategory, PropertyTag, sequelize } from '../../../models/index.js';
 import tagService from '../../tag/service/tagService.js';
+import { isValidCity, isValidLocality, isValidDeveloper } from '../../../config/enums.js';
+
+/**
+ * Validate enum slug fields and throw a descriptive 400 if any are invalid.
+ * All three params are optional — only validates what is supplied.
+ */
+function validateEnumSlugs({ citySlug, localitySlug, developerSlug } = {}) {
+  if (citySlug !== undefined && citySlug !== null) {
+    if (!isValidCity(citySlug)) {
+      throw { status: 400, message: `Unknown city slug: "${citySlug}". See GET /api/enums for valid values.` };
+    }
+  }
+  if (localitySlug !== undefined && localitySlug !== null) {
+    // If a city is also supplied, verify that the locality belongs to it
+    if (!isValidLocality(localitySlug, citySlug || null)) {
+      const detail = citySlug
+        ? `"${localitySlug}" is not a known locality in city "${citySlug}"`
+        : `Unknown locality slug: "${localitySlug}"`;
+      throw { status: 400, message: `${detail}. See GET /api/enums for valid values.` };
+    }
+  }
+  if (developerSlug !== undefined && developerSlug !== null) {
+    if (!isValidDeveloper(developerSlug)) {
+      throw { status: 400, message: `Unknown developer slug: "${developerSlug}". See GET /api/enums for valid values.` };
+    }
+  }
+}
 
 class PropertyService {
   async createProperty(data) {
@@ -30,12 +57,16 @@ class PropertyService {
 
   async updatePropertyFull(id, data) {
     const {
-      slug, title, propertyType, developerId, locationId,
+      slug, title, propertyType,
+      citySlug, localitySlug, developerSlug,
       status, priceMin, priceMax, isPublished,
       seoTitle, h1Heading, metaDescription,
       tagSlugs = [], categorySlugs = [],
       sections = [],
     } = data;
+
+    // Validate enum slugs before touching the DB
+    validateEnumSlugs({ citySlug, localitySlug, developerSlug });
 
     const property = await Property.findByPk(id);
     if (!property) throw { status: 404, message: 'Property not found' };
@@ -47,8 +78,9 @@ class PropertyService {
       if (slug !== undefined) updateData.slug = slug;
       if (title !== undefined) updateData.title = title;
       if (propertyType !== undefined) updateData.propertyType = propertyType;
-      if (developerId !== undefined) updateData.developerId = developerId;
-      if (locationId !== undefined) updateData.locationId = locationId;
+      if (citySlug !== undefined) updateData.citySlug = citySlug || null;
+      if (localitySlug !== undefined) updateData.localitySlug = localitySlug || null;
+      if (developerSlug !== undefined) updateData.developerSlug = developerSlug || null;
       if (status !== undefined) updateData.status = status;
       if (priceMin !== undefined) updateData.priceMin = priceMin ? parseFloat(priceMin) : null;
       if (priceMax !== undefined) updateData.priceMax = priceMax ? parseFloat(priceMax) : null;
@@ -137,10 +169,11 @@ class PropertyService {
   async listProperties(filters = {}) {
     const {
       propertyType,
-      locationId,
-      developerId,
+      citySlug,      // enum slug, e.g. "gurgaon"
+      localitySlug,  // enum slug, e.g. "golf-course-road"
+      developerSlug, // enum slug, e.g. "dlf"
       categoryIds,   // array of UUIDs
-      tagSlugs,      // array of tag slug strings  ← new
+      tagSlugs,      // array of tag slug strings
       priceMin,
       priceMax,
       isPublished,
@@ -157,8 +190,22 @@ class PropertyService {
     ];
 
     if (propertyType) where.propertyType = propertyType;
-    if (locationId) where.locationId = locationId;
-    if (developerId) where.developerId = developerId;
+
+    // ── Enum slug filters ──────────────────────────────────────────────────────
+    if (citySlug) {
+      if (!isValidCity(citySlug)) throw { status: 400, message: `Unknown city slug: "${citySlug}"` };
+      where.citySlug = citySlug;
+    }
+    if (localitySlug) {
+      if (!isValidLocality(localitySlug, citySlug || null))
+        throw { status: 400, message: `Unknown/mismatched locality slug: "${localitySlug}"` };
+      where.localitySlug = localitySlug;
+    }
+    if (developerSlug) {
+      if (!isValidDeveloper(developerSlug)) throw { status: 400, message: `Unknown developer slug: "${developerSlug}"` };
+      where.developerSlug = developerSlug;
+    }
+    // ──────────────────────────────────────────────────────────────────────────
 
     if (priceMin) where.priceMin = { [Op.gte]: parseFloat(priceMin) };
     if (priceMax) where.priceMax = { ...(where.priceMax || {}), [Op.lte]: parseFloat(priceMax) };
@@ -283,21 +330,19 @@ class PropertyService {
   // ── Create a full property with sections, tags and categories in one go ─────
   async createPropertyFull(data) {
     const {
-      slug, title, propertyType, developerId, locationId,
+      slug, title, propertyType,
+      citySlug, localitySlug, developerSlug,
       status = 'draft', priceMin, priceMax, isPublished = false,
       tagSlugs = [], categorySlugs = [],
       sections = [],
     } = data;
 
-    if (!slug || !title || !propertyType || !developerId || !locationId) {
-      throw { status: 400, message: 'Missing required fields: slug, title, propertyType, developerId, locationId' };
+    if (!slug || !title || !propertyType) {
+      throw { status: 400, message: 'Missing required fields: slug, title, propertyType' };
     }
 
-    const developer = await Developer.findByPk(developerId);
-    if (!developer) throw { status: 404, message: 'Developer not found' };
-
-    const location = await Location.findByPk(locationId);
-    if (!location) throw { status: 404, message: 'Location not found' };
+    // Validate enum slugs before touching the DB
+    validateEnumSlugs({ citySlug, localitySlug, developerSlug });
 
     const existing = await Property.findOne({ where: { slug } });
     if (existing) throw { status: 409, message: `A property with slug "${slug}" already exists.` };
@@ -306,7 +351,9 @@ class PropertyService {
     try {
       const property = await Property.create({
         slug, title, propertyType,
-        developerId, locationId,
+        citySlug: citySlug || null,
+        localitySlug: localitySlug || null,
+        developerSlug: developerSlug || null,
         status,
         priceMin: priceMin ? parseFloat(priceMin) : null,
         priceMax: priceMax ? parseFloat(priceMax) : null,
@@ -358,10 +405,13 @@ class PropertyService {
 
   // ── List all properties for admin (no pagination limits, includes sections count) ─
   async listAllProperties(filters = {}) {
-    const { isPublished, propertyType, limit = 100, offset = 0 } = filters;
+    const { isPublished, propertyType, citySlug, localitySlug, developerSlug, limit = 100, offset = 0 } = filters;
     const where = {};
     if (isPublished !== undefined) where.isPublished = isPublished;
     if (propertyType) where.propertyType = propertyType;
+    if (citySlug) where.citySlug = citySlug;
+    if (localitySlug) where.localitySlug = localitySlug;
+    if (developerSlug) where.developerSlug = developerSlug;
 
     const { count, rows } = await Property.findAndCountAll({
       where,

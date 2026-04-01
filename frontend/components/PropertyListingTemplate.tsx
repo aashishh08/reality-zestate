@@ -15,6 +15,7 @@ import { PropertySort } from './filters/PropertySort';
 import { Pagination } from './ui/Pagination';
 import { PropertyListResponse, PropertyFilters, SortOption } from '@/types/property-listing';
 import { Project } from '@/types';
+import { fetchPublicEnums, fetchAllTags, PublicEnumsData, Tag } from '@/lib/api/properties-listing';
 
 export interface PropertyListingTemplateProps {
   /**
@@ -56,7 +57,7 @@ export interface PropertyListingTemplateProps {
 
   /**
    * Pre-applied filters (context-aware)
-   * For example, location pages should have locationId pre-applied
+   * For example, city pages should have citySlug pre-applied
    */
   contextFilters?: Partial<PropertyFilters>;
 
@@ -107,6 +108,15 @@ export function PropertyListingTemplate({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // Enum + tag data for the filter sidebar
+  const [enumData, setEnumData] = useState<PublicEnumsData>({ cities: [], localities: [], developers: [] });
+  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+
+  useEffect(() => {
+    fetchPublicEnums().then(setEnumData).catch(() => {});
+    fetchAllTags().then(setAvailableTags).catch(() => {});
+  }, []);
 
   // Fetch properties when filters change
   const fetchProperties = useCallback(async () => {
@@ -211,6 +221,11 @@ export function PropertyListingTemplate({
                 onFilterChange={handleFilterChange}
                 onClearFilters={handleClearFilters}
                 hasActiveFilters={hasActiveFilters}
+                contextFilters={contextFilters}
+                enumCities={enumData.cities}
+                enumLocalities={enumData.localities}
+                enumDevelopers={enumData.developers}
+                availableTags={availableTags}
               />
             </div>
           )}
@@ -401,6 +416,11 @@ export function PropertyListingTemplate({
                   }}
                   onClearFilters={handleClearFilters}
                   hasActiveFilters={hasActiveFilters}
+                  contextFilters={contextFilters}
+                  enumCities={enumData.cities}
+                  enumLocalities={enumData.localities}
+                  enumDevelopers={enumData.developers}
+                  availableTags={availableTags}
                 />
               </div>
             </motion.div>

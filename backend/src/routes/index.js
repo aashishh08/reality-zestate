@@ -9,6 +9,7 @@ import blogRoute from '../modules/blog/route/blogRoute.js';
 import leadRoute from '../modules/lead/route/leadRoute.js';
 import integrationRoute from '../modules/integration/route/integrationRoute.js';
 import healthRoute from '../modules/health/route/healthRoute.js';
+import enumsRoute from '../modules/enums/route/enumsRoute.js';
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.use('/blogs', blogRoute);
 router.use('/leads', leadRoute);
 router.use('/crm', integrationRoute);
 router.use('/health', healthRoute);
+router.use('/enums', enumsRoute);
 
 router.get('/', (_req, res) => {
   res.json({
@@ -30,7 +32,7 @@ router.get('/', (_req, res) => {
     version: 'v1',
     endpoints: {
       auth: '/auth/login, /auth/register',
-      properties: '/properties?tags=upcoming,trending&locationId=&developerId=&propertyType=',
+      properties: '/properties?tags=upcoming,trending&citySlug=gurgaon&localitySlug=golf-course-road&developerSlug=dlf',
       locations: '/locations',
       categories: '/categories',
       developers: '/developers',
@@ -39,6 +41,7 @@ router.get('/', (_req, res) => {
       leads: '/leads',
       crm: '/crm (requires x-api-key)',
       health: '/health',
+      enums: '/enums (GET cities, localities, developers) | /enums?city=gurgaon',
     },
   });
 });

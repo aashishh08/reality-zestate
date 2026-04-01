@@ -2,14 +2,14 @@ import propertyService from '../service/propertyService.js';
 
 class PropertyController {
   async createProperty(req, res) {
-    const { slug, title, propertyType, developerId, locationId, status, priceMin, priceMax, isPublished } = req.body;
+    const { slug, title, propertyType, status, priceMin, priceMax, isPublished } = req.body;
 
-    if (!slug || !title || !propertyType || !developerId || !locationId) {
-      throw { status: 400, message: 'Missing required fields: slug, title, propertyType, developerId, locationId' };
+    if (!slug || !title || !propertyType) {
+      throw { status: 400, message: 'Missing required fields: slug, title, propertyType' };
     }
 
     const property = await propertyService.createProperty({
-      slug, title, propertyType, developerId, locationId, status, priceMin, priceMax, isPublished,
+      slug, title, propertyType, status, priceMin, priceMax, isPublished,
     });
 
     res.status(201).json({ success: true, data: property, message: 'Property created successfully' });
@@ -17,10 +17,10 @@ class PropertyController {
 
   async updateProperty(req, res) {
     const { id } = req.params;
-    const { slug, title, propertyType, developerId, locationId, status, priceMin, priceMax, isPublished } = req.body;
+    const { slug, title, propertyType, status, priceMin, priceMax, isPublished } = req.body;
 
     const property = await propertyService.updateProperty(id, {
-      slug, title, propertyType, developerId, locationId, status, priceMin, priceMax, isPublished,
+      slug, title, propertyType, status, priceMin, priceMax, isPublished,
     });
 
     res.json({ success: true, data: property, message: 'Property updated successfully' });
@@ -38,7 +38,8 @@ class PropertyController {
 
   async listProperties(req, res) {
     const {
-      propertyType, locationId, developerId, categoryIds,
+      propertyType, categoryIds,
+      citySlug, localitySlug, developerSlug,
       tags,      // comma-separated slugs OR repeated: ?tags=upcoming&tags=featured
       priceMin, priceMax, isPublished,
       sort = 'newest',
@@ -52,8 +53,9 @@ class PropertyController {
 
     const filters = {
       propertyType,
-      locationId,
-      developerId,
+      citySlug,
+      localitySlug,
+      developerSlug,
       categoryIds: categoryIds
         ? (Array.isArray(categoryIds) ? categoryIds : [categoryIds])
         : undefined,
@@ -123,10 +125,13 @@ class PropertyController {
 
   // ── Admin listing: all properties with section info ─────────────────────
   async listAllProperties(req, res) {
-    const { isPublished, propertyType, limit = 100, offset = 0 } = req.query;
+    const { isPublished, propertyType, citySlug, localitySlug, developerSlug, limit = 100, offset = 0 } = req.query;
     const result = await propertyService.listAllProperties({
       isPublished: isPublished !== undefined ? isPublished === 'true' : undefined,
       propertyType,
+      citySlug,
+      localitySlug,
+      developerSlug,
       limit,
       offset,
     });

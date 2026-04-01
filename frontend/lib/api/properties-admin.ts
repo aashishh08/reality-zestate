@@ -15,8 +15,10 @@ export interface CreatePropertyFullPayload {
     slug: string;
     title: string;
     propertyType: 'residential' | 'commercial';
-    developerId: string;
-    locationId: string;
+    // Enum slugs (validated server-side against enums.js)
+    citySlug?: string | null;
+    localitySlug?: string | null;
+    developerSlug?: string | null;
     status?: string;
     priceMin?: number | null;
     priceMax?: number | null;
@@ -37,13 +39,14 @@ export interface AdminProperty {
     title: string;
     propertyType: 'residential' | 'commercial';
     status: string;
+    citySlug?: string | null;
+    localitySlug?: string | null;
+    developerSlug?: string | null;
     priceMin: number | null;
     priceMax: number | null;
     isPublished: boolean;
     createdAt: string;
     updatedAt: string;
-    Developer?: { id: string; name: string };
-    Location?: { id: string; name: string };
     PropertySections?: { id: string; type: string }[];
 }
 
@@ -130,9 +133,12 @@ export async function fetchAdminPropertyById(
     propertyType: 'residential' | 'commercial';
     status: string; priceMin: number | null; priceMax: number | null;
     isPublished: boolean;
-    developerId: string; locationId: string;
-    Developer?: { id: string; name: string };
-    Location?: { id: string; name: string };
+    citySlug?: string | null;
+    localitySlug?: string | null;
+    developerSlug?: string | null;
+    seoTitle?: string | null;
+    h1Heading?: string | null;
+    metaDescription?: string | null;
     Tags?: { id: string; name: string; slug: string }[];
     Categories?: { id: string; name: string; slug: string }[];
     PropertySections?: { id: string; type: string; title: string; order: number; isVisible: boolean; data: Record<string, any> }[];
@@ -154,12 +160,21 @@ export async function updatePropertyFull(
 }
 
 
-// ─── Reference data (developers / locations / tags / categories) ─────────────
+// ─── Reference data (tags / categories) ──────────────────────────────────────
 
-export interface RefDeveloper { id: string; name: string; slug: string }
-export interface RefLocation { id: string; name: string; slug: string; type: string }
 export interface RefTag { id: string; name: string; slug: string }
 export interface RefCategory { id: string; name: string; slug: string }
+
+// ─── Enum types (from GET /enums) ────────────────────────────────────────────
+export interface EnumCity     { slug: string; label: string }
+export interface EnumLocality { slug: string; label: string; city: string }
+export interface EnumDeveloper{ slug: string; label: string }
+
+export interface EnumsData {
+    cities: EnumCity[];
+    localities: EnumLocality[];
+    developers: EnumDeveloper[];
+}
 
 async function publicFetch<T>(path: string): Promise<T> {
     const res = await fetch(`${API_BASE}${path}`);
@@ -168,18 +183,14 @@ async function publicFetch<T>(path: string): Promise<T> {
     return json;
 }
 
-export async function fetchDevelopers(): Promise<RefDeveloper[]> {
-    const json = await publicFetch<{ data?: RefDeveloper[]; success?: boolean } | RefDeveloper[]>('/developers?limit=200');
-    if (Array.isArray(json)) return json;
-    if ((json as any).data) return (json as any).data;
-    return json as RefDeveloper[];
-}
-
-export async function fetchLocations(): Promise<RefLocation[]> {
-    const json = await publicFetch<{ data?: RefLocation[] } | RefLocation[]>('/locations?limit=200');
-    if (Array.isArray(json)) return json;
-    if ((json as any).data) return (json as any).data;
-    return json as RefLocation[];
+/**
+ * Fetch the enum lists (cities, localities, developers) from the backend.
+ * Pass a citySlug to get only localities that belong to that city.
+ */
+export async function fetchEnums(citySlug?: string): Promise<EnumsData> {
+    const qs = citySlug ? `?city=${encodeURIComponent(citySlug)}` : '';
+    const json = await publicFetch<{ success: boolean; data: EnumsData }>(`/enums${qs}`);
+    return (json as any).data;
 }
 
 export async function fetchTags(): Promise<RefTag[]> {

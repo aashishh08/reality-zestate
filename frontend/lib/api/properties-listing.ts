@@ -27,20 +27,36 @@ function findBySlug<T extends { slug: string }>(response: any, slug: string): T 
 
 // ─── Property queries ─────────────────────────────────────────────────────────
 
-export async function fetchLocationProperties(
-  locationId: string,
-  filters?: Omit<PropertyFilters, 'locationId'>,
+export async function fetchCityProperties(
+  citySlug: string,
+  filters?: Omit<PropertyFilters, 'citySlug'>,
 ): Promise<PropertyListResponse> {
-  const response = await fetchFromAPI<any>(`/properties${buildQueryString({ locationId, ...filters })}`);
+  const response = await fetchFromAPI<any>(`/properties${buildQueryString({ citySlug, ...filters })}`);
   return normaliseListResponse(response, filters);
 }
 
-export async function fetchDeveloperProperties(
-  developerId: string,
-  filters?: Omit<PropertyFilters, 'developerId'>,
+export async function fetchDeveloperSlugProperties(
+  developerSlug: string,
+  filters?: Omit<PropertyFilters, 'developerSlug'>,
 ): Promise<PropertyListResponse> {
-  const response = await fetchFromAPI<any>(`/properties${buildQueryString({ developerId, ...filters })}`);
+  const response = await fetchFromAPI<any>(`/properties${buildQueryString({ developerSlug, ...filters })}`);
   return normaliseListResponse(response, filters);
+}
+
+/** @deprecated use fetchCityProperties */
+export async function fetchLocationProperties(
+  citySlug: string,
+  filters?: Omit<PropertyFilters, 'citySlug'>,
+): Promise<PropertyListResponse> {
+  return fetchCityProperties(citySlug, filters);
+}
+
+/** @deprecated use fetchDeveloperSlugProperties */
+export async function fetchDeveloperProperties(
+  developerSlug: string,
+  filters?: Omit<PropertyFilters, 'developerSlug'>,
+): Promise<PropertyListResponse> {
+  return fetchDeveloperSlugProperties(developerSlug, filters);
 }
 
 export async function fetchCategoryProperties(
@@ -107,6 +123,33 @@ export async function getAllDeveloperSlugs(): Promise<string[]> {
     return data.map((dev: any) => dev.slug).filter(Boolean);
   } catch {
     return [];
+  }
+}
+
+// ─── Enum helpers (cities / localities / developers from enums.js) ────────────
+
+export interface EnumCity     { slug: string; label: string }
+export interface EnumLocality { slug: string; label: string; city: string }
+export interface EnumDeveloper{ slug: string; label: string }
+
+export interface PublicEnumsData {
+  cities: EnumCity[];
+  localities: EnumLocality[];
+  developers: EnumDeveloper[];
+}
+
+export async function fetchPublicEnums(citySlug?: string): Promise<PublicEnumsData> {
+  try {
+    const qs = citySlug ? `?city=${encodeURIComponent(citySlug)}` : '';
+    const response = await fetchFromAPI<any>(`/enums${qs}`);
+    const data = response?.data ?? response;
+    return {
+      cities: data?.cities ?? [],
+      localities: data?.localities ?? [],
+      developers: data?.developers ?? [],
+    };
+  } catch {
+    return { cities: [], localities: [], developers: [] };
   }
 }
 

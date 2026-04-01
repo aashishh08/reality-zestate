@@ -9,7 +9,7 @@ import { notFound } from 'next/navigation';
 import { PropertyListingTemplate } from '@/components/PropertyListingTemplate';
 import { DeveloperHero } from '@/components/developer/DeveloperHero';
 import {
-  fetchDeveloperProperties,
+  fetchDeveloperSlugProperties,
   getAllDeveloperSlugs,
   getDeveloperBySlug,
 } from '@/lib/api/properties-listing';
@@ -85,18 +85,17 @@ export default async function DeveloperPage({
     notFound();
   }
 
-  // Fetch initial properties
-  const initialData = await fetchDeveloperProperties(developer.id, {
+  // Fetch initial properties — filtered by developerSlug (URL slug IS the enum developerSlug)
+  const initialData = await fetchDeveloperSlugProperties(slug, {
     limit: 12,
     offset: 0,
   });
 
   // Handler for fetching properties with filters
-  // This will be used by the template for filter/sort/pagination
   const handleFetchProperties = async (filters: PropertyFilters) => {
     'use server';
 
-    const result = await fetchDeveloperProperties(developer.id, {
+    const result = await fetchDeveloperSlugProperties(slug, {
       ...filters,
       limit: filters.limit || 12,
       offset: filters.offset || 0,
@@ -122,7 +121,7 @@ export default async function DeveloperPage({
       heroComponent={<DeveloperHero developer={developer} />}
       sortOptions={sortOptions}
       showFilters={true}
-      contextFilters={{ developerId: developer.id }}
+      contextFilters={{ developerSlug: slug }}
       itemsPerPage={12}
       noResultsMessage={`No properties found from ${developer.name}`}
     />

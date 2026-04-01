@@ -23,7 +23,7 @@ export default (sequelize) => {
     },
     developerId: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'developers',
         key: 'id',
@@ -31,12 +31,29 @@ export default (sequelize) => {
     },
     locationId: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'locations',
         key: 'id',
       },
     },
+    // ── Enum slug fields (validated at application layer via src/config/enums.js) ──
+    citySlug: {
+      type: DataTypes.STRING(100),
+      allowNull: true, // nullable during transition; tighten after back-fill
+      comment: 'Slug of the city enum, e.g. "gurgaon"',
+    },
+    localitySlug: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+      comment: 'Slug of the locality enum, e.g. "golf-course-road". Must belong to citySlug.',
+    },
+    developerSlug: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+      comment: 'Slug of the developer enum, e.g. "dlf"',
+    },
+    // ────────────────────────────────────────────────────────────────────────────
     status: {
       type: DataTypes.STRING,
       allowNull: false,
