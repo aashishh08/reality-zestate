@@ -1173,31 +1173,14 @@ export default function EditPropertyPage() {
                                                         <Input label="Role" value={m.role} onChange={e => updateItemField(setTeamMembers, i, 'role', e.target.value)} placeholder="Architect" />
                                                         <Input label="Name / Firm" value={m.name} onChange={e => updateItemField(setTeamMembers, i, 'name', e.target.value)} placeholder="Renowned Architecture Firm" />
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-3 items-start">
-                                                        <Select label="Card Colour" value={m.color} onChange={e => updateItemField(setTeamMembers, i, 'color', e.target.value)}>
-                                                            <option value="#3B82F6">Blue</option>
-                                                            <option value="#10B981">Green</option>
-                                                            <option value="#F97316">Orange</option>
-                                                            <option value="#8B5CF6">Purple</option>
-                                                            <option value="#EF4444">Red</option>
-                                                            <option value="#C9A961">Gold</option>
-                                                        </Select>
-                                                        <Input label="Short Description" value={m.description} onChange={e => updateItemField(setTeamMembers, i, 'description', e.target.value)} placeholder="Experienced architects bringing international standards." />
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-xs text-gray-400 mb-1 font-medium">Key Achievements</label>
-                                                        <div className="space-y-2">
-                                                            {m.achievements.map((ach, j) => (
-                                                                <div key={j} className="flex gap-2">
-                                                                    <input value={ach} onChange={e => setTeamMembers(prev => prev.map((x, xi) => xi === i ? { ...x, achievements: x.achievements.map((it, ji) => ji === j ? e.target.value : it) } : x))}
-                                                                        placeholder={`Achievement ${j + 1}`} className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition" />
-                                                                    {m.achievements.length > 1 && <RemoveBtn onClick={() => setTeamMembers(prev => prev.map((x, xi) => xi === i ? { ...x, achievements: x.achievements.filter((_, ji) => ji !== j) } : x))} />}
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                        <button type="button" onClick={() => setTeamMembers(prev => prev.map((x, xi) => xi === i ? { ...x, achievements: [...x.achievements, ''] } : x))}
-                                                            className="text-xs text-amber-400 hover:text-amber-300 transition mt-2">+ Add achievement</button>
-                                                    </div>
+                                                    <Select label="Card Colour" value={m.color} onChange={e => updateItemField(setTeamMembers, i, 'color', e.target.value)}>
+                                                        <option value="#3B82F6">Blue</option>
+                                                        <option value="#10B981">Green</option>
+                                                        <option value="#F97316">Orange</option>
+                                                        <option value="#8B5CF6">Purple</option>
+                                                        <option value="#EF4444">Red</option>
+                                                        <option value="#C9A961">Gold</option>
+                                                    </Select>
                                                 </div>
                                             ))}
                                         </div>
