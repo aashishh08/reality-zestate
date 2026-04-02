@@ -1,4 +1,5 @@
 import { Developer, Property, Location, Category, Tag } from '../../../models/index.js';
+import { Op } from 'sequelize';
 
 class DeveloperService {
   async getDeveloperById(id) {
@@ -14,8 +15,25 @@ class DeveloperService {
     return developer;
   }
 
-  async listDevelopers(limit = 10, offset = 0) {
+  async getDeveloperBySlug(slug) {
+    const developer = await Developer.findOne({ where: { slug } });
+
+    if (!developer) {
+      throw {
+        status: 404,
+        message: 'Developer not found',
+      };
+    }
+
+    return developer;
+  }
+
+  async listDevelopers(limit = 10, offset = 0, slug = null) {
+    const where = {};
+    if (slug) where.slug = slug;
+
     const { count, rows } = await Developer.findAndCountAll({
+      where,
       limit: parseInt(limit, 10),
       offset: parseInt(offset, 10),
       order: [['name', 'ASC']],

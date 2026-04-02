@@ -82,7 +82,7 @@ export interface Project extends Property {
     heroImage: string;
     subtitle: string;
     introText?: string;
-    highlights: {
+    highlights?: {
       landArea?: string;
       possession?: string;
       rera?: string;
@@ -90,7 +90,7 @@ export interface Project extends Property {
       priceRange?: string;
       totalUnits?: string;
     };
-    overview: {
+    overview?: {
       heading: string;
       content: string[];
       features?: string[];
@@ -123,24 +123,27 @@ export interface Project extends Property {
       }[];
     };
     gallery?: string[];
-    keyTakeaways?: {
-      status?: string;
-      type?: string;
-      area?: string;
-      configuration?: string;
-      sizes?: string;
-      towers?: string;
-      floors?: string;
-      totalUnits?: string;
-      clubhouse?: string;
-      priceRange?: string;
-      reraNo?: string;
-      launchDate?: string;
-      possessionDate?: string;
-      phases?: string;
-      developer?: string;
-      address?: string;
-    };
+    /** Structured (CMS) or legacy string list (seed data). */
+    keyTakeaways?:
+      | {
+          status?: string;
+          type?: string;
+          area?: string;
+          configuration?: string;
+          sizes?: string;
+          towers?: string;
+          floors?: string;
+          totalUnits?: string;
+          clubhouse?: string;
+          priceRange?: string;
+          reraNo?: string;
+          launchDate?: string;
+          possessionDate?: string;
+          phases?: string;
+          developer?: string;
+          address?: string;
+        }
+      | string[];
     whyInvest?: string[] | Array<{ title: string; subtitle: string; icon?: string }>;
     investmentAnalysis?: string;
     whyInvestStats?: {
@@ -195,5 +198,9 @@ export interface Project extends Property {
         icon?: string;
       }[];
     };
+
+    /** Legacy seed data only — not rendered on the default project page */
+    usp?: string[];
+    specifications?: { category: string; items: string[] }[];
   };
 }

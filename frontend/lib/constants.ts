@@ -47,8 +47,9 @@ export const UI_CONFIG = {
     type: 'spring' as const,
     duration: 0.5,
   },
+  /** Site overlays: use literal Tailwind classes e.g. z-[100] — dynamic z-[${n}] is stripped by JIT. */
   Z_INDEX: {
-    POPUP: 60,
+    POPUP: 100,
     FLOATING_ACTIONS: 40,
     HEADER: 50,
     MODAL_BACKDROP: 50,
@@ -61,6 +62,32 @@ export const SCROLL_THRESHOLDS = {
   HEADER: 50,
   SCROLL_TO_TOP_BUTTON: 400,
 } as const;
+
+/**
+ * Homepage “Curated Collections” — order matches DB category slugs (see seed).
+ * Each links to `/category/[slug]` and lists properties tagged with that category.
+ */
+export const CURATED_COLLECTION_SLUGS = [
+  'golf-residences',
+  'branded-residences',
+  'himalayan-living',
+  'senior-living',
+  'ultra-villas',
+  'off-market',
+] as const;
+
+export type CuratedCollectionSlug = (typeof CURATED_COLLECTION_SLUGS)[number];
+
+/** Categories picker in admin: curated homepage collections first, then A–Z by slug. */
+export function orderCategoriesWithCuratedFirst<T extends { slug: string }>(items: T[]): T[] {
+  const rank = new Map<string, number>(CURATED_COLLECTION_SLUGS.map((s, i) => [s, i]));
+  return [...items].sort((a, b) => {
+    const ra = rank.get(a.slug) ?? 1000;
+    const rb = rank.get(b.slug) ?? 1000;
+    if (ra !== rb) return ra - rb;
+    return a.slug.localeCompare(b.slug);
+  });
+}
 
 // Contact Information
 export const CONTACT_INFO = {

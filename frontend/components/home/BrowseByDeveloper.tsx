@@ -12,11 +12,12 @@ interface BrowseByDeveloperProps {
 
 // Placeholder developer images — keyed by slug for easy extension
 const DEV_IMAGES: Record<string, string> = {
-    "dlf-limited": "/images/project-1.jpg",
+    dlf: "/images/project-1.jpg",
     "godrej-properties": "/images/project-2.jpg",
     "prestige-group": "/images/project-3.jpg",
-    "sobha-limited": "/images/project-4.jpg",
-    "lodha-group": "/images/project-5.jpg",
+    sobha: "/images/project-4.jpg",
+    "max-estates": "/images/project-5.jpg",
+    "oberoi-realty": "/images/project-1.jpg",
 };
 
 export function BrowseByDeveloper({ developers }: BrowseByDeveloperProps) {
@@ -73,7 +74,7 @@ export function BrowseByDeveloper({ developers }: BrowseByDeveloperProps) {
                             <Link href={`/developer/${dev.slug}`} className="block h-full">
                                 <div className="group relative h-[220px] overflow-hidden rounded-xl shadow-md cursor-pointer transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
                                     <Image
-                                        src={DEV_IMAGES[dev.slug] || "/images/project-1.jpg"}
+                                        src={dev.logo?.trim() || DEV_IMAGES[dev.slug] || "/images/hero-bg.png"}
                                         alt={dev.name}
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"

@@ -104,9 +104,34 @@ export function ProjectHero({ project }: ProjectHeroProps) {
               <p className="text-xl md:text-2xl text-white/90 font-light mb-6">
                 {details.subtitle}
               </p>
-              <p className="text-lg text-white/70 mb-8">
+              <p className="text-lg text-white/70 mb-4">
                 📍 {project.location}
               </p>
+
+              {details.highlights && (() => {
+                const h = details.highlights;
+                const chips: { label: string; value: string }[] = [];
+                if (h.landArea?.trim()) chips.push({ label: "Land", value: h.landArea.trim() });
+                if (h.possession?.trim()) chips.push({ label: "Possession", value: h.possession.trim() });
+                if (h.rera?.trim()) chips.push({ label: "RERA", value: h.rera.trim() });
+                if (h.configuration?.trim()) chips.push({ label: "Config", value: h.configuration.trim() });
+                if (h.priceRange?.trim()) chips.push({ label: "Price", value: h.priceRange.trim() });
+                if (h.totalUnits?.trim()) chips.push({ label: "Units", value: h.totalUnits.trim() });
+                if (!chips.length) return null;
+                return (
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {chips.map((c) => (
+                      <span
+                        key={c.label}
+                        className="text-xs sm:text-sm text-white/95 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-md border border-white/20"
+                      >
+                        <span className="text-white/65 mr-1">{c.label}:</span>
+                        {c.value}
+                      </span>
+                    ))}
+                  </div>
+                );
+              })()}
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <button

@@ -48,18 +48,18 @@ export function LocationHero({ location }: LocationHeroProps) {
           priority
           quality={90}
         />
-        {/* Premium gradient overlay matching ProjectHero */}
-        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-black/20" />
+        {/* Premium gradient overlay */}
+        <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/50 to-black/40" />
       </div>
 
       {/* Content */}
-      <div className="relative h-full flex flex-col justify-between pb-12 md:pb-16 px-6">
-        {/* Breadcrumb */}
+      <div className="relative h-full flex flex-col justify-between pb-12 md:pb-16 px-6 md:px-12">
+        {/* Breadcrumb — pt-[80px] clears the fixed nav (~68px) */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex items-center gap-2 pt-8 text-sm text-white/80"
+          className="flex items-center gap-2 pt-[80px] text-sm text-white/80"
         >
           <span>Home</span>
           <ChevronRight className="w-4 h-4" />

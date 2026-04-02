@@ -8,6 +8,7 @@ import {
     createPropertyFull, fetchTags, fetchCategories, fetchEnums,
     RefTag, RefCategory, SectionPayload, EnumsData,
 } from '@/lib/api/properties-admin';
+import { orderCategoriesWithCuratedFirst } from '@/lib/constants';
 import {
     Building2, Plus, TrendingUp, FileText, LogOut, Menu, X, Home,
     ChevronRight, ChevronLeft, CheckCircle2, XCircle, RefreshCw, Trash2, Eye,
@@ -235,7 +236,9 @@ export default function CreatePropertyPage() {
     // ── Load reference data ──────────────────────────────────────────────────────
     useEffect(() => {
         fetchTags().then(setTags).catch(() => { });
-        fetchCategories().then(setCategories).catch(() => { });
+        fetchCategories()
+            .then((c) => setCategories(orderCategoriesWithCuratedFirst(c)))
+            .catch(() => { });
         fetchEnums().then(setEnums).catch(() => { });
     }, []);
 
@@ -245,7 +248,7 @@ export default function CreatePropertyPage() {
     const buildSections = useCallback((): SectionPayload[] => {
         const sec: SectionPayload[] = [];
         let order = 0;
-        if (hero.heroImage || hero.subtitle)
+        if (hero.heroImage || hero.subtitle || hero.videoUrl?.trim())
             sec.push({ type: 'heroImage', title: 'Hero', order: order++, data: { image: hero.heroImage, subtitle: hero.subtitle, videoUrl: hero.videoUrl } });
         if (intro.introText)
             sec.push({ type: 'intro', title: 'Intro', order: order++, data: { text: intro.introText } });
@@ -276,8 +279,8 @@ export default function CreatePropertyPage() {
             sec.push({ type: 'whyInvest', title: sectionTitles.whyInvest, order: order++, data: { reasons: wiArr, analysis: investmentText, stats: whyInvestStats, sectionHeading: sectionTitles.whyInvest } });
         if (locSection.address || nearby.some(n => n.category) || connectivity.some(c => c.place))
             sec.push({ type: 'location', title: sectionTitles.location, order: order++, data: { address: locSection.address, mapImage: locSection.mapImage, nearby: nearby.filter(n => n.category).map(n => ({ category: n.category, icon: n.icon, items: n.items.filter(Boolean).map(name => ({ name })) })), connectivity: connectivity.filter(c => c.place), sectionHeading: sectionTitles.location } });
-        if (masterPlan.imageUrl)
-            sec.push({ type: 'masterPlan', title: sectionTitles.masterPlan, order: order++, data: { image: masterPlan.imageUrl, description: masterPlan.description, sectionHeading: sectionTitles.masterPlan } });
+        if (masterPlan.imageUrl?.trim() || masterPlan.description?.trim())
+            sec.push({ type: 'masterPlan', title: sectionTitles.masterPlan, order: order++, data: { image: masterPlan.imageUrl || '', description: masterPlan.description, sectionHeading: sectionTitles.masterPlan } });
         const faqArr = faqs.filter(f => f.question || f.answer);
         if (faqArr.length)
             sec.push({ type: 'faqs', title: sectionTitles.faqs, order: order++, data: { faqs: faqArr, sectionHeading: sectionTitles.faqs } });

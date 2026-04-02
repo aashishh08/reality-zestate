@@ -8,10 +8,12 @@ import { CityLocations } from "@/components/home/CityLocations";
 import { UpcomingProjects } from "@/components/home/UpcomingProjects";
 import { BrowseByDeveloper } from "@/components/home/BrowseByDeveloper";
 import { BoutiqueCollection } from "@/components/home/BoutiqueCollection";
+import { FeaturedCorridors } from "@/components/home/FeaturedCorridors";
 import { SuperluxereExclusive } from "@/components/home/OpulnzExclusive";
 import { LeadPopup } from "@/components/ui/LeadPopup";
-import { getProperties, getLocations, getDevelopers, getCategories } from "@/lib";
+import { getLocations, getDevelopers, getCategories } from "@/lib";
 import { fetchFromAPI } from "@/lib/api-client";
+import { getFeaturedCorridorCards } from "@/lib/featured-corridors";
 
 // ISR: Revalidate every hour
 export const revalidate = 3600;
@@ -21,21 +23,22 @@ async function getHomePageData() {
     const [
       trendingRes,
       upcomingRes,
+      boutiqueRes,
       locationsRes,
       developersRes,
       categoriesRes,
     ] = await Promise.all([
-      // Fetch tag-filtered trending properties
       fetchFromAPI<any>("/properties?tags=trending&limit=8&isPublished=true", { next: { revalidate: 3600 } })
         .catch(e => { console.error('Trending fetch failed:', e.message); return []; }),
-      // Fetch tag-filtered upcoming properties
       fetchFromAPI<any>("/properties?tags=upcoming&limit=8&isPublished=true", { next: { revalidate: 3600 } })
         .catch(e => { console.error('Upcoming fetch failed:', e.message); return []; }),
+      fetchFromAPI<any>("/properties?tags=featured&limit=8&isPublished=true", { next: { revalidate: 3600 } })
+        .catch(e => { console.error('Featured / boutique fetch failed:', e.message); return []; }),
       getLocations({ limit: 20, offset: 0 }, 3600)
         .catch(e => { console.error('Locations fetch failed:', e.message); return { data: [] }; }),
       getDevelopers({ limit: 12, offset: 0 }, 3600)
         .catch(e => { console.error('Developers fetch failed:', e.message); return { data: [] }; }),
-      getCategories({ limit: 50, offset: 0 }, 3600)
+      getCategories({ limit: 120, offset: 0 }, 3600)
         .catch(e => { console.error('Categories fetch failed:', e.message); return { data: [] }; }),
     ]);
 
@@ -45,22 +48,19 @@ async function getHomePageData() {
 
     const trending = normalise(trendingRes);
     const upcoming = normalise(upcomingRes);
+    const boutiqueProperties = normalise(boutiqueRes);
+    const locations = normalise(locationsRes);
 
-    // Fallback: if no tagged properties yet, show generic properties
-    const fallbackProps = trending.length || upcoming.length
-      ? null
-      : await getProperties({ limit: 12, offset: 0 }, 3600);
+    const featuredCorridors = await getFeaturedCorridorCards(locations, 3600);
 
     return {
-      trendingProperties: trending.length
-        ? trending
-        : normalise(fallbackProps),
-      upcomingProperties: upcoming.length
-        ? upcoming
-        : normalise(fallbackProps),
-      locations: normalise(locationsRes),
+      trendingProperties: trending,
+      upcomingProperties: upcoming,
+      boutiqueProperties,
+      locations,
       developers: normalise(developersRes),
       categories: normalise(categoriesRes),
+      featuredCorridors,
     };
   } catch (error) {
     if (process.env.NODE_ENV === "development") {
@@ -69,19 +69,27 @@ async function getHomePageData() {
     return {
       trendingProperties: [],
       upcomingProperties: [],
+      boutiqueProperties: [],
       locations: [],
       developers: [],
       categories: [],
+      featuredCorridors: [],
     };
   }
 }
 
-import { TrustedPartnerships } from "@/components/home/TrustedPartnerships";
 import { ResourcesInsights } from "@/components/home/ResourcesInsights";
 
 export default async function Home() {
-  const { trendingProperties, upcomingProperties, locations, developers, categories } =
-    await getHomePageData();
+  const {
+    trendingProperties,
+    upcomingProperties,
+    boutiqueProperties,
+    locations,
+    developers,
+    categories,
+    featuredCorridors,
+  } = await getHomePageData();
 
   return (
     <main className="min-h-screen relative selection:bg-gold selection:text-white">
@@ -97,7 +105,8 @@ export default async function Home() {
       <TrendingProjects properties={trendingProperties} />
 
       {/* 2. Browse by Location — card grid */}
-      <LocationCategories locations={locations} />
+      <LocationCategories categories={categories} />
+      <FeaturedCorridors corridors={featuredCorridors} />
       <CityLocations locations={locations} />
 
       {/* 3. Upcoming Launches — tag-filtered */}
@@ -107,9 +116,7 @@ export default async function Home() {
       <BrowseByDeveloper developers={developers} />
 
 
-      <BoutiqueCollection locations={locations} />
-
-      <TrustedPartnerships />
+      <BoutiqueCollection properties={boutiqueProperties} />
 
       <ResourcesInsights />
 

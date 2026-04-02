@@ -5,7 +5,11 @@ import { Metadata } from "next";
 export const dynamic = 'force-dynamic';
 import { getProjectBySlug, getAllProjectSlugs } from "@/lib/data";
 import { getPropertyBySlug, getProperties } from "@/lib/api/properties";
-import { transformBackendPropertyToProject } from "@/lib/property-transformer";
+import {
+  transformBackendPropertyToProject,
+  transformListingPropertyToProject,
+} from "@/lib/property-transformer";
+import type { Property, Project as ProjectType } from "@/types";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingActions } from "@/components/layout/FloatingActions";
@@ -105,7 +109,7 @@ export async function generateMetadata({
   }
 
   const description = project.metaDescription
-    || project.details?.overview.content[0]
+    || project.details?.overview?.content?.[0]
     || project.description
     || `Luxury ${project.type} in ${project.location}. ${project.price}`;
 
@@ -131,6 +135,25 @@ export async function generateMetadata({
 // Allow rendering pages for slugs not in generateStaticParams
 export const dynamicParams = true;
 
+/** Prefer other published CMS properties; fall back to static seed data. */
+async function getSimilarProjects(
+  currentSlug: string,
+  currentId: string | undefined,
+): Promise<ProjectType[]> {
+  try {
+    const res = await getProperties({ isPublished: true, limit: 32 }, false);
+    const rows = (res?.data ?? []) as Property[];
+    const others = rows
+      .filter((p) => p.slug !== currentSlug && (!currentId || p.id !== currentId))
+      .slice(0, 3)
+      .map((p) => transformListingPropertyToProject(p));
+    if (others.length > 0) return others;
+  } catch {
+    /* use static fallback */
+  }
+  return projects.filter((p) => !currentId || p.id !== currentId).slice(0, 3);
+}
+
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const project = await getPropertyData(slug);
@@ -141,11 +164,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   const { details } = project;
 
-  // Get similar projects (same category, excluding current project)
-  const allProjects = projects;
-  const similarProjects = allProjects
-    .filter(p => p.id !== project.id)
-    .slice(0, 3);
+  const similarProjects = await getSimilarProjects(slug, project.id);
 
   return (
     <main className="min-h-screen relative selection:bg-gold selection:text-white pt-[80px]">
@@ -204,11 +223,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       )}
 
 
-      {/* Investment Analysis */}
+      {/* Investment — component returns null when CMS section has no content */}
       {details && (
         <ErrorBoundary sectionName="Why Invest">
           <ProjectWhyInvest
-            reasons={details.whyInvest || []}
+            reasons={details.whyInvest ?? []}
             videoUrl={details.videoUrl}
             detailedAnalysis={details.investmentAnalysis}
             projectTitle={project.title}
@@ -229,7 +248,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <div id="overview">
         {details?.overview && (
           <ErrorBoundary sectionName="Overview">
-            <ProjectOverview overview={details.overview} />
+            <ProjectOverview
+              overview={details.overview}
+              featureImage={details.gallery?.[0] || details.heroImage}
+            />
           </ErrorBoundary>
         )}
       </div>
@@ -250,7 +272,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       )}
 
       {/* Master Plan */}
-      {details?.masterPlan && (
+      {(details?.masterPlan || details?.masterPlanDescription) && (
         <section id="masterplan" className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ErrorBoundary sectionName="Master Plan">

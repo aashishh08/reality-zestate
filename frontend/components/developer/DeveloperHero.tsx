@@ -18,18 +18,22 @@ interface DeveloperHeroProps {
     logo?: string;
     description?: string;
   };
+  /** Hardcoded override — wins over API `description` and default blurb */
+  tagline?: string;
+  /** Hardcoded hero background — wins over `DEVELOPER_IMAGES[slug]` */
+  heroImageSrc?: string;
 }
 
 // Default hero images for different developers
 const DEVELOPER_IMAGES: Record<string, string> = {
-  'dlf': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=600&fit=crop',
-  'godrej': 'https://images.unsplash.com/photo-1486328803556-cb3e53108c30?w=1200&h=600&fit=crop',
-  'lodha': 'https://images.unsplash.com/photo-1486568151456-6d019d1a635c?w=1200&h=600&fit=crop',
-  'default': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=600&fit=crop',
+  dlf: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=600&fit=crop',
+  'godrej-properties': 'https://images.unsplash.com/photo-1486328803556-cb3e53108c30?w=1200&h=600&fit=crop',
+  default: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=600&fit=crop',
 };
 
-export function DeveloperHero({ developer }: DeveloperHeroProps) {
-  const heroImage = DEVELOPER_IMAGES[developer.slug.toLowerCase()] || DEVELOPER_IMAGES['default'];
+export function DeveloperHero({ developer, tagline, heroImageSrc }: DeveloperHeroProps) {
+  const heroImage =
+    heroImageSrc || DEVELOPER_IMAGES[developer.slug.toLowerCase()] || DEVELOPER_IMAGES['default'];
 
   return (
     <section className="relative h-[60vh] md:h-[70vh] w-full overflow-hidden">
@@ -43,18 +47,18 @@ export function DeveloperHero({ developer }: DeveloperHeroProps) {
           priority
           quality={90}
         />
-        {/* Premium gradient overlay matching ProjectHero */}
-        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-black/20" />
+        {/* Premium gradient overlay */}
+        <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/50 to-black/40" />
       </div>
 
       {/* Content */}
-      <div className="relative h-full flex flex-col justify-between pb-12 md:pb-16 px-6">
-        {/* Breadcrumb */}
+      <div className="relative h-full flex flex-col justify-between pb-12 md:pb-16 px-6 md:px-12">
+        {/* Breadcrumb — pt-[80px] clears the fixed nav (~68px) */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex items-center gap-2 pt-8 text-sm text-white/80"
+          className="flex items-center gap-2 pt-[80px] text-sm text-white/80"
         >
           <span>Home</span>
           <ChevronRight className="w-4 h-4" />
@@ -102,7 +106,8 @@ export function DeveloperHero({ developer }: DeveloperHeroProps) {
             </div>
 
             <p className="text-lg text-white/80 font-light max-w-2xl">
-              {developer.description ||
+              {tagline ||
+                developer.description ||
                 `Discover all premium projects and properties developed by ${developer.name}.
               Explore world-class amenities, strategic locations, and exceptional investment opportunities.`}
             </p>

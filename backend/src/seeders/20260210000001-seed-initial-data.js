@@ -161,23 +161,29 @@ export async function up(queryInterface) {
     });
   }
 
-  // ─── 5. Developers (Builders) ──────────────────────────────────────────────
+  // ─── 5. Developers (Builders) — canonical list (see src/config/enums.js) ─────
   for (const dev of [
-    { name: 'DLF', slug: 'dlf' },
     { name: 'Max Estates', slug: 'max-estates' },
-    { name: 'Experion', slug: 'experion' },
+    { name: 'DLF', slug: 'dlf' },
+    { name: 'Sobha', slug: 'sobha' },
+    { name: 'Elevate', slug: 'elevate' },
+    { name: 'Conscient Hines Elevate', slug: 'conscient-hines-elevate' },
     { name: 'Eldeco', slug: 'eldeco' },
-    { name: 'Conscient', slug: 'conscient' },
-    { name: 'Kreeva', slug: 'kreeva' },
+    { name: 'Experion Developers', slug: 'experion-developers' },
     { name: 'Godrej Properties', slug: 'godrej-properties' },
     { name: 'Oberoi Realty', slug: 'oberoi-realty' },
+    { name: 'Kreeva', slug: 'kreeva' },
+    { name: 'Terra Grande', slug: 'terra-grande' },
+    { name: 'Central Park', slug: 'central-park' },
+    { name: 'Trac', slug: 'trac' },
+    { name: 'trump tower', slug: 'trump-tower' },
+    { name: 'm3m, smartworld', slug: 'm3m-smartworld' },
+    { name: 'ats', slug: 'ats' },
+    { name: 'Silver glades', slug: 'silver-glades' },
     { name: 'Adani Realty', slug: 'adani-realty' },
+    { name: 'prestige group', slug: 'prestige-group' },
     { name: 'AIPL', slug: 'aipl' },
-    { name: 'Prestige Group', slug: 'prestige-group' },
-    { name: 'M3M India', slug: 'm3m-india' },
-    { name: 'Smartworld Developers', slug: 'smartworld-developers' },
-    { name: 'Shapoorji Pallonji', slug: 'shapoorji-pallonji' },
-    { name: 'Eldeco Terra Grande', slug: 'eldeco-terra-grande' },
+    { name: 'Max Antara', slug: 'max-antara' },
   ]) {
     await queryInterface.sequelize.query(
       `INSERT INTO "developers" ("id", "name", "slug", "logo", "createdAt", "updatedAt")
@@ -191,12 +197,18 @@ export async function up(queryInterface) {
 
   // ─── 6. Categories ─────────────────────────────────────────────────────────
   for (const cat of [
+    // Curated homepage collections
+    { name: 'Golf Residences', slug: 'golf-residences', propertyType: 'residential' },
+    { name: 'Branded Residences', slug: 'branded-residences', propertyType: 'residential' },
+    { name: 'Himalayan Living', slug: 'himalayan-living', propertyType: 'residential' },
+    { name: 'Senior Living', slug: 'senior-living', propertyType: 'residential' },
+    { name: 'Ultra Villas', slug: 'ultra-villas', propertyType: 'residential' },
+    { name: 'Off-Market', slug: 'off-market', propertyType: 'residential' },
     // Residential
     { name: 'Luxury', slug: 'luxury', propertyType: 'residential' },
     { name: 'Ultra Luxury', slug: 'ultra-luxury', propertyType: 'residential' },
     { name: 'Affordable', slug: 'affordable', propertyType: 'residential' },
     { name: 'Mid Segment', slug: 'mid-segment', propertyType: 'residential' },
-    { name: 'Senior Living', slug: 'senior-living', propertyType: 'residential' },
     { name: 'Plotted', slug: 'plotted', propertyType: 'residential' },
     { name: 'Villa', slug: 'villa', propertyType: 'residential' },
     // Commercial

@@ -3,25 +3,36 @@ import { Metadata } from "next";
 import { getCategoryBySlug, getAllCategorySlugs } from "@/lib/category-data";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { FloatingActions } from "@/components/layout/FloatingActions";
-import { CategoryHero } from "@/components/category/CategoryHero";
-import { CategoryIntro } from "@/components/category/CategoryIntro";
-import { CategoryFeatures } from "@/components/category/CategoryFeatures";
-import { CategoryCityProjects } from "@/components/category/CategoryCityProjects";
-import { CategoryContent } from "@/components/category/CategoryContent";
-import { CategoryOffer } from "@/components/category/CategoryOffer";
-import { LeadForm } from "@/components/category/LeadForm";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { LeadPopup } from "@/components/ui/LeadPopup";
+import { PropertyListingTemplate } from "@/components/PropertyListingTemplate";
+import {
+  CorridorEditorialHero,
+  CorridorCharacter,
+  CorridorDevelopersPresence,
+  CorridorFaq,
+  CorridorNriStrip,
+} from "@/components/location/micro-market";
+import {
+  fetchCategoryProperties,
+  fetchCategoryPropertiesBySlug,
+} from "@/lib/api/properties-listing";
+import { getLocations, getDevelopers, getCategories } from "@/lib";
+import { buildCategoryCollectionPageModel } from "@/lib/category-collection-page";
+import type { PropertyFilters } from "@/types/property-listing";
 
-// Generate static params for all categories (ISR)
 export async function generateStaticParams() {
   const slugs = getAllCategorySlugs();
   return slugs.map((slug) => ({
-    slug: slug,
+    slug,
   }));
 }
 
-// Generate metadata for SEO
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const category = getCategoryBySlug(slug);
 
@@ -42,62 +53,107 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-// ISR Configuration - Revalidate every 2 hours
 export const revalidate = 7200;
 
-export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function CategoryPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
-  const category = getCategoryBySlug(slug);
+  const editorial = getCategoryBySlug(slug);
 
-  if (!category) {
+  if (!editorial) {
     notFound();
   }
 
+  const [locationsRes, developersRes, categoriesRes, initialData] = await Promise.all([
+    getLocations({ limit: 20, offset: 0 }, revalidate).catch(() => ({ data: [] })),
+    getDevelopers({ limit: 12, offset: 0 }, revalidate).catch(() => []),
+    getCategories({ limit: 200, offset: 0 }, revalidate).catch(() => ({ data: [] })),
+    fetchCategoryPropertiesBySlug(slug, { limit: 12, offset: 0 }, revalidate),
+  ]);
+
+  const apiCategory =
+    categoriesRes.data?.find((c) => c.slug === slug) ?? null;
+  const displayName = apiCategory?.name ?? editorial.title;
+  const categoryId = apiCategory?.id ?? null;
+
+  const handleFetchProperties = async (filters: PropertyFilters) => {
+    "use server";
+
+    if (!categoryId) {
+      return {
+        data: [],
+        pagination: {
+          limit: filters.limit ?? 12,
+          offset: filters.offset ?? 0,
+          total: 0,
+        },
+      };
+    }
+
+    const result = await fetchCategoryProperties(categoryId, {
+      ...filters,
+      limit: filters.limit || 12,
+      offset: filters.offset || 0,
+      isPublished: true,
+    });
+
+    return result;
+  };
+
+  const mm = buildCategoryCollectionPageModel(displayName, editorial, initialData);
+
+  const breadcrumbItems = [
+    { label: "Projects", href: "/projects" },
+    { label: displayName, href: `/category/${slug}` },
+  ];
+
   return (
-    <main className="min-h-screen bg-white">
-      <Header />
-
-      {/* Hero Section */}
-      <CategoryHero
-        title={category.heroTitle}
-        subtitle={category.heroSubtitle}
-        backgroundImage={`/images/category-${slug}.jpg`}
+    <>
+      <Header
+        locations={locationsRes.data || []}
+        developers={Array.isArray(developersRes) ? developersRes : []}
+        categories={categoriesRes.data || []}
       />
+      <div className="relative min-h-screen selection:bg-gold selection:text-white pt-16 lg:pt-20">
+        <div className="pointer-events-none fixed inset-0 z-[-1] bg-background">
+          <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
+        </div>
+        <div className="relative">
+          <Breadcrumbs items={breadcrumbItems} />
 
-      {/* Introduction with Breadcrumbs */}
-      <CategoryIntro
-        text={category.introText}
-        categoryTitle={category.title}
-      />
+          <CorridorEditorialHero {...mm.hero} />
 
-      {/* City-wise Projects */}
-      {category.citySections && category.citySections.length > 0 && (
-        <CategoryCityProjects citySections={category.citySections} />
-      )}
+          <PropertyListingTemplate
+            key={slug}
+            initialData={initialData}
+            onFetchProperties={handleFetchProperties}
+            title={`${displayName} — curated collection`}
+            subtitle={
+              editorial.introText ||
+              `Discover premium properties in the ${displayName} collection.`
+            }
+            itemsPerPage={12}
+            noResultsMessage={`No properties found in ${displayName}`}
+            projectsSection={mm.projectsSection}
+          />
 
-      {/* Features/USP */}
-      {category.features && category.features.length > 0 && (
-        <CategoryFeatures features={category.features} />
-      )}
-
-      {/* Content Sections */}
-      {category.contentSections && category.contentSections.length > 0 && (
-        <CategoryContent sections={category.contentSections} />
-      )}
-
-      {/* Special Offer */}
-      {category.specialOffer && (
-        <CategoryOffer offer={category.specialOffer} />
-      )}
-
-      {/* Lead Generation Form */}
-      <LeadForm
-        offerTitle={category.specialOffer?.title}
-        offerValidTill={category.specialOffer?.validTill}
-      />
-
+          <CorridorCharacter {...mm.character} />
+          <CorridorDevelopersPresence
+            locationTitle={displayName}
+            sectionSubtitle={mm.developers.sectionSubtitle}
+            items={mm.developers.items}
+          />
+          <CorridorNriStrip {...mm.nri} />
+          <CorridorFaq locationName={displayName} items={mm.faqs} />
+        </div>
+      </div>
       <Footer />
-      <FloatingActions />
-    </main>
+      <LeadPopup />
+    </>
   );
 }
+
+export const dynamicParams = false;

@@ -12,6 +12,14 @@ interface SuperluxereExclusiveProps {
 
 export function SuperluxereExclusive({ developers }: SuperluxereExclusiveProps) {
   const { openModal } = useLeadModal();
+  const partnerLine =
+    developers.length > 0
+      ? `Partner roster on-platform includes ${developers
+          .slice(0, 5)
+          .map((d) => d.name)
+          .join(" · ")}${developers.length > 5 ? " · …" : ""}.`
+      : null;
+
   return (
     <section id="superluxere-exclusive" className="relative py-32 px-6 bg-[#F5F5F0] text-foreground overflow-hidden">
       {/* Background with Overlay */}
@@ -43,9 +51,18 @@ export function SuperluxereExclusive({ developers }: SuperluxereExclusiveProps) 
               <span className="text-gold-dark">Exclusive</span>
             </h2>
 
-            <p className="text-xl text-zinc-600 font-light leading-relaxed mb-10 max-w-lg">
+            <p
+              className={`text-xl text-zinc-600 font-light leading-relaxed max-w-lg ${
+                partnerLine ? "mb-6" : "mb-10"
+              }`}
+            >
               Unlock access to off-market listings, pre-launch opportunities, and high-yield real estate investments reserved strictly for our inner circle.
             </p>
+            {partnerLine ? (
+              <p className="text-sm text-zinc-500 font-medium leading-relaxed mb-10 max-w-lg">
+                {partnerLine}
+              </p>
+            ) : null}
 
             <ul className="space-y-4 mb-10">
               {["Off-Market Listings", "Priority Allocations", "Dedicated Wealth Manager"].map((item) => (

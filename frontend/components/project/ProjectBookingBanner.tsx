@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CalendarCheck, AlertCircle } from "lucide-react";
 import { createLead } from "@/lib/api/leads";
@@ -15,6 +16,7 @@ interface ProjectBookingBannerProps {
 }
 
 export function ProjectBookingBanner({ projectTitle, propertyId, propertySlug }: ProjectBookingBannerProps) {
+  const [mounted, setMounted] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success">("idle");
@@ -30,6 +32,10 @@ export function ProjectBookingBanner({ projectTitle, propertyId, propertySlug }:
       }, 2800);
     },
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -116,27 +122,32 @@ export function ProjectBookingBanner({ projectTitle, propertyId, propertySlug }:
         </div>
       </section>
 
-      {/* ── Lead Modal ── */}
-      <AnimatePresence>
-        {showModal && (
-          <div className={`fixed inset-0 z-[${UI_CONFIG.Z_INDEX.POPUP}] flex items-center justify-center pointer-events-none`}>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto"
-              onClick={() => setShowModal(false)}
-            />
+      {/* ── Lead Modal (portal + static z-index: avoids Tailwind JIT stripping dynamic z-[]) ── */}
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {showModal && (
+              <div
+                className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none"
+                role="presentation"
+              >
+                {/* Backdrop */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 z-0 bg-black/60 backdrop-blur-sm pointer-events-auto"
+                  onClick={() => setShowModal(false)}
+                />
 
-            {/* Modal card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={UI_CONFIG.SPRING_CONFIG}
-              className="relative w-full max-w-md bg-white overflow-hidden shadow-2xl rounded-2xl pointer-events-auto m-4"
-            >
+                {/* Modal card */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                  transition={UI_CONFIG.SPRING_CONFIG}
+                  className="relative z-10 w-full max-w-md bg-white overflow-hidden shadow-2xl rounded-2xl pointer-events-auto m-4"
+                >
               {/* Close */}
               <button
                 onClick={() => setShowModal(false)}
@@ -264,10 +275,12 @@ export function ProjectBookingBanner({ projectTitle, propertyId, propertySlug }:
                   </>
                 )}
               </div>
-            </motion.div>
-          </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
     </>
   );
 }

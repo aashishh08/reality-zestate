@@ -132,18 +132,12 @@ export default async function TagPage({
 
     return (
         <PropertyListingTemplate
+            key={slug}
             initialData={initialData}
             onFetchProperties={handleFetchProperties}
             title={`${tag.name} Properties`}
             subtitle={tag.description ?? `Browse all ${tag.name.toLowerCase()} properties`}
             heroComponent={<TagHero tag={tag} />}
-            sortOptions={[
-                { value: 'newest', label: 'Newest First' },
-                { value: 'price-asc', label: 'Price: Low to High' },
-                { value: 'price-desc', label: 'Price: High to Low' },
-                { value: 'name-asc', label: 'Name: A to Z' },
-            ]}
-            showFilters={true}
             contextFilters={{}}
             itemsPerPage={12}
             noResultsMessage={`No properties found under "${tag.name}" tag yet.`}

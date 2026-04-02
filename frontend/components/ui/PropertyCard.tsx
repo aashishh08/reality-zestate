@@ -3,84 +3,164 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Project } from "@/types";
-import { motion } from "framer-motion";
-import { ArrowUpRight, MapPin, BedDouble, Bath, Square } from "lucide-react";
+
+// Status-type tag slugs shown as badge on the card.
+// Add new slugs here to extend badge support automatically.
+export const STATUS_TAG_SLUGS = [
+  'new-launch',
+  'upcoming',
+  'under-construction',
+  'ready-to-move',
+];
+
+// Fallback badge colors by slug (used when tag.color is not set in the DB)
+const STATUS_BADGE_COLORS: Record<string, { bg: string; text: string }> = {
+  'new-launch':         { bg: 'rgba(109,40,217,0.12)', text: '#6D28D9' },
+  'upcoming':           { bg: 'rgba(5,150,105,0.12)',  text: '#059669' },
+  'under-construction': { bg: 'rgba(180,83,9,0.12)',   text: '#B45309' },
+  'ready-to-move':      { bg: 'rgba(29,78,216,0.12)',  text: '#1D4ED8' },
+};
+const DEFAULT_BADGE = { bg: 'rgba(107,114,128,0.12)', text: '#6B7280' };
+
+function formatPrice(value: number): string {
+  if (value >= 10_000_000) {
+    const cr = value / 10_000_000;
+    return `₹${cr % 1 === 0 ? cr.toFixed(0) : cr.toFixed(1)} Cr`;
+  }
+  if (value >= 100_000) {
+    const l = value / 100_000;
+    return `₹${l % 1 === 0 ? l.toFixed(0) : l.toFixed(1)} L`;
+  }
+  return `₹${value.toLocaleString('en-IN')}`;
+}
 
 interface PropertyCardProps {
   project: Project;
   index: number;
 }
 
-export function PropertyCard({ project, index }: PropertyCardProps) {
-  if (!project?.slug || !project?.title) {
-    return null; // Don't render if essential fields are missing
-  }
+export function PropertyCard({ project }: PropertyCardProps) {
+  if (!project?.slug || !project?.title) return null;
+
+  // First status-type tag drives the badge
+  const statusTag = project.Tags?.find(t => STATUS_TAG_SLUGS.includes(t.slug));
+  const badgeStyle = statusTag
+    ? {
+        backgroundColor: statusTag.color
+          ? `${statusTag.color}20`
+          : (STATUS_BADGE_COLORS[statusTag.slug]?.bg ?? DEFAULT_BADGE.bg),
+        color: statusTag.color || (STATUS_BADGE_COLORS[statusTag.slug]?.text ?? DEFAULT_BADGE.text),
+      }
+    : null;
+
+  const priceDisplay = project.priceMin
+    ? `From ${formatPrice(project.priceMin)}`
+    : null;
+
+  const developerName = project.Developer?.name ?? '';
+  const locationName  = project.Location?.name ?? project.location ?? '';
 
   return (
-    <Link href={`/projects/${project.slug}`}>
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: index * 0.1 }}
-        className="group relative w-full aspect-[3/4] overflow-hidden rounded-sm cursor-pointer"
-      >
-      {/* Background Image with Zoom Effect */}
-      <div className="absolute inset-0 w-full h-full">
-        <Image
-          src={project.image || "/images/placeholder.jpg"}
-          alt={project.title}
-          fill
-          className="object-cover transition-transform duration-1000 group-hover:scale-110"
-        />
-        {/* Gradient Overlay - Lighter Premium Feel */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-      </div>
+    <Link href={`/projects/${project.slug}`} className="block">
+      <div className="group bg-white overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
 
-      {/* Floating Category Badge */}
-      <div className="absolute top-6 left-6 z-10">
-        <span className="bg-white/90 backdrop-blur-md shadow-sm text-charcoal px-4 py-1.5 text-xs font-bold tracking-widest uppercase rounded-full">
-          {project.category}
-        </span>
-      </div>
+        {/* ── Image / Gradient area ──────────────────────────── */}
+        <div className="relative h-[220px] overflow-hidden">
+          {project.image ? (
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          ) : (
+            /* Gradient fallback with diagonal gold pattern */
+            <div className="absolute inset-0 bg-gradient-to-br from-charcoal via-[#3a3a3a] to-[#505050]">
+              <div
+                className="absolute inset-0 opacity-[0.06]"
+                style={{
+                  backgroundImage:
+                    'repeating-linear-gradient(45deg,#D4AF37 0,#D4AF37 1px,transparent 1px,transparent 22px)',
+                }}
+              />
+            </div>
+          )}
 
-      {/* Price Tag - Top Right */}
-      <div className="absolute top-6 right-6 z-10 translate-y-[-20px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-         <span className="text-gold font-serif text-lg font-bold drop-shadow-md">
-            {project.price}
-         </span>
-      </div>
+          {/* Gradient overlay for price tag legibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
-      {/* Bottom Content Area */}
-      <div className="absolute bottom-0 left-0 right-0 p-8 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-        {/* Title & Location */}
-        <div className="mb-4">
-          <h3 className="text-2xl font-serif font-medium mb-2 leading-tight">
-            {project.title}
-          </h3>
-          <div className="flex items-center gap-2 text-white/70 text-sm">
-            <MapPin className="w-4 h-4 text-gold" />
-            <span>{project.location}</span>
-          </div>
+          {/* Status badge — top left */}
+          {statusTag && badgeStyle && (
+            <div
+              className="absolute top-3 left-3 z-10 text-[9px] font-medium tracking-[0.16em] uppercase px-2.5 py-[5px]"
+              style={badgeStyle}
+            >
+              {statusTag.name}
+            </div>
+          )}
+
+          {/* Price tag — bottom right */}
+          {priceDisplay && (
+            <div className="absolute bottom-3 right-3 z-10 bg-black/75 backdrop-blur-sm px-3 py-1.5">
+              <span className="font-serif text-[14px] font-medium text-gold tracking-wide">
+                {priceDisplay}
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Divider */}
-        <div className="h-[1px] w-full bg-white/20 mb-4 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left" />
+        {/* ── Card body ─────────────────────────────────────── */}
+        <div className="px-5 pt-4 pb-5">
 
-        {/* Specs & CTA - Hidden initially or subtle */}
-        <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-          <div className="flex items-center gap-4 text-sm text-white/80">
-             <span className="flex items-center gap-1"><BedDouble className="w-3 h-3" /> 4</span>
-             <span className="flex items-center gap-1"><Bath className="w-3 h-3" /> 4</span>
-             <span className="flex items-center gap-1"><Square className="w-3 h-3" /> 3200 sqft</span>
+          {/* Developer */}
+          {developerName && (
+            <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-gold mb-1">
+              {developerName}
+            </p>
+          )}
+
+          {/* Project name */}
+          <h3 className="font-serif text-[19px] font-medium text-charcoal leading-snug mb-2">
+            {project.title}
+          </h3>
+
+          {/* Location */}
+          {locationName && (
+            <div className="flex items-center gap-1.5 mb-3">
+              <span className="w-[4px] h-[4px] rounded-full bg-gold flex-shrink-0" />
+              <span className="text-[11px] text-muted-foreground tracking-[0.04em]">
+                {locationName}
+              </span>
+            </div>
+          )}
+
+          {/* Specs row */}
+          <div className="flex flex-wrap items-center gap-4 pt-3 border-t border-border mb-4">
+            {project.propertyType && (
+              <span className="text-[11px] text-muted-foreground tracking-[0.04em]">
+                Type{' '}
+                <strong className="text-charcoal font-medium capitalize">
+                  {project.propertyType}
+                </strong>
+              </span>
+            )}
+            {project.priceMax && project.priceMin && project.priceMax !== project.priceMin && (
+              <span className="text-[11px] text-muted-foreground tracking-[0.04em]">
+                Up to{' '}
+                <strong className="text-charcoal font-medium">
+                  {formatPrice(project.priceMax)}
+                </strong>
+              </span>
+            )}
           </div>
-          
-          <button className="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-black hover:bg-white transition-colors">
-            <ArrowUpRight className="w-5 h-5" />
+
+          {/* CTA */}
+          <button className="w-full py-[11px] text-[10px] font-medium tracking-[0.14em] uppercase text-charcoal border border-border bg-transparent transition-all duration-300 group-hover:bg-charcoal group-hover:text-gold group-hover:border-charcoal">
+            View Project →
           </button>
         </div>
       </div>
-    </motion.div>
     </Link>
   );
 }

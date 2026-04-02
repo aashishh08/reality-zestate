@@ -1,3 +1,5 @@
+import 'dotenv/config.js';
+
 export default {
   development: {
     username: process.env.DB_USER || 'postgres',

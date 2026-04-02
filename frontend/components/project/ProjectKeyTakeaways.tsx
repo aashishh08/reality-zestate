@@ -22,7 +22,7 @@ export interface KeyTakeawaysData {
 }
 
 interface ProjectKeyTakeawaysProps {
-  data: KeyTakeawaysData;
+  data: KeyTakeawaysData | string[];
   heading?: string;
 }
 
@@ -66,6 +66,25 @@ const FIELDS: { key: keyof KeyTakeawaysData; label: string }[] = [
 ];
 
 export function ProjectKeyTakeaways({ data, heading = 'Key Takeaways' }: ProjectKeyTakeawaysProps) {
+  if (Array.isArray(data)) {
+    const lines = data.filter((x): x is string => typeof x === "string" && x.trim().length > 0);
+    if (!lines.length) return null;
+    return (
+      <div className="bg-gradient-to-br from-[#2C2416] to-[#3D3021] rounded-2xl shadow-2xl overflow-hidden">
+        <div className="px-6 py-5 border-b border-[#C9A961]/30">
+          <h3 className="text-2xl font-serif text-[#C9A961]">{heading}</h3>
+        </div>
+        <ul className="p-5 space-y-3 text-white/95 text-sm list-disc pl-10 pr-4">
+          {lines.map((line, i) => (
+            <li key={i} className="leading-relaxed">
+              {line}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
   // Only show fields that have a real value in the DB
   const cards = FIELDS.filter(
     (f) => data[f.key] && data[f.key] !== "" && data[f.key] !== "N/A"

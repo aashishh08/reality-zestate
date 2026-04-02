@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getBlogBySlug, getBlogs, BlogPost } from '@/lib/api/blogs';
+import { getLocations, getDevelopers, getCategories } from '@/lib';
+import { Header } from '@/components/layout/Header';
+import { LeadPopup } from '@/components/ui/LeadPopup';
 import { sanitizeHtml } from '@/lib/utils/sanitize-html';
 import { Calendar, Clock, User, ArrowLeft, Facebook, Twitter, Linkedin, ArrowRight } from 'lucide-react';
 
@@ -97,14 +100,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   if (!post) notFound();
 
-  // Related posts (exclude current)
-  let relatedPosts: BlogPost[] = [];
-  try {
-    const all = await getBlogs({ limit: 4 }, 3600);
-    relatedPosts = (all.data || []).filter((p) => p.slug !== slug).slice(0, 3);
-  } catch {
-    relatedPosts = [];
-  }
+  const [locationsRes, developersRes, categoriesRes, blogsForRelated] = await Promise.all([
+    getLocations({ limit: 20, offset: 0 }, 3600).catch(() => ({ data: [] })),
+    getDevelopers({ limit: 12, offset: 0 }, 3600).catch(() => []),
+    getCategories({ limit: 50, offset: 0 }, 3600).catch(() => ({ data: [] })),
+    getBlogs({ limit: 4 }, 3600).catch(() => ({ data: [] })),
+  ]);
+
+  const relatedPosts = (blogsForRelated.data || []).filter((p) => p.slug !== slug).slice(0, 3);
 
   const dateSource = post.publishedAt || post.createdAt || '';
   const formattedDate = dateSource
@@ -140,7 +143,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <main className="min-h-screen bg-white">
+      <Header
+        locations={locationsRes.data || []}
+        developers={Array.isArray(developersRes) ? developersRes : []}
+        categories={categoriesRes.data || []}
+      />
 
+      <div className="pt-16 lg:pt-20">
       {/* ── Hero Image ────────────────────────────────────────────────────── */}
       {post.featuredImage ? (
         <div className="relative w-full h-56 sm:h-72 md:h-[480px] overflow-hidden">
@@ -469,6 +478,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           }),
         }}
       />
+      </div>
+
+      <LeadPopup />
     </main>
   );
 }

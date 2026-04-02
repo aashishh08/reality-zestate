@@ -83,7 +83,9 @@ export function CityLocations({ locations }: CityLocationsProps) {
               <Link href={`/location/${location.slug}`} className="block h-full">
                 <div className="group relative h-[300px] overflow-hidden rounded-xl shadow-lg cursor-pointer transform transition-all duration-300 hover:-translate-y-2">
                   <Image
-                    src={locationImages[location.slug.toLowerCase()] || "/images/category-delhi.jpg"}
+                    src={
+                      locationImages[location.slug.toLowerCase()] || "/images/hero-bg.png"
+                    }
                     alt={location.name}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"

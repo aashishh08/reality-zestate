@@ -80,6 +80,8 @@ export interface PropertyItem {
   Categories?: CategoryShape[];
   /** Frontend-only convenience field added by data-fetching helpers */
   image?: string;
+  /** First visible heroImage section’s `data.image`, when list API enriches rows */
+  thumbnailUrl?: string | null;
 }
 
 export interface PropertyListResponse {

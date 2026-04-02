@@ -94,6 +94,23 @@ export function ProjectTeam({ team, heading = 'Design & Construction Team' }: Pr
                   </div>
                 </div>
 
+                <div className="px-6 py-5 bg-white text-left border-t border-gray-100">
+                  {member.description?.trim() ? (
+                    <p className="text-sm text-gray-600 leading-relaxed mb-4">{member.description}</p>
+                  ) : null}
+                  {member.achievements?.length ? (
+                    <ul className="text-sm text-gray-700 space-y-2 list-disc pl-4">
+                      {member.achievements.map((a, i) =>
+                        a?.trim() ? (
+                          <li key={i} className="leading-snug">
+                            {a}
+                          </li>
+                        ) : null,
+                      )}
+                    </ul>
+                  ) : null}
+                </div>
+
               </motion.div>
             );
           })}

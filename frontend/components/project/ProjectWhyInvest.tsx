@@ -91,31 +91,34 @@ export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectT
     }
   };
 
-  // Convert simple string array to structured format if needed.
-  // Guard against null/undefined reasons with a safe array fallback.
   const safeReasons = Array.isArray(reasons) ? reasons : [];
 
-  const investmentBoxes: WhyInvestItem[] =
-    safeReasons.length === 0 || typeof safeReasons[0] === 'string'
-      ? [
-        { title: "Prime Location", subtitle: "Strategic location with high appreciation", icon: "location" },
-        { title: "Brand Legacy", subtitle: "Trusted developer with proven track record", icon: "award" },
-        { title: "Investment Returns", subtitle: "Strong rental yield and capital appreciation", icon: "trending" },
-        { title: "Market Timing", subtitle: "Pre-launch pricing advantage", icon: "calendar" },
-      ]
-      : (safeReasons as WhyInvestItem[]);
+  const structuredBoxes: WhyInvestItem[] =
+    safeReasons.length > 0 && typeof safeReasons[0] !== "string"
+      ? (safeReasons as WhyInvestItem[])
+      : [];
 
-  const analysisText = detailedAnalysis ||
-    (safeReasons.length > 0 && typeof safeReasons[0] === 'string' ? safeReasons.join('\n\n') : '') ||
-    `This premium development offers a compelling investment opportunity in one of the most sought-after locations. The strategic location ensures excellent connectivity to major business hubs, entertainment zones, and essential amenities.
+  const legacyStringReasons =
+    safeReasons.length > 0 && typeof safeReasons[0] === "string"
+      ? (safeReasons as string[])
+      : [];
 
-The property benefits from being developed by a renowned builder with a proven track record in delivering quality projects on time. This reputation provides investors with the assurance of transparent dealings and reliable possession timelines.
+  const analysisText =
+    (detailedAnalysis && detailedAnalysis.trim()) ||
+    (legacyStringReasons.length > 0 ? legacyStringReasons.join("\n\n") : "");
 
-From an appreciation perspective, the micro-market has demonstrated consistent growth over the years. The area's infrastructure development, coupled with limited supply of premium properties, creates a favorable environment for long-term capital appreciation.
+  const hasStats =
+    !!whyInvestStats &&
+    [whyInvestStats.annualAppreciation, whyInvestStats.rentalYield, whyInvestStats.preLaunchGain].some(
+      (v) => typeof v === "string" && v.trim().length > 0,
+    );
 
-Rental yield potential is another attractive aspect of this investment. The location commands premium rents due to its proximity to corporate offices and lifestyle amenities. Luxury apartments in this area typically generate rental yields in the range of 3-4%, providing steady cash flow for investors.
+  const hasBoxes = structuredBoxes.length > 0;
+  if (!hasBoxes && !analysisText.trim() && !hasStats) {
+    return null;
+  }
 
-The current pre-launch phase presents an optimal entry point from a pricing perspective. Early investors typically benefit from significant appreciation by the time of possession, as seen in previous projects in similar locations.`;
+  const investmentBoxes = structuredBoxes;
 
   return (
     <section className="py-12 bg-[#F5F0E8]" id="why-invest">
@@ -129,100 +132,112 @@ The current pre-launch phase presents an optimal entry point from a pricing pers
           </SectionHeading>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Left Side - Small Icon Boxes in Grid */}
-          <div className="grid grid-cols-2 gap-3">
-            {investmentBoxes.slice(0, 4).map((item, index) => {
-              // Safe icon lookup: unknown keys (e.g. "building", "star") return undefined → fall back to TrendingUp
-              const IconComponent = (item.icon ? iconMap[item.icon as keyof typeof iconMap] : null) ?? TrendingUp;
-              const isMarketTiming = item.title === "Market Timing";
+        <div
+          className={`grid gap-8 ${hasBoxes ? "md:grid-cols-2" : "md:grid-cols-1"}`}
+        >
+          {hasBoxes ? (
+            <div className="grid grid-cols-2 gap-3">
+              {investmentBoxes.slice(0, 4).map((item, index) => {
+                const IconComponent =
+                  (item.icon ? iconMap[item.icon as keyof typeof iconMap] : null) ?? TrendingUp;
+                const isMarketTiming = item.title === "Market Timing";
 
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group cursor-pointer flex flex-col ${isMarketTiming ? "bg-gradient-to-br from-[#C9A961]/10 to-[#C9A961]/5" : "bg-white"
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group cursor-pointer flex flex-col ${
+                      isMarketTiming
+                        ? "bg-gradient-to-br from-[#C9A961]/10 to-[#C9A961]/5"
+                        : "bg-white"
                     }`}
-                >
-                  <div className="flex-1">
-                    <div className="w-10 h-10 bg-[#C9A961]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#C9A961]/20 transition-colors">
-                      <IconComponent className="w-5 h-5 text-[#C9A961]" />
+                  >
+                    <div className="flex-1">
+                      <div className="w-10 h-10 bg-[#C9A961]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#C9A961]/20 transition-colors">
+                        <IconComponent className="w-5 h-5 text-[#C9A961]" />
+                      </div>
+                      <h3 className="text-sm font-semibold text-[#2C2416] mb-1.5 leading-tight">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-gray-600 leading-snug line-clamp-2">
+                        {item.subtitle}
+                      </p>
                     </div>
-                    <h3 className="text-sm font-semibold text-[#2C2416] mb-1.5 leading-tight">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-gray-600 leading-snug line-clamp-2">
-                      {item.subtitle}
-                    </p>
-                  </div>
 
-                  {isMarketTiming && (
-                    <button
-                      onClick={() => setShowForm(true)}
-                      className="mt-3 w-full bg-[#C9A961] hover:bg-[#A88B4A] text-black text-xs font-semibold py-1.5 px-2 rounded transition-all"
-                    >
-                      Get More Insights
-                    </button>
-                  )}
-                </motion.div>
-              );
-            })}
-          </div>
+                    {isMarketTiming && (
+                      <button
+                        type="button"
+                        onClick={() => setShowForm(true)}
+                        className="mt-3 w-full bg-[#C9A961] hover:bg-[#A88B4A] text-black text-xs font-semibold py-1.5 px-2 rounded transition-all"
+                      >
+                        Get More Insights
+                      </button>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+          ) : null}
 
-          {/* Right Side - Scrollable Text + Stats */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: hasBoxes ? 50 : 0 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             className="flex flex-col gap-6"
           >
-            {/* Scrollable Analysis Text */}
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
-              <div className="h-[400px] overflow-y-auto pr-4 custom-scrollbar">
-                <HtmlRenderer html={analysisText} />
+            {analysisText.trim() ? (
+              <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
+                <div className="h-[400px] overflow-y-auto pr-4 custom-scrollbar">
+                  <HtmlRenderer html={analysisText} />
+                </div>
               </div>
-            </div>
+            ) : null}
 
-            {/* Investment Statistics Cards */}
-            <div className="grid grid-cols-3 gap-4">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="bg-[#1A1A2E] rounded-xl p-6 text-center"
-              >
-                <p className="text-[#C9A961] text-2xl font-bold mb-2">
-                  {whyInvestStats?.annualAppreciation ?? '12-15%'}
-                </p>
-                <p className="text-gray-300 text-sm font-medium">Annual Appreciation</p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="bg-[#1A1A2E] rounded-xl p-6 text-center"
-              >
-                <p className="text-[#C9A961] text-2xl font-bold mb-2">
-                  {whyInvestStats?.rentalYield ?? '3.5-4.5%'}
-                </p>
-                <p className="text-gray-300 text-sm font-medium">Rental Yield</p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="bg-[#1A1A2E] rounded-xl p-6 text-center"
-              >
-                <p className="text-[#C9A961] text-2xl font-bold mb-2">
-                  {whyInvestStats?.preLaunchGain ?? '25-30%'}
-                </p>
-                <p className="text-gray-300 text-sm font-medium">Pre-Launch Gain</p>
-              </motion.div>
-            </div>
+            {hasStats ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {whyInvestStats?.annualAppreciation?.trim() ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="bg-[#1A1A2E] rounded-xl p-6 text-center"
+                  >
+                    <p className="text-[#C9A961] text-2xl font-bold mb-2">
+                      {whyInvestStats.annualAppreciation}
+                    </p>
+                    <p className="text-gray-300 text-sm font-medium">Annual Appreciation</p>
+                  </motion.div>
+                ) : null}
+                {whyInvestStats?.rentalYield?.trim() ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-[#1A1A2E] rounded-xl p-6 text-center"
+                  >
+                    <p className="text-[#C9A961] text-2xl font-bold mb-2">
+                      {whyInvestStats.rentalYield}
+                    </p>
+                    <p className="text-gray-300 text-sm font-medium">Rental Yield</p>
+                  </motion.div>
+                ) : null}
+                {whyInvestStats?.preLaunchGain?.trim() ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="bg-[#1A1A2E] rounded-xl p-6 text-center"
+                  >
+                    <p className="text-[#C9A961] text-2xl font-bold mb-2">
+                      {whyInvestStats.preLaunchGain}
+                    </p>
+                    <p className="text-gray-300 text-sm font-medium">Pre-Launch Gain</p>
+                  </motion.div>
+                ) : null}
+              </div>
+            ) : null}
           </motion.div>
         </div>
       </div>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { PropertyItem } from "@/types/property-listing";
 import { PropertyCard } from "@/components/ui/PropertyCard";
+import { listingCardImageUrl } from "@/lib/listing-card-image";
 import { motion } from "framer-motion";
 import { MoveRight, TrendingUp } from "lucide-react";
 
@@ -10,10 +11,18 @@ interface TrendingProjectsProps {
   properties: PropertyItem[];
 }
 
-export function TrendingProjects({ properties }: TrendingProjectsProps) {
-  if (!properties || properties.length === 0) return null;
+function hasTrendingTag(property: PropertyItem): boolean {
+  return (
+    property.Tags?.some((t) => t.slug?.toLowerCase() === "trending") ?? false
+  );
+}
 
-  const display = properties.slice(0, 4);
+export function TrendingProjects({ properties }: TrendingProjectsProps) {
+  const trendingOnly = properties.filter(hasTrendingTag);
+
+  if (!trendingOnly.length) return null;
+
+  const display = trendingOnly.slice(0, 4);
 
   return (
     <section id="trending-projects" className="py-24 px-6 bg-transparent overflow-hidden">
@@ -56,8 +65,10 @@ export function TrendingProjects({ properties }: TrendingProjectsProps) {
           {display.map((property, index) => {
             if (!property?.slug || !property?.title) return null;
 
-            // Extract the first tag's colour for the badge (if available)
-            const firstTag = property.Tags?.[0];
+            const trendingTag = property.Tags?.find(
+              (t) => t.slug?.toLowerCase() === "trending",
+            );
+            const firstTag = trendingTag ?? property.Tags?.[0];
 
             return (
               <PropertyCard
@@ -79,7 +90,7 @@ export function TrendingProjects({ properties }: TrendingProjectsProps) {
                   price: property.priceMin
                     ? `₹ ${(property.priceMin / 10_000_000).toFixed(1)}Cr`
                     : "Price on Request",
-                  image: "/images/project-1.jpg",
+                  image: listingCardImageUrl(property),
                   category: (firstTag?.name || "Trending") as string,
                   tagColor: firstTag?.color,
                 }}

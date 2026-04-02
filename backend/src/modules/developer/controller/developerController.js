@@ -13,9 +13,9 @@ class DeveloperController {
   }
 
   async listDevelopers(req, res) {
-    const { limit = 10, offset = 0 } = req.query;
+    const { limit = 10, offset = 0, slug } = req.query;
 
-    const result = await developerService.listDevelopers(limit, offset);
+    const result = await developerService.listDevelopers(limit, offset, slug || null);
 
     res.json({
       success: true,

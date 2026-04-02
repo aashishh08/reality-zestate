@@ -1,30 +1,34 @@
 /**
- * Location Properties Page
- * Displays all properties in a specific location
+ * Location Properties Page — micro-market / corridor template
  * Route: /location/[slug]
+ *
+ * Editorial hero, project listings, corridor story, developers, NRI, FAQ.
  */
 
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PropertyListingTemplate } from '@/components/PropertyListingTemplate';
-import { LocationHero } from '@/components/location/LocationHero';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { LeadPopup } from '@/components/ui/LeadPopup';
 import {
-  fetchLocationDetail,
-  fetchCityProperties,
+  CorridorEditorialHero,
+  CorridorCharacter,
+  CorridorDevelopersPresence,
+  CorridorFaq,
+  CorridorNriStrip,
+} from '@/components/location/micro-market';
+import {
+  fetchLocationPageProperties,
   getAllLocationSlugs,
   getLocationBySlug,
+  type LocationListingContext,
 } from '@/lib/api/properties-listing';
+import { getLocations, getDevelopers, getCategories } from '@/lib';
+import { buildMicroMarketPageModel } from '@/lib/location-micro-market';
 import { PropertyFilters } from '@/types/property-listing';
 
-interface LocationPageProps {
-  params: Promise<{
-    slug: string;
-  }>;
-}
-
-/**
- * Generate metadata for the page
- */
 export async function generateMetadata({
   params: paramsPromise,
 }: {
@@ -41,21 +45,18 @@ export async function generateMetadata({
   }
 
   return {
-    title: `Properties in ${location.name} | Reality Estate`,
-    description: `Discover premium properties in ${location.name}. Find residential and commercial properties with detailed information, prices, and amenities.`,
-    keywords: [location.name, 'properties', 'real estate', 'residential', 'commercial'],
+    title: `${location.name} — Luxury Projects | Superluxere`,
+    description: `Discover curated projects in ${location.name}. Explore developers and corridor fundamentals before you book a site visit.`,
+    keywords: [location.name, 'luxury real estate', 'micro-market', 'India', 'Superluxere'],
     openGraph: {
-      title: `Properties in ${location.name}`,
-      description: `Browse properties available in ${location.name}`,
+      title: `${location.name} | Superluxere`,
+      description: `Browse premium inventory in ${location.name}.`,
       type: 'website',
       url: `/location/${location.slug}`,
     },
   };
 }
 
-/**
- * Generate static params for all locations
- */
 export async function generateStaticParams() {
   try {
     const slugs = await getAllLocationSlugs();
@@ -68,74 +69,124 @@ export async function generateStaticParams() {
   }
 }
 
-/**
- * Location Page Component
- */
-export default async function LocationPage({ 
+export default async function LocationPage({
   params: paramsPromise,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await paramsPromise;
-  
-  // Fetch location details
+
   const location = await getLocationBySlug(slug);
 
   if (!location) {
     notFound();
   }
 
-  // Fetch initial properties — filtered by citySlug (the URL slug IS the enum citySlug)
-  const initialData = await fetchCityProperties(slug, {
-    limit: 12,
-    offset: 0,
-  });
+  const listingContext: LocationListingContext = {
+    slug: location.slug,
+    type: location.type,
+    parent: location.parent ? { slug: location.parent.slug } : undefined,
+  };
 
-  // Handler for fetching properties with filters
+  const serializedListingContext = {
+    slug: location.slug,
+    type: location.type,
+    parentSlug: location.parent?.slug ?? null,
+  } as const;
+
+  const [
+    locationsRes,
+    developersRes,
+    categoriesRes,
+    initialData,
+  ] = await Promise.all([
+    getLocations({ limit: 20, offset: 0 }, 3600).catch(() => ({ data: [] })),
+    getDevelopers({ limit: 12, offset: 0 }, 3600).catch(() => []),
+    getCategories({ limit: 50, offset: 0 }, 3600).catch(() => ({ data: [] })),
+    fetchLocationPageProperties(listingContext, {
+      limit: 12,
+      offset: 0,
+    }),
+  ]);
+
   const handleFetchProperties = async (filters: PropertyFilters) => {
     'use server';
 
-    const result = await fetchCityProperties(slug, {
+    const loc: LocationListingContext = {
+      slug: serializedListingContext.slug,
+      type: serializedListingContext.type,
+      parent: serializedListingContext.parentSlug
+        ? { slug: serializedListingContext.parentSlug }
+        : undefined,
+    };
+
+    return fetchLocationPageProperties(loc, {
       ...filters,
       limit: filters.limit || 12,
       offset: filters.offset || 0,
     });
-
-    return result;
   };
 
-  // Sort options specific to location pages
-  const sortOptions = [
-    { value: 'newest' as const, label: 'Newest First' },
-    { value: 'price-asc' as const, label: 'Price: Low to High' },
-    { value: 'price-desc' as const, label: 'Price: High to Low' },
-    { value: 'name-asc' as const, label: 'Name: A to Z' },
+  const mm = buildMicroMarketPageModel(location, initialData);
+
+  const breadcrumbItems = [
+    { label: 'Projects', href: '/projects' },
+    ...(location.parent
+      ? [{ label: location.parent.name, href: `/location/${location.parent.slug}` } as const]
+      : []),
+    { label: location.name, href: `/location/${slug}` },
   ];
 
   return (
-    <PropertyListingTemplate
-      initialData={initialData}
-      onFetchProperties={handleFetchProperties}
-      title={`Properties in ${location.name}`}
-      subtitle={`Discover premium properties available in ${location.name}`}
-      heroComponent={<LocationHero location={location} />}
-      sortOptions={sortOptions}
-      showFilters={true}
-      contextFilters={{ citySlug: slug }}
-      itemsPerPage={12}
-      noResultsMessage={`No properties found in ${location.name}`}
-    />
+    <>
+      <Header
+        locations={locationsRes.data || []}
+        developers={Array.isArray(developersRes) ? developersRes : []}
+        categories={categoriesRes.data || []}
+      />
+      <div className="relative min-h-screen selection:bg-gold selection:text-white pt-16 lg:pt-20">
+        <div className="pointer-events-none fixed inset-0 z-[-1] bg-background">
+          <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
+        </div>
+        <div className="relative">
+        <Breadcrumbs items={breadcrumbItems} />
+
+        <CorridorEditorialHero {...mm.hero} />
+
+        <PropertyListingTemplate
+          key={slug}
+          initialData={initialData}
+          onFetchProperties={handleFetchProperties}
+          title={`Properties in ${location.name}`}
+          subtitle={`Discover premium properties available in ${location.name}`}
+          contextFilters={
+            location.type === 'locality' || location.type === 'sector'
+              ? location.parent?.slug
+                ? { citySlug: location.parent.slug, localitySlug: location.slug }
+                : { localitySlug: location.slug }
+              : { citySlug: location.slug }
+          }
+          itemsPerPage={12}
+          noResultsMessage={`No properties found in ${location.name}`}
+          projectsSection={mm.projectsSection}
+        />
+
+        <CorridorCharacter {...mm.character} />
+        <CorridorDevelopersPresence
+          locationTitle={location.name}
+          sectionSubtitle={mm.developers.sectionSubtitle}
+          items={mm.developers.items}
+        />
+        <CorridorNriStrip {...mm.nri} />
+        <CorridorFaq locationName={location.name} items={mm.faqs} />
+        </div>
+      </div>
+      <Footer />
+      <LeadPopup />
+    </>
   );
 }
 
-/**
- * ISR Configuration
- * Revalidate every 1 hour (3600 seconds)
- */
 export const revalidate = 3600;
 
-/**
- * Dynamic segment configuration
- * Ensures page is generated on-demand if not pre-generated
- */
 export const dynamicParams = true;

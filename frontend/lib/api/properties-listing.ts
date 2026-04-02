@@ -1,4 +1,6 @@
 import { fetchFromAPI, buildQueryString } from '../api-client';
+import { getCategories } from './categories';
+import type { Location } from './locations';
 import { PropertyListResponse, PropertyFilters } from '@/types/property-listing';
 
 // ─── Shared normaliser ────────────────────────────────────────────────────────
@@ -35,6 +37,37 @@ export async function fetchCityProperties(
   return normaliseListResponse(response, filters);
 }
 
+/** Minimal shape for `/location/[slug]` — supports cities and localities/ sectors (micro-markets). */
+export type LocationListingContext = Pick<Location, 'slug' | 'type'> & {
+  parent?: Pick<NonNullable<Location['parent']>, 'slug'> | null;
+};
+
+/**
+ * List properties for a location row from `/locations` — uses enum `citySlug` for cities,
+ * and `citySlug` + `localitySlug` for localities so the API matches `enums.js` (avoids
+ * sending a locality slug as `citySlug`, which returns "Unknown city slug").
+ */
+export async function fetchLocationPageProperties(
+  location: LocationListingContext,
+  filters?: Omit<PropertyFilters, 'citySlug' | 'localitySlug'>,
+): Promise<PropertyListResponse> {
+  const q: PropertyFilters = { ...(filters ?? {}) };
+
+  if (location.type === 'locality' || location.type === 'sector') {
+    if (location.parent?.slug) {
+      q.citySlug = location.parent.slug;
+      q.localitySlug = location.slug;
+    } else {
+      q.localitySlug = location.slug;
+    }
+  } else {
+    q.citySlug = location.slug;
+  }
+
+  const response = await fetchFromAPI<any>(`/properties${buildQueryString(q)}`);
+  return normaliseListResponse(response, filters);
+}
+
 export async function fetchDeveloperSlugProperties(
   developerSlug: string,
   filters?: Omit<PropertyFilters, 'developerSlug'>,
@@ -61,10 +94,28 @@ export async function fetchDeveloperProperties(
 
 export async function fetchCategoryProperties(
   categoryId: string,
-  filters?: Omit<PropertyFilters, 'categoryId'>,
+  filters?: Omit<PropertyFilters, 'categoryIds'>,
 ): Promise<PropertyListResponse> {
   const response = await fetchFromAPI<any>(`/properties${buildQueryString({ categoryIds: [categoryId], ...filters })}`);
   return normaliseListResponse(response, filters);
+}
+
+/** Resolve a category UUID from its slug, then list published properties in that category. */
+export async function fetchCategoryPropertiesBySlug(
+  slug: string,
+  filters?: Omit<PropertyFilters, 'categoryIds'>,
+  categoriesRevalidate: number | false = 7200,
+): Promise<PropertyListResponse> {
+  const catsRes = await getCategories({ limit: 200, offset: 0 }, categoriesRevalidate);
+  const list = catsRes?.data ?? [];
+  const cat = list.find((c) => c.slug === slug);
+  if (!cat) {
+    return {
+      data: [],
+      pagination: { limit: filters?.limit ?? 12, offset: filters?.offset ?? 0, total: 0 },
+    };
+  }
+  return fetchCategoryProperties(cat.id, { ...filters, isPublished: true });
 }
 
 export async function fetchProperties(filters: PropertyFilters): Promise<PropertyListResponse> {
@@ -90,8 +141,9 @@ export async function fetchCategoryDetail(slug: string) {
 
 export async function getLocationBySlug(slug: string) {
   try {
-    const response = await fetchFromAPI(`/locations?slug=${slug}`);
-    return findBySlug(response, slug);
+    const response = await fetchFromAPI<any>(`/locations?slug=${slug}`);
+    const list = Array.isArray(response?.data) ? response.data : (Array.isArray(response) ? response : []);
+    return list.find((l: any) => l.slug === slug) ?? null;
   } catch {
     return null;
   }
@@ -99,8 +151,10 @@ export async function getLocationBySlug(slug: string) {
 
 export async function getDeveloperBySlug(slug: string) {
   try {
-    const response = await fetchFromAPI(`/developers?slug=${slug}`);
-    return findBySlug(response, slug);
+    const response = await fetchFromAPI<any>(`/developers?slug=${slug}`);
+    // normalizeResponse returns { data: [...], pagination: {...} } for paginated endpoints
+    const list = Array.isArray(response?.data) ? response.data : (Array.isArray(response) ? response : []);
+    return list.find((d: any) => d.slug === slug) ?? null;
   } catch {
     return null;
   }

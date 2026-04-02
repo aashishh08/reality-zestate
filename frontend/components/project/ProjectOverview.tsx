@@ -11,9 +11,11 @@ interface ProjectOverviewProps {
     content: string[];
     features?: string[];
   };
+  /** Hero / gallery image for the feature column (falls back to a stock image). */
+  featureImage?: string;
 }
 
-export function ProjectOverview({ overview }: ProjectOverviewProps) {
+export function ProjectOverview({ overview, featureImage }: ProjectOverviewProps) {
   if (!overview) return null;
   const safeContent = Array.isArray(overview.content) ? overview.content : [];
   const safeFeatures = Array.isArray(overview.features) ? overview.features : [];
@@ -63,7 +65,7 @@ export function ProjectOverview({ overview }: ProjectOverviewProps) {
               {/* Main Project Image */}
               <div className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="/images/project-1.jpg"
+                  src={featureImage?.trim() ? featureImage.trim() : "/images/project-1.jpg"}
                   alt="Project Overview"
                   className="w-full h-full object-cover"
                 />

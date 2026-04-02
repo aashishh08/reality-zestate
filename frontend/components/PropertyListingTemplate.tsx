@@ -1,124 +1,84 @@
 /**
  * Reusable Property Listing Template
  * Used for Location pages, Developer pages, Category pages, etc.
- * Handles filtering, sorting, pagination, and property display
+ *
+ * Layout: sticky horizontal filter bar (status pills)
+ * followed by a full-width 3-column property grid.
+ * No sidebar — matches the reference design.
  */
 
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, X } from 'lucide-react';
-import { PropertyCard } from './ui/PropertyCard';
-import { PropertyFilters as PropertyFiltersComponent } from './filters/PropertyFilters';
-import { PropertySort } from './filters/PropertySort';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { PropertyCard, STATUS_TAG_SLUGS } from './ui/PropertyCard';
 import { Pagination } from './ui/Pagination';
-import { PropertyListResponse, PropertyFilters, SortOption } from '@/types/property-listing';
+import { PropertyListResponse, PropertyFilters } from '@/types/property-listing';
 import { Project } from '@/types';
-import { fetchPublicEnums, fetchAllTags, PublicEnumsData, Tag } from '@/lib/api/properties-listing';
+import { fetchAllTags, Tag } from '@/lib/api/properties-listing';
+import {
+  corridorEyebrow,
+  corridorGoldRule,
+  corridorHeading,
+} from '@/components/location/micro-market/corridor-section-styles';
+
+// ─── Props ────────────────────────────────────────────────────────────────────
 
 export interface PropertyListingTemplateProps {
-  /**
-   * Initial properties and pagination data
-   */
   initialData: PropertyListResponse;
-
-  /**
-   * Function to fetch properties with filters
-   * Should return PropertyListResponse
-   */
   onFetchProperties: (filters: PropertyFilters) => Promise<PropertyListResponse>;
-
-  /**
-   * Page title (e.g., "Properties in Delhi")
-   */
   title: string;
-
-  /**
-   * Page subtitle (e.g., "Discover amazing properties")
-   */
   subtitle?: string;
-
-  /**
-   * Hero section component
-   */
   heroComponent?: React.ReactNode;
-
-  /**
-   * Available sort options
-   */
-  sortOptions?: SortOption[];
-
-  /**
-   * Show/hide filter sidebar
-   * @default true
-   */
-  showFilters?: boolean;
-
-  /**
-   * Pre-applied filters (context-aware)
-   * For example, city pages should have citySlug pre-applied
-   */
+  /** Pre-locked filters (city page locks citySlug, developer page locks developerSlug, etc.) */
   contextFilters?: Partial<PropertyFilters>;
-
-  /**
-   * Items per page
-   * @default 12
-   */
   itemsPerPage?: number;
-
-  /**
-   * Loading skeleton count
-   * @default 12
-   */
   loadingSkeletonCount?: number;
-
-  /**
-   * No results message
-   * @default "No properties found"
-   */
   noResultsMessage?: string;
+  /** Optional corridor-style block above the grid (inside the projects section). */
+  projectsSection?: {
+    eyebrow: string;
+    title: string;
+    viewAll?: { href: string; label: string };
+    sectionClassName?: string;
+  };
 }
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export function PropertyListingTemplate({
   initialData,
   onFetchProperties,
-  title,
-  subtitle,
   heroComponent,
-  sortOptions = [
-    { value: 'newest', label: 'Newest First' },
-    { value: 'price-asc', label: 'Price: Low to High' },
-    { value: 'price-desc', label: 'Price: High to Low' },
-    { value: 'name-asc', label: 'Name: A to Z' },
-  ],
-  showFilters = true,
   contextFilters = {},
   itemsPerPage = 12,
   loadingSkeletonCount = 12,
   noResultsMessage = 'No properties found',
+  projectsSection,
 }: PropertyListingTemplateProps) {
-  // State management
-  const [data, setData] = useState<PropertyListResponse>(initialData);
+
+  const [data, setData]       = useState<PropertyListResponse>(initialData);
   const [filters, setFilters] = useState<PropertyFilters>({
     ...contextFilters,
     limit: itemsPerPage,
     offset: 0,
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [error, setError]     = useState<string | null>(null);
 
-  // Enum + tag data for the filter sidebar
-  const [enumData, setEnumData] = useState<PublicEnumsData>({ cities: [], localities: [], developers: [] });
-  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+  /** Skip fetch on mount only — SSR already provided `initialData`. */
+  const skipFetchUntilFilterChange = useRef(true);
+
+  // Only the status-type tags are shown as pills
+  const [statusTags, setStatusTags] = useState<Tag[]>([]);
 
   useEffect(() => {
-    fetchPublicEnums().then(setEnumData).catch(() => {});
-    fetchAllTags().then(setAvailableTags).catch(() => {});
+    fetchAllTags()
+      .then(tags => setStatusTags(tags.filter(t => STATUS_TAG_SLUGS.includes(t.slug))))
+      .catch(() => {});
   }, []);
 
-  // Fetch properties when filters change
+  // ── Fetch ────────────────────────────────────────────────────────────────────
   const fetchProperties = useCallback(async () => {
     try {
       setLoading(true);
@@ -127,306 +87,226 @@ export function PropertyListingTemplate({
       setData(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch properties');
-      console.error('Error fetching properties:', err);
     } finally {
       setLoading(false);
     }
   }, [filters, onFetchProperties]);
 
-  // Fetch when filters change
   useEffect(() => {
-    // Don't fetch on initial render since we have initialData
-    if (JSON.stringify(filters) !== JSON.stringify({ ...contextFilters, limit: itemsPerPage, offset: 0 })) {
-      fetchProperties();
+    if (skipFetchUntilFilterChange.current) {
+      skipFetchUntilFilterChange.current = false;
+      return;
     }
-  }, [filters, fetchProperties, contextFilters, itemsPerPage]);
+    void fetchProperties();
+  }, [filters, fetchProperties]);
 
-  // Calculate pagination state with safety checks
-  const paginationData = data?.pagination || { limit: 12, offset: 0, total: 0 };
-
+  // ── Pagination ───────────────────────────────────────────────────────────────
+  const pg = data?.pagination ?? { limit: 12, offset: 0, total: 0 };
   const pagination = {
-    currentPage: Math.floor((paginationData.offset || 0) / (paginationData.limit || 12)) + 1,
-    totalPages: Math.ceil((paginationData.total || 0) / (paginationData.limit || 12)),
-    hasNextPage: (paginationData.offset || 0) + (paginationData.limit || 12) < (paginationData.total || 0),
-    hasPreviousPage: (paginationData.offset || 0) > 0,
-    totalItems: paginationData.total || 0,
+    currentPage:     Math.floor((pg.offset ?? 0) / (pg.limit ?? 12)) + 1,
+    totalPages:      Math.ceil((pg.total ?? 0) / (pg.limit ?? 12)),
+    hasNextPage:     (pg.offset ?? 0) + (pg.limit ?? 12) < (pg.total ?? 0),
+    hasPreviousPage: (pg.offset ?? 0) > 0,
+    totalItems:      pg.total ?? 0,
   };
 
-  // Handlers
-  const handleFilterChange = (newFilters: Partial<PropertyFilters>) => {
-    setFilters(prev => ({
-      ...prev,
-      ...newFilters,
-      offset: 0, // Reset to first page when filters change
-    }));
-  };
+  // ── Derived active states ────────────────────────────────────────────────────
+  const activeTagSlug = filters.tags?.length === 1 ? filters.tags[0] : 'all';
 
-  const handleSortChange = (sortBy: PropertyFilters['sortBy']) => {
+  // ── Handlers ─────────────────────────────────────────────────────────────────
+  const handleTagPill = (slug: string) => {
     setFilters(prev => ({
       ...prev,
-      sortBy,
-      offset: 0, // Reset to first page when sorting changes
+      tags:   slug === 'all' ? undefined : [slug],
+      offset: 0,
     }));
   };
 
   const handlePageChange = (page: number) => {
-    const limit = data?.pagination?.limit || 12;
-    const offset = (page - 1) * limit;
-    setFilters(prev => ({
-      ...prev,
-      offset,
-    }));
+    setFilters(prev => ({ ...prev, offset: (page - 1) * (pg.limit ?? 12) }));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleClearFilters = () => {
-    setFilters({
-      ...contextFilters,
-      limit: itemsPerPage,
-      offset: 0,
-    });
+    setFilters({ ...contextFilters, limit: itemsPerPage, offset: 0 });
   };
 
-  // Check if filters are applied (excluding context filters)
-  const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
-    if (key === 'limit' || key === 'offset' || key === 'sortBy') return false;
-    const contextValue = contextFilters[key as keyof PropertyFilters];
-    return value !== undefined && value !== contextValue;
-  });
+  const hasActiveFilters = !!(filters.tags?.length);
 
+  // ── Render ───────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      {heroComponent && <>{heroComponent}</>}
+    <div className="min-h-screen bg-background">
 
-      {/* Page Title */}
-      <section className="border-b border-zinc-200">
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold text-black mb-2">{title}</h1>
-          {subtitle && <p className="text-zinc-600">{subtitle}</p>}
-          <p className="text-sm text-zinc-500 mt-4">
-            Showing {data.data.length} of {pagination.totalItems} properties
-          </p>
-        </div>
-      </section>
+      {/* Hero */}
+      {heroComponent ? <>{heroComponent}</> : null}
 
-      {/* Filters and Listings */}
-      <section className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar Filters (Desktop) */}
-          {showFilters && (
-            <div className="hidden lg:block">
-              <PropertyFiltersComponent
-                filters={filters}
-                onFilterChange={handleFilterChange}
-                onClearFilters={handleClearFilters}
-                hasActiveFilters={hasActiveFilters}
-                contextFilters={contextFilters}
-                enumCities={enumData.cities}
-                enumLocalities={enumData.localities}
-                enumDevelopers={enumData.developers}
-                availableTags={availableTags}
-              />
-            </div>
-          )}
+      {/* ── Sticky Filter Bar ──────────────────────────────────────────────── */}
+      <div className="sticky top-[68px] z-40 bg-white border-b border-border shadow-[0_2px_20px_rgba(44,44,44,0.05)]">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex items-center justify-between gap-4 py-0 min-h-[56px]">
 
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            {/* Mobile Filter & Sort Bar */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 lg:hidden">
-              {showFilters && (
-                <button
-                  onClick={() => setShowMobileFilters(true)}
-                  className="flex items-center gap-2 px-4 py-2 border border-zinc-300 rounded hover:bg-zinc-50 transition-colors"
-                >
-                  <ChevronDown className="w-5 h-5" />
-                  <span>Filters</span>
-                  {hasActiveFilters && (
-                    <span className="ml-2 px-2 py-0.5 bg-gold text-black text-xs rounded">
-                      Active
-                    </span>
-                  )}
-                </button>
-              )}
+          {/* Left — status pills */}
+          <div className="flex items-center gap-[3px] overflow-x-auto no-scrollbar py-2 flex-1 min-w-0">
 
-              <PropertySort
-                sortOptions={sortOptions}
-                currentSort={filters.sortBy || 'newest'}
-                onSortChange={handleSortChange}
-              />
-            </div>
+            {/* All */}
+            <button
+              onClick={() => handleTagPill('all')}
+              className={`flex-shrink-0 text-[11px] font-medium tracking-[0.1em] uppercase px-[18px] py-2 border transition-all duration-200 whitespace-nowrap ${
+                activeTagSlug === 'all'
+                  ? 'bg-charcoal text-gold border-charcoal'
+                  : 'bg-transparent text-muted-foreground border-border hover:border-gold hover:text-charcoal'
+              }`}
+            >
+              All ({pagination.totalItems})
+            </button>
 
-            {/* Desktop Sort & Filter Bar */}
-            <div className="hidden lg:flex justify-between items-center mb-6 pb-4 border-b border-zinc-200">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-zinc-700">Sort by:</span>
-                <PropertySort
-                  sortOptions={sortOptions}
-                  currentSort={filters.sortBy || 'newest'}
-                  onSortChange={handleSortChange}
-                  compact
-                />
-              </div>
-
-              {hasActiveFilters && (
-                <button
-                  onClick={handleClearFilters}
-                  className="text-sm text-gold hover:text-gold-dark transition-colors flex items-center gap-1"
-                >
-                  <X className="w-4 h-4" />
-                  Clear Filters
-                </button>
-              )}
-            </div>
-
-            {/* Error State */}
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="p-4 mb-6 bg-red-50 border border-red-200 rounded-lg"
+            {/* Status tag pills (dynamic, from backend) */}
+            {statusTags.map(tag => (
+              <button
+                key={tag.slug}
+                onClick={() => handleTagPill(tag.slug)}
+                className={`flex-shrink-0 text-[11px] font-medium tracking-[0.1em] uppercase px-[18px] py-2 border transition-all duration-200 whitespace-nowrap ${
+                  activeTagSlug === tag.slug
+                    ? 'bg-charcoal text-gold border-charcoal'
+                    : 'bg-transparent text-muted-foreground border-border hover:border-gold hover:text-charcoal'
+                }`}
               >
-                <p className="text-red-900 text-sm font-medium">{error}</p>
-                <button
-                  onClick={fetchProperties}
-                  className="mt-2 text-sm text-red-600 hover:text-red-700 font-medium"
-                >
-                  Try again
-                </button>
-              </motion.div>
-            )}
+                {tag.name}
+              </button>
+            ))}
+          </div>
 
-            {/* Loading State */}
-            {loading && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: loadingSkeletonCount }).map((_, i) => (
-                  <div key={i} className="bg-zinc-200 rounded-lg h-80 animate-pulse" />
-                ))}
-              </div>
-            )}
+          {/* Right — count + clear */}
+          <div className="flex items-center gap-2 flex-shrink-0 py-2">
+            <span className="text-[11px] text-muted-foreground/60 tracking-wide whitespace-nowrap hidden md:block">
+              Showing {data.data.length} of {pagination.totalItems}
+            </span>
 
-            {/* Empty State */}
-            {!loading && data.data.length === 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="py-12 text-center"
+            {/* Clear active filters */}
+            {hasActiveFilters && (
+              <button
+                onClick={handleClearFilters}
+                className="text-[11px] text-gold hover:text-gold-dark transition-colors tracking-wide whitespace-nowrap ml-1"
               >
-                <div className="inline-block p-12 bg-zinc-50 rounded-lg">
-                  <p className="text-zinc-600 text-lg mb-4">{noResultsMessage}</p>
-                  {hasActiveFilters && (
-                    <button
-                      onClick={handleClearFilters}
-                      className="text-gold hover:text-gold-dark font-medium transition-colors"
-                    >
-                      Try clearing filters
-                    </button>
-                  )}
-                </div>
-              </motion.div>
-            )}
-
-            {/* Property Grid */}
-            <AnimatePresence>
-              {!loading && data.data.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {data.data.map((property, index) => {
-                    // Convert API property to Project type for PropertyCard
-                    const projectData: Project = {
-                      id: property.id,
-                      slug: property.slug,
-                      title: property.title,
-                      propertyType: property.propertyType,
-                      priceMin: property.priceMin ?? undefined,
-                      priceMax: property.priceMax ?? undefined,
-                      isPublished: true,
-                      image: property.image || '/images/placeholder.jpg',
-                      location: property.Location?.name || 'Unknown',
-                      price: property.priceMin && property.priceMax
-                        ? `₹${property.priceMin.toLocaleString('en-IN')} - ₹${property.priceMax.toLocaleString('en-IN')}`
-                        : 'Price on Request',
-                      category: 'Trending' as const,
-                      Developer: property.Developer,
-                      Location: property.Location ? { ...property.Location, type: 'city' } : undefined,
-                      Categories: (property as any).Categories,
-                      Tags: (property as any).Tags,
-                    };
-
-                    return (
-                      <PropertyCard
-                        key={property.id}
-                        project={projectData}
-                        index={index}
-                      />
-                    );
-                  })}
-                </div>
-              )}
-            </AnimatePresence>
-
-            {/* Pagination */}
-            {!loading && data.data.length > 0 && pagination.totalPages > 1 && (
-              <div className="mt-12">
-                <Pagination
-                  currentPage={pagination.currentPage}
-                  totalPages={pagination.totalPages}
-                  onPageChange={handlePageChange}
-                  hasNextPage={pagination.hasNextPage}
-                  hasPreviousPage={pagination.hasPreviousPage}
-                />
-              </div>
+                Clear
+              </button>
             )}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Mobile Filters Modal */}
-      <AnimatePresence>
-        {showMobileFilters && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50 lg:hidden"
-            onClick={() => setShowMobileFilters(false)}
-          >
-            <motion.div
-              initial={{ x: -400 }}
-              animate={{ x: 0 }}
-              exit={{ x: -400 }}
-              onClick={e => e.stopPropagation()}
-              className="fixed left-0 top-0 h-full w-80 bg-white overflow-y-auto z-50"
-            >
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold">Filters</h2>
-                  <button
-                    onClick={() => setShowMobileFilters(false)}
-                    className="p-2 hover:bg-zinc-100 rounded transition-colors"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
-                </div>
-
-                <PropertyFiltersComponent
-                  filters={filters}
-                  onFilterChange={(newFilters) => {
-                    handleFilterChange(newFilters);
-                    setShowMobileFilters(false);
-                  }}
-                  onClearFilters={handleClearFilters}
-                  hasActiveFilters={hasActiveFilters}
-                  contextFilters={contextFilters}
-                  enumCities={enumData.cities}
-                  enumLocalities={enumData.localities}
-                  enumDevelopers={enumData.developers}
-                  availableTags={availableTags}
-                />
-              </div>
-            </motion.div>
-          </motion.div>
+      {/* ── Projects Section ───────────────────────────────────────────────── */}
+      <section
+        id={projectsSection ? 'projects-section' : undefined}
+        className={`w-full py-12 ${projectsSection?.sectionClassName ?? ''}`.trim()}
+      >
+        <div className="mx-auto max-w-[1400px] px-6 md:px-12">
+        {projectsSection && (
+          <div className="mb-10 flex flex-col justify-between gap-4 sm:mb-12 md:flex-row md:items-end">
+            <div>
+              <p className={`${corridorEyebrow} mb-3`}>{projectsSection.eyebrow}</p>
+              <div className={`${corridorGoldRule} mb-4`} />
+              <h2 className={corridorHeading}>{projectsSection.title}</h2>
+            </div>
+            {projectsSection.viewAll && (
+              <Link
+                href={projectsSection.viewAll.href}
+                className="shrink-0 border-b border-gold pb-0.5 font-sans text-[11px] font-semibold uppercase tracking-[0.16em] text-gold-dark transition-colors hover:text-gold"
+              >
+                {projectsSection.viewAll.label}
+              </Link>
+            )}
+          </div>
         )}
-      </AnimatePresence>
+
+        {/* Error */}
+        {error && (
+          <div className="p-4 mb-8 bg-red-50 border border-red-200">
+            <p className="text-red-900 text-sm font-medium">{error}</p>
+            <button
+              onClick={fetchProperties}
+              className="mt-2 text-sm text-red-600 hover:text-red-700 font-medium"
+            >
+              Try again
+            </button>
+          </div>
+        )}
+
+        {/* Loading skeletons — match card structure */}
+        {loading && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2px] bg-border">
+            {Array.from({ length: loadingSkeletonCount }).map((_, i) => (
+              <div key={i} className="bg-white">
+                <div className="h-[220px] bg-sand animate-pulse" />
+                <div className="px-5 pt-4 pb-5 space-y-3">
+                  <div className="h-2.5 bg-sand animate-pulse rounded w-1/4" />
+                  <div className="h-5 bg-sand animate-pulse rounded w-3/4" />
+                  <div className="h-2.5 bg-sand animate-pulse rounded w-1/2" />
+                  <div className="h-10 bg-sand animate-pulse rounded mt-4" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!loading && data.data.length === 0 && (
+          <div className="py-24 text-center">
+            <p className="text-muted-foreground text-base mb-4">{noResultsMessage}</p>
+            {hasActiveFilters && (
+              <button
+                onClick={handleClearFilters}
+                className="text-[11px] font-medium tracking-[0.12em] uppercase text-gold hover:text-gold-dark transition-colors border border-gold px-6 py-2.5"
+              >
+                Clear Filters
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Property grid — 2px gap between cards (bg-border shows through) */}
+        {!loading && data.data.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2px] bg-border">
+            {data.data.map((property, index) => {
+              const projectData: Project = {
+                id:           property.id,
+                slug:         property.slug,
+                title:        property.title,
+                propertyType: property.propertyType,
+                priceMin:     property.priceMin ?? undefined,
+                priceMax:     property.priceMax ?? undefined,
+                isPublished:  true,
+                image:        property.image ?? undefined,
+                location:     property.Location?.name ?? '',
+                price:        undefined,
+                category:     'Trending' as const,
+                Developer:    property.Developer,
+                Location:     property.Location
+                  ? { ...property.Location, type: 'city' as const }
+                  : undefined,
+                Tags:       property.Tags,
+                Categories: property.Categories,
+              };
+              return (
+                <PropertyCard key={property.id} project={projectData} index={index} />
+              );
+            })}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {!loading && data.data.length > 0 && pagination.totalPages > 1 && (
+          <div className="mt-12">
+            <Pagination
+              currentPage={pagination.currentPage}
+              totalPages={pagination.totalPages}
+              onPageChange={handlePageChange}
+              hasNextPage={pagination.hasNextPage}
+              hasPreviousPage={pagination.hasPreviousPage}
+            />
+          </div>
+        )}
+        </div>
+      </section>
     </div>
   );
 }

@@ -32,12 +32,13 @@ const PROPERTY_TYPES = [
   { value: 'commercial', label: 'Commercial' },
 ];
 
+// Values are in crores; multiplied by 10,000,000 when sent to the API
 const PRICE_RANGES = [
-  { value: [0, 50], label: 'Under ₹50L' },
-  { value: [50, 100], label: '₹50L – ₹1Cr' },
-  { value: [100, 250], label: '₹1Cr – ₹2.5Cr' },
-  { value: [250, 500], label: '₹2.5Cr – ₹5Cr' },
-  { value: [500, Infinity], label: 'Above ₹5Cr' },
+  { value: [0, 3],        label: 'Under ₹3 Cr'     },
+  { value: [3, 5],        label: '₹3 Cr – ₹5 Cr'   },
+  { value: [5, 10],       label: '₹5 Cr – ₹10 Cr'  },
+  { value: [10, 25],      label: '₹10 Cr – ₹25 Cr' },
+  { value: [25, Infinity], label: 'Above ₹25 Cr'   },
 ];
 
 export function PropertyFilters({

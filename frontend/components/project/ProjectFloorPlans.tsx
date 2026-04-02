@@ -135,30 +135,36 @@ export function ProjectFloorPlans({ floorPlans, descriptionSections, heading = '
 
         </div>
 
-        {/* Scrollable Description Container */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mt-16 bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10"
-        >
-          <div className="h-[300px] overflow-y-auto pr-4 custom-scrollbar">
-            <div className="space-y-8">
-              {(descriptionSections && descriptionSections.length > 0
-                ? descriptionSections
-                : DEFAULT_FLOOR_PLAN_DESCRIPTIONS
-              ).map((section, i) => (
-                <div key={i}>
-                  <h4 className="text-lg font-semibold text-[#2C2416] mb-3">{section.heading}</h4>
-                  <div 
-                    className="text-gray-700 leading-relaxed text-sm floor-plan-prose"
-                    dangerouslySetInnerHTML={{ __html: section.body }}
-                  />
+        {/* Scrollable descriptions: legacy undefined → defaults; CMS empty array → omit */}
+        {(() => {
+          const resolved =
+            descriptionSections === undefined
+              ? DEFAULT_FLOOR_PLAN_DESCRIPTIONS
+              : descriptionSections;
+          if (!resolved.length) return null;
+          return (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mt-16 bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10"
+            >
+              <div className="h-[300px] overflow-y-auto pr-4 custom-scrollbar">
+                <div className="space-y-8">
+                  {resolved.map((section, i) => (
+                    <div key={i}>
+                      <h4 className="text-lg font-semibold text-[#2C2416] mb-3">{section.heading}</h4>
+                      <div
+                        className="text-gray-700 leading-relaxed text-sm floor-plan-prose"
+                        dangerouslySetInnerHTML={{ __html: section.body }}
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
+              </div>
+            </motion.div>
+          );
+        })()}
       </div>
 
       <style jsx>{`

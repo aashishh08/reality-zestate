@@ -14,12 +14,7 @@ import {
   getDeveloperBySlug,
 } from '@/lib/api/properties-listing';
 import { PropertyFilters } from '@/types/property-listing';
-
-interface DeveloperPageProps {
-  params: Promise<{
-    slug: string;
-  }>;
-}
+import { getDeveloperPageOverrides } from '@/data/page-copy-overrides';
 
 /**
  * Generate metadata for the page
@@ -104,26 +99,25 @@ export default async function DeveloperPage({
     return result;
   };
 
-  // Sort options specific to developer pages
-  const sortOptions = [
-    { value: 'newest' as const, label: 'Newest First' },
-    { value: 'price-asc' as const, label: 'Price: Low to High' },
-    { value: 'price-desc' as const, label: 'Price: High to Low' },
-    { value: 'name-asc' as const, label: 'Name: A to Z' },
-  ];
+  const copy = getDeveloperPageOverrides(slug);
 
   return (
     <PropertyListingTemplate
+      key={slug}
       initialData={initialData}
       onFetchProperties={handleFetchProperties}
-      title={`${developer.name} Projects`}
-      subtitle={`Discover premium properties and projects by ${developer.name}`}
-      heroComponent={<DeveloperHero developer={developer} />}
-      sortOptions={sortOptions}
-      showFilters={true}
+      title={copy?.title ?? `${developer.name} Projects`}
+      subtitle={copy?.subtitle ?? `Discover premium properties and projects by ${developer.name}`}
+      heroComponent={
+        <DeveloperHero
+          developer={developer}
+          tagline={copy?.heroTagline}
+          heroImageSrc={copy?.heroImageUrl}
+        />
+      }
       contextFilters={{ developerSlug: slug }}
       itemsPerPage={12}
-      noResultsMessage={`No properties found from ${developer.name}`}
+      noResultsMessage={copy?.noResultsMessage ?? `No properties found from ${developer.name}`}
     />
   );
 }

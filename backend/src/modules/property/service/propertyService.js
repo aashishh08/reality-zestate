@@ -29,6 +29,16 @@ function validateEnumSlugs({ citySlug, localitySlug, developerSlug } = {}) {
   }
 }
 
+/**
+ * Resolve `locations.id` from enum slugs (same rule as seeders: locality row if set, else city row).
+ */
+async function resolveLocationIdFromSlugs(localitySlug, citySlug, transaction) {
+  const slug = localitySlug || citySlug || null;
+  if (!slug) return null;
+  const loc = await Location.findOne({ where: { slug }, transaction });
+  return loc ? loc.id : null;
+}
+
 class PropertyService {
   async createProperty(data) {
     return Property.create(data);
@@ -80,14 +90,40 @@ class PropertyService {
       if (propertyType !== undefined) updateData.propertyType = propertyType;
       if (citySlug !== undefined) updateData.citySlug = citySlug || null;
       if (localitySlug !== undefined) updateData.localitySlug = localitySlug || null;
-      if (developerSlug !== undefined) updateData.developerSlug = developerSlug || null;
+      if (developerSlug !== undefined) {
+        updateData.developerSlug = developerSlug || null;
+        if (developerSlug) {
+          const dev = await Developer.findOne({
+            where: { slug: developerSlug },
+            transaction,
+          });
+          updateData.developerId = dev ? dev.id : null;
+        } else {
+          updateData.developerId = null;
+        }
+      }
       if (status !== undefined) updateData.status = status;
       if (priceMin !== undefined) updateData.priceMin = priceMin ? parseFloat(priceMin) : null;
       if (priceMax !== undefined) updateData.priceMax = priceMax ? parseFloat(priceMax) : null;
       if (isPublished !== undefined) updateData.isPublished = isPublished;
-      if (seoTitle !== undefined) updateData.seoTitle = seoTitle || null;
-      if (h1Heading !== undefined) updateData.h1Heading = h1Heading || null;
-      if (metaDescription !== undefined) updateData.metaDescription = metaDescription || null;
+      if (seoTitle !== undefined) {
+        updateData.seoTitle = seoTitle?.trim?.() ? seoTitle.trim().slice(0, 90) : null;
+      }
+      if (h1Heading !== undefined) {
+        updateData.h1Heading = h1Heading?.trim?.() ? h1Heading.trim().slice(0, 120) : null;
+      }
+      if (metaDescription !== undefined) {
+        updateData.metaDescription = metaDescription?.trim?.()
+          ? metaDescription.trim().slice(0, 158)
+          : null;
+      }
+
+      if (citySlug !== undefined || localitySlug !== undefined) {
+        const nextCity = citySlug !== undefined ? (citySlug || null) : property.citySlug;
+        const nextLocality = localitySlug !== undefined ? (localitySlug || null) : property.localitySlug;
+        updateData.locationId = await resolveLocationIdFromSlugs(nextLocality, nextCity, transaction);
+      }
+
       await property.update(updateData, { transaction });
 
       // Replace all sections
@@ -281,7 +317,43 @@ class PropertyService {
       distinct: true,
     });
 
-    return { total: count, properties: rows };
+    const properties = await this.enrichListingRowsWithThumbnailUrls(rows);
+    return { total: count, properties };
+  }
+
+  /**
+   * Attach `thumbnailUrl` from the first visible `heroImage` section (for cards / listing UIs).
+   */
+  async enrichListingRowsWithThumbnailUrls(rows) {
+    if (!rows.length) return [];
+    const ids = rows.map((r) => r.id);
+    const sections = await PropertySection.findAll({
+      where: {
+        propertyId: { [Op.in]: ids },
+        type: 'heroImage',
+        [Op.or]: [{ isVisible: true }, { isVisible: null }],
+      },
+      attributes: ['propertyId', 'data', 'order'],
+      order: [
+        ['propertyId', 'ASC'],
+        ['order', 'ASC'],
+      ],
+      raw: true,
+    });
+    const urlByPropertyId = new Map();
+    for (const s of sections) {
+      if (urlByPropertyId.has(s.propertyId)) continue;
+      const raw = s.data;
+      const image =
+        raw && typeof raw.image === 'string' && raw.image.trim().length > 0
+          ? raw.image.trim()
+          : null;
+      if (image) urlByPropertyId.set(s.propertyId, image);
+    }
+    return rows.map((row) => ({
+      ...row.get({ plain: true }),
+      thumbnailUrl: urlByPropertyId.get(row.id) ?? null,
+    }));
   }
 
   async createPropertySections(propertyId, sections) {
@@ -333,6 +405,7 @@ class PropertyService {
       slug, title, propertyType,
       citySlug, localitySlug, developerSlug,
       status = 'draft', priceMin, priceMax, isPublished = false,
+      seoTitle, h1Heading, metaDescription,
       tagSlugs = [], categorySlugs = [],
       sections = [],
     } = data;
@@ -349,15 +422,37 @@ class PropertyService {
 
     const transaction = await sequelize.transaction();
     try {
+      const locationId = await resolveLocationIdFromSlugs(
+        localitySlug || null,
+        citySlug || null,
+        transaction,
+      );
+
+      let developerId = null;
+      if (developerSlug) {
+        const dev = await Developer.findOne({
+          where: { slug: developerSlug },
+          transaction,
+        });
+        developerId = dev ? dev.id : null;
+      }
+
       const property = await Property.create({
         slug, title, propertyType,
         citySlug: citySlug || null,
         localitySlug: localitySlug || null,
         developerSlug: developerSlug || null,
+        developerId,
+        locationId,
         status,
         priceMin: priceMin ? parseFloat(priceMin) : null,
         priceMax: priceMax ? parseFloat(priceMax) : null,
         isPublished,
+        seoTitle: seoTitle?.trim?.() ? seoTitle.trim().slice(0, 90) : null,
+        h1Heading: h1Heading?.trim?.() ? h1Heading.trim().slice(0, 120) : null,
+        metaDescription: metaDescription?.trim?.()
+          ? metaDescription.trim().slice(0, 158)
+          : null,
       }, { transaction });
 
       if (sections.length > 0) {

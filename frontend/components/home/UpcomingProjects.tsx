@@ -6,9 +6,14 @@ import { PropertyItem } from "@/types/property-listing";
 import { motion, useScroll } from "framer-motion";
 import { ArrowRight, Calendar, MapPin } from "lucide-react";
 import Link from "next/link";
+import { listingCardImageUrl } from "@/lib/listing-card-image";
 
 interface UpcomingProjectsProps {
   properties: PropertyItem[];
+}
+
+function hasUpcomingTag(property: PropertyItem): boolean {
+  return property.Tags?.some((t) => t.slug?.toLowerCase() === "upcoming") ?? false;
 }
 
 // Inner component — uses useScroll (client only)
@@ -62,7 +67,7 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
           <Link key={property.id} href={`/projects/${property.slug}`}>
             <div className="panel relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] h-[500px] shrink-0 snap-center rounded-2xl overflow-hidden group cursor-pointer">
               <Image
-                src={"/images/project-1.jpg"}
+                src={listingCardImageUrl(property)}
                 alt={property.title}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -150,7 +155,9 @@ export function UpcomingProjects({ properties }: UpcomingProjectsProps) {
 
   useEffect(() => { setIsClient(true); }, []);
 
-  if (!properties || properties.length === 0) return null;
+  const upcomingOnly = properties.filter(hasUpcomingTag);
+
+  if (!upcomingOnly.length) return null;
 
   if (!isClient) {
     return (
@@ -170,5 +177,5 @@ export function UpcomingProjects({ properties }: UpcomingProjectsProps) {
     );
   }
 
-  return <UpcomingProjectsContent properties={properties} />;
+  return <UpcomingProjectsContent properties={upcomingOnly} />;
 }
