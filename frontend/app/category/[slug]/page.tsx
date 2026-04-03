@@ -70,7 +70,7 @@ export async function generateMetadata({
   return { title: "Category Not Found" };
 }
 
-/** Passed to data helpers when NEXT_FETCH_NO_CACHE=0 (caching enabled) */
+/** ISR window for category data fetches (unless `NEXT_FETCH_NO_CACHE=1`) */
 const DATA_REVALIDATE_SECONDS = 3600;
 
 async function resolveEditorial(slug: string): Promise<CategoryData | null> {
