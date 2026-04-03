@@ -1,5 +1,5 @@
--- Clear existing data (optional, be careful in production)
--- TRUNCATE TABLE leads, property_sections, property_categories, properties, blogs, categories, locations, developers CASCADE;
+-- Legacy SQL snapshot; prefer `npm run db:seed` and `npm run db:truncate:keep-blogs` for a clean
+-- slate without touching blogs or users. Never TRUNCATE blogs in production if you need to keep posts.
 
 -- Insert Developers
 INSERT INTO developers (id, name, slug, logo, "createdAt", "updatedAt")

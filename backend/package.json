@@ -10,6 +10,9 @@
     "db:migrate": "node src/scripts/migrate.js",
     "db:seed": "node src/scripts/seed.js",
     "db:setup": "node src/scripts/migrate.js && node src/scripts/seed.js",
+    "db:truncate:keep-blogs": "node src/scripts/truncate-non-blog-data.js",
+    "db:prune:migration-meta": "node src/scripts/prune-superseded-migration-meta.js",
+    "db:prune:seeder-meta": "node src/scripts/prune-superseded-seeder-meta.js",
     "db:migrate:undo:all": "sequelize-cli db:migrate:undo:all"
   },
   "keywords": [
