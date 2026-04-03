@@ -303,7 +303,7 @@ export default function ContactPage() {
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/project-5.jpg"
+            src="/images/hero-bg.png"
             alt="Find Your Dream Home"
             fill
             className="object-cover"

@@ -46,9 +46,6 @@ export function transformListingPropertyToProject(property: PropertyItem | Prope
 
 const VALID_WHY_ICONS = new Set(["location", "award", "trending", "calendar"]);
 
-const FALLBACK_HERO = "/images/project-1.jpg";
-const FALLBACK_SUBTITLE = "Luxury Development";
-
 function safeData(sectionMap: Map<string, any>, key: string): Record<string, any> {
   const val = sectionMap.get(key);
   return val && typeof val === "object" && !Array.isArray(val) ? val : {};
@@ -65,11 +62,12 @@ function hasHighlightValues(h: Record<string, any>): boolean {
 export function transformBackendPropertyToProject(property: Property): Project {
   const details = buildDetailsFromSections(property.PropertySections || []);
 
+  const thumbOrLogo = listingCardImageUrl(property as PropertyItem);
   return {
     ...property,
     price: formatPriceRange(property.priceMin ?? 0, property.priceMax ?? 0),
     location: property.Location?.name || "India",
-    image: details?.heroImage || FALLBACK_HERO,
+    image: details?.heroImage?.trim() || thumbOrLogo || "",
     type: formatPropertyType(property.propertyType ?? "residential"),
     category: "Exclusive",
     details,
@@ -219,7 +217,7 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
     hasLocationSection && (addr || mapImg || nearbyArr.length > 0 || connArr.length > 0)
       ? {
           address: addr || undefined,
-          mapImage: mapImg || "/images/grand-arch-location.jpg",
+          mapImage: mapImg || undefined,
           nearby: nearbyArr,
           connectivity: connArr,
         }
@@ -254,13 +252,14 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
     delete overviewBlock.features;
   }
 
+  const heroImg =
+    typeof hero.image === "string" && hero.image.trim() ? hero.image.trim() : undefined;
+  const heroSubtitle =
+    typeof hero.subtitle === "string" && hero.subtitle.trim() ? hero.subtitle.trim() : undefined;
+
   return {
-    heroImage:
-      typeof hero.image === "string" && hero.image.trim() ? hero.image.trim() : FALLBACK_HERO,
-    subtitle:
-      typeof hero.subtitle === "string" && hero.subtitle.trim()
-        ? hero.subtitle.trim()
-        : FALLBACK_SUBTITLE,
+    ...(heroImg ? { heroImage: heroImg } : {}),
+    ...(heroSubtitle ? { subtitle: heroSubtitle } : {}),
     videoUrl:
       typeof hero.videoUrl === "string" && hero.videoUrl.trim()
         ? hero.videoUrl.trim()
@@ -302,7 +301,7 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
             type: p.type,
             superArea: p.superArea,
             price: p.price,
-            image: p.image && String(p.image).trim() ? p.image : "/images/3bhk-plan.png",
+            ...(p.image && String(p.image).trim() ? { image: String(p.image).trim() } : {}),
           }))
         : undefined,
 

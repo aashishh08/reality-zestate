@@ -6,79 +6,15 @@ A premium real estate website built with Next.js 14, featuring dynamic project p
 
 ### Dynamic Project System
 
-The platform uses a **data-driven architecture** where all projects are defined in `lib/data.ts`. This allows for:
+Published properties come from the **backend API** (`lib/api/properties.ts`). Detail pages at `/projects/[slug]` load CMS-backed sections only—there is no static project catalog in the frontend.
 
-- **Dynamic Routing**: Each project automatically gets its own page at `/projects/[slug]`
-- **ISR (Incremental Static Regeneration)**: Pages are statically generated and revalidated every hour
-- **SEO Optimization**: Dynamic metadata generation for each project
-- **Conditional Rendering**: Sections only render if data is provided
+- **Dynamic Routing**: Each published property slug gets a page at `/projects/[slug]` (`dynamicParams` allows new slugs without a rebuild).
+- **SEO**: `generateMetadata` and Open Graph use real hero/thumbnail URLs when the API provides them.
+- **Conditional Rendering**: Sections render only when the API returns the matching property sections.
 
 ### Adding New Projects
 
-To add a new project, simply add an entry to the `projects` array in `lib/data.ts`:
-
-```typescript
-{
-  id: "10",
-  slug: "your-project-slug", // URL-friendly identifier
-  title: "Your Project Name",
-  location: "Location, City",
-  price: "₹ X Cr Onwards",
-  image: "/images/your-project.jpg",
-  category: "Trending", // or "Upcoming", "Boutique", "Exclusive"
-  type: "Property Type",
-  details: {
-    heroImage: "/images/hero.jpg",
-    subtitle: "Tagline for the project",
-    highlights: {
-      landArea: "X Acres",
-      possession: "Month Year",
-      rera: "RERA Number",
-      configuration: "3, 4 & 5 BHK",
-      priceRange: "₹ X Cr - ₹ Y Cr"
-    },
-    overview: {
-      heading: "Main Heading",
-      content: ["Paragraph 1", "Paragraph 2"],
-      features: ["Feature 1", "Feature 2"]
-    },
-    amenities: [
-      { name: "Swimming Pool", icon: "🏊" }
-    ],
-    floorPlans: [
-      {
-        type: "3 BHK",
-        superArea: "2200 sq.ft",
-        price: "₹ 4.5 Cr",
-        image: "/images/floor-plan.jpg"
-      }
-    ],
-    location: {
-      nearby: [
-        {
-          category: "Schools",
-          items: [
-            { name: "School Name", distance: "2 km" }
-          ]
-        }
-      ]
-    },
-    usp: ["USP 1", "USP 2"],
-    faqs: [
-      {
-        question: "Question?",
-        answer: "Answer"
-      }
-    ]
-  }
-}
-```
-
-The project will automatically:
-- Appear in the appropriate category section (Trending/Upcoming/Boutique)
-- Get its own detail page at `/projects/your-project-slug`
-- Be indexed for SEO with proper metadata
-- Be statically generated at build time
+Create and publish the property in the admin CMS (or API). Listings, detail pages, and metadata use that data end to end.
 
 ## 🚀 Performance Features
 
@@ -129,7 +65,7 @@ components/
     └── LeadPopup.tsx
 
 lib/
-└── data.ts                   # Central data source for all projects
+└── api/                      # API clients (properties, categories, etc.)
 
 types/
 └── index.ts                  # TypeScript interfaces
@@ -170,24 +106,10 @@ npm start
 
 ## 📊 Data Flow
 
-1. **Data Definition** (`lib/data.ts`)
-   - Projects are defined with all details
-   - Helper functions for data retrieval
-
-2. **Static Generation** (Build Time)
-   - `generateStaticParams()` creates routes for all projects
-   - `generateMetadata()` creates SEO tags
-   - Pages are pre-rendered as static HTML
-
-3. **ISR** (Runtime)
-   - Pages are served from cache
-   - Revalidated every hour in background
-   - New data appears without rebuild
-
-4. **Conditional Rendering**
-   - Sections check for data existence
-   - Only render if data is provided
-   - Graceful degradation for incomplete data
+1. **API** — Properties, categories, tags, and sections are stored in the backend and exposed via REST.
+2. **Detail pages** — `getPropertyBySlug` plus `transformBackendPropertyToProject` map API payloads to UI types.
+3. **`generateStaticParams`** — Optionally pre-renders paths for published slugs when the API is reachable at build time; otherwise routes are still served dynamically.
+4. **Conditional rendering** — UI sections appear only when the corresponding CMS sections exist.
 
 ## 🔍 SEO Best Practices
 

@@ -69,12 +69,18 @@ export function ProjectLocation({ location, heading = 'Location Advantage' }: Pr
             className="relative h-[500px]"
           >
             <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl">
-              <Image
-                src={location.mapImage || "/images/project-4.jpg"}
-                alt="Location Map"
-                fill
-                className="object-cover"
-              />
+              {location.mapImage?.trim() ? (
+                <Image
+                  src={location.mapImage.trim()}
+                  alt="Location Map"
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-zinc-200 via-zinc-100 to-zinc-300 flex items-center justify-center">
+                  <MapPin className="w-16 h-16 text-zinc-400" aria-hidden />
+                </div>
+              )}
               <div className="absolute inset-0 bg-black/30" />
               <div className="absolute top-6 left-6 bg-white rounded-lg p-4 shadow-lg max-w-xs">
                 <div className="flex items-start gap-3">

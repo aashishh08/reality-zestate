@@ -11,7 +11,7 @@ interface ProjectFloorPlansProps {
     type: string;
     superArea: string;
     price: string;
-    image: string;
+    image?: string;
   }[];
   descriptionSections?: { heading: string; body: string }[];
   heading?: string;
@@ -121,15 +121,19 @@ export function ProjectFloorPlans({ floorPlans, descriptionSections, heading = '
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="relative aspect-[16/10] bg-white rounded-sm overflow-hidden shadow-xl border border-black/5 group">
-              <Image
-                src={safePlans[safeTab].image}
-                alt={safePlans[safeTab].type}
-                fill
-                className="object-contain p-8 group-hover:scale-105 transition-transform duration-700"
-              />
-
-
+            <div className="relative aspect-[16/10] bg-white rounded-sm overflow-hidden shadow-xl border border-black/5 group flex items-center justify-center">
+              {safePlans[safeTab].image?.trim() ? (
+                <Image
+                  src={safePlans[safeTab].image!.trim()}
+                  alt={safePlans[safeTab].type}
+                  fill
+                  className="object-contain p-8 group-hover:scale-105 transition-transform duration-700"
+                />
+              ) : (
+                <p className="text-zinc-500 text-sm font-medium px-6 text-center">
+                  Floor plan layout image not available for this configuration.
+                </p>
+              )}
             </div>
           </motion.div>
 

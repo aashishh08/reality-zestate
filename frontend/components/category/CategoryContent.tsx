@@ -53,7 +53,7 @@ export function CategoryContent({ sections }: CategoryContentProps) {
               {/* Background Image */}
               <div className="absolute inset-0">
                 <Image
-                  src={section.image || defaultImages[section.title] || "/images/project-1.jpg"}
+                  src={section.image || defaultImages[section.title] || "/images/hero-bg.png"}
                   alt={section.title}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"

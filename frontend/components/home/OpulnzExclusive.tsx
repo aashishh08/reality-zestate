@@ -25,7 +25,7 @@ export function SuperluxereExclusive({ developers }: SuperluxereExclusiveProps) 
       {/* Background with Overlay */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/project-5.jpg"
+          src="/images/hero-bg.png"
           alt="Exclusive Background"
           fill
           className="object-cover opacity-20"
@@ -89,7 +89,7 @@ export function SuperluxereExclusive({ developers }: SuperluxereExclusiveProps) 
             className="relative h-[600px] w-full hidden lg:block rounded-t-full overflow-hidden border border-black/5 shadow-2xl"
           >
             <Image
-              src="/images/project-2.jpg"
+              src="/images/hero-bg.png"
               alt="Exclusive Interior"
               fill
               className="object-cover"

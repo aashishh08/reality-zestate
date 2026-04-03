@@ -79,8 +79,8 @@ export interface Project extends Property {
 
   // Detailed page content
   details?: {
-    heroImage: string;
-    subtitle: string;
+    heroImage?: string;
+    subtitle?: string;
     introText?: string;
     highlights?: {
       landArea?: string;
@@ -104,7 +104,7 @@ export interface Project extends Property {
       type: string;
       superArea: string;
       price: string;
-      image: string;
+      image?: string;
     }[];
     masterPlan?: string;
     masterPlanDescription?: string;

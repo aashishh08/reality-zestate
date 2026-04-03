@@ -3,7 +3,6 @@ import { Metadata } from "next";
 
 // Always fetch fresh data — admin updates must be visible immediately
 export const dynamic = 'force-dynamic';
-import { getProjectBySlug, getAllProjectSlugs } from "@/lib/data";
 import { getPropertyBySlug, getProperties } from "@/lib/api/properties";
 import {
   transformBackendPropertyToProject,
@@ -30,16 +29,11 @@ import { ProjectWhyInvest } from "@/components/project/ProjectWhyInvest";
 import { ProjectSimilar } from "@/components/project/ProjectSimilar";
 import { ProjectSectionNavigation } from "@/components/project/ProjectSectionNavigation";
 import { ProjectTeam } from "@/components/project/ProjectTeam";
-import { projects } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import { HtmlRenderer } from "@/components/ui/HtmlRenderer";
 
-/**
- * Fetch property data from backend or fallback to hardcoded data
- * @param slug - Property slug to fetch
- * @returns Property data transformed into Project format
- */
+/** Published property from API only — no static fallback. */
 async function getPropertyData(slug: string) {
   try {
     const backendProperty = await getPropertyBySlug(slug, false);
@@ -49,44 +43,22 @@ async function getPropertyData(slug: string) {
     if (process.env.NODE_ENV === 'development') {
       console.warn(`[ProjectPage] Backend fetch failed for '${slug}': ${errorMessage}`);
     }
-
-    // Fallback to hardcoded data
-    const hardcodedProject = getProjectBySlug(slug);
-
-    if (hardcodedProject) {
-      return hardcodedProject;
-    }
-
     return null;
   }
 }
 
-/**
- * Generate static params for all projects (ISR)
- * Fetches from backend API and merges with hardcoded slugs
- */
+/** Pre-render paths from published API properties only. */
 export async function generateStaticParams() {
   try {
-    // Fetch published properties from backend
-    const backendProperties = await getProperties({ isPublished: true }, false);
-    const backendSlugs = (backendProperties?.data ?? []).map((p) => p.slug);
-
-    // Get hardcoded slugs as fallback
-    const hardcodedSlugs = getAllProjectSlugs();
-
-    // Combine and deduplicate
-    const allSlugs = [...new Set([...backendSlugs, ...hardcodedSlugs])];
-
-    return allSlugs.map((slug) => ({ slug }));
+    const backendProperties = await getProperties({ isPublished: true, limit: 500 }, false);
+    const slugs = (backendProperties?.data ?? []).map((p) => p.slug);
+    return slugs.map((slug) => ({ slug }));
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     if (process.env.NODE_ENV === 'development') {
       console.error(`[generateStaticParams] Backend API error: ${errorMessage}`);
     }
-
-    // Fallback to hardcoded slugs if backend is unavailable
-    const slugs = getAllProjectSlugs();
-    return slugs.map((slug) => ({ slug }));
+    return [];
   }
 }
 
@@ -113,6 +85,9 @@ export async function generateMetadata({
     || project.description
     || `Luxury ${project.type} in ${project.location}. ${project.price}`;
 
+  const ogImage =
+    project.details?.heroImage?.trim() || project.image?.trim() || undefined;
+
   return {
     title: `${project.seoTitle || project.title} - ${project.location} | Superluxere`,
     description,
@@ -127,7 +102,7 @@ export async function generateMetadata({
     openGraph: {
       title: project.title,
       description: project.details?.subtitle || description,
-      images: [project.details?.heroImage || project.image || "/images/project-1.jpg"],
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
     },
   };
 }
@@ -135,7 +110,7 @@ export async function generateMetadata({
 // Allow rendering pages for slugs not in generateStaticParams
 export const dynamicParams = true;
 
-/** Prefer other published CMS properties; fall back to static seed data. */
+/** Other published properties from API only (no static fallback). */
 async function getSimilarProjects(
   currentSlug: string,
   currentId: string | undefined,
@@ -143,15 +118,13 @@ async function getSimilarProjects(
   try {
     const res = await getProperties({ isPublished: true, limit: 32 }, false);
     const rows = (res?.data ?? []) as Property[];
-    const others = rows
+    return rows
       .filter((p) => p.slug !== currentSlug && (!currentId || p.id !== currentId))
       .slice(0, 3)
       .map((p) => transformListingPropertyToProject(p));
-    if (others.length > 0) return others;
   } catch {
-    /* use static fallback */
+    return [];
   }
-  return projects.filter((p) => !currentId || p.id !== currentId).slice(0, 3);
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -202,22 +175,33 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <SectionHeading label="Highlights">{details.sectionHeadings?.keyTakeaways || 'Key Takeaways'}</SectionHeading>
 
-            <div className="grid md:grid-cols-2 gap-8 items-stretch">
-              {/* Left Side - Image */}
-              <div className="relative rounded-2xl overflow-hidden shadow-lg min-h-[320px]">
-                <img
-                  src={details.gallery?.[0] || details.heroImage || "/images/project-1.jpg"}
-                  alt="Project Details"
-                  className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-              </div>
+            {(() => {
+              const ktImage = details.gallery?.[0]?.trim() || details.heroImage?.trim();
+              return (
+                <div
+                  className={
+                    ktImage
+                      ? "grid md:grid-cols-2 gap-8 items-stretch"
+                      : "grid grid-cols-1 gap-8"
+                  }
+                >
+                  {ktImage ? (
+                    <div className="relative rounded-2xl overflow-hidden shadow-lg min-h-[320px]">
+                      <img
+                        src={ktImage}
+                        alt="Project Details"
+                        className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                    </div>
+                  ) : null}
 
-              {/* Right Side - Key Takeaways Cards */}
-              <div className="flex flex-col">
-                <ProjectKeyTakeaways data={details.keyTakeaways} heading={details.sectionHeadings?.keyTakeaways} />
-              </div>
-            </div>
+                  <div className="flex flex-col">
+                    <ProjectKeyTakeaways data={details.keyTakeaways} heading={details.sectionHeadings?.keyTakeaways} />
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </section>
       )}

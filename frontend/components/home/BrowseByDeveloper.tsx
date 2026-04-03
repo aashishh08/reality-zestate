@@ -10,16 +10,6 @@ interface BrowseByDeveloperProps {
     developers: Developer[];
 }
 
-// Placeholder developer images — keyed by slug for easy extension
-const DEV_IMAGES: Record<string, string> = {
-    dlf: "/images/project-1.jpg",
-    "godrej-properties": "/images/project-2.jpg",
-    "prestige-group": "/images/project-3.jpg",
-    sobha: "/images/project-4.jpg",
-    "max-estates": "/images/project-5.jpg",
-    "oberoi-realty": "/images/project-1.jpg",
-};
-
 export function BrowseByDeveloper({ developers }: BrowseByDeveloperProps) {
     if (!developers || developers.length === 0) return null;
 
@@ -73,15 +63,18 @@ export function BrowseByDeveloper({ developers }: BrowseByDeveloperProps) {
                         >
                             <Link href={`/developer/${dev.slug}`} className="block h-full">
                                 <div className="group relative h-[220px] overflow-hidden rounded-xl shadow-md cursor-pointer transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-                                    <Image
-                                        src={dev.logo?.trim() || DEV_IMAGES[dev.slug] || "/images/hero-bg.png"}
-                                        alt={dev.name}
-                                        fill
-                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                    />
+                                    {dev.logo?.trim() ? (
+                                        <Image
+                                            src={dev.logo.trim()}
+                                            alt={dev.name}
+                                            fill
+                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 bg-gradient-to-br from-[#2C2416] via-[#3d3429] to-[#1a1612]" />
+                                    )}
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-                                    {/* Developer icon badge */}
                                     <div className="absolute top-4 left-4 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
                                         <Building2 className="w-5 h-5 text-white" />
                                     </div>

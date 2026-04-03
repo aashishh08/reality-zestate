@@ -11,7 +11,7 @@ interface ProjectOverviewProps {
     content: string[];
     features?: string[];
   };
-  /** Hero / gallery image for the feature column (falls back to a stock image). */
+  /** Hero / gallery image for the feature column (CMS only). */
   featureImage?: string;
 }
 
@@ -53,7 +53,7 @@ export function ProjectOverview({ overview, featureImage }: ProjectOverviewProps
             </div>
           </motion.div>
 
-          {/* Right: Project Image with Overlapping Key Features Card */}
+          {/* Right: optional CMS image with overlapping Key Features Card */}
           {safeFeatures.length > 0 && (
             <motion.div
               initial={{ opacity: 0, x: 30 }}
@@ -62,14 +62,16 @@ export function ProjectOverview({ overview, featureImage }: ProjectOverviewProps
               viewport={{ once: true }}
               className="relative h-[600px]"
             >
-              {/* Main Project Image */}
               <div className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl">
-                <img
-                  src={featureImage?.trim() ? featureImage.trim() : "/images/project-1.jpg"}
-                  alt="Project Overview"
-                  className="w-full h-full object-cover"
-                />
-                {/* Gradient Overlay for better card visibility */}
+                {featureImage?.trim() ? (
+                  <img
+                    src={featureImage.trim()}
+                    alt="Project Overview"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-[#2C2416] via-[#3d3429] to-[#1a1612]" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />
               </div>
 

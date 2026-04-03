@@ -2,6 +2,7 @@
 
 import { Property, Location } from "@/lib";
 import { PropertyCard } from "@/components/ui/PropertyCard";
+import { transformListingPropertyToProject } from "@/lib/property-transformer";
 
 interface LocationPropertiesListProps {
   location: Location;
@@ -45,21 +46,19 @@ export function LocationPropertiesList({
 
         {/* Properties Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {properties.map((property, index) => (
-            <PropertyCard
-              key={property.id}
-              project={{
-                ...property,
-                location: property.Location?.name || location.name,
-                price: property.priceMin
-                  ? `₹ ${Math.floor(property.priceMin / 10000000)}Cr - ${Math.floor(property.priceMax / 10000000)}Cr`
-                  : "Price on Request",
-                image: "/images/project-1.jpg", // Placeholder
-                category: property.propertyType === "commercial" ? "Exclusive" : "Trending",
-              }}
-              index={index}
-            />
-          ))}
+          {properties.map((property, index) => {
+            const base = transformListingPropertyToProject(property);
+            return (
+              <PropertyCard
+                key={property.id}
+                project={{
+                  ...base,
+                  location: property.Location?.name || location.name || base.location,
+                }}
+                index={index}
+              />
+            );
+          })}
         </div>
 
         {/* Stats */}

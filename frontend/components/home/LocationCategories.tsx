@@ -20,14 +20,11 @@ const categoryDescriptions: Record<string, string> = {
   "off-market": "Discreet inventory — by introduction only",
 };
 
+/** Curated collection card art — neutral / category-specific only (no stock project photos). */
 const categoryCardImages: Record<string, string> = {
-  "golf-residences": "/images/project-1.jpg",
-  "branded-residences": "/images/project-2.jpg",
-  "himalayan-living": "/images/project-3.jpg",
   "senior-living": "/images/category-senior-living.jpg",
-  "ultra-villas": "/images/project-1.jpg",
-  "off-market": "/images/project-2.jpg",
 };
+const DEFAULT_COLLECTION_CARD_IMAGE = "/images/hero-bg.png";
 
 export function LocationCategories({ categories }: LocationCategoriesProps) {
   const bySlug = new Map(categories.map((c) => [c.slug, c]));
@@ -89,7 +86,7 @@ export function LocationCategories({ categories }: LocationCategoriesProps) {
             const desc =
               categoryDescriptions[cat.slug] ||
               `Explore luxury ${cat.name.toLowerCase()} listings on Superluxere — inventory updates from verified developers.`;
-            const img = categoryCardImages[cat.slug] || "/images/hero-bg.png";
+            const img = categoryCardImages[cat.slug] || DEFAULT_COLLECTION_CARD_IMAGE;
 
             return (
               <motion.div

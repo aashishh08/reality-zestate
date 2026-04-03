@@ -1,5 +1,7 @@
 /**
- * Launch geography: keep in sync with seeded `locations` (4 cities, 4 micro-market localities).
+ * Launch geography — source of truth for cities and micro-market localities.
+ * `src/seeders/20260403120100-seed-reference-data.js` seeds the `locations` table from
+ * CITIES and LOCALITIES (cities are top-level rows with parentId null; localities reference their city).
  * Admin dropdowns and property API validation use this file via GET /api/enums.
  */
 export const CITIES = [
@@ -28,7 +30,7 @@ export function getLocalitiesForCity(citySlug) {
   return LOCALITIES.filter(l => l.city === citySlug);
 }
 
-// ── Developers (canonical list — keep in sync with DB + seeders) ────────────
+// ── Developers — seeded into `developers` from this list (see reference seeder) ─
 export const DEVELOPERS = [
   { slug: 'max-estates',             label: 'Max Estates'               },
   { slug: 'dlf',                     label: 'DLF'                       },

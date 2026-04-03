@@ -73,19 +73,25 @@ export function ProjectHero({ project }: ProjectHeroProps) {
 
   if (!details) return null;
 
+  const heroSrc = details.heroImage?.trim();
+
   return (
     <>
       <section className="relative h-[70vh] md:h-[80vh] w-full overflow-hidden">
-        {/* Background Image */}
+        {/* Background — CMS hero only; no stock property image */}
         <div className="absolute inset-0">
-          <Image
-            src={details.heroImage}
-            alt={project.title}
-            fill
-            className="object-cover"
-            priority
-            quality={100}
-          />
+          {heroSrc ? (
+            <Image
+              src={heroSrc}
+              alt={project.title}
+              fill
+              className="object-cover"
+              priority
+              quality={100}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-[#2C2416] via-[#3d3429] to-[#1a1612]" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         </div>
 
@@ -101,9 +107,11 @@ export function ProjectHero({ project }: ProjectHeroProps) {
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-4 leading-tight">
                 {project.h1Heading || project.title}
               </h1>
-              <p className="text-xl md:text-2xl text-white/90 font-light mb-6">
-                {details.subtitle}
-              </p>
+              {details.subtitle?.trim() ? (
+                <p className="text-xl md:text-2xl text-white/90 font-light mb-6">
+                  {details.subtitle}
+                </p>
+              ) : null}
               <p className="text-lg text-white/70 mb-4">
                 📍 {project.location}
               </p>

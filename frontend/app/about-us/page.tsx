@@ -177,7 +177,7 @@ export default function AboutPage() {
           <div className="relative">
             <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="/images/project-1.jpg"
+                src="/images/hero-bg.png"
                 alt="Luxury Property"
                 fill
                 className="object-cover"
@@ -458,7 +458,7 @@ export default function AboutPage() {
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/project-3.jpg"
+            src="/images/hero-bg.png"
             alt="Find Your Dream Property"
             fill
             className="object-cover"

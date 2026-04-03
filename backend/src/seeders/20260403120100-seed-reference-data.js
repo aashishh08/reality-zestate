@@ -1,20 +1,26 @@
 /**
- * Reference data: admin user, locations (prod launch: Delhi, Noida, Gurgaon, Mumbai + four NCR corridors),
- * canonical developers, categories, tags. Idempotent (ON CONFLICT). Does not touch blogs or properties.
+ * Reference data: admin user, locations (CITIES + LOCALITIES) and developers (DEVELOPERS)
+ * from config/enums.js, plus categories and tags. Idempotent (ON CONFLICT).
+ * Does not touch blogs or properties.
  */
 
 import { randomUUID } from 'crypto';
 import bcrypt from 'bcrypt';
+import { CITIES, LOCALITIES, DEVELOPERS } from '../config/enums.js';
 
 async function insertLocation(queryInterface, { name, slug, type, parentId }) {
   const newId = randomUUID();
   const rows = await queryInterface.sequelize.query(
     `INSERT INTO "locations" ("id", "name", "slug", "type", "parentId", "createdAt", "updatedAt")
      VALUES (:id, :name, :slug, :type, :parentId, NOW(), NOW())
-     ON CONFLICT ("slug") DO UPDATE SET "name" = EXCLUDED."name", "updatedAt" = NOW()
+     ON CONFLICT ("slug") DO UPDATE SET
+       "name" = EXCLUDED."name",
+       "type" = EXCLUDED."type",
+       "parentId" = EXCLUDED."parentId",
+       "updatedAt" = NOW()
      RETURNING "id"`,
     {
-      replacements: { id: newId, name, slug, type, parentId: parentId || null },
+      replacements: { id: newId, name, slug, type, parentId: parentId ?? null },
       type: queryInterface.sequelize.QueryTypes.SELECT,
     },
   );
@@ -37,89 +43,37 @@ export async function up(queryInterface) {
     },
   );
 
-  const indiaId = await insertLocation(queryInterface, {
-    name: 'India',
-    slug: 'india',
-    type: 'country',
-    parentId: null,
-  });
-
-  const S = {};
-  for (const state of [
-    { name: 'Haryana', slug: 'haryana' },
-    { name: 'Uttar Pradesh', slug: 'uttar-pradesh' },
-    { name: 'Delhi', slug: 'delhi' },
-    { name: 'Maharashtra', slug: 'maharashtra' },
-  ]) {
-    S[state.slug] = await insertLocation(queryInterface, {
-      ...state,
-      type: 'state',
-      parentId: indiaId,
-    });
-  }
-
-  const C = {};
-  for (const city of [
-    { name: 'Gurgaon', slug: 'gurgaon', state: 'haryana' },
-    { name: 'Noida', slug: 'noida', state: 'uttar-pradesh' },
-    { name: 'Delhi', slug: 'new-delhi', state: 'delhi' },
-    { name: 'Mumbai', slug: 'mumbai', state: 'maharashtra' },
-  ]) {
-    C[city.slug] = await insertLocation(queryInterface, {
-      name: city.name,
-      slug: city.slug,
+  const cityIdsBySlug = {};
+  for (const { slug, label } of CITIES) {
+    cityIdsBySlug[slug] = await insertLocation(queryInterface, {
+      name: label,
+      slug,
       type: 'city',
-      parentId: S[city.state],
+      parentId: null,
     });
   }
 
-  for (const locality of [
-    { name: 'Golf Course Road', slug: 'golf-course-road' },
-    { name: 'Golf Course Extension Road', slug: 'golf-course-road-extension' },
-    { name: 'Dwarka Expressway', slug: 'dwarka-expressway' },
-  ]) {
+  for (const { slug, label, city } of LOCALITIES) {
+    const parentId = cityIdsBySlug[city];
+    if (!parentId) {
+      throw new Error(
+        `Seeder: locality "${slug}" references unknown city slug "${city}" — fix LOCALITIES in enums.js`,
+      );
+    }
     await insertLocation(queryInterface, {
-      ...locality,
+      name: label,
+      slug,
       type: 'locality',
-      parentId: C.gurgaon,
+      parentId,
     });
   }
 
-  await insertLocation(queryInterface, {
-    name: 'Noida Expressway',
-    slug: 'noida-expressway',
-    type: 'locality',
-    parentId: C.noida,
-  });
-
-  for (const dev of [
-    { name: 'Max Estates', slug: 'max-estates' },
-    { name: 'DLF', slug: 'dlf' },
-    { name: 'Sobha', slug: 'sobha' },
-    { name: 'Elevate', slug: 'elevate' },
-    { name: 'Conscient Hines Elevate', slug: 'conscient-hines-elevate' },
-    { name: 'Eldeco', slug: 'eldeco' },
-    { name: 'Experion Developers', slug: 'experion-developers' },
-    { name: 'Godrej Properties', slug: 'godrej-properties' },
-    { name: 'Oberoi Realty', slug: 'oberoi-realty' },
-    { name: 'Kreeva', slug: 'kreeva' },
-    { name: 'Terra Grande', slug: 'terra-grande' },
-    { name: 'Central Park', slug: 'central-park' },
-    { name: 'Trac', slug: 'trac' },
-    { name: 'trump tower', slug: 'trump-tower' },
-    { name: 'm3m, smartworld', slug: 'm3m-smartworld' },
-    { name: 'ats', slug: 'ats' },
-    { name: 'Silver glades', slug: 'silver-glades' },
-    { name: 'Adani Realty', slug: 'adani-realty' },
-    { name: 'prestige group', slug: 'prestige-group' },
-    { name: 'AIPL', slug: 'aipl' },
-    { name: 'Max Antara', slug: 'max-antara' },
-  ]) {
+  for (const { slug, label } of DEVELOPERS) {
     await queryInterface.sequelize.query(
       `INSERT INTO "developers" ("id", "name", "slug", "logo", "createdAt", "updatedAt")
        VALUES (:id, :name, :slug, NULL, NOW(), NOW())
        ON CONFLICT ("slug") DO UPDATE SET "name" = EXCLUDED."name", "updatedAt" = NOW()`,
-      { replacements: { id: randomUUID(), name: dev.name, slug: dev.slug } },
+      { replacements: { id: randomUUID(), name: label, slug } },
     );
   }
 

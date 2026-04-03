@@ -60,7 +60,7 @@ const categories: Record<string, CategoryData> = {
     metaDescription: 'Discover premium apartment properties in Delhi NCR',
     heroTitle: 'Luxury Apartments',
     heroSubtitle: 'Experience premium living spaces designed for modern lifestyles',
-    heroImage: '/images/project-1.jpg',
+    heroImage: '/images/hero-bg.png',
     introText: 'Explore our collection of premium apartment properties across Delhi NCR region.',
     citySections: [
       {
@@ -115,7 +115,7 @@ const categories: Record<string, CategoryData> = {
     metaDescription: 'Discover premium villa properties in Delhi NCR',
     heroTitle: 'Luxury Villas',
     heroSubtitle: 'Experience the pinnacle of luxury living',
-    heroImage: '/images/project-2.jpg',
+    heroImage: '/images/hero-bg.png',
     introText: 'Explore our collection of premium villa properties with expansive spaces.',
     citySections: [
       {
@@ -165,7 +165,7 @@ const categories: Record<string, CategoryData> = {
     metaDescription: 'Discover exclusive boutique properties',
     heroTitle: 'Boutique Collection',
     heroSubtitle: 'Limited edition luxury properties',
-    heroImage: '/images/project-3.jpg',
+    heroImage: '/images/hero-bg.png',
     introText: 'Experience our exclusive boutique collection of premium properties.',
     features: [
       {
@@ -198,7 +198,7 @@ const categories: Record<string, CategoryData> = {
     metaDescription: 'Private golf-fronting homes and estates across India’s finest fairways.',
     heroTitle: 'Golf Residences',
     heroSubtitle: 'Fairway-front living with club culture at your doorstep',
-    heroImage: '/images/project-1.jpg',
+    heroImage: '/images/hero-bg.png',
     introText:
       'From championship courses to quiet green vistas, golf-tied residences blend recreation, privacy, and long-term rarity in one address.',
     features: [
@@ -222,7 +222,7 @@ const categories: Record<string, CategoryData> = {
     metaDescription: 'Hotel and luxury-brand residences with global service pedigree.',
     heroTitle: 'Branded Residences',
     heroSubtitle: 'Iconic names, private ownership, five-star service rails',
-    heroImage: '/images/project-2.jpg',
+    heroImage: '/images/hero-bg.png',
     introText:
       'Partnerships with global hospitality and design houses bring turnkey service, elite fit-outs, and exit liquidity to a select set of owners.',
     features: [
@@ -246,7 +246,7 @@ const categories: Record<string, CategoryData> = {
     metaDescription: 'Alpine villas and retreats across the Himalayan belt.',
     heroTitle: 'Himalayan Living',
     heroSubtitle: 'Altitude, silence, and nature at a different scale',
-    heroImage: '/images/project-3.jpg',
+    heroImage: '/images/hero-bg.png',
     introText:
       'Curated mountain inventory emphasises climate-proof construction, views, and access—whether for year-round living or a generational retreat.',
     features: [
@@ -280,7 +280,7 @@ const categories: Record<string, CategoryData> = {
     metaDescription: 'Ultra-luxury villas with land, pools, and bespoke architecture.',
     heroTitle: 'Ultra Villas',
     heroSubtitle: 'Land-rich compounds for multi-generational use',
-    heroImage: '/images/project-1.jpg',
+    heroImage: '/images/hero-bg.png',
     introText:
       'Stand-alone villas with exceptional land-to-built ratios, private pools, and room for staff quarters—selected for privacy and scale.',
     features: [
@@ -297,7 +297,7 @@ const categories: Record<string, CategoryData> = {
     metaDescription: 'Private inventory not broadly advertised—by introduction only.',
     heroTitle: 'Off-Market',
     heroSubtitle: 'Discreet listings for qualified buyers',
-    heroImage: '/images/project-2.jpg',
+    heroImage: '/images/hero-bg.png',
     introText:
       'These opportunities are shared after fit checks. Expect NDA-friendly briefs, seller or developer dialogue, and pricing that reflects bilateral negotiation—not portal anchors.',
     features: [
