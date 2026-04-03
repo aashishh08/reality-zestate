@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
+import { serverFetchNoCache } from "@/lib/server-fetch-policy";
 import "./globals.css";
+
+/** Fresh API-backed UI on each request unless NEXT_FETCH_NO_CACHE=0 */
+export const dynamic = serverFetchNoCache() ? "force-dynamic" : "auto";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],

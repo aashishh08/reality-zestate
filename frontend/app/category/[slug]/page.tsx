@@ -70,13 +70,14 @@ export async function generateMetadata({
   return { title: "Category Not Found" };
 }
 
-export const revalidate = 3600;
+/** Passed to data helpers when NEXT_FETCH_NO_CACHE=0 (caching enabled) */
+const DATA_REVALIDATE_SECONDS = 3600;
 
 async function resolveEditorial(slug: string): Promise<CategoryData | null> {
   const staticCat = getCategoryBySlug(slug);
   if (staticCat) return staticCat;
 
-  const catsRes = await getCategories({ limit: 300, offset: 0 }, revalidate).catch(() => ({
+  const catsRes = await getCategories({ limit: 300, offset: 0 }, DATA_REVALIDATE_SECONDS).catch(() => ({
     data: [] as { slug: string; name: string }[],
   }));
   const api = catsRes.data?.find((c) => c.slug === slug);
@@ -97,10 +98,10 @@ export default async function CategoryPage({
   }
 
   const [locationsRes, developersRes, categoriesRes, initialData] = await Promise.all([
-    getLocations({ limit: 20, offset: 0 }, revalidate).catch(() => ({ data: [] })),
-    getDevelopers({ limit: 12, offset: 0 }, revalidate).catch(() => []),
-    getCategories({ limit: 200, offset: 0 }, revalidate).catch(() => ({ data: [] })),
-    fetchCategoryPropertiesBySlug(slug, { limit: 12, offset: 0 }, revalidate),
+    getLocations({ limit: 20, offset: 0 }, DATA_REVALIDATE_SECONDS).catch(() => ({ data: [] })),
+    getDevelopers({ limit: 12, offset: 0 }, DATA_REVALIDATE_SECONDS).catch(() => []),
+    getCategories({ limit: 200, offset: 0 }, DATA_REVALIDATE_SECONDS).catch(() => ({ data: [] })),
+    fetchCategoryPropertiesBySlug(slug, { limit: 12, offset: 0 }, DATA_REVALIDATE_SECONDS),
   ]);
 
   const apiCategory =

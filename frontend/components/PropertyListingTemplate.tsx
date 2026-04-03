@@ -63,6 +63,8 @@ export function PropertyListingTemplate({
     limit: itemsPerPage,
     offset: 0,
   });
+  /** Total count with no status-tag filter — "All (n)" must not use tag-filtered pagination.total */
+  const [allTabTotal, setAllTabTotal] = useState(() => initialData.pagination?.total ?? 0);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState<string | null>(null);
 
@@ -85,6 +87,9 @@ export function PropertyListingTemplate({
       setError(null);
       const result = await onFetchProperties(filters);
       setData(result);
+      if (!filters.tags?.length) {
+        setAllTabTotal(result.pagination?.total ?? 0);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch properties');
     } finally {
@@ -156,7 +161,7 @@ export function PropertyListingTemplate({
                   : 'bg-transparent text-muted-foreground border-border hover:border-gold hover:text-charcoal'
               }`}
             >
-              All ({pagination.totalItems})
+              All ({allTabTotal})
             </button>
 
             {/* Status tag pills (dynamic, from backend) */}
