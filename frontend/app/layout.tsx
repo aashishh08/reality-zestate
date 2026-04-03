@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
 
@@ -34,6 +34,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#F0EFEB",
+};
+
 import { LeadModalProvider } from "@/lib/contexts/LeadModalContext";
 
 export default function RootLayout({
@@ -44,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfair.variable} ${montserrat.variable} antialiased`}
+        className={`${playfair.variable} ${montserrat.variable} font-sans antialiased`}
       >
         <LeadModalProvider>
           {children}

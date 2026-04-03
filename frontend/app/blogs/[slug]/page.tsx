@@ -182,7 +182,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   ))}
                 </div>
               )}
-              <h1 className="text-xl sm:text-2xl md:text-4xl font-playfair font-bold text-white leading-tight">
+              <h1 className="text-xl sm:text-2xl md:text-4xl font-serif font-bold text-white leading-tight">
                 {post.title}
               </h1>
             </div>
@@ -210,7 +210,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 ))}
               </div>
             )}
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-playfair font-bold text-gray-900 leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-gray-900 leading-tight">
               {post.title}
             </h1>
           </div>
@@ -300,10 +300,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             {/* Content */}
             <div
               className="prose prose-lg max-w-none
-                prose-headings:font-playfair prose-headings:font-bold prose-headings:text-gray-900
+                prose-headings:font-serif prose-headings:font-bold prose-headings:text-gray-900
                 prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-amber-200
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-amber-800
-                prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
+                prose-p:font-sans prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
                 prose-a:text-amber-700 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
                 prose-strong:text-gray-900 prose-strong:font-semibold
                 prose-ul:my-6 prose-li:my-2 prose-li:text-gray-700
@@ -359,7 +359,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section className="bg-gradient-to-r from-amber-600 to-orange-600 py-16 mt-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-playfair font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
             Looking for Your Dream Property?
           </h2>
           <p className="text-lg text-amber-100 mb-8">
@@ -378,7 +378,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       {relatedPosts.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
           <div className="flex items-center justify-between mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-playfair font-bold text-gray-900">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-gray-900">
               More Articles
             </h2>
             <Link
@@ -420,7 +420,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                           {relDate}
                         </p>
                       )}
-                      <h3 className="font-playfair font-bold text-gray-900 text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-amber-700 transition-colors mb-2">
+                      <h3 className="font-serif font-bold text-gray-900 text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-amber-700 transition-colors mb-2">
                         {related.title}
                       </h3>
                       <p className="text-gray-500 text-xs sm:text-sm line-clamp-2">{related.excerpt}</p>

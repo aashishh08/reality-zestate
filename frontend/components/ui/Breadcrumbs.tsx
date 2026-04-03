@@ -12,9 +12,9 @@ interface BreadcrumbsProps {
 
 export function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
-    <nav className="flex sticky top-[60px] z-40 bg-white/80 backdrop-blur-md border-b border-black/5 py-3 px-6">
-      <div className="max-w-7xl mx-auto w-full">
-         <ol className="flex items-center space-x-2 text-sm">
+    <nav className="sticky top-[60px] z-40 flex border-b border-black/5 bg-white/80 px-4 py-3 font-sans backdrop-blur-md sm:px-6">
+      <div className="mx-auto w-full max-w-7xl">
+         <ol className="flex items-center gap-2 text-sm">
           <li>
             <Link href="/" className="text-zinc-500 hover:text-gold-dark transition-colors flex items-center">
               <Home className="w-4 h-4" />

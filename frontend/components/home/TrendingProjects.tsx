@@ -8,21 +8,15 @@ import { motion } from "framer-motion";
 import { MoveRight, TrendingUp } from "lucide-react";
 
 interface TrendingProjectsProps {
+  /** From `fetchHomeSectionProperties('trending')` — API + tag filter applied upstream */
   properties: PropertyItem[];
 }
 
-function hasTrendingTag(property: PropertyItem): boolean {
-  return (
-    property.Tags?.some((t) => t.slug?.toLowerCase() === "trending") ?? false
-  );
-}
-
 export function TrendingProjects({ properties }: TrendingProjectsProps) {
-  const trendingOnly = properties.filter(hasTrendingTag);
+  if (!properties.length) return null;
 
-  if (!trendingOnly.length) return null;
-
-  const display = trendingOnly.slice(0, 4);
+  // Match server fetch limit (8) so newer trending listings are not hidden behind a 4-card cap.
+  const display = properties.slice(0, 8);
 
   return (
     <section id="trending-projects" className="py-24 px-6 bg-transparent overflow-hidden">

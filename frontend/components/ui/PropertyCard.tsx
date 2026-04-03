@@ -93,7 +93,7 @@ export function PropertyCard({ project }: PropertyCardProps) {
           {/* Status badge — top left */}
           {statusTag && badgeStyle && (
             <div
-              className="absolute top-3 left-3 z-10 text-[9px] font-medium tracking-[0.16em] uppercase px-2.5 py-[5px]"
+              className="absolute top-3 left-3 z-10 px-2.5 py-[5px] font-sans text-[10px] font-semibold uppercase tracking-[0.16em] sm:text-xs"
               style={badgeStyle}
             >
               {statusTag.name}
@@ -103,7 +103,7 @@ export function PropertyCard({ project }: PropertyCardProps) {
           {/* Price tag — bottom right */}
           {priceDisplay && (
             <div className="absolute bottom-3 right-3 z-10 bg-black/75 backdrop-blur-sm px-3 py-1.5">
-              <span className="font-serif text-[14px] font-medium text-gold tracking-wide">
+              <span className="font-serif text-sm font-medium tracking-wide text-gold">
                 {priceDisplay}
               </span>
             </div>
@@ -115,13 +115,13 @@ export function PropertyCard({ project }: PropertyCardProps) {
 
           {/* Developer */}
           {developerName && (
-            <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-gold mb-1">
+            <p className="mb-1 font-sans text-xs font-semibold uppercase tracking-widest text-gold">
               {developerName}
             </p>
           )}
 
           {/* Project name */}
-          <h3 className="font-serif text-[19px] font-medium text-charcoal leading-snug mb-2">
+          <h3 className="mb-2 font-serif text-lg font-medium leading-snug text-charcoal sm:text-xl">
             {project.title}
           </h3>
 
@@ -129,7 +129,7 @@ export function PropertyCard({ project }: PropertyCardProps) {
           {locationName && (
             <div className="flex items-center gap-1.5 mb-3">
               <span className="w-[4px] h-[4px] rounded-full bg-gold flex-shrink-0" />
-              <span className="text-[11px] text-muted-foreground tracking-[0.04em]">
+              <span className="font-sans text-xs text-muted-foreground tracking-wide">
                 {locationName}
               </span>
             </div>
@@ -138,7 +138,7 @@ export function PropertyCard({ project }: PropertyCardProps) {
           {/* Specs row */}
           <div className="flex flex-wrap items-center gap-4 pt-3 border-t border-border mb-4">
             {project.propertyType && (
-              <span className="text-[11px] text-muted-foreground tracking-[0.04em]">
+              <span className="font-sans text-xs text-muted-foreground tracking-wide">
                 Type{' '}
                 <strong className="text-charcoal font-medium capitalize">
                   {project.propertyType}
@@ -146,7 +146,7 @@ export function PropertyCard({ project }: PropertyCardProps) {
               </span>
             )}
             {project.priceMax && project.priceMin && project.priceMax !== project.priceMin && (
-              <span className="text-[11px] text-muted-foreground tracking-[0.04em]">
+              <span className="font-sans text-xs text-muted-foreground tracking-wide">
                 Up to{' '}
                 <strong className="text-charcoal font-medium">
                   {formatPrice(project.priceMax)}
@@ -156,7 +156,7 @@ export function PropertyCard({ project }: PropertyCardProps) {
           </div>
 
           {/* CTA */}
-          <button className="w-full py-[11px] text-[10px] font-medium tracking-[0.14em] uppercase text-charcoal border border-border bg-transparent transition-all duration-300 group-hover:bg-charcoal group-hover:text-gold group-hover:border-charcoal">
+          <button className="w-full border border-border bg-transparent py-3 font-sans text-xs font-semibold uppercase tracking-widest text-charcoal transition-all duration-300 group-hover:border-charcoal group-hover:bg-charcoal group-hover:text-gold">
             View Project →
           </button>
         </div>

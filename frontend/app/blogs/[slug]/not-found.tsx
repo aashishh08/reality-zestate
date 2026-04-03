@@ -5,9 +5,9 @@ export default function NotFound() {
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center px-4">
       <div className="text-center">
         <div className="mb-8">
-          <h1 className="text-9xl font-playfair font-bold text-gray-200">404</h1>
+          <h1 className="text-9xl font-serif font-bold text-gray-200">404</h1>
           <div className="relative -mt-8">
-            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
               Blog Post Not Found
             </h2>
           </div>

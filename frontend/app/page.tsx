@@ -12,7 +12,7 @@ import { FeaturedCorridors } from "@/components/home/FeaturedCorridors";
 import { SuperluxereExclusive } from "@/components/home/OpulnzExclusive";
 import { LeadPopup } from "@/components/ui/LeadPopup";
 import { getLocations, getDevelopers, getCategories } from "@/lib";
-import { fetchFromAPI } from "@/lib/api-client";
+import { fetchHomeSectionProperties } from "@/lib/homepage-properties";
 import { getFeaturedCorridorCards } from "@/lib/featured-corridors";
 
 // ISR: Revalidate every hour
@@ -21,19 +21,16 @@ export const revalidate = 3600;
 async function getHomePageData() {
   try {
     const [
-      trendingRes,
-      upcomingRes,
-      boutiqueRes,
+      trendingProperties,
+      upcomingProperties,
+      boutiqueProperties,
       locationsRes,
       developersRes,
       categoriesRes,
     ] = await Promise.all([
-      fetchFromAPI<any>("/properties?tags=trending&limit=8&isPublished=true", { next: { revalidate: 3600 } })
-        .catch(e => { console.error('Trending fetch failed:', e.message); return []; }),
-      fetchFromAPI<any>("/properties?tags=upcoming&limit=8&isPublished=true", { next: { revalidate: 3600 } })
-        .catch(e => { console.error('Upcoming fetch failed:', e.message); return []; }),
-      fetchFromAPI<any>("/properties?tags=featured&limit=8&isPublished=true", { next: { revalidate: 3600 } })
-        .catch(e => { console.error('Featured / boutique fetch failed:', e.message); return []; }),
+      fetchHomeSectionProperties("trending", { limit: 8, revalidate: 3600 }),
+      fetchHomeSectionProperties("upcoming", { limit: 8, revalidate: 3600 }),
+      fetchHomeSectionProperties("boutique", { limit: 8, revalidate: 3600 }),
       getLocations({ limit: 20, offset: 0 }, 3600)
         .catch(e => { console.error('Locations fetch failed:', e.message); return { data: [] }; }),
       getDevelopers({ limit: 12, offset: 0 }, 3600)
@@ -42,20 +39,16 @@ async function getHomePageData() {
         .catch(e => { console.error('Categories fetch failed:', e.message); return { data: [] }; }),
     ]);
 
-    // Normalise varying response shapes
     const normalise = (res: any) =>
       Array.isArray(res) ? res : res?.data || [];
 
-    const trending = normalise(trendingRes);
-    const upcoming = normalise(upcomingRes);
-    const boutiqueProperties = normalise(boutiqueRes);
     const locations = normalise(locationsRes);
 
-    const featuredCorridors = await getFeaturedCorridorCards(locations, 3600);
+    const featuredCorridors = await getFeaturedCorridorCards(3600);
 
     return {
-      trendingProperties: trending,
-      upcomingProperties: upcoming,
+      trendingProperties,
+      upcomingProperties,
       boutiqueProperties,
       locations,
       developers: normalise(developersRes),

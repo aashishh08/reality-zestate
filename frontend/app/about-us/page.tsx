@@ -398,7 +398,7 @@ export default function AboutPage() {
             </div>
             <span className="text-2xl font-bold text-gray-900">5.0</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-playfair font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
             What Our Clients Say
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
@@ -466,7 +466,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-black/70" />
         </div>
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-playfair font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
             Ready to Begin Your Journey?
           </h2>
           <p className="text-lg text-white/80 mb-8">

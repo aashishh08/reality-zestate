@@ -8,13 +8,14 @@ import { PropertyItem } from "@/types/property-listing";
 import { listingCardImageUrl } from "@/lib/listing-card-image";
 
 interface BoutiqueCollectionProps {
-  /** Properties tagged `featured` in the CMS — drives this section dynamically */
+  /** From `fetchHomeSectionProperties('boutique')` — API uses `featured` tag */
   properties: PropertyItem[];
 }
 
 export function BoutiqueCollection({ properties }: BoutiqueCollectionProps) {
+  if (!properties.length) return null;
+
   const display = properties.slice(0, 4);
-  if (!display.length) return null;
 
   const bentoClasses = [
     "md:col-span-3 md:row-span-2",

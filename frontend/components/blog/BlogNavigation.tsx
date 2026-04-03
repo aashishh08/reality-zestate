@@ -61,7 +61,7 @@ export default function BlogNavigation({ categories, currentCategory }: BlogNavi
           <div className="flex items-center gap-2 sm:gap-6 min-w-0">
             <Link
               href="/blogs"
-              className="text-xl sm:text-2xl font-playfair font-bold text-gray-900 hover:text-amber-700 transition-colors shrink-0"
+              className="text-xl sm:text-2xl font-serif font-bold text-gray-900 hover:text-amber-700 transition-colors shrink-0"
             >
               Blog
             </Link>

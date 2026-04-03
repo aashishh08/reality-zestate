@@ -98,7 +98,7 @@ export default function BlogCard({ post, featured = false, priority = false }: B
                 )}
               </div>
 
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-playfair font-bold text-gray-900 mb-3 sm:mb-4 group-hover:text-amber-700 transition-colors leading-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-3 sm:mb-4 group-hover:text-amber-700 transition-colors leading-tight">
                 {post.title}
               </h2>
 
@@ -167,7 +167,7 @@ export default function BlogCard({ post, featured = false, priority = false }: B
             </div>
           </div>
 
-          <h3 className="text-base sm:text-lg font-playfair font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-amber-700 transition-colors leading-snug">
+          <h3 className="text-base sm:text-lg font-serif font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-amber-700 transition-colors leading-snug">
             {post.title}
           </h3>
 

@@ -35,15 +35,25 @@ class LocationService {
       where.slug = slug;
     }
 
+    const treeIncludes = [
+      {
+        model: Location,
+        as: 'children',
+        include: [{ model: Location, as: 'children' }],
+      },
+    ];
+
+    const localityIncludes = [
+      {
+        model: Location,
+        as: 'parent',
+        attributes: ['id', 'name', 'slug', 'type'],
+      },
+    ];
+
     const locations = await Location.findAll({
       where,
-      include: [
-        {
-          model: Location,
-          as: 'children',
-          include: [{ model: Location, as: 'children' }],
-        },
-      ],
+      include: type === 'locality' ? localityIncludes : treeIncludes,
       order: [['name', 'ASC']],
     });
 
@@ -66,7 +76,7 @@ class LocationService {
       include: [
         { model: Developer },
         { model: Location },
-        { model: Category, through: { attributes: [] } },
+        { model: Category, as: 'Categories', through: { attributes: [] } },
         { model: Tag, as: 'Tags', through: { attributes: [] } },
       ],
       limit: parseInt(limit, 10),

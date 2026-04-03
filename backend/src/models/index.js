@@ -41,11 +41,13 @@ Property.belongsToMany(Category, {
   through: PropertyCategory,
   foreignKey: 'propertyId',
   otherKey: 'categoryId',
+  as: 'Categories',
 });
 Category.belongsToMany(Property, {
   through: PropertyCategory,
   foreignKey: 'categoryId',
   otherKey: 'propertyId',
+  as: 'Properties',
 });
 
 // ─── Tag (many-to-many) ────────────────────────────────────────────────────────

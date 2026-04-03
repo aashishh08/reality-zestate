@@ -61,7 +61,7 @@ class DeveloperService {
       include: [
         { model: Developer },
         { model: Location },
-        { model: Category, through: { attributes: [] } },
+        { model: Category, as: 'Categories', through: { attributes: [] } },
         { model: Tag, as: 'Tags', through: { attributes: [] } },
       ],
       limit: parseInt(limit, 10),

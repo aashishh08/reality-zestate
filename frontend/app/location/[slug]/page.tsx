@@ -106,6 +106,7 @@ export default async function LocationPage({
     fetchLocationPageProperties(listingContext, {
       limit: 12,
       offset: 0,
+      isPublished: true,
     }),
   ]);
 
@@ -124,6 +125,7 @@ export default async function LocationPage({
       ...filters,
       limit: filters.limit || 12,
       offset: filters.offset || 0,
+      isPublished: filters.isPublished ?? true,
     });
   };
 
@@ -162,9 +164,13 @@ export default async function LocationPage({
           contextFilters={
             location.type === 'locality' || location.type === 'sector'
               ? location.parent?.slug
-                ? { citySlug: location.parent.slug, localitySlug: location.slug }
-                : { localitySlug: location.slug }
-              : { citySlug: location.slug }
+                ? {
+                    citySlug: location.parent.slug,
+                    localitySlug: location.slug,
+                    isPublished: true,
+                  }
+                : { localitySlug: location.slug, isPublished: true }
+              : { citySlug: location.slug, isPublished: true }
           }
           itemsPerPage={12}
           noResultsMessage={`No properties found in ${location.name}`}

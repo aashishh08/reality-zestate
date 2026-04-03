@@ -40,8 +40,10 @@ export function HtmlRenderer({ html, className = "", fontSize = "text-base" }: H
         className={[
           // Tailwind typography plugin — proven to render h1/h2/h3 at correct sizes
           "prose",
+          "prose-headings:font-serif",
           "prose-headings:text-[#2C2416]",
           "prose-headings:font-bold",
+          "prose-p:font-sans",
           "prose-p:text-gray-700",
           "prose-strong:text-[#2C2416]",
           "prose-strong:font-semibold",
@@ -64,7 +66,7 @@ export function HtmlRenderer({ html, className = "", fontSize = "text-base" }: H
 
   // Plain text fallback — split on double-newlines
   return (
-    <div className={`space-y-4 ${fontSize} text-gray-700 leading-relaxed ${className}`}>
+    <div className={`space-y-4 font-sans leading-relaxed text-gray-700 ${fontSize} ${className}`}>
       {safe.split("\n\n").map((paragraph, i) => (
         <p key={i}>{paragraph}</p>
       ))}

@@ -12,7 +12,7 @@ export default function BlogError({
   return (
     <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="text-center max-w-md">
-        <h1 className="text-3xl font-playfair font-bold text-gray-900 mb-4">
+        <h1 className="text-3xl font-serif font-bold text-gray-900 mb-4">
           Something went wrong
         </h1>
         <p className="text-gray-600 mb-8">

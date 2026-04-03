@@ -64,6 +64,7 @@ class CategoryService {
         { model: Location },
         {
           model: Category,
+          as: 'Categories',
           where: { id: categoryId },
           through: { attributes: [] },
         },

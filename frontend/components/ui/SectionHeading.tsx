@@ -18,14 +18,16 @@ export function SectionHeading({
   className = "",
 }: SectionHeadingProps) {
   return (
-    <div className={`flex flex-col items-${centered ? "center" : "start"} mb-8`}>
+    <div
+      className={`mb-8 flex flex-col ${centered ? "items-center" : "items-start"}`}
+    >
       {/* Optional label */}
       {label && (
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="text-[#C9A961] font-semibold tracking-widest text-sm uppercase mb-4"
+          className="mb-4 font-sans text-sm font-semibold uppercase tracking-widest text-[#C9A961]"
         >
           {label}
         </motion.p>
@@ -47,7 +49,7 @@ export function SectionHeading({
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className={`text-gray-500 text-lg max-w-2xl mt-4 leading-relaxed ${centered ? "text-center" : ""}`}
+          className={`mt-4 max-w-2xl font-sans text-lg leading-relaxed text-gray-500 ${centered ? "text-center" : ""}`}
         >
           {description}
         </motion.p>

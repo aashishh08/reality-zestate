@@ -1,53 +1,44 @@
 /**
- * Curated micro-markets for the homepage corridor row.
- * Counts are filled at request time from the properties API; slugs must match backend enums.
+ * Optional editorial lines for homepage corridor cards. The corridor *list* is built from
+ * `GET /locations?type=locality` (plus parent city); slugs here only enrich copy when present.
  */
 export interface FeaturedCorridorConfig {
-  /** Slug for `/location/[slug]` — should match a row in `locations`. */
   locationSlug: string;
   citySlug: string;
   localitySlug: string;
-  /** Fallback if the location is not in the homepage locations payload */
   name: string;
   moodLine: string;
   description: string;
 }
 
-export const FEATURED_CORRIDORS: FeaturedCorridorConfig[] = [
-  {
-    locationSlug: 'golf-course-road',
-    citySlug: 'gurgaon',
-    localitySlug: 'golf-course-road',
-    name: 'Golf Course Road',
+export const DEFAULT_CORRIDOR_MOOD = 'Curated micro-market.';
+
+export const DEFAULT_CORRIDOR_DESCRIPTION =
+  'Premium projects and developer depth in this corridor — browse listings and request a structured memo.';
+
+/** Keyed by locality slug. Unknown slugs use defaults above. */
+export const CORRIDOR_EDITORIAL_BY_SLUG: Record<
+  string,
+  Pick<FeaturedCorridorConfig, 'moodLine' | 'description'>
+> = {
+  'golf-course-road': {
     moodLine: 'Old money. New highs.',
     description:
       'The NCR’s most established luxury spine — shallow resale, deep developer pedigree, and the social infrastructure buyers expect at the very top of the market.',
   },
-  {
-    locationSlug: 'dwarka-expressway',
-    citySlug: 'gurgaon',
-    localitySlug: 'dwarka-expressway',
-    name: 'Dwarka Expressway',
+  'golf-course-road-extension': {
+    moodLine: 'The natural extension of GCR.',
+    description:
+      'Newer premium supply adjacent to the established GCR spine — similar buyer profile with more runway on fresh inventory and master-planned pockets.',
+  },
+  'dwarka-expressway': {
     moodLine: 'The growth corridor with runway.',
     description:
       'Highway-led catchments with scaled launches and improving retail depth — where early institutional interest meets family-office scale.',
   },
-  {
-    locationSlug: 'bandra',
-    citySlug: 'mumbai',
-    localitySlug: 'bandra',
-    name: 'Bandra',
-    moodLine: 'Sea-facing scarcity.',
-    description:
-      'West Mumbai’s marquee belt for legacy apartments and new towers alike — liquidity, visibility, and tenant demand that rarely goes out of fashion.',
-  },
-  {
-    locationSlug: 'noida-expressway',
-    citySlug: 'noida',
-    localitySlug: 'noida-expressway',
-    name: 'Noida Expressway',
+  'noida-expressway': {
     moodLine: 'Structured supply, sharp product.',
     description:
       'Planned sector grids and grade-A developer lanes make this one of the most legible luxury pipelines in the NCR — easy to compare, easier to underwrite.',
   },
-];
+};

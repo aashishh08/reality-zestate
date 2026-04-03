@@ -1,6 +1,11 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { getCategoryBySlug, getAllCategorySlugs } from "@/lib/category-data";
+import {
+  getCategoryBySlug,
+  getAllCategorySlugs,
+  buildFallbackCategoryEditorial,
+  type CategoryData,
+} from "@/lib/category-data";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -34,26 +39,50 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const category = getCategoryBySlug(slug);
-
-  if (!category) {
+  const staticCat = getCategoryBySlug(slug);
+  if (staticCat) {
     return {
-      title: "Category Not Found",
+      title: staticCat.metaTitle,
+      description: staticCat.metaDescription,
+      keywords: [staticCat.title, "luxury real estate", "premium properties", "Superluxere"],
+      openGraph: {
+        title: staticCat.metaTitle,
+        description: staticCat.metaDescription,
+      },
     };
   }
 
-  return {
-    title: category.metaTitle,
-    description: category.metaDescription,
-    keywords: [category.title, "luxury real estate", "premium properties", "Superluxere"],
-    openGraph: {
-      title: category.metaTitle,
-      description: category.metaDescription,
-    },
-  };
+  try {
+    const catsRes = await getCategories({ limit: 300, offset: 0 }, 60);
+    const api = catsRes.data?.find((c) => c.slug === slug);
+    if (api) {
+      const fb = buildFallbackCategoryEditorial(slug, api.name);
+      return {
+        title: fb.metaTitle,
+        description: fb.metaDescription,
+        keywords: [api.name, "luxury real estate", "Superluxere"],
+      };
+    }
+  } catch {
+    /* ignore */
+  }
+
+  return { title: "Category Not Found" };
 }
 
-export const revalidate = 7200;
+export const revalidate = 3600;
+
+async function resolveEditorial(slug: string): Promise<CategoryData | null> {
+  const staticCat = getCategoryBySlug(slug);
+  if (staticCat) return staticCat;
+
+  const catsRes = await getCategories({ limit: 300, offset: 0 }, revalidate).catch(() => ({
+    data: [] as { slug: string; name: string }[],
+  }));
+  const api = catsRes.data?.find((c) => c.slug === slug);
+  if (api) return buildFallbackCategoryEditorial(slug, api.name);
+  return null;
+}
 
 export default async function CategoryPage({
   params,
@@ -61,8 +90,8 @@ export default async function CategoryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const editorial = getCategoryBySlug(slug);
 
+  const editorial = await resolveEditorial(slug);
   if (!editorial) {
     notFound();
   }
@@ -77,12 +106,13 @@ export default async function CategoryPage({
   const apiCategory =
     categoriesRes.data?.find((c) => c.slug === slug) ?? null;
   const displayName = apiCategory?.name ?? editorial.title;
-  const categoryId = apiCategory?.id ?? null;
 
   const handleFetchProperties = async (filters: PropertyFilters) => {
     "use server";
 
-    if (!categoryId) {
+    const catsRes = await getCategories({ limit: 300, offset: 0 }, false);
+    const cat = catsRes.data?.find((c) => c.slug === slug);
+    if (!cat?.id) {
       return {
         data: [],
         pagination: {
@@ -93,14 +123,12 @@ export default async function CategoryPage({
       };
     }
 
-    const result = await fetchCategoryProperties(categoryId, {
+    return fetchCategoryProperties(cat.id, {
       ...filters,
       limit: filters.limit || 12,
       offset: filters.offset || 0,
-      isPublished: true,
+      isPublished: filters.isPublished ?? true,
     });
-
-    return result;
   };
 
   const mm = buildCategoryCollectionPageModel(displayName, editorial, initialData);
@@ -156,4 +184,5 @@ export default async function CategoryPage({
   );
 }
 
-export const dynamicParams = false;
+/** Allow `/category/[slug]` for any category row in the API, not only static marketing slugs. */
+export const dynamicParams = true;

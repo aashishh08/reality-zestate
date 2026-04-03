@@ -6,8 +6,6 @@ import { Menu, X, ChevronDown, MapPin, Building2, Tag, LayoutGrid } from "lucide
 import { cn } from "@/lib/utils";
 import { SCROLL_THRESHOLDS } from "@/lib/constants";
 import { Location, Developer, Category } from "@/lib";
-import { useLeadModal } from "@/lib/contexts/LeadModalContext";
-
 // Status tags — hardcoded because they are a fixed product concept
 const STATUS_TAGS = [
   { label: "Trending", slug: "trending", color: "#EF4444", emoji: "🔥" },
@@ -29,7 +27,6 @@ interface HeaderProps {
 type MegaMenu = "locations" | "developers" | "categories" | "status" | null;
 
 export function Header({ locations = [], developers = [], categories = [] }: HeaderProps) {
-  const { openModal } = useLeadModal();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setMobileMenu] = useState(false);
   const [activeMega, setActiveMega] = useState<MegaMenu>(null);
@@ -73,10 +70,6 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
           <nav className="hidden lg:flex items-center justify-end gap-10 xl:gap-14">
             <Link href="/" className="text-black hover:text-gold-dark transition-colors text-sm font-serif font-bold tracking-wider relative group uppercase">
               Home
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-dark transition-all duration-300 group-hover:w-full" />
-            </Link>
-            <Link href="/projects" className="text-black hover:text-gold-dark transition-colors text-sm font-serif font-bold tracking-wider relative group uppercase">
-              Projects
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-dark transition-all duration-300 group-hover:w-full" />
             </Link>
 
@@ -245,13 +238,6 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
 
             <div className="flex items-center gap-6">
               <button
-                onClick={() => openModal("header-book-button")}
-                className="hidden lg:inline-block px-6 py-2.5 bg-black text-white font-bold text-xs tracking-widest rounded-sm hover:bg-gold-dark transition-colors uppercase ml-8"
-              >
-                Book
-              </button>
-
-              <button
                 onClick={() => setMobileMenu(!isMobileMenuOpen)}
                 className="lg:hidden flex items-center gap-2 text-gray-900 hover:text-gold transition-colors"
                 aria-label="Toggle menu"
@@ -269,7 +255,6 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
           <nav className="flex flex-col py-4">
             {[
               { label: "Home", href: "/" },
-              { label: "Projects", href: "/projects" },
               { label: "Blogs", href: "/blogs" },
               { label: "About Us", href: "/about-us" },
               { label: "Contact", href: "/contact" },
@@ -320,16 +305,6 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
                 </div>
               </div>
             )}
-
-            <div className="px-6 py-4">
-              <Link
-                href="/contact"
-                className="block w-full text-center px-6 py-3 bg-gradient-to-r from-gold to-gold-dark text-white font-semibold text-sm rounded-sm shadow-md"
-                onClick={() => setMobileMenu(false)}
-              >
-                BOOK NOW
-              </Link>
-            </div>
           </nav>
         </div>
       )}

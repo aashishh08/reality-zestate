@@ -6,6 +6,20 @@
 
 import { Project } from '@/types';
 
+/** When a category exists in the API but not in static `categories` (e.g. Luxury, Commercial). */
+export function buildFallbackCategoryEditorial(slug: string, name: string): CategoryData {
+  return {
+    slug,
+    title: name,
+    metaTitle: `${name} | Superluxere`,
+    metaDescription: `Browse premium ${name} properties curated on Superluxere.`,
+    heroTitle: name,
+    heroSubtitle: 'Curated luxury inventory',
+    heroImage: '/images/hero-bg.png',
+    introText: `Discover published properties in the ${name} collection.`,
+  };
+}
+
 export interface CategoryData {
   slug: string;
   title: string;

@@ -41,7 +41,7 @@ export async function getCategories(
 ): Promise<CategoriesResponse> {
   const queryString = buildQueryString(filters);
 
-  return fetchFromAPI<CategoriesResponse>(
+  const raw = await fetchFromAPI<Category[] | CategoriesResponse>(
     `/categories${queryString}`,
     {
       method: 'GET',
@@ -50,6 +50,18 @@ export async function getCategories(
       },
     }
   );
+
+  // Backend returns `{ success, data: Category[] }` without pagination; `normalizeResponse`
+  // unwraps to a bare array. Callers expect `{ data, pagination }` (e.g. category pages).
+  const data = Array.isArray(raw) ? raw : (raw?.data ?? []);
+  return {
+    data,
+    pagination: {
+      limit: filters?.limit ?? data.length,
+      offset: filters?.offset ?? 0,
+      total: data.length,
+    },
+  };
 }
 
 /**

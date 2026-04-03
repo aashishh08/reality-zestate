@@ -9,11 +9,8 @@ import Link from "next/link";
 import { listingCardImageUrl } from "@/lib/listing-card-image";
 
 interface UpcomingProjectsProps {
+  /** From `fetchHomeSectionProperties('upcoming')` — API + tag filter applied upstream */
   properties: PropertyItem[];
-}
-
-function hasUpcomingTag(property: PropertyItem): boolean {
-  return property.Tags?.some((t) => t.slug?.toLowerCase() === "upcoming") ?? false;
 }
 
 // Inner component — uses useScroll (client only)
@@ -155,9 +152,7 @@ export function UpcomingProjects({ properties }: UpcomingProjectsProps) {
 
   useEffect(() => { setIsClient(true); }, []);
 
-  const upcomingOnly = properties.filter(hasUpcomingTag);
-
-  if (!upcomingOnly.length) return null;
+  if (!properties.length) return null;
 
   if (!isClient) {
     return (
@@ -177,5 +172,5 @@ export function UpcomingProjects({ properties }: UpcomingProjectsProps) {
     );
   }
 
-  return <UpcomingProjectsContent properties={upcomingOnly} />;
+  return <UpcomingProjectsContent properties={properties} />;
 }

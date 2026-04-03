@@ -115,7 +115,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       {/* Hero Section */}
       <section className="bg-linear-to-r from-amber-50 to-orange-50 py-10 md:py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
             {searchParamsObj.search
               ? `Search Results for "${searchParamsObj.search}"`
               : searchParamsObj.category
@@ -215,7 +215,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h2 className="text-2xl font-playfair font-bold text-gray-900 mb-2">No articles found</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-900 mb-2">No articles found</h2>
             <p className="text-gray-600 mb-6">Try adjusting your search or filter criteria</p>
             <Link
               href="/blogs"
@@ -230,7 +230,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       {/* Newsletter Section */}
       <section className="bg-linear-to-r from-amber-600 to-orange-600 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-playfair font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
             Stay Updated
           </h2>
           <p className="text-lg text-amber-100 mb-8">

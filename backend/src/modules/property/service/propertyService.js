@@ -57,7 +57,7 @@ class PropertyService {
         { model: Developer },
         { model: Location },
         { model: PropertySection, order: [['order', 'ASC']] },
-        { model: Category, through: { attributes: [] } },
+        { model: Category, as: 'Categories', through: { attributes: [] } },
         { model: Tag, as: 'Tags', through: { attributes: [] } },
       ],
     });
@@ -187,7 +187,7 @@ class PropertyService {
         { model: Developer },
         { model: Location },
         { model: PropertySection, order: [['order', 'ASC']] },
-        { model: Category, through: { attributes: [] } },
+        { model: Category, as: 'Categories', through: { attributes: [] } },
         { model: Tag, as: 'Tags', through: { attributes: [] } },
       ],
     });
@@ -219,10 +219,16 @@ class PropertyService {
     } = filters;
 
     const where = {};
+    // Must match Property.belongsToMany(Category) default alias — required for correct JOIN + filter.
+    const categoryInclude = {
+      model: Category,
+      as: 'Categories',
+      through: { attributes: [] },
+    };
     const include = [
       { model: Developer },
       { model: Location },
-      { model: Category, through: { attributes: [] } },
+      categoryInclude,
     ];
 
     if (propertyType) where.propertyType = propertyType;
@@ -250,8 +256,8 @@ class PropertyService {
 
     // ── Category filter ────────────────────────────────────────────────────────
     if (categoryIds?.length) {
-      include.find(i => i.model === Category).where = { id: { [Op.in]: categoryIds } };
-      include.find(i => i.model === Category).required = true;
+      categoryInclude.where = { id: { [Op.in]: categoryIds } };
+      categoryInclude.required = true;
     }
 
     // ── Tag filter (AND — property must have ALL requested tags) ──────────────
@@ -350,10 +356,18 @@ class PropertyService {
           : null;
       if (image) urlByPropertyId.set(s.propertyId, image);
     }
-    return rows.map((row) => ({
-      ...row.get({ plain: true }),
-      thumbnailUrl: urlByPropertyId.get(row.id) ?? null,
-    }));
+    return rows.map((row) => {
+      const plain = row.get({ plain: true });
+      // Many-to-many Tags must survive listing serialization (homepage filters on Tags; cards show pills).
+      const tags = row.Tags ?? plain.Tags;
+      const categories = row.Categories ?? plain.Categories;
+      return {
+        ...plain,
+        Tags: tags,
+        Categories: categories,
+        thumbnailUrl: urlByPropertyId.get(row.id) ?? null,
+      };
+    });
   }
 
   async createPropertySections(propertyId, sections) {
@@ -514,7 +528,7 @@ class PropertyService {
         { model: Developer },
         { model: Location },
         { model: PropertySection, attributes: ['id', 'type'] },
-        { model: Category, through: { attributes: [] } },
+        { model: Category, as: 'Categories', through: { attributes: [] } },
         { model: Tag, as: 'Tags', through: { attributes: [] } },
       ],
       limit: parseInt(limit, 10),
