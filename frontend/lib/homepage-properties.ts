@@ -1,4 +1,5 @@
 import { fetchFromAPI, buildQueryString } from '@/lib/api-client';
+import { HOMEPAGE_PROPERTY_SECTIONS_TAG } from '@/lib/cache-tags';
 import type { PropertyItem } from '@/types/property-listing';
 
 /**
@@ -54,12 +55,12 @@ export async function fetchHomeSectionProperties(
   try {
     const raw = await fetchFromAPI<unknown>(
       `/properties${qs}`,
-      revalidate === false ? {} : { next: { revalidate } },
+      revalidate === false
+        ? {}
+        : { next: { revalidate, tags: [HOMEPAGE_PROPERTY_SECTIONS_TAG] } },
     );
     const list = unwrapPropertiesPayload(raw);
-    // Backend already filters by tag; keep a soft filter only when Tags are present (avoids empty sections if JSON omits them).
-    const filtered = filterPropertiesByTagSlug(list, tagSlug);
-    return filtered.length > 0 ? filtered : list;
+    return filterPropertiesByTagSlug(list, tagSlug);
   } catch {
     return [];
   }

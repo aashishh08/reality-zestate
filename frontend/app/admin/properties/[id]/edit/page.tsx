@@ -8,6 +8,7 @@ import {
     updatePropertyFull, fetchAdminPropertyById, fetchTags, fetchCategories, fetchEnums,
     RefTag, RefCategory, SectionPayload, EnumsData,
 } from '@/lib/api/properties-admin';
+import { revalidateHomepagePropertySections } from '@/app/actions/revalidate-homepage';
 import { orderCategoriesWithCuratedFirst } from '@/lib/constants';
 import {
     Building2, Plus, ChevronRight, ChevronLeft, CheckCircle2, XCircle, RefreshCw, Trash2, Eye, Loader2, AlertTriangle,
@@ -451,6 +452,7 @@ export default function EditPropertyPage() {
                 priceMax: basic.priceMax ? Number(basic.priceMax) : null,
                 sections: buildSections(),
             }, token);
+            await revalidateHomepagePropertySections();
             setDone(result);
         } catch (e: any) {
             setFormError(e.message || 'Failed to update property');

@@ -8,6 +8,7 @@ import {
     createPropertyFull, fetchTags, fetchCategories, fetchEnums,
     RefTag, RefCategory, SectionPayload, EnumsData,
 } from '@/lib/api/properties-admin';
+import { revalidateHomepagePropertySections } from '@/app/actions/revalidate-homepage';
 import { orderCategoriesWithCuratedFirst } from '@/lib/constants';
 import {
     Building2, Plus, TrendingUp, FileText, LogOut, Menu, X, Home,
@@ -301,6 +302,7 @@ export default function CreatePropertyPage() {
                 priceMax: basic.priceMax ? Number(basic.priceMax) : null,
                 sections: buildSections(),
             }, token);
+            await revalidateHomepagePropertySections();
             setDone(result);
         } catch (e: any) {
             setFormError(e.message || 'Failed to create property');

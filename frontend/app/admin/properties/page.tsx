@@ -6,6 +6,7 @@ import { ProtectedAdminRoute } from '@/components/admin/ProtectedAdminRoute';
 import {
     listAdminProperties, deleteAdminProperty, togglePublishProperty, AdminProperty,
 } from '@/lib/api/properties-admin';
+import { revalidateHomepagePropertySections } from '@/app/actions/revalidate-homepage';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -54,7 +55,11 @@ export default function AdminPropertiesPage() {
         if (!token) return;
         if (!confirm(`Delete "${p.title}"? This cannot be undone.`)) return;
         setDeletingId(p.id);
-        try { await deleteAdminProperty(p.id, token); loadProperties(); }
+        try {
+            await deleteAdminProperty(p.id, token);
+            await revalidateHomepagePropertySections();
+            loadProperties();
+        }
         catch (e: any) { alert(e.message || 'Delete failed'); }
         finally { setDeletingId(null); }
     };
@@ -62,7 +67,11 @@ export default function AdminPropertiesPage() {
     const handleTogglePublish = async (p: AdminProperty) => {
         if (!token) return;
         setTogglingId(p.id);
-        try { await togglePublishProperty(p.id, !p.isPublished, token); loadProperties(); }
+        try {
+            await togglePublishProperty(p.id, !p.isPublished, token);
+            await revalidateHomepagePropertySections();
+            loadProperties();
+        }
         catch (e: any) { alert(e.message || 'Update failed'); }
         finally { setTogglingId(null); }
     };
