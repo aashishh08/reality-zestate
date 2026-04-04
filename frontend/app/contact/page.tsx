@@ -4,10 +4,10 @@ import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Twitter, Send } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Contact Us - Get in Touch | Superluxere',
+  title: 'Contact Us - Get in Touch',
   description: 'Contact Superluxere for luxury real estate inquiries. Visit our office, call us, or send a message. We\'re here to help you find your dream property.',
   openGraph: {
-    title: 'Contact Us - Get in Touch | Superluxere',
+    title: 'Contact Us - Get in Touch',
     description: 'Contact Superluxere for luxury real estate inquiries. Visit our office, call us, or send a message.',
     type: 'website',
     url: 'https://superluxere.com/contact',

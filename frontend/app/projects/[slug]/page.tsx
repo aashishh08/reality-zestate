@@ -75,7 +75,7 @@ export async function generateMetadata({
 
   if (!project) {
     return {
-      title: "Project Not Found | Superluxere",
+      title: "Project Not Found",
       description: "The requested property could not be found.",
     };
   }
@@ -88,8 +88,13 @@ export async function generateMetadata({
   const ogImage =
     project.details?.heroImage?.trim() || project.image?.trim() || undefined;
 
+  const titleSegment = `${project.seoTitle || project.title} - ${project.location}`.replace(
+    /\s*\|\s*Superluxere\s*$/i,
+    "",
+  ).trim();
+
   return {
-    title: `${project.seoTitle || project.title} - ${project.location} | Superluxere`,
+    title: titleSegment,
     description,
     keywords: [
       project.title,

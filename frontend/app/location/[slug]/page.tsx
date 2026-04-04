@@ -45,11 +45,11 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${location.name} — Luxury Projects | Superluxere`,
+    title: `${location.name} — Luxury Projects`,
     description: `Discover curated projects in ${location.name}. Explore developers and corridor fundamentals before you book a site visit.`,
     keywords: [location.name, 'luxury real estate', 'micro-market', 'India', 'Superluxere'],
     openGraph: {
-      title: `${location.name} | Superluxere`,
+      title: `${location.name} — Luxury Projects`,
       description: `Browse premium inventory in ${location.name}.`,
       type: 'website',
       url: `/location/${location.slug}`,

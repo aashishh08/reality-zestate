@@ -35,7 +35,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${developer.name} Projects & Properties | Reality Estate`,
+    title: `${developer.name} Projects & Properties`,
     description: `Explore all projects and properties by ${developer.name}. Discover residential and commercial developments with premium amenities.`,
     keywords: [developer.name, 'properties', 'projects', 'real estate', 'developer'],
     openGraph: {

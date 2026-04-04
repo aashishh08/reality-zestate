@@ -4,10 +4,10 @@ import Image from 'next/image';
 import { Award, Users, Building2, TrendingUp, Shield, Heart, Target, Sparkles, Star } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About Us - Luxury Real Estate Experts | Superluxere',
+  title: 'About Us - Luxury Real Estate Experts',
   description: 'Discover Superluxere - India\'s premier luxury real estate platform. Learn about our mission, values, and commitment to delivering exceptional property experiences.',
   openGraph: {
-    title: 'About Us - Luxury Real Estate Experts | Superluxere',
+    title: 'About Us - Luxury Real Estate Experts',
     description: 'Discover Superluxere - India\'s premier luxury real estate platform. Learn about our mission, values, and commitment to excellence.',
     type: 'website',
     url: 'https://superluxere.com/about-us',

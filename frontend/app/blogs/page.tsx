@@ -30,7 +30,7 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
   let description = 'Explore expert insights, market trends, and guides on luxury real estate in India. Stay updated with the latest in premium properties and investment opportunities.';
 
   if (search) {
-    title = `Search Results for "${search}" - Blog | Superluxere`;
+    title = `Search Results for "${search}" - Blog`;
     description = `Find articles related to "${search}" on luxury real estate, property investment, and market insights.`;
   }
 

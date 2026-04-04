@@ -11,7 +11,7 @@ export function buildFallbackCategoryEditorial(slug: string, name: string): Cate
   return {
     slug,
     title: name,
-    metaTitle: `${name} | Superluxere`,
+    metaTitle: name,
     metaDescription: `Browse premium ${name} properties curated on Superluxere.`,
     heroTitle: name,
     heroSubtitle: 'Curated luxury inventory',
@@ -56,7 +56,7 @@ const categories: Record<string, CategoryData> = {
   apartment: {
     slug: 'apartment',
     title: 'Apartments',
-    metaTitle: 'Luxury Apartments | Superluxere',
+    metaTitle: 'Luxury Apartments',
     metaDescription: 'Discover premium apartment properties in Delhi NCR',
     heroTitle: 'Luxury Apartments',
     heroSubtitle: 'Experience premium living spaces designed for modern lifestyles',
@@ -111,7 +111,7 @@ const categories: Record<string, CategoryData> = {
   villa: {
     slug: 'villa',
     title: 'Villas',
-    metaTitle: 'Luxury Villas | Superluxere',
+    metaTitle: 'Luxury Villas',
     metaDescription: 'Discover premium villa properties in Delhi NCR',
     heroTitle: 'Luxury Villas',
     heroSubtitle: 'Experience the pinnacle of luxury living',
@@ -161,7 +161,7 @@ const categories: Record<string, CategoryData> = {
   boutique: {
     slug: 'boutique',
     title: 'Boutique Collection',
-    metaTitle: 'Boutique Properties | Superluxere',
+    metaTitle: 'Boutique Properties',
     metaDescription: 'Discover exclusive boutique properties',
     heroTitle: 'Boutique Collection',
     heroSubtitle: 'Limited edition luxury properties',
@@ -194,7 +194,7 @@ const categories: Record<string, CategoryData> = {
   'golf-residences': {
     slug: 'golf-residences',
     title: 'Golf Residences',
-    metaTitle: 'Golf Residences | Superluxere',
+    metaTitle: 'Golf Residences',
     metaDescription: 'Private golf-fronting homes and estates across India’s finest fairways.',
     heroTitle: 'Golf Residences',
     heroSubtitle: 'Fairway-front living with club culture at your doorstep',
@@ -218,7 +218,7 @@ const categories: Record<string, CategoryData> = {
   'branded-residences': {
     slug: 'branded-residences',
     title: 'Branded Residences',
-    metaTitle: 'Branded Residences | Superluxere',
+    metaTitle: 'Branded Residences',
     metaDescription: 'Hotel and luxury-brand residences with global service pedigree.',
     heroTitle: 'Branded Residences',
     heroSubtitle: 'Iconic names, private ownership, five-star service rails',
@@ -242,7 +242,7 @@ const categories: Record<string, CategoryData> = {
   'himalayan-living': {
     slug: 'himalayan-living',
     title: 'Himalayan Living',
-    metaTitle: 'Himalayan Living | Superluxere',
+    metaTitle: 'Himalayan Living',
     metaDescription: 'Alpine villas and retreats across the Himalayan belt.',
     heroTitle: 'Himalayan Living',
     heroSubtitle: 'Altitude, silence, and nature at a different scale',
@@ -259,7 +259,7 @@ const categories: Record<string, CategoryData> = {
   'senior-living': {
     slug: 'senior-living',
     title: 'Senior Living',
-    metaTitle: 'Senior Living | Superluxere',
+    metaTitle: 'Senior Living',
     metaDescription: 'Premium senior living with care layers and resort-grade amenities.',
     heroTitle: 'Senior Living',
     heroSubtitle: 'Independence, healthcare adjacency, and community design',
@@ -276,7 +276,7 @@ const categories: Record<string, CategoryData> = {
   'ultra-villas': {
     slug: 'ultra-villas',
     title: 'Ultra Villas',
-    metaTitle: 'Ultra Villas | Superluxere',
+    metaTitle: 'Ultra Villas',
     metaDescription: 'Ultra-luxury villas with land, pools, and bespoke architecture.',
     heroTitle: 'Ultra Villas',
     heroSubtitle: 'Land-rich compounds for multi-generational use',
@@ -293,7 +293,7 @@ const categories: Record<string, CategoryData> = {
   'off-market': {
     slug: 'off-market',
     title: 'Off-Market',
-    metaTitle: 'Off-Market Properties | Superluxere',
+    metaTitle: 'Off-Market Properties',
     metaDescription: 'Private inventory not broadly advertised—by introduction only.',
     heroTitle: 'Off-Market',
     heroSubtitle: 'Discreet listings for qualified buyers',

@@ -34,14 +34,14 @@ export async function generateMetadata({
     }
 
     return {
-        title: `${tag.name} Properties | Reality Estate`,
+        title: `${tag.name} Properties`,
         description: tag.description
             ? `${tag.description} Browse ${tag.name.toLowerCase()} properties with detailed pricing, amenities and location info.`
-            : `Explore all ${tag.name} properties on Reality Estate.`,
+            : `Explore all ${tag.name} properties on Superluxere.`,
         keywords: [tag.name, 'properties', 'real estate', 'buy', 'invest'],
         openGraph: {
             title: `${tag.name} Properties`,
-            description: tag.description ?? `Browse ${tag.name} properties on Reality Estate.`,
+            description: tag.description ?? `Browse ${tag.name} properties on Superluxere.`,
             type: 'website',
             url: `/tag/${tag.slug}`,
         },

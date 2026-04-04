@@ -46,7 +46,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const { slug } = await params;
   try {
     const post = await getBlogBySlug(slug);
-    const metaTitle = post.seo?.metaTitle || `${post.title} | Superluxere`;
+    const rawSeoTitle = post.seo?.metaTitle?.trim() || post.title;
+    // Root layout uses `title.template: "%s | Superluxere"` — strip a trailing brand so we never double it.
+    const metaTitle = rawSeoTitle.replace(/\s*\|\s*Superluxere\s*$/i, '').trim() || post.title;
     const metaDescription =
       post.seo?.metaDescription ||
       post.excerpt ||
