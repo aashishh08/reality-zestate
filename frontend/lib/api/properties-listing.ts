@@ -64,7 +64,11 @@ export async function fetchLocationPageProperties(
     q.citySlug = location.slug;
   }
 
-  const response = await fetchFromAPI<any>(`/properties${buildQueryString(q)}`);
+  /** Same rationale as category pages: avoid stale ISR/SSG empty `/properties` responses. */
+  const response = await fetchFromAPI<any>(
+    `/properties${buildQueryString(q)}`,
+    { cache: 'no-store' },
+  );
   return normaliseListResponse(response, filters);
 }
 

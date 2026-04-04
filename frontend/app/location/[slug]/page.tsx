@@ -69,6 +69,14 @@ export async function generateStaticParams() {
   }
 }
 
+const LOCATION_PAGE_CACHE_TTL = 3600;
+
+/**
+ * Micro-market pages must not ship a stale SSG shell with empty listings (same issue as
+ * `/category/[slug]`): filter pills triggered a fresh fetch; full refresh showed 0 again.
+ */
+export const dynamic = 'force-dynamic';
+
 export default async function LocationPage({
   params: paramsPromise,
 }: {
@@ -100,9 +108,9 @@ export default async function LocationPage({
     categoriesRes,
     initialData,
   ] = await Promise.all([
-    getLocations({ limit: 20, offset: 0 }, 3600).catch(() => ({ data: [] })),
-    getDevelopers({ limit: 12, offset: 0 }, 3600).catch(() => []),
-    getCategories({ limit: 50, offset: 0 }, 3600).catch(() => ({ data: [] })),
+    getLocations({ limit: 20, offset: 0 }, LOCATION_PAGE_CACHE_TTL).catch(() => ({ data: [] })),
+    getDevelopers({ limit: 12, offset: 0 }, LOCATION_PAGE_CACHE_TTL).catch(() => []),
+    getCategories({ limit: 50, offset: 0 }, LOCATION_PAGE_CACHE_TTL).catch(() => ({ data: [] })),
     fetchLocationPageProperties(listingContext, {
       limit: 12,
       offset: 0,
@@ -192,7 +200,5 @@ export default async function LocationPage({
     </>
   );
 }
-
-export const revalidate = 3600;
 
 export const dynamicParams = true;
