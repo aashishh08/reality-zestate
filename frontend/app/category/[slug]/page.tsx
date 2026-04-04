@@ -70,13 +70,19 @@ export async function generateMetadata({
   return { title: "Category Not Found" };
 }
 
-export const revalidate = 3600;
+/**
+ * Curated collection pages must not use stale SSG/ISR props for the grid: a static shell
+ * with empty `initialData` was shown until a filter pill triggered a fresh server action fetch.
+ */
+export const dynamic = "force-dynamic";
+
+const CATEGORY_PAGE_CACHE_TTL = 3600;
 
 async function resolveEditorial(slug: string): Promise<CategoryData | null> {
   const staticCat = getCategoryBySlug(slug);
   if (staticCat) return staticCat;
 
-  const catsRes = await getCategories({ limit: 300, offset: 0 }, revalidate).catch(() => ({
+  const catsRes = await getCategories({ limit: 300, offset: 0 }, CATEGORY_PAGE_CACHE_TTL).catch(() => ({
     data: [] as { slug: string; name: string }[],
   }));
   const api = catsRes.data?.find((c) => c.slug === slug);
@@ -97,10 +103,10 @@ export default async function CategoryPage({
   }
 
   const [locationsRes, developersRes, categoriesRes, initialData] = await Promise.all([
-    getLocations({ limit: 20, offset: 0 }, revalidate).catch(() => ({ data: [] })),
-    getDevelopers({ limit: 12, offset: 0 }, revalidate).catch(() => []),
-    getCategories({ limit: 200, offset: 0 }, revalidate).catch(() => ({ data: [] })),
-    fetchCategoryPropertiesBySlug(slug, { limit: 12, offset: 0 }, revalidate),
+    getLocations({ limit: 20, offset: 0 }, CATEGORY_PAGE_CACHE_TTL).catch(() => ({ data: [] })),
+    getDevelopers({ limit: 12, offset: 0 }, CATEGORY_PAGE_CACHE_TTL).catch(() => []),
+    getCategories({ limit: 300, offset: 0 }, CATEGORY_PAGE_CACHE_TTL).catch(() => ({ data: [] })),
+    fetchCategoryPropertiesBySlug(slug, { limit: 12, offset: 0 }),
   ]);
 
   const apiCategory =
@@ -110,7 +116,7 @@ export default async function CategoryPage({
   const handleFetchProperties = async (filters: PropertyFilters) => {
     "use server";
 
-    const catsRes = await getCategories({ limit: 300, offset: 0 }, false);
+    const catsRes = await getCategories({ limit: 500, offset: 0 }, 0);
     const cat = catsRes.data?.find((c) => c.slug === slug);
     if (!cat?.id) {
       return {

@@ -96,17 +96,23 @@ export async function fetchCategoryProperties(
   categoryId: string,
   filters?: Omit<PropertyFilters, 'categoryIds'>,
 ): Promise<PropertyListResponse> {
-  const response = await fetchFromAPI<any>(`/properties${buildQueryString({ categoryIds: [categoryId], ...filters })}`);
+  /** Avoid Next fetch Data Cache serving a stale empty list from an older ISR/SSG build. */
+  const response = await fetchFromAPI<any>(
+    `/properties${buildQueryString({ categoryIds: [categoryId], ...filters })}`,
+    { cache: 'no-store' },
+  );
   return normaliseListResponse(response, filters);
 }
 
-/** Resolve a category UUID from its slug, then list published properties in that category. */
+/**
+ * Resolve a category UUID from its slug, then list published properties in that category.
+ * Uses a fresh categories lookup (`revalidate: 0`) so slug→id resolution is never stale.
+ */
 export async function fetchCategoryPropertiesBySlug(
   slug: string,
   filters?: Omit<PropertyFilters, 'categoryIds'>,
-  categoriesRevalidate: number | false = 7200,
 ): Promise<PropertyListResponse> {
-  const catsRes = await getCategories({ limit: 200, offset: 0 }, categoriesRevalidate);
+  const catsRes = await getCategories({ limit: 500, offset: 0 }, 0);
   const list = catsRes?.data ?? [];
   const cat = list.find((c) => c.slug === slug);
   if (!cat) {
