@@ -4,7 +4,7 @@ import "./globals.css";
 
 /**
  * Must be a static literal (Next.js / Turbopack parses route config at build time).
- * Per-route caching uses `next: { revalidate }` in `fetchFromAPI`; set `NEXT_FETCH_NO_CACHE=1` to force no-store everywhere.
+ * Per-route caching uses `next: { revalidate }` in `fetchFromAPI`. `NEXT_FETCH_NO_CACHE` only applies in development.
  */
 export const dynamic = "auto";
 
