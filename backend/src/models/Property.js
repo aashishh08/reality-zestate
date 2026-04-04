@@ -48,6 +48,11 @@ export default (sequelize) => {
       allowNull: true,
       comment: 'Slug of the locality enum, e.g. "golf-course-road". Must belong to citySlug.',
     },
+    sublocality: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      comment: 'Display-only micro-area (e.g. sector / landmark). Not used for API filters.',
+    },
     developerSlug: {
       type: DataTypes.STRING(100),
       allowNull: true,

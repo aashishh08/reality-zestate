@@ -68,7 +68,7 @@ class PropertyService {
   async updatePropertyFull(id, data) {
     const {
       slug, title, propertyType,
-      citySlug, localitySlug, developerSlug,
+      citySlug, localitySlug, sublocality, developerSlug,
       status, priceMin, priceMax, isPublished,
       seoTitle, h1Heading, metaDescription,
       tagSlugs = [], categorySlugs = [],
@@ -116,6 +116,12 @@ class PropertyService {
         updateData.metaDescription = metaDescription?.trim?.()
           ? metaDescription.trim().slice(0, 158)
           : null;
+      }
+      if (sublocality !== undefined) {
+        updateData.sublocality =
+          typeof sublocality === 'string' && sublocality.trim()
+            ? sublocality.trim().slice(0, 255)
+            : null;
       }
 
       if (citySlug !== undefined || localitySlug !== undefined) {
@@ -417,7 +423,7 @@ class PropertyService {
   async createPropertyFull(data) {
     const {
       slug, title, propertyType,
-      citySlug, localitySlug, developerSlug,
+      citySlug, localitySlug, sublocality, developerSlug,
       status = 'draft', priceMin, priceMax, isPublished = false,
       seoTitle, h1Heading, metaDescription,
       tagSlugs = [], categorySlugs = [],
@@ -451,10 +457,15 @@ class PropertyService {
         developerId = dev ? dev.id : null;
       }
 
+      const subTrim = typeof sublocality === 'string' && sublocality.trim()
+        ? sublocality.trim().slice(0, 255)
+        : null;
+
       const property = await Property.create({
         slug, title, propertyType,
         citySlug: citySlug || null,
         localitySlug: localitySlug || null,
+        sublocality: subTrim,
         developerSlug: developerSlug || null,
         developerId,
         locationId,

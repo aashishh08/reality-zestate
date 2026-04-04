@@ -11,6 +11,8 @@ export interface Property {
   seoTitle?: string | null;
   h1Heading?: string | null;
   metaDescription?: string | null;
+  /** Display-only micro-area on project page; not used for listing filters. */
+  sublocality?: string | null;
 
   Developer?: {
     id: string;

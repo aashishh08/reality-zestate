@@ -156,7 +156,7 @@ export default function EditPropertyPage() {
     const [basic, setBasic] = useState({
         slug: '', title: '', propertyType: 'residential' as 'residential' | 'commercial',
         status: 'draft',
-        citySlug: '', localitySlug: '', developerSlug: '',
+        citySlug: '', localitySlug: '', sublocality: '', developerSlug: '',
         priceMin: '', priceMax: '', isPublished: false,
         tagSlugs: [] as string[], categorySlugs: [] as string[],
         seoTitle: '', h1Heading: '', metaDescription: '',
@@ -234,6 +234,7 @@ export default function EditPropertyPage() {
             status: p.status,
             citySlug: p.citySlug ?? '',
             localitySlug: p.localitySlug ?? '',
+            sublocality: p.sublocality ?? '',
             developerSlug: p.developerSlug ?? '',
             priceMin: p.priceMin != null ? String(p.priceMin) : '',
             priceMax: p.priceMax != null ? String(p.priceMax) : '',
@@ -639,6 +640,12 @@ export default function EditPropertyPage() {
                                                     {enums.developers.map(d => <option key={d.slug} value={d.slug}>{d.label}</option>)}
                                                 </Select>
                                             </div>
+                                            <Input
+                                                label="Sublocality (optional)"
+                                                value={basic.sublocality}
+                                                onChange={e => setBasic(b => ({ ...b, sublocality: e.target.value }))}
+                                                placeholder="e.g. Sector 57, near Metro — shown on project page only"
+                                            />
                                             {(basic.citySlug || basic.localitySlug || basic.developerSlug) && (
                                                 <p className="text-xs text-gray-500 mt-2">
                                                     ✓ {[basic.developerSlug, basic.localitySlug, basic.citySlug].filter(Boolean).join(' · ')}

@@ -275,11 +275,15 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      {/* Location Advantage */}
+      {/* Location Advantage — CMS section and/or display-only sublocality from property record */}
       <section id="location">
-        {details?.location && (
+        {(details?.location || project.sublocality?.trim()) && (
           <ErrorBoundary sectionName="Location">
-            <ProjectLocation location={details.location} heading={details.sectionHeadings?.location} />
+            <ProjectLocation
+              location={details?.location ?? { nearby: [], connectivity: [] }}
+              sublocality={project.sublocality}
+              heading={details?.sectionHeadings?.location}
+            />
           </ErrorBoundary>
         )}
       </section>

@@ -114,6 +114,9 @@ export function ProjectHero({ project }: ProjectHeroProps) {
               ) : null}
               <p className="text-lg text-white/70 mb-4">
                 📍 {project.location}
+                {project.sublocality?.trim() ? (
+                  <span className="text-white/90"> · {project.sublocality.trim()}</span>
+                ) : null}
               </p>
 
               {details.highlights && (() => {

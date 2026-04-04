@@ -160,7 +160,7 @@ export default function CreatePropertyPage() {
     const [basic, setBasic] = useState({
         slug: '', title: '', propertyType: 'residential' as 'residential' | 'commercial',
         status: 'draft',
-        citySlug: '', localitySlug: '', developerSlug: '',
+        citySlug: '', localitySlug: '', sublocality: '', developerSlug: '',
         priceMin: '', priceMax: '', isPublished: false,
         tagSlugs: [] as string[], categorySlugs: [] as string[],
         seoTitle: '', h1Heading: '', metaDescription: '',
@@ -341,7 +341,7 @@ export default function CreatePropertyPage() {
                                 className="flex items-center space-x-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-white rounded-xl text-sm font-semibold transition">
                                 <Eye className="w-4 h-4" /><span>View Property</span>
                             </a>
-                            <button onClick={() => { setDone(null); setStep(0); setBasic({ slug: '', title: '', propertyType: 'residential', status: 'draft', citySlug: '', localitySlug: '', developerSlug: '', priceMin: '', priceMax: '', isPublished: false, tagSlugs: [], categorySlugs: [], seoTitle: '', h1Heading: '', metaDescription: '' }); }}
+                            <button onClick={() => { setDone(null); setStep(0); setBasic({ slug: '', title: '', propertyType: 'residential', status: 'draft', citySlug: '', localitySlug: '', sublocality: '', developerSlug: '', priceMin: '', priceMax: '', isPublished: false, tagSlugs: [], categorySlugs: [], seoTitle: '', h1Heading: '', metaDescription: '' }); }}
                                 className="px-5 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded-xl text-sm font-semibold transition">
                                 Create Another
                             </button>
@@ -454,6 +454,12 @@ export default function CreatePropertyPage() {
                                                     {enums.developers.map(d => <option key={d.slug} value={d.slug}>{d.label}</option>)}
                                                 </Select>
                                             </div>
+                                            <Input
+                                                label="Sublocality (optional)"
+                                                value={basic.sublocality}
+                                                onChange={e => setBasic(b => ({ ...b, sublocality: e.target.value }))}
+                                                placeholder="e.g. Sector 57, near Metro — shown on project page only"
+                                            />
                                             {(basic.citySlug || basic.localitySlug || basic.developerSlug) && (
                                                 <p className="text-xs text-gray-500 mt-2">
                                                     ✓ {[basic.developerSlug, basic.localitySlug, basic.citySlug].filter(Boolean).join(' · ')}

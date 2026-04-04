@@ -18,6 +18,7 @@ export interface CreatePropertyFullPayload {
     // Enum slugs (validated server-side against enums.js)
     citySlug?: string | null;
     localitySlug?: string | null;
+    sublocality?: string | null;
     developerSlug?: string | null;
     status?: string;
     priceMin?: number | null;
@@ -41,6 +42,7 @@ export interface AdminProperty {
     status: string;
     citySlug?: string | null;
     localitySlug?: string | null;
+    sublocality?: string | null;
     developerSlug?: string | null;
     priceMin: number | null;
     priceMax: number | null;
@@ -135,6 +137,7 @@ export async function fetchAdminPropertyById(
     isPublished: boolean;
     citySlug?: string | null;
     localitySlug?: string | null;
+    sublocality?: string | null;
     developerSlug?: string | null;
     seoTitle?: string | null;
     h1Heading?: string | null;

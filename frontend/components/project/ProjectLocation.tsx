@@ -17,6 +17,8 @@ interface ProjectLocationProps {
     connectivity?: ConnectivityItem[];
   };
   heading?: string;
+  /** Optional micro-area from property record; display-only (not used for filters). */
+  sublocality?: string | null;
 }
 
 const categoryIcons: Record<string, React.ElementType> = {
@@ -41,12 +43,16 @@ const connectivityIcons: Record<string, React.ElementType> = {
   default: MapPin,
 };
 
-export function ProjectLocation({ location, heading = 'Location Advantage' }: ProjectLocationProps) {
-  // Graceful null guard
+export function ProjectLocation({ location, heading = 'Location Advantage', sublocality }: ProjectLocationProps) {
   if (!location) return null;
 
   const safeNearby: NearbyCategory[] = Array.isArray(location.nearby) ? location.nearby : [];
   const safeConnectivity: ConnectivityItem[] = Array.isArray(location.connectivity) ? location.connectivity : [];
+  const sub = typeof sublocality === 'string' ? sublocality.trim() : '';
+  const addr = typeof location.address === 'string' ? location.address.trim() : '';
+  const hasMap = !!location.mapImage?.trim();
+  const hasBody = !!(sub || addr || hasMap || safeNearby.length > 0 || safeConnectivity.length > 0);
+  if (!hasBody) return null;
 
   return (
     <section className="py-12 bg-white">
@@ -89,8 +95,11 @@ export function ProjectLocation({ location, heading = 'Location Advantage' }: Pr
                   </div>
                   <div>
                     <p className="font-serif font-bold text-[#2C2416] text-base">
-                      {location.address || "Prime Location"}
+                      {addr || sub || "Prime Location"}
                     </p>
+                    {addr && sub ? (
+                      <p className="text-sm text-zinc-600 mt-1 font-sans font-normal">{sub}</p>
+                    ) : null}
                   </div>
                 </div>
               </div>
