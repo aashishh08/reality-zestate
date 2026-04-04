@@ -2,12 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
 
-/**
- * Must be a static literal (Next.js / Turbopack parses route config at build time).
- * Per-route caching uses `next: { revalidate }` in `fetchFromAPI`. `NEXT_FETCH_NO_CACHE` only applies in development.
- */
-export const dynamic = "auto";
-
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",

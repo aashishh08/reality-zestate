@@ -145,4 +145,6 @@ export default async function TagPage({
     );
 }
 
+// ISR: revalidate every hour; new tags get picked up immediately via dynamicParams
+export const revalidate = 3600;
 export const dynamicParams = true;

@@ -485,3 +485,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   );
 }
 
+// ISR: cache each blog post page for 5 minutes.
+// getBlogBySlug also uses next: { revalidate: 300 } so both layers stay in sync.
+export const revalidate = 300;

@@ -15,7 +15,7 @@ import { getLocations, getDevelopers, getCategories } from "@/lib";
 import { fetchHomeSectionProperties } from "@/lib/homepage-properties";
 import { getFeaturedCorridorCards } from "@/lib/featured-corridors";
 
-// ISR: align segment with `next: { revalidate: 3600 }` fetches in `getHomePageData`.
+// ISR: Revalidate every hour
 export const revalidate = 3600;
 
 async function getHomePageData() {

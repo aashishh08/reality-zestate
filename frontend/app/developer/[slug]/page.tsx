@@ -123,6 +123,12 @@ export default async function DeveloperPage({
 }
 
 /**
+ * ISR Configuration
+ * Revalidate every 1 hour (3600 seconds)
+ */
+export const revalidate = 3600;
+
+/**
  * Dynamic segment configuration
  * Ensures page is generated on-demand if not pre-generated
  */

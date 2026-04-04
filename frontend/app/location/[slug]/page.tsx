@@ -193,4 +193,6 @@ export default async function LocationPage({
   );
 }
 
+export const revalidate = 3600;
+
 export const dynamicParams = true;

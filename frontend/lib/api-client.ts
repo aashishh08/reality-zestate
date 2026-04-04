@@ -1,5 +1,3 @@
-import { serverFetchNoCache } from './server-fetch-policy';
-
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/v1';
 const API_TIMEOUT = parseInt(process.env.NEXT_PUBLIC_API_TIMEOUT || '30000');
 
@@ -74,20 +72,14 @@ export async function fetchFromAPI<T = unknown>(
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  const bypassDataCache = serverFetchNoCache();
-
   const fetchOptions: RequestInit = {
     method,
     headers: finalHeaders,
     ...(body && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)
       ? { body: JSON.stringify(body) }
       : {}),
-    ...(bypassDataCache
-      ? { cache: 'no-store' as RequestCache }
-      : {
-          ...(cache ? { cache } : {}),
-          ...(next ? { next } as Record<string, unknown> : {}),
-        }),
+    ...(cache ? { cache } : {}),
+    ...(next ? { next } as any : {}),
   };
 
   try {
