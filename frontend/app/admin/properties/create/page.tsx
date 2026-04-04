@@ -10,6 +10,7 @@ import {
 } from '@/lib/api/properties-admin';
 import { revalidateHomepagePropertySections } from '@/app/actions/revalidate-homepage';
 import { orderCategoriesWithCuratedFirst } from '@/lib/constants';
+import { sortTagsForAdmin } from '@/lib/status-tags';
 import {
     Building2, Plus, TrendingUp, FileText, LogOut, Menu, X, Home,
     ChevronRight, ChevronLeft, CheckCircle2, XCircle, RefreshCw, Trash2, Eye,
@@ -236,7 +237,7 @@ export default function CreatePropertyPage() {
 
     // ── Load reference data ──────────────────────────────────────────────────────
     useEffect(() => {
-        fetchTags().then(setTags).catch(() => { });
+        fetchTags().then((t) => setTags(sortTagsForAdmin(t))).catch(() => { });
         fetchCategories()
             .then((c) => setCategories(orderCategoriesWithCuratedFirst(c)))
             .catch(() => { });
@@ -468,6 +469,9 @@ export default function CreatePropertyPage() {
                                     <SectionCard title="🏷️ Tags & Categories">
                                         <div>
                                             <p className="text-xs text-gray-400 mb-2 font-medium">Tags (select all that apply)</p>
+                                            <p className="text-xs text-gray-500 mb-3">
+                                                Listing filters use these slugs first: New Launch, Upcoming, Under Construction, Ready to Move — pick at least one status tag when relevant.
+                                            </p>
                                             <div className="flex flex-wrap gap-2">
                                                 {tags.map(t => {
                                                     const sel = basic.tagSlugs.includes(t.slug);

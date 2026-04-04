@@ -10,6 +10,7 @@ import {
 } from '@/lib/api/properties-admin';
 import { revalidateHomepagePropertySections } from '@/app/actions/revalidate-homepage';
 import { orderCategoriesWithCuratedFirst } from '@/lib/constants';
+import { sortTagsForAdmin } from '@/lib/status-tags';
 import {
     Building2, Plus, ChevronRight, ChevronLeft, CheckCircle2, XCircle, RefreshCw, Trash2, Eye, Loader2, AlertTriangle,
 } from 'lucide-react';
@@ -215,7 +216,7 @@ export default function EditPropertyPage() {
             fetchAdminPropertyById(propertyId, token),
         ])
             .then(([tgs, cats, property]) => {
-                setTags(tgs);
+                setTags(sortTagsForAdmin(tgs));
                 setCategories(orderCategoriesWithCuratedFirst(cats));
                 hydrateForm(property);
             })
@@ -654,6 +655,9 @@ export default function EditPropertyPage() {
                                     <SectionCard title="🏷️ Tags & Categories">
                                         <div>
                                             <p className="text-xs text-gray-400 mb-2 font-medium">Tags (select all that apply)</p>
+                                            <p className="text-xs text-gray-500 mb-3">
+                                                Listing filters use these slugs first: New Launch, Upcoming, Under Construction, Ready to Move — pick at least one status tag when relevant.
+                                            </p>
                                             <div className="flex flex-wrap gap-2">
                                                 {tags.map(t => {
                                                     const sel = basic.tagSlugs.includes(t.slug);

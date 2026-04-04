@@ -117,6 +117,8 @@ export async function up(queryInterface) {
     { name: 'Featured', slug: 'featured', color: '#3B82F6' },
     { name: 'Best Seller', slug: 'best-seller', color: '#F97316' },
     { name: 'New Launch', slug: 'new-launch', color: '#8B5CF6' },
+    { name: 'Under Construction', slug: 'under-construction', color: '#F97316' },
+    { name: 'Ready to Move', slug: 'ready-to-move', color: '#06B6D4' },
     { name: 'Hot Property', slug: 'hot-property', color: '#EF4444' },
     { name: 'Investment Pick', slug: 'investment-pick', color: '#10B981' },
     { name: 'Vastu Compliant', slug: 'vastu-compliant', color: '#F59E0B' },

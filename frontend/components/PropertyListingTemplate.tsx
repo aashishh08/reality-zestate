@@ -11,11 +11,16 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { PropertyCard, STATUS_TAG_SLUGS } from './ui/PropertyCard';
+import { PropertyCard } from './ui/PropertyCard';
 import { Pagination } from './ui/Pagination';
 import { PropertyListResponse, PropertyFilters } from '@/types/property-listing';
 import { Project } from '@/types';
-import { fetchAllTags, Tag } from '@/lib/api/properties-listing';
+import { fetchAllTags } from '@/lib/api/properties-listing';
+import {
+  STATUS_TAG_SLUGS,
+  STATUS_TAG_DEFAULT_LABELS,
+  type StatusTagSlug,
+} from '@/lib/status-tags';
 import {
   corridorEyebrow,
   corridorGoldRule,
@@ -71,12 +76,29 @@ export function PropertyListingTemplate({
   /** Skip fetch on mount only — SSR already provided `initialData`. */
   const skipFetchUntilFilterChange = useRef(true);
 
-  // Only the status-type tags are shown as pills
-  const [statusTags, setStatusTags] = useState<Tag[]>([]);
+  /** Four fixed pills (slugs); labels prefer DB names from admin when present. */
+  const [statusPills, setStatusPills] = useState<
+    { slug: StatusTagSlug; name: string }[]
+  >(() =>
+    STATUS_TAG_SLUGS.map((slug) => ({
+      slug,
+      name: STATUS_TAG_DEFAULT_LABELS[slug],
+    })),
+  );
 
   useEffect(() => {
     fetchAllTags()
-      .then(tags => setStatusTags(tags.filter(t => STATUS_TAG_SLUGS.includes(t.slug))))
+      .then((tags) => {
+        setStatusPills(
+          STATUS_TAG_SLUGS.map((slug) => {
+            const t = tags.find((x) => x.slug === slug);
+            return {
+              slug,
+              name: t?.name?.trim() || STATUS_TAG_DEFAULT_LABELS[slug],
+            };
+          }),
+        );
+      })
       .catch(() => {});
   }, []);
 
@@ -164,10 +186,11 @@ export function PropertyListingTemplate({
               All ({allTabTotal})
             </button>
 
-            {/* Status tag pills (dynamic, from backend) */}
-            {statusTags.map(tag => (
+            {/* Status tag pills — slugs match admin / `tags` table (see status-tags.ts) */}
+            {statusPills.map((tag) => (
               <button
                 key={tag.slug}
+                type="button"
                 onClick={() => handleTagPill(tag.slug)}
                 className={`flex-shrink-0 text-[11px] font-medium tracking-[0.1em] uppercase px-[18px] py-2 border transition-all duration-200 whitespace-nowrap ${
                   activeTagSlug === tag.slug

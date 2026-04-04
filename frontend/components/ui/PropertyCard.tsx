@@ -3,23 +3,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Project } from "@/types";
+import {
+  STATUS_TAG_SLUGS,
+  STATUS_BADGE_COLORS,
+  isStatusTagSlug,
+} from "@/lib/status-tags";
 
-// Status-type tag slugs shown as badge on the card.
-// Add new slugs here to extend badge support automatically.
-export const STATUS_TAG_SLUGS = [
-  'new-launch',
-  'upcoming',
-  'under-construction',
-  'ready-to-move',
-];
+export { STATUS_TAG_SLUGS } from "@/lib/status-tags";
 
-// Fallback badge colors by slug (used when tag.color is not set in the DB)
-const STATUS_BADGE_COLORS: Record<string, { bg: string; text: string }> = {
-  'new-launch':         { bg: 'rgba(109,40,217,0.12)', text: '#6D28D9' },
-  'upcoming':           { bg: 'rgba(5,150,105,0.12)',  text: '#059669' },
-  'under-construction': { bg: 'rgba(180,83,9,0.12)',   text: '#B45309' },
-  'ready-to-move':      { bg: 'rgba(29,78,216,0.12)',  text: '#1D4ED8' },
-};
 const DEFAULT_BADGE = { bg: 'rgba(107,114,128,0.12)', text: '#6B7280' };
 
 function formatPrice(value: number): string {
@@ -43,7 +34,7 @@ export function PropertyCard({ project }: PropertyCardProps) {
   if (!project?.slug || !project?.title) return null;
 
   // First status-type tag drives the badge
-  const statusTag = project.Tags?.find(t => STATUS_TAG_SLUGS.includes(t.slug));
+  const statusTag = project.Tags?.find((t) => isStatusTagSlug(t.slug));
   const badgeStyle = statusTag
     ? {
         backgroundColor: statusTag.color
