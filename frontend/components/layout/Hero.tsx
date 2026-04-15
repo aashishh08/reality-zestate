@@ -41,9 +41,6 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h2 className="text-white/90 text-lg md:text-xl font-medium tracking-[0.3em] mb-4 uppercase drop-shadow-sm">
-            Luxury Redefined
-          </h2>
           <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif font-bold text-white mb-6 drop-shadow-md">
             SUPERLUXERE
           </h1>
