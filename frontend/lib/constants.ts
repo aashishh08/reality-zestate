@@ -91,9 +91,9 @@ export function orderCategoriesWithCuratedFirst<T extends { slug: string }>(item
 
 // Contact Information
 export const CONTACT_INFO = {
-  WHATSAPP_NUMBER: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+919654888862',
-  PHONE_NUMBER: process.env.NEXT_PUBLIC_PHONE_NUMBER || '+919654888862',
-  EMAIL: 'info@superluxere.com',
-  ADDRESS: 'Golf Course Road, Sector 54, Gurgaon',
+  WHATSAPP_NUMBER: '+919873336686',
+  PHONE_NUMBER: '+919873336686',
+  EMAIL: 'aspire@superluxere.com',
+  ADDRESS: '1701A, Max Towers, Sector 16B, Noida Expressway',
   HOURS: 'Mon - Sun: 10:00 AM – 7:00 PM',
 } as const;

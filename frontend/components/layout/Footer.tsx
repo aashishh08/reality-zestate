@@ -3,12 +3,16 @@
 import Link from "next/link";
 import { Facebook, Instagram, Linkedin, Mail, Phone, Twitter, MapPin } from "lucide-react";
 import { Location } from "@/lib";
+import { CONTACT_INFO } from "@/lib/constants";
 
 interface FooterProps {
   locations?: Location[];
 }
 
 export function Footer({ locations = [] }: FooterProps) {
+  const phoneHref = `tel:${CONTACT_INFO.PHONE_NUMBER.replace(/\s/g, "")}`;
+  const footerPhoneDisplay = CONTACT_INFO.PHONE_NUMBER.replace(/^\+91/, "");
+
   // Use real city locations from DB; fall back to curated list so footer is never empty
   const cities = locations.filter(l => l.type === "city").slice(0, 6);
   const displayLocations: Array<{ name: string; slug: string }> =
@@ -95,16 +99,18 @@ export function Footer({ locations = [] }: FooterProps) {
             <ul className="space-y-5 text-zinc-500">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-[#C9A961] shrink-0 mt-1" />
-                <span className="text-sm">Level 18, One Horizon Center, Golf Course Road, Gurgaon, India</span>
+                <span className="text-sm">{CONTACT_INFO.ADDRESS}</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-[#C9A961] shrink-0" />
-                <a href="tel:+919999999999" className="text-sm hover:text-[#C9A961] transition-colors">+91 999 999 9999</a>
+                <a href={phoneHref} className="text-sm hover:text-[#C9A961] transition-colors">
+                  {footerPhoneDisplay}
+                </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-[#C9A961] shrink-0" />
-                <a href="mailto:concierge@superluxere.com" className="text-sm hover:text-[#C9A961] transition-colors">
-                  concierge@superluxere.com
+                <a href={`mailto:${CONTACT_INFO.EMAIL}`} className="text-sm hover:text-[#C9A961] transition-colors">
+                  {CONTACT_INFO.EMAIL}
                 </a>
               </li>
             </ul>

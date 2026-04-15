@@ -1,3 +1,4 @@
+import { CONTACT_INFO } from '@/lib/constants';
 import type { CategoryData } from '@/lib/category-data';
 import type { PropertyListResponse } from '@/types/property-listing';
 import type {
@@ -40,7 +41,7 @@ function categoryFaqs(collectionName: string): CorridorFaqItem[] {
     {
       question: `How often is ${collectionName} inventory refreshed?`,
       answer:
-        'Counts sync from our operator tools when developers publish or update stock. If something looks off, flag it to concierge@superluxere.com.',
+        `Counts sync from our operator tools when developers publish or update stock. If something looks off, flag it to ${CONTACT_INFO.EMAIL}.`,
     },
   ];
 }

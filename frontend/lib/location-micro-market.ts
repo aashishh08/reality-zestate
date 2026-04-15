@@ -1,4 +1,5 @@
 import { getLocationMicroMarketOverrides } from '@/data/page-copy-overrides';
+import { CONTACT_INFO } from '@/lib/constants';
 import { deepMerge } from '@/lib/deep-merge';
 import type { LocationDetail, PropertyListResponse } from '@/types/property-listing';
 import type {
@@ -41,7 +42,7 @@ function defaultFaqs(locationName: string): CorridorFaqItem[] {
     {
       question: `How often is ${locationName} inventory updated?`,
       answer:
-        'Listing counts and project cards sync from our operator tools. If you notice a mismatch, contact concierge@superluxere.com and we will verify with the developer team.',
+        `Listing counts and project cards sync from our operator tools. If you notice a mismatch, contact ${CONTACT_INFO.EMAIL} and we will verify with the developer team.`,
     },
     {
       question: `How does ${locationName} compare with neighbouring corridors?`,
