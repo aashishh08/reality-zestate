@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Twitter, Send } from 'lucide-react';
+import { CONTACT_INFO } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Contact Us - Get in Touch',
@@ -18,21 +19,9 @@ export const metadata: Metadata = {
 };
 
 const contactInfo = {
-  address: {
-    street: 'DLF Cyber City, Phase 2',
-    city: 'Gurgaon',
-    state: 'Haryana',
-    pincode: '122002',
-    country: 'India',
-  },
-  phone: {
-    primary: '+91 999 999 9999',
-    secondary: '+91 888 888 8888',
-  },
-  email: {
-    sales: 'sales@superluxere.com',
-    support: 'support@superluxere.com',
-  },
+  address: CONTACT_INFO.ADDRESS,
+  phone: CONTACT_INFO.PHONE_NUMBER,
+  email: CONTACT_INFO.EMAIL,
   hours: {
     weekdays: 'Monday - Friday: 9:00 AM - 7:00 PM',
     saturday: 'Saturday: 10:00 AM - 5:00 PM',
@@ -87,10 +76,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-3">Visit Us</h3>
             <address className="text-gray-600 not-italic leading-relaxed">
-              {contactInfo.address.street}<br />
-              {contactInfo.address.city}, {contactInfo.address.state}<br />
-              {contactInfo.address.pincode}<br />
-              {contactInfo.address.country}
+              {contactInfo.address}
             </address>
           </div>
 
@@ -100,20 +86,12 @@ export default function ContactPage() {
               <Phone className="w-6 h-6 text-gold" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-3">Call Us</h3>
-            <div className="space-y-2">
-              <a
-                href={`tel:${contactInfo.phone.primary.replace(/\s/g, '')}`}
-                className="block text-gray-600 hover:text-gold transition-colors"
-              >
-                {contactInfo.phone.primary}
-              </a>
-              <a
-                href={`tel:${contactInfo.phone.secondary.replace(/\s/g, '')}`}
-                className="block text-gray-600 hover:text-gold transition-colors"
-              >
-                {contactInfo.phone.secondary}
-              </a>
-            </div>
+            <a
+              href={`tel:${contactInfo.phone.replace(/\s/g, '')}`}
+              className="block text-gray-600 hover:text-gold transition-colors"
+            >
+              {contactInfo.phone}
+            </a>
           </div>
 
           {/* Email */}
@@ -122,20 +100,12 @@ export default function ContactPage() {
               <Mail className="w-6 h-6 text-gold" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-3">Email Us</h3>
-            <div className="space-y-2">
-              <a
-                href={`mailto:${contactInfo.email.sales}`}
-                className="block text-gray-600 hover:text-gold transition-colors break-all"
-              >
-                {contactInfo.email.sales}
-              </a>
-              <a
-                href={`mailto:${contactInfo.email.support}`}
-                className="block text-gray-600 hover:text-gold transition-colors break-all"
-              >
-                {contactInfo.email.support}
-              </a>
-            </div>
+            <a
+              href={`mailto:${contactInfo.email}`}
+              className="block text-gray-600 hover:text-gold transition-colors break-all"
+            >
+              {contactInfo.email}
+            </a>
           </div>
 
           {/* Hours */}
@@ -157,7 +127,7 @@ export default function ContactPage() {
           {/* Google Maps */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden h-[500px]">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3507.4956447956847!2d77.08773631508236!3d28.494347982468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1939f0000001%3A0x8f2d1e4f8f8f8f8f!2sDLF%20Cyber%20City%2C%20Phase%202%2C%20Sector%2024%2C%20Gurugram%2C%20Haryana%20122002!5e0!3m2!1sen!2sin!4v1642000000000!5m2!1sen!2sin"
+              src="https://maps.google.com/maps?q=1701A%2C%20Max%20Towers%2C%20Sector%2016B%2C%20Noida%20Expressway&z=15&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -226,7 +196,7 @@ export default function ContactPage() {
                   id="phone"
                   name="phone"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent transition-all"
-                  placeholder="+91 999 999 9999"
+                  placeholder={CONTACT_INFO.PHONE_NUMBER}
                 />
               </div>
 
