@@ -59,8 +59,8 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out border-b",
         isScrolled
-          ? "bg-[#FDFBF7]/95 backdrop-blur-md shadow-sm border-black/5 py-2"
-          : "bg-white/95 backdrop-blur-sm border-transparent py-4"
+          ? "bg-[#FDFBF7]/95 backdrop-blur-md shadow-sm border-black/5 py-1.5"
+          : "bg-white/95 backdrop-blur-sm border-transparent py-2"
       )}
     >
       <div className="max-w-[1920px] mx-auto px-8 lg:px-16">
@@ -212,11 +212,19 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
             </div>
           </nav>
 
-          {/* ── Logo ─────────────────────────────────────────────────── */}
-          <Link href="/" className="z-50 group flex justify-center shrink-0">
-            <h1 className="text-2xl lg:text-3xl font-serif font-bold text-[#1A1A1A] tracking-widest group-hover:text-gold-dark transition-colors text-center whitespace-nowrap">
-              SUPERLUXERE
-            </h1>
+          {/* ── Logo: taller than text-sm nav links; bar stays compact vertically ─ */}
+          <Link
+            href="/"
+            className="z-50 group flex justify-center items-center shrink-0 overflow-visible min-w-0"
+          >
+            <img
+              src="/images/superluxere-navbar-logo.png"
+              alt="SUPERLUXERE"
+              className="block w-auto max-w-[min(88vw,32rem)] !h-[clamp(2.375rem,4.5vw,3rem)] object-contain object-center select-none transition-opacity group-hover:opacity-90"
+              width={400}
+              height={120}
+              decoding="async"
+            />
           </Link>
 
           {/* ── Right nav ──────────────────────────────────────────────── */}

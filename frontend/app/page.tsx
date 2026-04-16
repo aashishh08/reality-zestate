@@ -1,4 +1,3 @@
-import { Header } from "@/components/layout/Header";
 import { Hero } from "@/components/layout/Hero";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingActions } from "@/components/layout/FloatingActions";
@@ -91,7 +90,6 @@ export default async function Home() {
         <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
       </div>
 
-      <Header locations={locations} developers={developers} categories={categories} />
       <Hero />
 
       {/* 1. Trending — tag-filtered */}

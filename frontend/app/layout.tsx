@@ -41,6 +41,7 @@ export const viewport: Viewport = {
 };
 
 import { LeadModalProvider } from "@/lib/contexts/LeadModalContext";
+import { SiteHeader } from "@/components/layout/SiteHeader";
 
 export default function RootLayout({
   children,
@@ -52,9 +53,8 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${montserrat.variable} font-sans antialiased`}
       >
-        <LeadModalProvider>
-          {children}
-        </LeadModalProvider>
+        <SiteHeader />
+        <LeadModalProvider>{children}</LeadModalProvider>
       </body>
     </html>
   );

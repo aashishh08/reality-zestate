@@ -20,6 +20,8 @@ interface ProjectWhyInvestProps {
   reasons: string[] | WhyInvestItem[];
   videoUrl?: string;
   detailedAnalysis?: string;
+  /** Paragraph under the section title (editable in admin). Falls back to a template if empty. */
+  introDescription?: string;
   projectTitle?: string;
   propertyId?: string;
   propertySlug?: string;
@@ -38,7 +40,17 @@ const iconMap = {
   calendar: Calendar,
 };
 
-export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectTitle = "Project", propertyId, propertySlug, heading, whyInvestStats }: ProjectWhyInvestProps) {
+export function ProjectWhyInvest({
+  reasons,
+  videoUrl,
+  detailedAnalysis,
+  introDescription,
+  projectTitle = "Project",
+  propertyId,
+  propertySlug,
+  heading,
+  whyInvestStats,
+}: ProjectWhyInvestProps) {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -113,10 +125,17 @@ export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectT
       (v) => typeof v === "string" && v.trim().length > 0,
     );
 
+  const introTrimmed = introDescription?.trim() ?? "";
+  const hasIntro = introTrimmed.length > 0;
+
   const hasBoxes = structuredBoxes.length > 0;
-  if (!hasBoxes && !analysisText.trim() && !hasStats) {
+  if (!hasBoxes && !analysisText.trim() && !hasStats && !hasIntro) {
     return null;
   }
+
+  const subtitleParagraph =
+    introTrimmed ||
+    `Discover the compelling reasons why ${projectTitle} represents one of the finest investment opportunities in Gurgaon`;
 
   const investmentBoxes = structuredBoxes;
 
@@ -126,7 +145,7 @@ export function ProjectWhyInvest({ reasons, videoUrl, detailedAnalysis, projectT
         <div className="text-center mb-16">
           <SectionHeading
             label="Investment Opportunity"
-            description={`Discover the compelling reasons why ${projectTitle} represents one of the finest investment opportunities in Gurgaon`}
+            description={subtitleParagraph}
           >
             {heading || <>Why Invest in <span className="text-[#C9A961]">{projectTitle}</span></>}
           </SectionHeading>

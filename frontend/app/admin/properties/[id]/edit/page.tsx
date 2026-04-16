@@ -177,6 +177,7 @@ export default function EditPropertyPage() {
     const [floorPlans, setFloorPlans] = useState([{ type: '', superArea: '', price: '', imageUrl: '' }]);
     const [paymentPlans, setPaymentPlans] = useState([{ title: '', type: '', description: '' }]);
     const [whyInvest, setWhyInvest] = useState([{ title: '', subtitle: '', icon: '' }]);
+    const [whyInvestIntro, setWhyInvestIntro] = useState('');
     const [investmentText, setInvestmentText] = useState('');
     const [locSection, setLocSection] = useState({ address: '', mapImage: '' });
     const [nearby, setNearby] = useState([{ category: '', icon: '', items: ['', ''] }]);
@@ -335,6 +336,7 @@ export default function EditPropertyPage() {
                             ? d.reasons.map((r: any) => ({ title: r.title ?? '', subtitle: r.subtitle ?? '', icon: r.icon ?? '' }))
                             : [{ title: '', subtitle: '', icon: '' }],
                     );
+                    setWhyInvestIntro(typeof d.intro === 'string' ? d.intro : '');
                     setInvestmentText(d.analysis ?? '');
                     if (d.stats) setWhyInvestStats({
                         annualAppreciation: d.stats.annualAppreciation ?? '12-15%',
@@ -428,8 +430,19 @@ export default function EditPropertyPage() {
         if (ppArr.length)
             sec.push({ type: 'paymentPlans', title: sectionTitles.paymentPlans, order: order++, data: { plans: ppArr, sectionHeading: sectionTitles.paymentPlans } });
         const wiArr = whyInvest.filter(w => w.title);
-        if (wiArr.length || investmentText)
-            sec.push({ type: 'whyInvest', title: sectionTitles.whyInvest, order: order++, data: { reasons: wiArr, analysis: investmentText, stats: whyInvestStats, sectionHeading: sectionTitles.whyInvest } });
+        if (wiArr.length || investmentText || whyInvestIntro.trim())
+            sec.push({
+                type: 'whyInvest',
+                title: sectionTitles.whyInvest,
+                order: order++,
+                data: {
+                    reasons: wiArr,
+                    analysis: investmentText,
+                    stats: whyInvestStats,
+                    sectionHeading: sectionTitles.whyInvest,
+                    intro: whyInvestIntro.trim(),
+                },
+            });
         if (locSection.address || nearby.some(n => n.category) || connectivity.some(c => c.place))
             sec.push({ type: 'location', title: sectionTitles.location, order: order++, data: { address: locSection.address, mapImage: locSection.mapImage, nearby: nearby.filter(n => n.category).map(n => ({ category: n.category, icon: n.icon, items: n.items.filter(Boolean).map(name => ({ name })) })), connectivity: connectivity.filter(c => c.place), sectionHeading: sectionTitles.location } });
         if (masterPlan.imageUrl?.trim() || masterPlan.description?.trim())
@@ -441,7 +454,7 @@ export default function EditPropertyPage() {
         if (membArr.length)
             sec.push({ type: 'team', title: sectionTitles.team, order: order++, data: { members: membArr.map(m => ({ ...m, achievements: m.achievements.filter(Boolean) })), highlights: teamHighlights.filter(th => th.title), sectionHeading: sectionTitles.team } });
         return sec;
-    }, [hero, intro, highlights, keyTakeaways, overview, gallery, selectedPresetAmenities, customAmenities, floorPlans, paymentPlans, whyInvest, investmentText, locSection, nearby, connectivity, masterPlan, faqs, teamMembers, teamHighlights, whyInvestStats, amenitiesStats, floorPlanDescSections, sectionTitles]);
+    }, [hero, intro, highlights, keyTakeaways, overview, gallery, selectedPresetAmenities, customAmenities, floorPlans, paymentPlans, whyInvest, whyInvestIntro, investmentText, locSection, nearby, connectivity, masterPlan, faqs, teamMembers, teamHighlights, whyInvestStats, amenitiesStats, floorPlanDescSections, sectionTitles]);
 
     // ── Submit ───────────────────────────────────────────────────────────────
     const handleSubmit = async () => {
@@ -811,6 +824,18 @@ export default function EditPropertyPage() {
                                 <div className="space-y-6">
                                     <SectionCard title="📈 Why Invest — Reason Cards">
                                         <Input label="Section Heading" value={sectionTitles.whyInvest} onChange={e => setSectionTitles(t => ({ ...t, whyInvest: e.target.value }))} placeholder="Why Invest" />
+                                        <div className="mt-3">
+                                            <label className="block text-xs text-gray-400 font-medium mb-1">
+                                                Intro paragraph <span className="text-gray-500">(gray text under the main title on the property page)</span>
+                                            </label>
+                                            <textarea
+                                                value={whyInvestIntro}
+                                                onChange={e => setWhyInvestIntro(e.target.value)}
+                                                rows={3}
+                                                placeholder="Discover the compelling reasons why this project represents one of the finest investment opportunities in Gurgaon"
+                                                className="w-full px-3 py-2.5 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y"
+                                            />
+                                        </div>
                                         <p className="text-xs text-gray-500 -mt-1">Icon options: <code className="text-amber-400">location · award · trending · calendar</code></p>
                                         <div className="space-y-3">
                                             {whyInvest.map((w, i) => (

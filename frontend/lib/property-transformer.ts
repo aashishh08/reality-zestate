@@ -113,6 +113,10 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
     whyInvest && typeof whyInvest.analysis === "string" ? whyInvest.analysis.trim() : "";
   const investmentAnalysis = investmentAnalysisRaw || undefined;
 
+  const whyInvestIntroRaw =
+    whyInvest && typeof whyInvest.intro === "string" ? whyInvest.intro.trim() : "";
+  const whyInvestIntro = whyInvestIntroRaw || undefined;
+
   let whyInvestStats:
     | {
         annualAppreciation?: string;
@@ -310,6 +314,7 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
 
     whyInvest: whyInvestList,
     investmentAnalysis,
+    whyInvestIntro,
     whyInvestStats,
 
     location: locationBlock,

@@ -148,6 +148,8 @@ export interface Project extends Property {
       | string[];
     whyInvest?: string[] | Array<{ title: string; subtitle: string; icon?: string }>;
     investmentAnalysis?: string;
+    /** Short paragraph under the Why Invest heading (eyebrow + title); from admin "Intro" field. */
+    whyInvestIntro?: string;
     whyInvestStats?: {
       annualAppreciation?: string;
       rentalYield?: string;

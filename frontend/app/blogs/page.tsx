@@ -1,7 +1,5 @@
 import { Metadata } from 'next';
 import { getBlogs } from '@/lib/api/blogs';
-import { getLocations, getDevelopers, getCategories } from '@/lib';
-import { Header } from '@/components/layout/Header';
 import { LeadPopup } from '@/components/ui/LeadPopup';
 import BlogNavigation from '@/components/blog/BlogNavigation';
 import BlogCard from '@/components/blog/BlogCard';
@@ -72,20 +70,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const page = parseInt(searchParamsObj.page || '1');
   const pageSize = 9;
 
-  const [locationsRes, developersRes, categoriesRes, blogResponse] = await Promise.all([
-    getLocations({ limit: 20, offset: 0 }, 3600).catch(() => ({ data: [] })),
-    getDevelopers({ limit: 12, offset: 0 }, 3600).catch(() => []),
-    getCategories({ limit: 50, offset: 0 }, 3600).catch(() => ({ data: [] })),
-    // Cache data for 60s at the fetch layer (Next.js data cache).
-    getBlogs(
-      {
-        limit: pageSize,
-        offset: (page - 1) * pageSize,
-        search: searchParamsObj.search,
-      },
-      60
-    ).catch(() => ({ data: [], pagination: { total: 0, limit: pageSize, offset: 0 } })),
-  ]);
+  const blogResponse = await getBlogs(
+    {
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      search: searchParamsObj.search,
+    },
+    60
+  ).catch(() => ({ data: [], pagination: { total: 0, limit: pageSize, offset: 0 } }));
 
   const posts = blogResponse.data || [];
   const total = blogResponse.pagination?.total || 0;
@@ -97,13 +89,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <main className="min-h-screen bg-linear-to-b from-gray-50 to-white">
-      {/* Site-wide nav */}
-      <Header
-        locations={locationsRes.data || []}
-        developers={Array.isArray(developersRes) ? developersRes : []}
-        categories={categoriesRes.data || []}
-      />
-
       {/* Blog sub-navigation + rest of page (offset for fixed header) */}
       <div className="pt-16 lg:pt-20">
         <BlogNavigation

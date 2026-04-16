@@ -8,7 +8,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PropertyListingTemplate } from '@/components/PropertyListingTemplate';
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { LeadPopup } from '@/components/ui/LeadPopup';
@@ -149,11 +148,6 @@ export default async function LocationPage({
 
   return (
     <>
-      <Header
-        locations={locationsRes.data || []}
-        developers={Array.isArray(developersRes) ? developersRes : []}
-        categories={categoriesRes.data || []}
-      />
       <div className="relative min-h-screen selection:bg-gold selection:text-white pt-16 lg:pt-20">
         <div className="pointer-events-none fixed inset-0 z-[-1] bg-background">
           <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
