@@ -9,6 +9,7 @@ import {
   transformListingPropertyToProject,
 } from "@/lib/property-transformer";
 import type { Property, Project as ProjectType } from "@/types";
+import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingActions } from "@/components/layout/FloatingActions";
 import { ProjectHero } from "@/components/project/ProjectHero";
@@ -150,6 +151,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
       </div>
 
+      <Header />
+
       <Breadcrumbs
         items={[
           { label: "Projects", href: "/projects" },
@@ -216,7 +219,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             reasons={details.whyInvest ?? []}
             videoUrl={details.videoUrl}
             detailedAnalysis={details.investmentAnalysis}
-            introDescription={details.whyInvestIntro}
             projectTitle={project.title}
             propertyId={project.id}
             propertySlug={slug}
@@ -306,7 +308,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.floorPlans && details.floorPlans.length > 0 && (
         <section id="floorplans">
           <ErrorBoundary sectionName="Floor Plans">
-            <ProjectFloorPlans floorPlans={details.floorPlans} descriptionSections={details.floorPlanDescriptionSections} heading={details.sectionHeadings?.floorPlans} />
+            <ProjectFloorPlans
+              floorPlans={details.floorPlans}
+              descriptionSections={details.floorPlanDescriptionSections}
+              heading={details.sectionHeadings?.floorPlans}
+              propertyId={project.id}
+              propertySlug={slug}
+              projectTitle={project.title}
+            />
           </ErrorBoundary>
         </section>
       )}

@@ -18,6 +18,8 @@ export interface Lead {
   status: 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
   source?: string;
   propertyId?: string;
+  /** True when the lead came from Residences → Download Layout */
+  layoutDownload?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -41,6 +43,7 @@ export async function createLead(data: {
   phone: string;
   source?: string;
   propertyId?: string;
+  layoutDownload?: boolean;
 }): Promise<Lead> {
   return fetchFromAPI<Lead>(
     '/leads',

@@ -31,6 +31,11 @@ export default (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    layoutDownload: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     propertyId: {
       type: DataTypes.UUID,
       allowNull: true,

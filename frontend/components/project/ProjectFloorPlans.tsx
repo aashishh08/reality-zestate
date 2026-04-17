@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { Download } from "lucide-react";
+import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ProjectFloorPlanLayoutDownload } from "@/components/project/ProjectFloorPlanLayoutDownload";
 
 interface ProjectFloorPlansProps {
   floorPlans: {
@@ -15,6 +15,9 @@ interface ProjectFloorPlansProps {
   }[];
   descriptionSections?: { heading: string; body: string }[];
   heading?: string;
+  propertyId?: string;
+  propertySlug: string;
+  projectTitle: string;
 }
 
 const DEFAULT_FLOOR_PLAN_DESCRIPTIONS = [
@@ -36,7 +39,14 @@ const DEFAULT_FLOOR_PLAN_DESCRIPTIONS = [
   },
 ];
 
-export function ProjectFloorPlans({ floorPlans, descriptionSections, heading = 'Sizes, Prices & Layouts' }: ProjectFloorPlansProps) {
+export function ProjectFloorPlans({
+  floorPlans,
+  descriptionSections,
+  heading = "Sizes, Prices & Layouts",
+  propertyId,
+  propertySlug,
+  projectTitle,
+}: ProjectFloorPlansProps) {
   const safePlans = Array.isArray(floorPlans) && floorPlans.length > 0 ? floorPlans : null;
   const [activeTab, setActiveTab] = useState(0);
 
@@ -100,10 +110,11 @@ export function ProjectFloorPlans({ floorPlans, descriptionSections, heading = '
                 </div>
               </div>
 
-              <button className="w-full bg-black text-white py-4 rounded-sm font-bold tracking-wide hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2 group">
-                <Download className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
-                Download Layout
-              </button>
+              <ProjectFloorPlanLayoutDownload
+                propertyId={propertyId}
+                propertySlug={propertySlug}
+                projectTitle={projectTitle}
+              />
             </div>
 
             <div className="mt-6 p-6 bg-gold/5 rounded-sm border border-gold/10">

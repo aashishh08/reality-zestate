@@ -8,7 +8,7 @@ import {
     Users, LogOut, Menu, X, TrendingUp, Building2,
     FileText, Plus, RefreshCw, Search, Phone, Mail,
     CheckCircle2, XCircle, Clock, Star, AlertCircle, Filter,
-    ChevronDown,
+    ChevronDown, Layout,
 } from 'lucide-react';
 import Link from 'next/link';
 import { getLeads, updateLeadStatus, Lead } from '@/lib/api/leads';
@@ -262,10 +262,14 @@ export default function AdminLeadsPage() {
                             ) : (
                                 <>
                                     {/* Table Header */}
-                                    <div className="hidden md:grid grid-cols-[2fr_2fr_1.5fr_1.2fr_1.2fr_1.5fr] gap-4 px-6 py-3 border-b border-gray-700 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    <div className="hidden md:grid grid-cols-[2fr_2fr_1.4fr_0.85fr_1.1fr_1.2fr_1.35fr] gap-4 px-6 py-3 border-b border-gray-700 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                         <span>Name</span>
                                         <span>Contact</span>
                                         <span>Source</span>
+                                        <span className="flex items-center gap-1">
+                                            <Layout className="w-3.5 h-3.5" />
+                                            Layout
+                                        </span>
                                         <span>Status</span>
                                         <span>Update Status</span>
                                         <span>Submitted</span>
@@ -275,7 +279,7 @@ export default function AdminLeadsPage() {
                                         {filtered.map(lead => {
                                             const meta = STATUS_META[lead.status] ?? STATUS_META.new;
                                             return (
-                                                <div key={lead.id} className="grid grid-cols-1 md:grid-cols-[2fr_2fr_1.5fr_1.2fr_1.2fr_1.5fr] gap-4 px-6 py-4 hover:bg-gray-700/20 transition items-center">
+                                                <div key={lead.id} className="grid grid-cols-1 md:grid-cols-[2fr_2fr_1.4fr_0.85fr_1.1fr_1.2fr_1.35fr] gap-4 px-6 py-4 hover:bg-gray-700/20 transition items-center">
 
                                                     {/* Name */}
                                                     <div>
@@ -300,6 +304,21 @@ export default function AdminLeadsPage() {
                                                         <span className="text-xs px-2 py-1 rounded-full bg-gray-700 text-gray-300 font-medium">
                                                             {formatSource(lead.source)}
                                                         </span>
+                                                    </div>
+
+                                                    {/* Layout download (Residences CTA) */}
+                                                    <div>
+                                                        {lead.layoutDownload ? (
+                                                            <span
+                                                                className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-amber-500/15 text-amber-400 font-medium"
+                                                                title="Lead requested layout download from property page"
+                                                            >
+                                                                <Layout className="w-3 h-3 shrink-0" />
+                                                                Yes
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-gray-600 text-xs">—</span>
+                                                        )}
                                                     </div>
 
                                                     {/* Status badge */}

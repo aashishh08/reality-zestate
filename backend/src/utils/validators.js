@@ -81,6 +81,7 @@ export const createLeadSchema = z.object({
     phone: z.string().min(10, 'Invalid phone number'),
     source: z.string().optional(),
     propertyId: z.string().uuid().optional().nullable(),
+    layoutDownload: z.boolean().optional(),
   }),
 });
 

@@ -2,7 +2,7 @@ import leadService from '../service/leadService.js';
 
 class LeadController {
   async createLead(req, res) {
-    const { name, email, phone, source, propertyId } = req.body;
+    const { name, email, phone, source, propertyId, layoutDownload } = req.body;
 
     if (!name || !email || !phone) {
       throw {
@@ -18,6 +18,7 @@ class LeadController {
       source: source || 'website',
       propertyId: propertyId || null,
       status: 'new',
+      layoutDownload: Boolean(layoutDownload),
     });
 
     res.status(201).json({
