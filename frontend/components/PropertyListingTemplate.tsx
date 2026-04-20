@@ -26,6 +26,7 @@ import {
   corridorGoldRule,
   corridorHeading,
 } from '@/components/location/micro-market/corridor-section-styles';
+import { listingCardImageUrl } from '@/lib/listing-card-image';
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -303,7 +304,7 @@ export function PropertyListingTemplate({
                 priceMin:     property.priceMin ?? undefined,
                 priceMax:     property.priceMax ?? undefined,
                 isPublished:  true,
-                image:        property.image ?? undefined,
+                image:        listingCardImageUrl(property),
                 location:     property.Location?.name ?? '',
                 price:        undefined,
                 category:     'Trending' as const,
