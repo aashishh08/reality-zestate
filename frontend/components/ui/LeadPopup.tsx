@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Gift, AlertCircle } from "lucide-react";
+import { X, AlertCircle } from "lucide-react";
 import { createLead } from "@/lib/api/leads";
 import { useApiCall } from "@/lib/hooks/useApiCall";
 import { validateLeadForm } from "@/lib/validation/lead-form";
@@ -104,38 +104,58 @@ export function LeadPopup() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           transition={UI_CONFIG.SPRING_CONFIG}
-          className="relative z-10 w-full max-w-lg bg-white overflow-hidden shadow-2xl rounded-lg pointer-events-auto m-4"
+          className="relative z-10 w-full max-w-4xl max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white shadow-2xl rounded-lg pointer-events-auto m-4"
         >
-          {/* Close Button */}
+          {/* Close — same position as before (whole dialog); contrast on mobile (over dark column) vs desktop (over white) */}
           <button
+            type="button"
             onClick={closeModal}
-            className="absolute top-4 right-4 text-zinc-400 hover:text-black transition-colors z-20"
+            className="absolute top-4 right-4 z-20 text-zinc-300 hover:text-white md:text-zinc-400 md:hover:text-black transition-colors"
             aria-label="Close popup"
           >
             <X className="w-5 h-5" />
           </button>
 
-          <div className="flex flex-col md:flex-row">
-            {/* Left Image Side - Hidden on mobile */}
-            <div style={{ width: `${UI_CONFIG.MODAL_IMAGE_WIDTH_PERCENTAGE}%` }} className="hidden md:block bg-black relative overflow-hidden">
-              <div className="absolute inset-0 opacity-60">
-                {/* Abstract Pattern or Image */}
-                <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2700&auto=format&fit=crop')] bg-cover bg-center" />
+          <div className="flex flex-col md:flex-row md:min-h-[380px]">
+            {/* Left — Superluxere Concierge */}
+            <div className="w-full md:w-1/2 shrink-0 bg-[#1c1c1c] text-white flex flex-col justify-between p-8 md:p-10 pt-14 md:pt-10">
+              <div>
+                <p className="text-[10px] sm:text-xs font-medium tracking-[0.22em] text-[#b27b1f] uppercase mb-4">
+                  Superluxere Concierge
+                </p>
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 leading-tight">
+                  The right property. Before it&apos;s listed.
+                </h3>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  We advise on India&apos;s most exclusive launches — before public pricing, before broker calls, before
+                  the crowd.
+                </p>
               </div>
-              <div className="absolute inset-0 bg-gold/10" />
-              <div className="absolute top-8 left-6 right-6 text-white">
-                <h3 className="text-2xl font-serif font-bold mb-2">Exclusive Offer</h3>
-                <p className="text-xs text-zinc-300">Register now for early bird privileges on our upcoming launches.</p>
+              <div className="mt-8 pt-6 border-t border-white/10">
+                <div className="grid grid-cols-3 gap-3 sm:gap-4 text-center sm:text-left">
+                  <div>
+                    <p className="text-lg sm:text-xl font-semibold text-[#b27b1f]">500+</p>
+                    <p className="text-[10px] sm:text-xs text-zinc-500 mt-1">Projects curated</p>
+                  </div>
+                  <div>
+                    <p className="text-lg sm:text-xl font-semibold text-[#b27b1f]">₹10Cr+</p>
+                    <p className="text-[10px] sm:text-xs text-zinc-500 mt-1">Avg transaction</p>
+                  </div>
+                  <div>
+                    <p className="text-lg sm:text-xl font-semibold text-[#b27b1f]">15+</p>
+                    <p className="text-[10px] sm:text-xs text-zinc-500 mt-1">Cities covered</p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Form Side */}
-            <div className="w-full md:flex-1 p-8">
+            {/* Right — form */}
+            <div className="relative w-full md:w-1/2 flex flex-col bg-white p-8 md:p-10">
               {submitStatus === "success" ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-8"
+                  className="text-center py-8 flex flex-col items-center justify-center flex-1"
                 >
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -143,18 +163,18 @@ export function LeadPopup() {
                     </svg>
                   </div>
                   <h4 className="text-lg font-bold text-black mb-2">Thank You!</h4>
-                  <p className="text-zinc-600 text-xs">
+                  <p className="text-zinc-600 text-xs max-w-xs">
                     {SUCCESS_MESSAGES.LEAD_SUBMITTED}
                   </p>
                 </motion.div>
               ) : (
                 <>
-                  <div className="flex items-center gap-2 mb-6">
-                    <div className="p-2 bg-gold/10 rounded-full">
-                      <Gift className="w-5 h-5 text-gold" />
-                    </div>
-                    <h3 className="text-xl font-bold text-black">Get VIP Access</h3>
-                  </div>
+                  <p className="text-[10px] sm:text-xs font-medium tracking-[0.22em] text-[#b27b1f] uppercase mb-2 pr-12">
+                    Private Enquiry
+                  </p>
+                  <h3 className="text-xl sm:text-2xl font-bold text-black mb-6 pr-8 leading-tight">
+                    Tell us what you&apos;re looking for
+                  </h3>
 
                   {submitError && (
                     <motion.div
@@ -170,7 +190,7 @@ export function LeadPopup() {
                     </motion.div>
                   )}
 
-                  <form className="space-y-4" onSubmit={handleSubmit}>
+                  <form className="space-y-4 flex-1 flex flex-col" onSubmit={handleSubmit}>
                     <div>
                       <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1">
                         Name
@@ -180,8 +200,8 @@ export function LeadPopup() {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full border-b border-zinc-200 py-2 focus:outline-none focus:border-gold transition-colors text-sm"
-                        placeholder="John Doe"
+                        className="w-full border-0 border-b border-zinc-300 bg-transparent py-2 focus:outline-none focus:border-[#b27b1f] transition-colors text-sm text-black placeholder:text-zinc-400"
+                        placeholder="Your name"
                         required
                       />
                     </div>
@@ -194,8 +214,8 @@ export function LeadPopup() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full border-b border-zinc-200 py-2 focus:outline-none focus:border-gold transition-colors text-sm"
-                        placeholder="98765 43210"
+                        className="w-full border-0 border-b border-zinc-300 bg-transparent py-2 focus:outline-none focus:border-[#b27b1f] transition-colors text-sm text-black placeholder:text-zinc-400"
+                        placeholder="Your number"
                         required
                       />
                     </div>
@@ -208,8 +228,8 @@ export function LeadPopup() {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full border-b border-zinc-200 py-2 focus:outline-none focus:border-gold transition-colors text-sm"
-                        placeholder="john@example.com"
+                        className="w-full border-0 border-b border-zinc-300 bg-transparent py-2 focus:outline-none focus:border-[#b27b1f] transition-colors text-sm text-black placeholder:text-zinc-400"
+                        placeholder="Your email"
                         required
                       />
                     </div>
@@ -217,7 +237,7 @@ export function LeadPopup() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-black text-white py-3 font-medium mt-4 hover:bg-gold hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      className="w-full rounded-sm bg-[#b27b1f] text-white py-3.5 font-bold mt-2 hover:bg-[#9a6919] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       {isSubmitting ? (
                         <>
@@ -225,13 +245,15 @@ export function LeadPopup() {
                           <span>Submitting...</span>
                         </>
                       ) : (
-                        "Request Access"
+                        <>
+                          Get Private Access <span aria-hidden="true">→</span>
+                        </>
                       )}
                     </button>
                   </form>
 
-                  <p className="text-[10px] text-center text-zinc-400 mt-4">
-                    We respect your privacy. No spam, ever.
+                  <p className="text-[10px] text-center text-zinc-500 mt-4 leading-relaxed">
+                    Your details go directly to your dedicated advisor. Never shared. No spam.
                   </p>
                 </>
               )}
