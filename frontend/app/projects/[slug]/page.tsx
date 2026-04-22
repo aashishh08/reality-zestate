@@ -312,6 +312,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <ProjectFloorPlans
               floorPlans={details.floorPlans}
               descriptionSections={details.floorPlanDescriptionSections}
+              floorPlanPanelQuote={details.floorPlanPanelQuote}
               heading={details.sectionHeadings?.floorPlans}
               propertyId={project.id}
               propertySlug={slug}

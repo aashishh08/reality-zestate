@@ -188,6 +188,7 @@ export default function EditPropertyPage() {
     const [teamHighlights, setTeamHighlights] = useState([{ title: '', subtitle: '' }]);
     const [whyInvestStats, setWhyInvestStats] = useState({ annualAppreciation: '12-15%', rentalYield: '3.5-4.5%', preLaunchGain: '25-30%' });
     const [amenitiesStats, setAmenitiesStats] = useState({ clubhouseSqFt: '100K', amenitiesCount: '25+', swimmingPools: '5', diningOptions: '5' });
+    const [floorPlanPanelQuote, setFloorPlanPanelQuote] = useState('');
     const [floorPlanDescSections, setFloorPlanDescSections] = useState([
         { heading: 'Premium Design', body: '' },
         { heading: 'Smart Layouts', body: '' },
@@ -317,6 +318,7 @@ export default function EditPropertyPage() {
                             ? d.plans.map((f: any) => ({ type: f.type ?? '', superArea: f.superArea ?? '', price: f.price ?? '', imageUrl: f.image ?? '' }))
                             : [{ type: '', superArea: '', price: '', imageUrl: '' }],
                     );
+                    setFloorPlanPanelQuote(typeof d.panelQuote === 'string' ? d.panelQuote : '');
                     setFloorPlanDescSections(
                         d.descriptionSections?.length
                             ? d.descriptionSections
@@ -425,7 +427,17 @@ export default function EditPropertyPage() {
             sec.push({ type: 'amenities', title: sectionTitles.amenities, order: order++, data: { items: amenArr.map(a => ({ name: a.name, icon: a.icon, image: a.imageUrl })), stats: amenitiesStats, sectionHeading: sectionTitles.amenities } });
         const fpArr = floorPlans.filter(f => f.type || f.superArea || f.price || f.imageUrl);
         if (fpArr.length)
-            sec.push({ type: 'floorPlans', title: sectionTitles.floorPlans, order: order++, data: { plans: fpArr.map(f => ({ type: f.type, superArea: f.superArea, price: f.price, image: f.imageUrl })), descriptionSections: floorPlanDescSections.filter(s => s.heading), sectionHeading: sectionTitles.floorPlans } });
+            sec.push({
+                type: 'floorPlans',
+                title: sectionTitles.floorPlans,
+                order: order++,
+                data: {
+                    plans: fpArr.map(f => ({ type: f.type, superArea: f.superArea, price: f.price, image: f.imageUrl })),
+                    descriptionSections: floorPlanDescSections.filter(s => (s.heading || '').trim() || (s.body || '').trim()),
+                    panelQuote: floorPlanPanelQuote,
+                    sectionHeading: sectionTitles.floorPlans,
+                },
+            });
         const ppArr = paymentPlans.filter(p => p.title || p.description);
         if (ppArr.length)
             sec.push({ type: 'paymentPlans', title: sectionTitles.paymentPlans, order: order++, data: { plans: ppArr, sectionHeading: sectionTitles.paymentPlans } });
@@ -454,7 +466,7 @@ export default function EditPropertyPage() {
         if (membArr.length)
             sec.push({ type: 'team', title: sectionTitles.team, order: order++, data: { members: membArr.map(m => ({ ...m, achievements: m.achievements.filter(Boolean) })), highlights: teamHighlights.filter(th => th.title), sectionHeading: sectionTitles.team } });
         return sec;
-    }, [hero, intro, highlights, keyTakeaways, overview, gallery, selectedPresetAmenities, customAmenities, floorPlans, paymentPlans, whyInvest, whyInvestIntro, investmentText, locSection, nearby, connectivity, masterPlan, faqs, teamMembers, teamHighlights, whyInvestStats, amenitiesStats, floorPlanDescSections, sectionTitles]);
+    }, [hero, intro, highlights, keyTakeaways, overview, gallery, selectedPresetAmenities, customAmenities, floorPlans, floorPlanPanelQuote, paymentPlans, whyInvest, whyInvestIntro, investmentText, locSection, nearby, connectivity, masterPlan, faqs, teamMembers, teamHighlights, whyInvestStats, amenitiesStats, floorPlanDescSections, sectionTitles]);
 
     // ── Submit ───────────────────────────────────────────────────────────────
     const handleSubmit = async () => {
@@ -1127,6 +1139,41 @@ export default function EditPropertyPage() {
                                         </div>
                                         <div className="text-xs text-gray-500">Type · Super Area · Price · Image URL</div>
                                         <AddBtn label="Add Floor Plan" onClick={() => addItem(setFloorPlans, { type: '', superArea: '', price: '', imageUrl: '' })} />
+                                        <div className="pt-2 space-y-1">
+                                            <div className="flex items-center justify-between">
+                                                <label className="text-xs text-gray-400 font-medium">
+                                                    Left panel quote (below Download) <span className="text-amber-400">(HTML supported)</span>
+                                                </label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const el = document.getElementById('fp-panel-quote-preview');
+                                                        if (el) el.classList.toggle('hidden');
+                                                    }}
+                                                    className="text-xs text-amber-400 hover:text-amber-300 transition underline"
+                                                >
+                                                    Toggle preview
+                                                </button>
+                                            </div>
+                                            <p className="text-xs text-gray-500">
+                                                Leave empty to use the default line with the active unit type (2 BHK / 4 BHK, etc.).
+                                            </p>
+                                            <textarea
+                                                value={floorPlanPanelQuote}
+                                                onChange={e => setFloorPlanPanelQuote(e.target.value)}
+                                                rows={3}
+                                                placeholder={`<p class="italic">"Custom quote…"</p>`}
+                                                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition resize-y font-mono"
+                                            />
+                                            <div id="fp-panel-quote-preview" className="hidden mt-2 rounded-xl border border-amber-500/30 bg-white p-4 max-h-48 overflow-y-auto">
+                                                <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-2">Preview</p>
+                                                {floorPlanPanelQuote.trim() ? (
+                                                    <HtmlRenderer html={floorPlanPanelQuote} fontSize="text-sm" />
+                                                ) : (
+                                                    <p className="text-gray-500 text-sm italic">Default quote will show on the site (varies by selected unit type).</p>
+                                                )}
+                                            </div>
+                                        </div>
                                     </SectionCard>
                                     <SectionCard title="📊 Amenities Stats Bar">
                                         <p className="text-xs text-gray-500 -mt-1">4 numbers shown in the dark bar at the bottom of the Amenities section.</p>

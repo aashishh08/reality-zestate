@@ -5,6 +5,17 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProjectFloorPlanLayoutDownload } from "@/components/project/ProjectFloorPlanLayoutDownload";
+import { HtmlRenderer } from "@/components/ui/HtmlRenderer";
+
+function escapeForInlineHtml(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function defaultPanelQuoteHtml(unitType: string) {
+  const t = (unitType || "").trim();
+  const label = t ? escapeForInlineHtml(t) : "this unit type";
+  return `<p class="text-zinc-700 text-sm italic m-0">&ldquo;This ${label} layout offers exceptional cross-ventilation and privacy, perfectly suited for modern family living.&rdquo;</p>`;
+}
 
 interface ProjectFloorPlansProps {
   floorPlans: {
@@ -14,6 +25,8 @@ interface ProjectFloorPlansProps {
     image?: string;
   }[];
   descriptionSections?: { heading: string; body: string }[];
+  /** From CMS. Sanitized + `prose` on render. Omitted/empty → default quote with active unit type. */
+  floorPlanPanelQuote?: string;
   heading?: string;
   propertyId?: string;
   propertySlug: string;
@@ -42,6 +55,7 @@ const DEFAULT_FLOOR_PLAN_DESCRIPTIONS = [
 export function ProjectFloorPlans({
   floorPlans,
   descriptionSections,
+  floorPlanPanelQuote,
   heading = "Sizes, Prices & Layouts",
   propertyId,
   propertySlug,
@@ -52,13 +66,15 @@ export function ProjectFloorPlans({
 
   if (!safePlans) return null;
 
-  // Clamp activeTab so it's always a valid index
   const safeTab = Math.min(activeTab, safePlans.length - 1);
+  const panelHtml =
+    floorPlanPanelQuote && floorPlanPanelQuote.trim()
+      ? floorPlanPanelQuote
+      : defaultPanelQuoteHtml(safePlans[safeTab].type);
 
   return (
     <section id="floor-plans" className="py-14 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
         <div className="text-center mb-12">
           <SectionHeading
             label="Configuration Options"
@@ -67,16 +83,16 @@ export function ProjectFloorPlans({
             {heading}
           </SectionHeading>
 
-          {/* Type Switcher Tabs */}
           <div className="inline-flex bg-white rounded-full p-1.5 shadow-sm border border-black/5">
             {safePlans.map((plan, index) => (
               <button
                 key={index}
                 onClick={() => setActiveTab(index)}
-                className={`px-8 py-3 rounded-full text-sm font-bold tracking-wide transition-all duration-300 ${activeTab === index
-                  ? "bg-black text-white shadow-md"
-                  : "text-zinc-500 hover:text-black hover:bg-zinc-50"
-                  }`}
+                className={`px-8 py-3 rounded-full text-sm font-bold tracking-wide transition-all duration-300 ${
+                  activeTab === index
+                    ? "bg-black text-white shadow-md"
+                    : "text-zinc-500 hover:text-black hover:bg-zinc-50"
+                }`}
               >
                 {plan.type}
               </button>
@@ -84,10 +100,7 @@ export function ProjectFloorPlans({
           </div>
         </div>
 
-        {/* Content Area */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-
-          {/* Left: Details Panel (4 cols) */}
           <motion.div
             className="lg:col-span-4 order-2 lg:order-1"
             key={`details-${activeTab}`}
@@ -118,13 +131,15 @@ export function ProjectFloorPlans({
             </div>
 
             <div className="mt-6 p-6 bg-gold/5 rounded-sm border border-gold/10">
-              <p className="text-zinc-700 text-sm italic">
-                &quot;This {safePlans[safeTab].type} layout offers exceptional cross-ventilation and privacy, perfectly suited for modern family living.&quot;
-              </p>
+              <HtmlRenderer
+                key={`panel-${safeTab}-${floorPlanPanelQuote ? "custom" : "def"}`}
+                html={panelHtml}
+                fontSize="text-sm"
+                className="prose-p:mb-0 prose-p:mt-0 max-w-none"
+              />
             </div>
           </motion.div>
 
-          {/* Right: Interactive Image Area (8 cols) */}
           <motion.div
             className="lg:col-span-8 order-1 lg:order-2"
             key={`image-${activeTab}`}
@@ -147,15 +162,11 @@ export function ProjectFloorPlans({
               )}
             </div>
           </motion.div>
-
         </div>
 
-        {/* Scrollable descriptions: legacy undefined → defaults; CMS empty array → omit */}
         {(() => {
           const resolved =
-            descriptionSections === undefined
-              ? DEFAULT_FLOOR_PLAN_DESCRIPTIONS
-              : descriptionSections;
+            descriptionSections === undefined ? DEFAULT_FLOOR_PLAN_DESCRIPTIONS : descriptionSections;
           if (!resolved.length) return null;
           return (
             <motion.div
@@ -166,15 +177,19 @@ export function ProjectFloorPlans({
             >
               <div className="h-[300px] overflow-y-auto pr-4 custom-scrollbar">
                 <div className="space-y-8">
-                  {resolved.map((section, i) => (
-                    <div key={i}>
-                      <h4 className="text-lg font-semibold text-[#2C2416] mb-3">{section.heading}</h4>
-                      <div
-                        className="text-gray-700 leading-relaxed text-sm floor-plan-prose"
-                        dangerouslySetInnerHTML={{ __html: section.body }}
-                      />
-                    </div>
-                  ))}
+                  {resolved.map((section, i) => {
+                    const h = (section.heading || "").trim();
+                    const b = (section.body || "").trim();
+                    if (!h && !b) return null;
+                    return (
+                      <div key={i}>
+                        {h ? <h4 className="text-lg font-semibold text-[#2C2416] mb-3">{section.heading}</h4> : null}
+                        {b ? (
+                          <HtmlRenderer html={b} fontSize="text-sm" className="max-w-none" />
+                        ) : null}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </motion.div>
@@ -183,10 +198,6 @@ export function ProjectFloorPlans({
       </div>
 
       <style jsx>{`
-        .floor-plan-prose p { margin-bottom: 0.75rem; }
-        .floor-plan-prose ul { list-style: disc; padding-left: 1.25rem; margin-bottom: 0.75rem; }
-        .floor-plan-prose ol { list-style: decimal; padding-left: 1.25rem; margin-bottom: 0.75rem; }
-        .floor-plan-prose strong, .floor-plan-prose b { color: #2C2416; font-weight: 600; }
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;
         }
@@ -195,11 +206,11 @@ export function ProjectFloorPlans({
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #C9A961;
+          background: #c9a961;
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #A88B4A;
+          background: #a88b4a;
         }
       `}</style>
     </section>

@@ -93,7 +93,7 @@ export function LeadPopup() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           transition={UI_CONFIG.SPRING_CONFIG}
-          className="relative z-10 w-full max-w-4xl max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white shadow-2xl rounded-lg pointer-events-auto m-4"
+          className="relative z-10 w-full max-w-3xl max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white shadow-2xl rounded-lg pointer-events-auto m-3 sm:m-4"
         >
           {/* Close — same position as before (whole dialog); contrast on mobile (over dark column) vs desktop (over white) */}
           <button
@@ -105,14 +105,14 @@ export function LeadPopup() {
             <X className="w-5 h-5" />
           </button>
 
-          <div className="flex flex-col md:flex-row md:min-h-[380px]">
+          <div className="flex flex-col md:flex-row md:min-h-[300px]">
             {/* Left — Superluxere Concierge */}
-            <div className="w-full md:w-1/2 shrink-0 bg-[#1c1c1c] text-white flex flex-col justify-between p-8 md:p-10 pt-14 md:pt-10">
+            <div className="w-full md:w-1/2 shrink-0 bg-[#1c1c1c] text-white flex flex-col justify-between p-6 md:p-8 pt-12 md:pt-8">
               <div>
                 <p className="text-[10px] sm:text-xs font-medium tracking-[0.22em] text-[#b27b1f] uppercase mb-4">
                   Superluxere Concierge
                 </p>
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 leading-tight">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-2 leading-tight">
                   The right property. Before it&apos;s listed.
                 </h3>
                 <p className="text-sm text-zinc-400 leading-relaxed">
@@ -120,18 +120,18 @@ export function LeadPopup() {
                   the crowd.
                 </p>
               </div>
-              <div className="mt-8 pt-6 border-t border-white/10">
-                <div className="grid grid-cols-3 gap-3 sm:gap-4 text-center sm:text-left">
+              <div className="mt-6 pt-4 border-t border-white/10">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center sm:text-left">
                   <div>
-                    <p className="text-lg sm:text-xl font-semibold text-[#b27b1f]">500+</p>
+                    <p className="text-base sm:text-lg font-semibold text-[#b27b1f]">500+</p>
                     <p className="text-[10px] sm:text-xs text-zinc-500 mt-1">Projects curated</p>
                   </div>
                   <div>
-                    <p className="text-lg sm:text-xl font-semibold text-[#b27b1f]">₹10Cr+</p>
+                    <p className="text-base sm:text-lg font-semibold text-[#b27b1f]">₹10Cr+</p>
                     <p className="text-[10px] sm:text-xs text-zinc-500 mt-1">Avg transaction</p>
                   </div>
                   <div>
-                    <p className="text-lg sm:text-xl font-semibold text-[#b27b1f]">15+</p>
+                    <p className="text-base sm:text-lg font-semibold text-[#b27b1f]">15+</p>
                     <p className="text-[10px] sm:text-xs text-zinc-500 mt-1">Cities covered</p>
                   </div>
                 </div>
@@ -139,7 +139,7 @@ export function LeadPopup() {
             </div>
 
             {/* Right — form */}
-            <div className="relative w-full md:w-1/2 flex flex-col bg-white p-8 md:p-10">
+            <div className="relative w-full md:w-1/2 flex flex-col bg-white p-6 md:p-8">
               {submitStatus === "success" ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -161,7 +161,7 @@ export function LeadPopup() {
                   <p className="text-[10px] sm:text-xs font-medium tracking-[0.22em] text-[#b27b1f] uppercase mb-2 pr-12">
                     Private Enquiry
                   </p>
-                  <h3 className="text-xl sm:text-2xl font-bold text-black mb-6 pr-8 leading-tight">
+                  <h3 className="text-lg sm:text-xl font-bold text-black mb-4 pr-8 leading-tight">
                     Tell us what you&apos;re looking for
                   </h3>
 
@@ -179,7 +179,7 @@ export function LeadPopup() {
                     </motion.div>
                   )}
 
-                  <form className="space-y-4 flex-1 flex flex-col" onSubmit={handleSubmit}>
+                  <form className="space-y-3 flex-1 flex flex-col" onSubmit={handleSubmit}>
                     <div>
                       <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1">
                         Name
@@ -226,7 +226,7 @@ export function LeadPopup() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full rounded-sm bg-[#b27b1f] text-white py-3.5 font-bold mt-2 hover:bg-[#9a6919] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      className="w-full rounded-sm bg-[#b27b1f] text-white py-2.5 font-bold mt-1 hover:bg-[#9a6919] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       {isSubmitting ? (
                         <>
@@ -241,7 +241,7 @@ export function LeadPopup() {
                     </button>
                   </form>
 
-                  <p className="text-[10px] text-center text-zinc-500 mt-4 leading-relaxed">
+                  <p className="text-[10px] text-center text-zinc-500 mt-3 leading-relaxed">
                     Your details go directly to your dedicated advisor. Never shared. No spam.
                   </p>
                 </>

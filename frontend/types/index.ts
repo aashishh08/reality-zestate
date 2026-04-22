@@ -165,6 +165,8 @@ export interface Project extends Property {
       heading: string;
       body: string;
     }[];
+    /** HTML/textarea from admin — left column quote above download (Residences). Empty → built-in default. */
+    floorPlanPanelQuote?: string;
     videoUrl?: string;
     paymentPlans?: {
       title: string;

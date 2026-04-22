@@ -171,6 +171,12 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
         ? []
         : undefined;
 
+  const floorPlanPanelQuote: string | undefined = (() => {
+    if (!sm.has("floorPlans")) return undefined;
+    const pq = (floorPlans as { panelQuote?: string }).panelQuote;
+    return typeof pq === "string" && pq.trim() ? pq.trim() : undefined;
+  })();
+
   const kt = safeData(sm, "keyTakeaways");
   const hasStructuredData = Boolean(
     kt.status ||
@@ -332,6 +338,7 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
     amenitiesStats,
 
     floorPlanDescriptionSections,
+    ...(floorPlanPanelQuote ? { floorPlanPanelQuote } : {}),
 
     sectionHeadings: {
       keyTakeaways: sh("keyTakeaways"),
