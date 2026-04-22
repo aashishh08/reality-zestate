@@ -104,11 +104,7 @@ export function LeadPopup() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           transition={UI_CONFIG.SPRING_CONFIG}
-<<<<<<< Updated upstream
           className="relative z-10 w-full max-w-4xl max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white shadow-2xl rounded-lg pointer-events-auto m-4"
-=======
-          className="relative z-10 w-full max-w-md bg-white overflow-hidden shadow-2xl rounded-lg pointer-events-auto m-4"
->>>>>>> Stashed changes
         >
           {/* Close — same position as before (whole dialog); contrast on mobile (over dark column) vs desktop (over white) */}
           <button
@@ -135,7 +131,6 @@ export function LeadPopup() {
                   the crowd.
                 </p>
               </div>
-<<<<<<< Updated upstream
               <div className="mt-8 pt-6 border-t border-white/10">
                 <div className="grid grid-cols-3 gap-3 sm:gap-4 text-center sm:text-left">
                   <div>
@@ -156,17 +151,6 @@ export function LeadPopup() {
 
             {/* Right — form */}
             <div className="relative w-full md:w-1/2 flex flex-col bg-white p-8 md:p-10">
-=======
-              <div className="absolute inset-0 bg-gold/10" />
-              <div className="absolute top-6 left-4 right-4 text-white">
-                <h3 className="text-lg font-serif font-bold mb-1.5">Exclusive Offer</h3>
-                <p className="text-[11px] text-zinc-300 leading-relaxed">Register now for early bird privileges on our upcoming launches.</p>
-              </div>
-            </div>
-
-            {/* Form Side */}
-            <div className="w-full md:flex-1 p-6">
->>>>>>> Stashed changes
               {submitStatus === "success" ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -185,21 +169,12 @@ export function LeadPopup() {
                 </motion.div>
               ) : (
                 <>
-<<<<<<< Updated upstream
                   <p className="text-[10px] sm:text-xs font-medium tracking-[0.22em] text-[#b27b1f] uppercase mb-2 pr-12">
                     Private Enquiry
                   </p>
                   <h3 className="text-xl sm:text-2xl font-bold text-black mb-6 pr-8 leading-tight">
                     Tell us what you&apos;re looking for
                   </h3>
-=======
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="p-1.5 bg-gold/10 rounded-full">
-                      <Gift className="w-4 h-4 text-gold" />
-                    </div>
-                    <h3 className="text-lg font-bold text-black">Get VIP Access</h3>
-                  </div>
->>>>>>> Stashed changes
 
                   {submitError && (
                     <motion.div
@@ -215,11 +190,7 @@ export function LeadPopup() {
                     </motion.div>
                   )}
 
-<<<<<<< Updated upstream
                   <form className="space-y-4 flex-1 flex flex-col" onSubmit={handleSubmit}>
-=======
-                  <form className="space-y-3" onSubmit={handleSubmit}>
->>>>>>> Stashed changes
                     <div>
                       <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1">
                         Name
@@ -266,11 +237,7 @@ export function LeadPopup() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-<<<<<<< Updated upstream
                       className="w-full rounded-sm bg-[#b27b1f] text-white py-3.5 font-bold mt-2 hover:bg-[#9a6919] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-=======
-                      className="w-full bg-black text-white py-2.5 font-medium mt-2 hover:bg-gold hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
->>>>>>> Stashed changes
                     >
                       {isSubmitting ? (
                         <>
