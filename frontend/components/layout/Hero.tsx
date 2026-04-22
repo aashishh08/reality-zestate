@@ -41,8 +41,14 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif font-bold text-white mb-6 drop-shadow-md">
-            SUPERLUXERE
+          <h1 className="mb-6 md:mb-8 flex flex-wrap items-end justify-center gap-x-1 sm:gap-x-2 md:gap-x-3 px-2 max-w-5xl mx-auto">
+            <span className="text-superluxere-rose-metallic font-[family-name:var(--font-great-vibes)] text-[2.75rem] leading-none sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl">
+              Superluxe
+            </span>
+            <span className="text-superluxere-rose-metallic font-sans font-black tracking-[-0.04em] leading-none text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl pb-0.5 sm:pb-1 md:pb-1.5">
+              RE
+            </span>
+            <span className="sr-only"> — luxury real estate</span>
           </h1>
           <p className="max-w-2xl mx-auto text-white/95 text-lg font-light leading-relaxed drop-shadow-sm">
             Discover a curated collection of the most exquisite properties.

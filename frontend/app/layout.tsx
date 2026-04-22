@@ -1,6 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Montserrat } from "next/font/google";
+import { Great_Vibes, Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
+
+const greatVibes = Great_Vibes({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-great-vibes",
+  display: "swap",
+});
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -51,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfair.variable} ${montserrat.variable} font-sans antialiased`}
+        className={`${greatVibes.variable} ${playfair.variable} ${montserrat.variable} font-sans antialiased`}
       >
         <SiteHeader />
         <LeadModalProvider>{children}</LeadModalProvider>

@@ -11,9 +11,8 @@ import { FORM_CONFIG, SUCCESS_MESSAGES, UI_CONFIG } from "@/lib/constants";
 import { useLeadModal } from "@/lib/contexts/LeadModalContext";
 
 export function LeadPopup() {
-  const { isOpen, openModal, closeModal, modalSource } = useLeadModal();
+  const { isOpen, closeModal, modalSource } = useLeadModal();
   const [mounted, setMounted] = useState(false);
-  const [hasOpened, setHasOpened] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -33,19 +32,9 @@ export function LeadPopup() {
   });
 
   useEffect(() => {
-    setMounted(true);
+    const t = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(t);
   }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!hasOpened && !isOpen) {
-        openModal("lead-popup-timer");
-        setHasOpened(true);
-      }
-    }, FORM_CONFIG.LEAD_POPUP_DELAY);
-
-    return () => clearTimeout(timer);
-  }, [hasOpened, isOpen, openModal]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
