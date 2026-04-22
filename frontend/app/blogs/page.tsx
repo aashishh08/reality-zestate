@@ -4,7 +4,7 @@ import { LeadPopup } from '@/components/ui/LeadPopup';
 import BlogNavigation from '@/components/blog/BlogNavigation';
 import BlogCard from '@/components/blog/BlogCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Link from 'next/link';
+import { NewTabLink } from '@/components/ui/NewTabLink';
 
 type SearchParamsShape = {
   category?: string;
@@ -137,13 +137,13 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             {totalPages > 1 && (
               <div className="mt-10 sm:mt-16 flex items-center justify-center gap-2 sm:gap-4 flex-wrap">
                 {page > 1 && (
-                  <Link
+                  <NewTabLink
                     href={`/blogs?${new URLSearchParams({ ...searchParamsObj, page: (page - 1).toString() }).toString()}`}
                     className="flex items-center gap-1.5 px-4 sm:px-6 py-2.5 sm:py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     <span className="hidden sm:inline">Previous</span>
-                  </Link>
+                  </NewTabLink>
                 )}
 
                 {/* Show fewer page buttons on mobile */}
@@ -164,7 +164,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     const isMobileVisible = Math.abs(pageNum - page) <= 1;
 
                     return (
-                      <Link
+                      <NewTabLink
                         key={pageNum}
                         href={`/blogs?${new URLSearchParams({ ...searchParamsObj, page: pageNum.toString() }).toString()}`}
                         className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg font-medium transition-colors text-sm ${
@@ -176,19 +176,19 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                         }`}
                       >
                         {pageNum}
-                      </Link>
+                      </NewTabLink>
                     );
                   })}
                 </div>
 
                 {page < totalPages && (
-                  <Link
+                  <NewTabLink
                     href={`/blogs?${new URLSearchParams({ ...searchParamsObj, page: (page + 1).toString() }).toString()}`}
                     className="flex items-center gap-1.5 px-4 sm:px-6 py-2.5 sm:py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base"
                   >
                     <span className="hidden sm:inline">Next</span>
                     <ChevronRight className="w-4 h-4" />
-                  </Link>
+                  </NewTabLink>
                 )}
               </div>
             )}
@@ -202,12 +202,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             </div>
             <h2 className="text-2xl font-serif font-bold text-gray-900 mb-2">No articles found</h2>
             <p className="text-gray-600 mb-6">Try adjusting your search or filter criteria</p>
-            <Link
+            <NewTabLink
               href="/blogs"
               className="inline-block px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors"
             >
               View All Articles
-            </Link>
+            </NewTabLink>
           </div>
         )}
       </section>

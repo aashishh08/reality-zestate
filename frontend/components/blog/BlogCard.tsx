@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
+import { NewTabLink } from '@/components/ui/NewTabLink';
 import Image from 'next/image';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
 import { BlogPost } from '@/types/blog';
@@ -62,7 +62,7 @@ export default function BlogCard({ post, featured = false, priority = false }: B
 
   if (featured) {
     return (
-      <Link href={`/blogs/${post.slug}`} className="group block">
+      <NewTabLink href={`/blogs/${post.slug}`} className="group block">
         <article className="relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-2xl transition-all duration-300">
           {/* Stack vertically on mobile, side-by-side on md+ */}
           <div className="grid grid-cols-1 md:grid-cols-2">
@@ -129,12 +129,12 @@ export default function BlogCard({ post, featured = false, priority = false }: B
             </div>
           </div>
         </article>
-      </Link>
+      </NewTabLink>
     );
   }
 
   return (
-    <Link href={`/blogs/${post.slug}`} className="group block h-full">
+    <NewTabLink href={`/blogs/${post.slug}`} className="group block h-full">
       <article className="h-full bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col">
         {/* Cover */}
         <div className="relative h-48 sm:h-52 overflow-hidden shrink-0">
@@ -191,6 +191,6 @@ export default function BlogCard({ post, featured = false, priority = false }: B
           </div>
         </div>
       </article>
-    </Link>
+    </NewTabLink>
   );
 }

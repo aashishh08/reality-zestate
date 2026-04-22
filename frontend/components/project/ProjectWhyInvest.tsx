@@ -92,7 +92,9 @@ export function ProjectWhyInvest({
           name: formData.name.trim(),
           email: formData.email.trim(),
           phone: formData.phone.trim(),
-          source: propertySlug ? `investment-inquiry | ${propertySlug}` : 'why-invest-cta',
+          source: propertySlug
+            ? `why-invest-more-insights | ${propertySlug}`
+            : "why-invest-more-insights",
           propertyId: propertyId || undefined,
         })
       );
@@ -138,6 +140,8 @@ export function ProjectWhyInvest({
     `Discover the compelling reasons why ${projectTitle} represents one of the finest investment opportunities in Gurgaon`;
 
   const investmentBoxes = structuredBoxes;
+  const visibleReasonCards = investmentBoxes.slice(0, 4);
+  const lastReasonCardIndex = visibleReasonCards.length > 0 ? visibleReasonCards.length - 1 : -1;
 
   return (
     <section className="py-12 bg-[#F5F0E8]" id="why-invest">
@@ -155,11 +159,12 @@ export function ProjectWhyInvest({
           className={`grid gap-8 ${hasBoxes ? "md:grid-cols-2" : "md:grid-cols-1"}`}
         >
           {hasBoxes ? (
-            <div className="grid grid-cols-2 gap-3">
-              {investmentBoxes.slice(0, 4).map((item, index) => {
+            <div className="grid grid-cols-2 gap-3 items-stretch">
+              {visibleReasonCards.map((item, index) => {
                 const IconComponent =
                   (item.icon ? iconMap[item.icon as keyof typeof iconMap] : null) ?? TrendingUp;
                 const isMarketTiming = item.title === "Market Timing";
+                const isLastReasonCard = index === lastReasonCardIndex;
 
                 return (
                   <motion.div
@@ -167,13 +172,13 @@ export function ProjectWhyInvest({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group cursor-pointer flex flex-col ${
+                    className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group flex flex-col h-full min-h-[140px] ${
                       isMarketTiming
                         ? "bg-gradient-to-br from-[#C9A961]/10 to-[#C9A961]/5"
                         : "bg-white"
                     }`}
                   >
-                    <div className="flex-1">
+                    <div className="flex-1 min-h-0">
                       <div className="w-10 h-10 bg-[#C9A961]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#C9A961]/20 transition-colors">
                         <IconComponent className="w-5 h-5 text-[#C9A961]" />
                       </div>
@@ -185,15 +190,15 @@ export function ProjectWhyInvest({
                       </p>
                     </div>
 
-                    {isMarketTiming && (
+                    {isLastReasonCard ? (
                       <button
                         type="button"
                         onClick={() => setShowForm(true)}
-                        className="mt-3 w-full bg-[#C9A961] hover:bg-[#A88B4A] text-black text-xs font-semibold py-1.5 px-2 rounded transition-all"
+                        className="mt-auto pt-3 w-full bg-[#C9A961] hover:bg-[#A88B4A] text-black text-xs font-semibold py-2 px-2 rounded transition-all"
                       >
-                        Get More Insights
+                        More insights
                       </button>
-                    )}
+                    ) : null}
                   </motion.div>
                 );
               })}
@@ -318,9 +323,9 @@ export function ProjectWhyInvest({
               ) : (
                 <>
                   <div className="mb-6">
-                    <h3 className="text-2xl font-bold text-black">Get More Insights</h3>
+                    <h3 className="text-2xl font-bold text-black">More insights</h3>
                     <p className="text-sm text-gray-600 mt-1">
-                      Learn more about market timing and investment opportunities
+                      Share your details and we&apos;ll send tailored investment insights for this project.
                     </p>
                   </div>
 
@@ -392,7 +397,7 @@ export function ProjectWhyInvest({
                           <span>Submitting...</span>
                         </>
                       ) : (
-                        "Get Insights"
+                        "Submit"
                       )}
                     </button>
                   </form>

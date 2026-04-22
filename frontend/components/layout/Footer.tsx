@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { NewTabLink } from "@/components/ui/NewTabLink";
 import { Facebook, Instagram, Linkedin, Mail, Phone, Twitter, MapPin } from "lucide-react";
 import { Location } from "@/lib";
 import { CONTACT_INFO } from "@/lib/constants";
@@ -120,13 +121,13 @@ export function Footer({ locations = [] }: FooterProps) {
               <h3 className="text-xs font-bold mb-4 tracking-widest uppercase text-[#2C2416]">Project Types</h3>
               <div className="flex flex-wrap gap-2">
                 {["luxury", "villas", "penthouse", "affordable", "golf-residences"].map(slug => (
-                  <Link
+                  <NewTabLink
                     key={slug}
                     href={`/category/${slug}`}
                     className="text-xs px-3 py-1 rounded-full border border-[#C9A961]/30 text-zinc-500 hover:bg-[#C9A961] hover:text-white hover:border-[#C9A961] transition-all capitalize"
                   >
                     {slug.replace(/-/g, " ")}
-                  </Link>
+                  </NewTabLink>
                 ))}
               </div>
             </div>

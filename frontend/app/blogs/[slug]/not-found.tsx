@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { NewTabLink } from '@/components/ui/NewTabLink';
 
 export default function NotFound() {
   return (
@@ -18,12 +19,12 @@ export default function NotFound() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
+          <NewTabLink
             href="/blogs"
             className="px-8 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors"
           >
             View All Articles
-          </Link>
+          </NewTabLink>
           <Link
             href="/"
             className="px-8 py-3 bg-white text-gray-700 font-semibold rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"

@@ -219,6 +219,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             reasons={details.whyInvest ?? []}
             videoUrl={details.videoUrl}
             detailedAnalysis={details.investmentAnalysis}
+            introDescription={details.whyInvestIntro}
             projectTitle={project.title}
             propertyId={project.id}
             propertySlug={slug}

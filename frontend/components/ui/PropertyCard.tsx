@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { NewTabLink } from "@/components/ui/NewTabLink";
 import Image from "next/image";
 import { Project } from "@/types";
 import {
@@ -52,7 +52,7 @@ export function PropertyCard({ project }: PropertyCardProps) {
   const locationName  = project.Location?.name ?? project.location ?? '';
 
   return (
-    <Link href={`/projects/${project.slug}`} className="block">
+    <NewTabLink href={`/projects/${project.slug}`} className="block">
       <div className="group bg-white overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
 
         {/* ── Image / Gradient area ──────────────────────────── */}
@@ -152,6 +152,6 @@ export function PropertyCard({ project }: PropertyCardProps) {
           </button>
         </div>
       </div>
-    </Link>
+    </NewTabLink>
   );
 }

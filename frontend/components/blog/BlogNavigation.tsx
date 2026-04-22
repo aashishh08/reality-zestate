@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { NewTabLink } from '@/components/ui/NewTabLink';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, X } from 'lucide-react';
@@ -59,16 +59,16 @@ export default function BlogNavigation({ categories, currentCategory }: BlogNavi
 
           {/* Left: Blog title + Desktop category pills */}
           <div className="flex items-center gap-2 sm:gap-6 min-w-0">
-            <Link
+            <NewTabLink
               href="/blogs"
               className="text-xl sm:text-2xl font-serif font-bold text-gray-900 hover:text-amber-700 transition-colors shrink-0"
             >
               Blog
-            </Link>
+            </NewTabLink>
 
             {/* Desktop Categories (hidden on mobile) */}
             <div className="hidden md:flex items-center gap-1 flex-wrap">
-              <Link
+              <NewTabLink
                 href="/blogs"
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                   !currentCategory
@@ -77,9 +77,9 @@ export default function BlogNavigation({ categories, currentCategory }: BlogNavi
                 }`}
               >
                 All Posts
-              </Link>
+              </NewTabLink>
               {categories.map((category) => (
-                <Link
+                <NewTabLink
                   key={category.id}
                   href={`/blogs?category=${category.slug}`}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
@@ -89,7 +89,7 @@ export default function BlogNavigation({ categories, currentCategory }: BlogNavi
                   }`}
                 >
                   {category.name}
-                </Link>
+                </NewTabLink>
               ))}
             </div>
           </div>
@@ -147,7 +147,7 @@ export default function BlogNavigation({ categories, currentCategory }: BlogNavi
         {/* ── Mobile category scroll strip (hidden on md+) ──────────── */}
         <div className="md:hidden pb-3 -mx-4 px-4 overflow-x-auto no-scrollbar">
           <div className="flex items-center gap-2 w-max">
-            <Link
+            <NewTabLink
               href="/blogs"
               className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                 !currentCategory
@@ -156,9 +156,9 @@ export default function BlogNavigation({ categories, currentCategory }: BlogNavi
               }`}
             >
               All Posts
-            </Link>
+            </NewTabLink>
             {categories.map((category) => (
-              <Link
+              <NewTabLink
                 key={category.id}
                 href={`/blogs?category=${category.slug}`}
                 className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
@@ -168,7 +168,7 @@ export default function BlogNavigation({ categories, currentCategory }: BlogNavi
                 }`}
               >
                 {category.name}
-              </Link>
+              </NewTabLink>
             ))}
           </div>
         </div>

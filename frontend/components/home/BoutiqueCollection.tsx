@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { NewTabLink } from "@/components/ui/NewTabLink";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { PropertyItem } from "@/types/property-listing";
@@ -74,7 +74,7 @@ export function BoutiqueCollection({ properties }: BoutiqueCollectionProps) {
                 viewport={{ once: true }}
                 className={`${bentoClasses[index] || "md:col-span-2"} group relative rounded-sm overflow-hidden bg-white shadow-2xl`}
               >
-                <Link href={`/projects/${property.slug}`} className="block h-full w-full">
+                <NewTabLink href={`/projects/${property.slug}`} className="block h-full w-full">
                   <div className="relative h-full w-full min-h-[400px] md:min-h-0">
                     <Image
                       src={img}
@@ -124,7 +124,7 @@ export function BoutiqueCollection({ properties }: BoutiqueCollectionProps) {
                       </div>
                     </div>
                   </div>
-                </Link>
+                </NewTabLink>
               </motion.div>
             );
           })}

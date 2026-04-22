@@ -6,6 +6,7 @@ import { PropertyItem } from "@/types/property-listing";
 import { motion, useScroll } from "framer-motion";
 import { ArrowRight, Calendar, MapPin } from "lucide-react";
 import Link from "next/link";
+import { NewTabLink } from "@/components/ui/NewTabLink";
 import { listingCardImageUrl } from "@/lib/listing-card-image";
 
 interface UpcomingProjectsProps {
@@ -61,7 +62,7 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
         <div className="w-0 md:w-[calc((100vw-80rem)/2)] shrink-0" />
 
         {properties.slice(0, 6).map((property) => (
-          <Link key={property.id} href={`/projects/${property.slug}`}>
+          <NewTabLink key={property.id} href={`/projects/${property.slug}`}>
             <div className="panel relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] h-[500px] shrink-0 snap-center rounded-2xl overflow-hidden group cursor-pointer">
               <Image
                 src={listingCardImageUrl(property)}
@@ -112,7 +113,7 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
                 </button>
               </div>
             </div>
-          </Link>
+          </NewTabLink>
         ))}
 
         <div className="w-6 md:w-[calc((100vw-80rem)/2)] shrink-0" />

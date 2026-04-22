@@ -13,7 +13,7 @@ export default function NotFound() {
           The property you're looking for doesn't exist or has been moved. 
           Explore our curated collection of luxury properties instead.
         </p>
-        <Link 
+        <Link
           href="/"
           className="inline-flex items-center gap-3 bg-gold text-black px-8 py-4 rounded-sm font-bold hover:bg-white transition-colors"
         >

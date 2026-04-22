@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { NewTabLink } from "@/components/ui/NewTabLink";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Category } from "@/lib/api/categories";
@@ -97,7 +97,7 @@ export function LocationCategories({ categories }: LocationCategoriesProps) {
                 viewport={{ once: true }}
                 className={`${gridClasses[index] || "md:col-span-2"} relative rounded-2xl overflow-hidden group shadow-xl`}
               >
-                <Link href={`/category/${cat.slug}`} className="block h-full w-full">
+                <NewTabLink href={`/category/${cat.slug}`} className="block h-full w-full">
                   <div className="relative h-full w-full min-h-[300px] md:min-h-0">
                     <Image
                       src={img}
@@ -147,7 +147,7 @@ export function LocationCategories({ categories }: LocationCategoriesProps) {
                       </div>
                     </div>
                   </div>
-                </Link>
+                </NewTabLink>
               </motion.div>
             );
           })}

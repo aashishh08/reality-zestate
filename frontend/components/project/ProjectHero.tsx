@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Project } from "@/types";
 import { motion } from "framer-motion";
-import { Download, Calendar, X, AlertCircle } from "lucide-react";
+import { Calendar, X, AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { createLead } from "@/lib/api/leads";
 import { useApiCall } from "@/lib/hooks/useApiCall";
@@ -144,20 +144,14 @@ export function ProjectHero({ project }: ProjectHeroProps) {
                 );
               })()}
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  id="hero-schedule-visit-btn"
-                  onClick={() => setShowModal(true)}
-                  className="bg-gradient-to-r from-gold to-gold-dark text-white px-8 py-4 rounded-sm font-bold tracking-wide hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-3 group transform hover:-translate-y-1"
-                >
-                  <Calendar className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                  Schedule Site Visit
-                </button>
-                <button className="bg-white/10 backdrop-blur-sm border-2 border-white text-white px-8 py-4 rounded-sm font-bold tracking-wide hover:bg-white hover:text-[#2C2416] transition-all duration-300 flex items-center justify-center gap-3 group">
-                  <Download className="w-5 h-5 group-hover:animate-bounce" />
-                  Download Brochure
-                </button>
-              </div>
+              <button
+                id="hero-schedule-visit-btn"
+                onClick={() => setShowModal(true)}
+                className="bg-gradient-to-r from-gold to-gold-dark text-white px-8 py-4 rounded-sm font-bold tracking-wide hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-3 group transform hover:-translate-y-1"
+              >
+                <Calendar className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                Schedule Site Visit
+              </button>
             </motion.div>
           </div>
         </div>
@@ -169,7 +163,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl p-8 max-w-md w-full relative"
+            className="bg-white rounded-2xl p-6 max-w-sm w-full sm:max-w-md relative"
           >
             {/* Close */}
             <button

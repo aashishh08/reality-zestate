@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { NewTabLink } from "@/components/ui/NewTabLink";
 import { Menu, X, ChevronDown, MapPin, Building2, Tag, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SCROLL_THRESHOLDS } from "@/lib/constants";
@@ -168,7 +169,7 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
                           <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-4">Project Types</p>
                           <div className="grid grid-cols-2 gap-2">
                             {catDisplay.map(cat => (
-                              <Link
+                              <NewTabLink
                                 key={cat.id}
                                 href={`/category/${cat.slug}`}
                                 className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gold/5 transition-colors group"
@@ -176,7 +177,7 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
                               >
                                 <LayoutGrid className="w-4 h-4 text-gold shrink-0" />
                                 <span className="text-sm font-medium text-zinc-700 group-hover:text-gold-dark">{cat.name}</span>
-                              </Link>
+                              </NewTabLink>
                             ))}
                           </div>
                         </>
@@ -230,10 +231,10 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
           {/* ── Right nav ──────────────────────────────────────────────── */}
           <div className="flex items-center justify-start">
             <nav className="hidden lg:flex items-center gap-10 xl:gap-14">
-              <Link href="/blogs" className="text-black hover:text-gold-dark transition-colors text-sm font-serif font-bold tracking-wider relative group uppercase">
+              <NewTabLink href="/blogs" className="text-black hover:text-gold-dark transition-colors text-sm font-serif font-bold tracking-wider relative group uppercase">
                 Blogs
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-dark transition-all duration-300 group-hover:w-full" />
-              </Link>
+              </NewTabLink>
               <Link href="/about-us" className="text-black hover:text-gold-dark transition-colors text-sm font-serif font-bold tracking-wider relative group uppercase">
                 About Us
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-dark transition-all duration-300 group-hover:w-full" />
@@ -266,16 +267,27 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
               { label: "Blogs", href: "/blogs" },
               { label: "About Us", href: "/about-us" },
               { label: "Contact", href: "/contact" },
-            ].map(link => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="px-6 py-3 text-zinc-600 hover:text-gold-dark hover:bg-black/5 transition-colors text-sm font-medium tracking-wide"
-                onClick={() => setMobileMenu(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
+            ].map(link =>
+              link.href === "/blogs" ? (
+                <NewTabLink
+                  key={link.label}
+                  href={link.href}
+                  className="px-6 py-3 text-zinc-600 hover:text-gold-dark hover:bg-black/5 transition-colors text-sm font-medium tracking-wide"
+                  onClick={() => setMobileMenu(false)}
+                >
+                  {link.label}
+                </NewTabLink>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="px-6 py-3 text-zinc-600 hover:text-gold-dark hover:bg-black/5 transition-colors text-sm font-medium tracking-wide"
+                  onClick={() => setMobileMenu(false)}
+                >
+                  {link.label}
+                </Link>
+              ),
+            )}
 
             {/* Mobile: Browse by Status */}
             <div className="px-6 pt-4 pb-2">
