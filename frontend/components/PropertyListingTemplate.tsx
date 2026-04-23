@@ -169,8 +169,8 @@ export function PropertyListingTemplate({
       {heroComponent ? <>{heroComponent}</> : null}
 
       {/* ── Sticky Filter Bar ──────────────────────────────────────────────── */}
-      <div className="sticky top-[68px] z-40 bg-white border-b border-border shadow-[0_2px_20px_rgba(44,44,44,0.05)]">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex items-center justify-between gap-4 py-0 min-h-[56px]">
+      <div className="sticky top-16 z-40 bg-white border-b border-border shadow-[0_2px_20px_rgba(44,44,44,0.05)] md:top-[4.25rem]">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between gap-3 sm:gap-4 py-0 min-h-[52px] sm:min-h-[56px]">
 
           {/* Left — status pills */}
           <div className="flex items-center gap-[3px] overflow-x-auto no-scrollbar py-2 flex-1 min-w-0">
@@ -228,7 +228,7 @@ export function PropertyListingTemplate({
         id={projectsSection ? 'projects-section' : undefined}
         className={`w-full py-12 ${projectsSection?.sectionClassName ?? ''}`.trim()}
       >
-        <div className="mx-auto max-w-[1400px] px-6 md:px-12">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 md:px-12">
         {projectsSection && (
           <div className="mb-10 flex flex-col justify-between gap-4 sm:mb-12 md:flex-row md:items-end">
             <div>
@@ -262,7 +262,7 @@ export function PropertyListingTemplate({
 
         {/* Loading skeletons — match card structure */}
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2px] bg-border">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-[2px] bg-border">
             {Array.from({ length: loadingSkeletonCount }).map((_, i) => (
               <div key={i} className="bg-white">
                 <div className="h-[220px] bg-sand animate-pulse" />
@@ -294,7 +294,7 @@ export function PropertyListingTemplate({
 
         {/* Property grid — 2px gap between cards (bg-border shows through) */}
         {!loading && data.data.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2px] bg-border">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-[2px] bg-border">
             {data.data.map((property, index) => {
               const projectData: Project = {
                 id:           property.id,
@@ -316,7 +316,12 @@ export function PropertyListingTemplate({
                 Categories: property.Categories,
               };
               return (
-                <PropertyCard key={property.id} project={projectData} index={index} />
+                <PropertyCard
+                  key={property.id}
+                  project={projectData}
+                  index={index}
+                  imageSizes="(max-width: 1024px) 50vw, 33vw"
+                />
               );
             })}
           </div>

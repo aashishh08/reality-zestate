@@ -25,12 +25,17 @@ function formatPrice(value: number): string {
   return `₹${value.toLocaleString('en-IN')}`;
 }
 
+const DEFAULT_CARD_IMAGE_SIZES =
+  '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw';
+
 interface PropertyCardProps {
   project: Project;
   index: number;
+  /** next/image `sizes` — set when the card sits in a 2+ column grid on small viewports */
+  imageSizes?: string;
 }
 
-export function PropertyCard({ project }: PropertyCardProps) {
+export function PropertyCard({ project, imageSizes }: PropertyCardProps) {
   if (!project?.slug || !project?.title) return null;
 
   // First status-type tag drives the badge
@@ -52,7 +57,7 @@ export function PropertyCard({ project }: PropertyCardProps) {
   const locationName  = project.Location?.name ?? project.location ?? '';
 
   return (
-    <NewTabLink href={`/projects/${project.slug}`} className="block">
+    <NewTabLink href={`/projects/${project.slug}`} className="block min-w-0">
       <div className="group bg-white overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
 
         {/* ── Image / Gradient area ──────────────────────────── */}
@@ -62,7 +67,7 @@ export function PropertyCard({ project }: PropertyCardProps) {
               src={project.image}
               alt={project.title}
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              sizes={imageSizes ?? DEFAULT_CARD_IMAGE_SIZES}
               className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
@@ -112,7 +117,7 @@ export function PropertyCard({ project }: PropertyCardProps) {
           )}
 
           {/* Project name */}
-          <h3 className="mb-2 font-serif text-lg font-medium leading-snug text-charcoal sm:text-xl">
+          <h3 className="mb-2 font-serif text-lg font-medium leading-snug text-charcoal sm:text-xl line-clamp-2">
             {project.title}
           </h3>
 

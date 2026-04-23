@@ -46,7 +46,7 @@ export function SuperluxereExclusive({ developers }: SuperluxereExclusiveProps) 
               <span className="tracking-[0.2em] uppercase text-sm font-bold">Members Only</span>
             </div>
 
-            <h2 className="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight text-black">
+            <h2 className="text-3xl sm:text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight text-black">
               Superluxere <br />
               <span className="text-gold-dark">Exclusive</span>
             </h2>

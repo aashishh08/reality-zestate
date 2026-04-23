@@ -12,7 +12,7 @@ interface CategoryPropertyGridProps {
 export function CategoryPropertyGrid({ categoryTitle, projects }: CategoryPropertyGridProps) {
   return (
     <section className="py-20 bg-zinc-50 border-y border-zinc-100">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -28,7 +28,7 @@ export function CategoryPropertyGrid({ categoryTitle, projects }: CategoryProper
         </motion.div>
 
         {projects.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}
@@ -37,7 +37,11 @@ export function CategoryPropertyGrid({ categoryTitle, projects }: CategoryProper
                 transition={{ duration: 0.5, delay: index * 0.06 }}
                 viewport={{ once: true }}
               >
-                <PropertyCard project={project} index={index} />
+                <PropertyCard
+                  project={project}
+                  index={index}
+                  imageSizes="(max-width: 1024px) 50vw, 33vw"
+                />
               </motion.div>
             ))}
           </div>

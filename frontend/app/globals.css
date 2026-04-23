@@ -49,6 +49,13 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* Fixed header + in-page sticky bars — anchor links land with readable context */
+  scroll-padding-top: 5rem;
+}
+@media (min-width: 1024px) {
+  html {
+    scroll-padding-top: 5.5rem;
+  }
 }
 
 body {

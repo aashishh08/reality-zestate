@@ -36,31 +36,33 @@ export function HtmlRenderer({ html, className = "", fontSize = "text-base" }: H
 
   if (hasHtml(safe)) {
     return (
-      <div
-        className={[
-          // Tailwind typography plugin — proven to render h1/h2/h3 at correct sizes
-          "prose",
-          "prose-headings:font-serif",
-          "prose-headings:text-[#2C2416]",
-          "prose-headings:font-bold",
-          "prose-p:font-sans",
-          "prose-p:text-gray-700",
-          "prose-strong:text-[#2C2416]",
-          "prose-strong:font-semibold",
-          "prose-a:text-[#C9A961]",
-          "prose-a:underline",
-          "prose-li:text-gray-700",
-          "prose-blockquote:border-l-[#C9A961]",
-          "prose-blockquote:text-gray-600",
-          // Layout
-          "max-w-none",
-          fontSize,
-          className,
-        ]
-          .filter(Boolean)
-          .join(" ")}
-        dangerouslySetInnerHTML={{ __html: safe }}
-      />
+      <div className="max-w-full overflow-x-auto [-webkit-overflow-scrolling:touch]">
+        <div
+          className={[
+            // Tailwind typography plugin — proven to render h1/h2/h3 at correct sizes
+            "prose",
+            "prose-headings:font-serif",
+            "prose-headings:text-[#2C2416]",
+            "prose-headings:font-bold",
+            "prose-p:font-sans",
+            "prose-p:text-gray-700",
+            "prose-strong:text-[#2C2416]",
+            "prose-strong:font-semibold",
+            "prose-a:text-[#C9A961]",
+            "prose-a:underline",
+            "prose-li:text-gray-700",
+            "prose-blockquote:border-l-[#C9A961]",
+            "prose-blockquote:text-gray-600",
+            // Layout
+            "max-w-none",
+            fontSize,
+            className,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          dangerouslySetInnerHTML={{ __html: safe }}
+        />
+      </div>
     );
   }
 

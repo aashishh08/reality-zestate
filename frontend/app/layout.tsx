@@ -58,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${greatVibes.variable} ${playfair.variable} ${montserrat.variable} font-sans antialiased`}
+        className={`${greatVibes.variable} ${playfair.variable} ${montserrat.variable} font-sans antialiased overflow-x-clip min-h-[100dvh]`}
       >
         <SiteHeader />
         <LeadModalProvider>{children}</LeadModalProvider>

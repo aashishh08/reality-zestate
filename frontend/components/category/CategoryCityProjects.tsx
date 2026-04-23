@@ -15,7 +15,7 @@ interface CategoryCityProjectsProps {
 export function CategoryCityProjects({ citySections }: CategoryCityProjectsProps) {
   return (
     <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {citySections.map((citySection, sectionIndex) => (
           <div 
             key={citySection.citySlug} 
@@ -37,7 +37,7 @@ export function CategoryCityProjects({ citySections }: CategoryCityProjectsProps
             </motion.div>
 
             {citySection.projects.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
                 {citySection.projects.map((project, index) => (
                   <motion.div
                     key={project.id}
@@ -46,9 +46,10 @@ export function CategoryCityProjects({ citySections }: CategoryCityProjectsProps
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <PropertyCard 
-                      project={project} 
+                    <PropertyCard
+                      project={project}
                       index={index}
+                      imageSizes="(max-width: 1024px) 50vw, 33vw"
                     />
                   </motion.div>
                 ))}

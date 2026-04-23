@@ -29,20 +29,20 @@ export function CategoryHero({ title, subtitle, backgroundImage = "/images/categ
 
       {/* Content */}
       <div className="relative h-full flex items-center justify-center">
-        <div className="max-w-5xl mx-auto px-6 text-center">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white mb-6 leading-tight tracking-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white mb-4 sm:mb-6 leading-tight tracking-tight">
               {title}
             </h1>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-              className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light tracking-wide"
+              className="text-base sm:text-xl md:text-2xl lg:text-3xl text-white/90 font-light tracking-wide"
             >
               {subtitle}
             </motion.p>

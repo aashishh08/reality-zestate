@@ -55,7 +55,7 @@ export function TrendingProjects({ properties }: TrendingProjectsProps) {
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
           {display.map((property, index) => {
             if (!property?.slug || !property?.title) return null;
 
@@ -67,6 +67,7 @@ export function TrendingProjects({ properties }: TrendingProjectsProps) {
             return (
               <PropertyCard
                 key={property.id}
+                imageSizes="(max-width: 1024px) 50vw, 25vw"
                 project={{
                   id: property.id,
                   slug: property.slug,

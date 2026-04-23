@@ -64,7 +64,7 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
           : "bg-white/95 backdrop-blur-sm border-transparent py-2"
       )}
     >
-      <div className="max-w-[1920px] mx-auto px-8 lg:px-16">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-16">
         <div className="flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-8">
 
           {/* ── Left nav ───────────────────────────────────────────────── */}

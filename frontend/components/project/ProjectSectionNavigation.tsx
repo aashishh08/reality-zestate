@@ -59,18 +59,19 @@ export function ProjectSectionNavigation({ sections = defaultSections }: Project
   };
 
   return (
-    <section className="sticky top-[80px] z-40 bg-[#1A1A2E] border-b border-gray-800 shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="sticky top-16 z-40 bg-[#1A1A2E] border-b border-gray-800 shadow-lg md:top-[4.25rem]">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Navigation Container */}
-        <div className="flex items-center gap-3 overflow-x-auto py-5 scrollbar-hide">
+        <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto py-3 sm:py-5 scrollbar-hide [-webkit-overflow-scrolling:touch] snap-x snap-mandatory">
           {sections.map((section, index) => (
             <motion.button
               key={section.id}
+              type="button"
               onClick={() => handleNavigate(section.id)}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05 }}
-              className={`flex items-center gap-2 px-5 py-3 rounded-lg font-medium text-sm whitespace-nowrap transition-all ${
+              className={`flex shrink-0 snap-start items-center gap-2 px-3.5 py-2.5 sm:px-5 sm:py-3 rounded-lg font-medium text-xs sm:text-sm whitespace-nowrap transition-all touch-manipulation ${
                 activeSection === section.id
                   ? "bg-[#C9A961] text-black shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white"

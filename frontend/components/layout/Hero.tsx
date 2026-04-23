@@ -61,9 +61,9 @@ export function Hero() {
       </div>
 
       {/* Quick Navigation Bar - Premium Dark Glassmorphism */}
-      <div className="absolute bottom-0 left-0 right-0 z-30">
+      <div className="absolute bottom-0 left-0 right-0 z-30 pb-[env(safe-area-inset-bottom)]">
         <div className="bg-black/90 backdrop-blur-xl border-t border-white/10 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.8)]">
-          <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/5">
               {quickLinks.map((link, index) => (
                 <motion.button
@@ -72,16 +72,17 @@ export function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
                   onClick={() => scrollToSection(link.toLowerCase().replace(" ", "-"))}
-                  className="group relative h-24 flex flex-col justify-center px-6 hover:bg-white/5 transition-colors duration-300 text-left"
+                  type="button"
+                  className="group relative min-h-[5.5rem] sm:h-24 flex flex-col justify-center px-3 py-3 sm:px-6 hover:bg-white/5 transition-colors duration-300 text-left touch-manipulation"
                 >
-                  <div className="flex items-center justify-between w-full mb-2">
-                    <span className="text-xs md:text-sm font-medium tracking-[0.2em] uppercase text-zinc-500 group-hover:text-gold transition-colors duration-300">
+                  <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2 gap-1">
+                    <span className="text-[10px] sm:text-xs md:text-sm font-medium tracking-[0.15em] sm:tracking-[0.2em] uppercase text-zinc-500 group-hover:text-gold transition-colors duration-300">
                       0{index + 1}
                     </span>
-                    <ChevronDown className="w-4 h-4 text-gold opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" />
+                    <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-gold opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hidden sm:block" />
                   </div>
 
-                  <span className="text-sm md:text-lg font-serif text-white group-hover:text-gold transition-colors">
+                  <span className="text-xs sm:text-sm md:text-lg font-serif text-white group-hover:text-gold transition-colors leading-snug line-clamp-2">
                     {link}
                   </span>
 

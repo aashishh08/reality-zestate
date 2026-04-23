@@ -16,35 +16,35 @@ const navigationItems: NavigationItem[] = [
   {
     id: 'usp',
     label: 'USP',
-    icon: <Sparkles className="w-8 h-8" />,
+    icon: <Sparkles className="w-6 h-6 sm:w-8 sm:h-8" />,
     href: '#usp',
     description: 'Unique Selling Points'
   },
   {
     id: 'masterplan',
     label: 'Master Plan',
-    icon: <Map className="w-8 h-8" />,
+    icon: <Map className="w-6 h-6 sm:w-8 sm:h-8" />,
     href: '#location',
     description: 'Location & Layout'
   },
   {
     id: 'payment',
     label: 'Payment Plan',
-    icon: <CreditCard className="w-8 h-8" />,
+    icon: <CreditCard className="w-6 h-6 sm:w-8 sm:h-8" />,
     href: '#payment-plans',
     description: 'Flexible Options'
   },
   {
     id: 'amenities',
     label: 'Amenities',
-    icon: <Building2 className="w-8 h-8" />,
+    icon: <Building2 className="w-6 h-6 sm:w-8 sm:h-8" />,
     href: '#amenities',
     description: 'Premium Facilities'
   },
   {
     id: 'layout',
     label: 'Floor Plans',
-    icon: <LayoutGrid className="w-8 h-8" />,
+    icon: <LayoutGrid className="w-6 h-6 sm:w-8 sm:h-8" />,
     href: '#floor-plans',
     description: 'Unit Layouts'
   }
@@ -97,19 +97,20 @@ export default function ProjectNavigation() {
       <nav className="bg-[#F5F2EC] py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center">
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="grid w-full max-w-4xl grid-cols-2 gap-2 sm:max-w-none sm:flex sm:flex-wrap sm:justify-center sm:gap-4 px-1">
               {navigationItems.map((item, index) => {
                 const isActive = activeSection === item.href.substring(1);
 
                 return (
                   <motion.button
                     key={item.id}
+                    type="button"
                     onClick={() => handleClick(item.href)}
                     className={`
-                      group relative flex flex-col items-center justify-center gap-3 
-                      px-8 py-6 rounded-xl min-w-[160px]
-                      font-medium transition-all duration-300 whitespace-nowrap
-                      bg-white
+                      group relative flex flex-col items-center justify-center gap-2 sm:gap-3 
+                      px-3 py-4 sm:px-8 sm:py-6 rounded-xl w-full sm:w-auto sm:min-w-[160px]
+                      font-medium transition-all duration-300 sm:whitespace-nowrap
+                      bg-white touch-manipulation
                       shadow-lg hover:shadow-2xl
                       transform hover:scale-105
                       ${isActive
@@ -141,7 +142,7 @@ export default function ProjectNavigation() {
 
                     {/* Label - golden when active, dark grey otherwise */}
                     <span className={`
-                      text-base font-bold tracking-wide transition-colors duration-300
+                      text-sm sm:text-base font-bold tracking-wide transition-colors duration-300 text-center
                       ${isActive ? 'text-[#C9A961]' : 'text-[#2C2416] group-hover:text-[#C9A961]'}
                     `}>
                       {item.label}
@@ -149,7 +150,7 @@ export default function ProjectNavigation() {
 
                     {/* Description - subtle grey */}
                     <span className={`
-                      text-xs font-normal transition-colors duration-300
+                      hidden sm:block text-xs font-normal transition-colors duration-300 text-center
                       ${isActive ? 'text-[#6B6B6B]' : 'text-[#8B8B8B] group-hover:text-[#6B6B6B]'}
                     `}>
                       {item.description}

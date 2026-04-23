@@ -66,7 +66,7 @@ export function FloatingActions() {
             exit={{ opacity: 0, scale: 0.5 }}
             onClick={scrollToTop}
             aria-label="Scroll to top"
-            className="fixed bottom-8 right-8 z-40 bg-black text-gold border border-gold/30 p-3 rounded-full shadow-2xl hover:bg-gold hover:text-black transition-colors"
+            className="fixed z-40 bg-black text-gold border border-gold/30 p-3 rounded-full shadow-2xl hover:bg-gold hover:text-black transition-colors touch-manipulation bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] md:bottom-8 md:right-8"
           >
             <ChevronUp className="w-6 h-6" />
           </motion.button>
