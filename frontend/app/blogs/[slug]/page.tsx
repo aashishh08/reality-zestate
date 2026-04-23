@@ -257,12 +257,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <div className="mb-6 sm:mb-8 rounded-lg border border-[#E5DED1] bg-[#FAF9F6] p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 sm:items-start">
                 <div className="mx-auto sm:mx-0 shrink-0">
-                  <div className="relative h-24 w-24 sm:h-28 sm:w-28 rounded-full border border-[#E5DED1] overflow-hidden bg-[#E5DED1]">
+                  <div className="relative h-24 w-24 sm:h-28 sm:w-28">
                     <Image
                       src="/images/author-himanshu-bamola.png"
                       alt="Himanshu Bamola"
                       fill
-                      className="object-cover object-top"
+                      className="object-contain object-center"
                       sizes="(max-width: 640px) 96px, 112px"
                     />
                   </div>

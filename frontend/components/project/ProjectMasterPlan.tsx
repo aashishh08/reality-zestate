@@ -156,13 +156,6 @@ export function ProjectMasterPlan({
                     </motion.div>
                   )}
                 </div>
-
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <div className="w-2 h-2 rounded-full bg-[#C9A961]" />
-                    <span className="font-medium">Designed for modern living with sustainable practices</span>
-                  </div>
-                </div>
               </motion.div>
             ) : null}
           </div>

@@ -172,20 +172,20 @@ export function ProjectWhyInvest({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group flex flex-col h-full min-h-[140px] ${
+                    className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group flex flex-col h-full ${
                       isMarketTiming
                         ? "bg-gradient-to-br from-[#C9A961]/10 to-[#C9A961]/5"
                         : "bg-white"
                     }`}
                   >
-                    <div className="flex-1 min-h-0">
+                    <div className="flex-1">
                       <div className="w-10 h-10 bg-[#C9A961]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#C9A961]/20 transition-colors">
                         <IconComponent className="w-5 h-5 text-[#C9A961]" />
                       </div>
                       <h3 className="text-sm font-semibold text-[#2C2416] mb-1.5 leading-tight">
                         {item.title}
                       </h3>
-                      <p className="text-xs text-gray-600 leading-snug line-clamp-2">
+                      <p className="text-xs text-gray-600 leading-relaxed">
                         {item.subtitle}
                       </p>
                     </div>
