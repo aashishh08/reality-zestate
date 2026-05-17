@@ -87,6 +87,16 @@ export function LeadPopup() {
           onClick={closeModal}
         />
 
+        {/* Close — fixed to viewport top-right so it stays visible above the dimmed overlay (not inside the card) */}
+        <button
+          type="button"
+          onClick={closeModal}
+          className="pointer-events-auto fixed top-4 right-4 z-[110] flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/95 text-zinc-800 shadow-lg backdrop-blur-sm transition-colors hover:bg-white hover:text-black sm:top-6 sm:right-6"
+          aria-label="Close popup"
+        >
+          <X className="h-5 w-5 shrink-0" />
+        </button>
+
         {/* Modal — z-10 so card always stacks above backdrop */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -95,19 +105,9 @@ export function LeadPopup() {
           transition={UI_CONFIG.SPRING_CONFIG}
           className="relative z-10 w-full max-w-3xl max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white shadow-2xl rounded-lg pointer-events-auto m-3 sm:m-4"
         >
-          {/* Close — same position as before (whole dialog); contrast on mobile (over dark column) vs desktop (over white) */}
-          <button
-            type="button"
-            onClick={closeModal}
-            className="absolute top-4 right-4 z-20 text-zinc-300 hover:text-white md:text-zinc-400 md:hover:text-black transition-colors"
-            aria-label="Close popup"
-          >
-            <X className="w-5 h-5" />
-          </button>
-
           <div className="flex flex-col md:flex-row md:min-h-[300px]">
             {/* Left — Superluxere Concierge */}
-            <div className="w-full md:w-1/2 shrink-0 bg-[#1c1c1c] text-white flex flex-col justify-between p-6 md:p-8 pt-12 md:pt-8">
+            <div className="w-full md:w-1/2 shrink-0 bg-[#1c1c1c] text-white flex flex-col justify-between p-6 md:p-8">
               <div>
                 <p className="text-[10px] sm:text-xs font-medium tracking-[0.22em] text-[#b27b1f] uppercase mb-4">
                   Superluxere Concierge
@@ -158,10 +158,10 @@ export function LeadPopup() {
                 </motion.div>
               ) : (
                 <>
-                  <p className="text-[10px] sm:text-xs font-medium tracking-[0.22em] text-[#b27b1f] uppercase mb-2 pr-12">
+                  <p className="text-[10px] sm:text-xs font-medium tracking-[0.22em] text-[#b27b1f] uppercase mb-2">
                     Private Enquiry
                   </p>
-                  <h3 className="text-lg sm:text-xl font-bold text-black mb-4 pr-8 leading-tight">
+                  <h3 className="text-lg sm:text-xl font-bold text-black mb-4 leading-tight">
                     Tell us what you&apos;re looking for
                   </h3>
 

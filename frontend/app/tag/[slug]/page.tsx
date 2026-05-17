@@ -9,6 +9,7 @@
 
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { getSiteUrl } from '@/lib/site-url';
 import { PropertyListingTemplate } from '@/components/PropertyListingTemplate';
 import {
     getTagBySlug,
@@ -33,17 +34,31 @@ export async function generateMetadata({
         return { title: 'Tag Not Found' };
     }
 
+    const base = getSiteUrl();
+    const canonicalUrl = `${base}/tag/${tag.slug}`;
+    const title = `${tag.name} Properties`;
+    const description = tag.description
+        ? `${tag.description} Browse ${tag.name.toLowerCase()} properties with detailed pricing, amenities and location info.`
+        : `Explore all ${tag.name} properties on Superluxere.`;
+    const ogDescription = tag.description ?? `Browse ${tag.name} properties on Superluxere.`;
+
     return {
-        title: `${tag.name} Properties`,
-        description: tag.description
-            ? `${tag.description} Browse ${tag.name.toLowerCase()} properties with detailed pricing, amenities and location info.`
-            : `Explore all ${tag.name} properties on Superluxere.`,
+        title,
+        description,
         keywords: [tag.name, 'properties', 'real estate', 'buy', 'invest'],
+        alternates: { canonical: canonicalUrl },
         openGraph: {
-            title: `${tag.name} Properties`,
-            description: tag.description ?? `Browse ${tag.name} properties on Superluxere.`,
+            title,
+            description: ogDescription,
             type: 'website',
-            url: `/tag/${tag.slug}`,
+            url: canonicalUrl,
+            siteName: 'Superluxere',
+            locale: 'en_IN',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description: ogDescription,
         },
     };
 }

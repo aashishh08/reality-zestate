@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { getSiteUrl } from "@/lib/site-url";
 
 // Always fetch fresh data — admin updates must be visible immediately
 export const dynamic = 'force-dynamic';
@@ -18,6 +19,8 @@ import { ProjectAmenities } from "@/components/project/ProjectAmenities";
 import { ProjectFloorPlans } from "@/components/project/ProjectFloorPlans";
 import { ProjectLocation } from "@/components/project/ProjectLocation";
 import { ProjectFAQ } from "@/components/project/ProjectFAQ";
+import { ProjectFaqJsonLd } from "@/components/project/ProjectFaqJsonLd";
+import { ProjectDetailJsonLd } from "@/components/project/ProjectDetailJsonLd";
 import { ProjectMasterPlan } from "@/components/project/ProjectMasterPlan";
 import { ProjectPaymentPlan } from "@/components/project/ProjectPaymentPlan";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -93,6 +96,13 @@ export async function generateMetadata({
     "",
   ).trim();
 
+  const base = getSiteUrl();
+  const canonicalUrl = `${base}/projects/${slug}`;
+  const ogDescription = project.details?.subtitle || description;
+  const ogImageEntry = ogImage
+    ? [{ url: ogImage, width: 1200, height: 630, alt: project.title }]
+    : undefined;
+
   return {
     title: titleSegment,
     description,
@@ -102,12 +112,25 @@ export async function generateMetadata({
       project.type || "residential",
       "luxury real estate",
       "premium properties",
-      "Superluxere"
+      "Superluxere",
     ],
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: project.title,
-      description: project.details?.subtitle || description,
-      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+      description: ogDescription,
+      type: "website",
+      url: canonicalUrl,
+      siteName: "Superluxere",
+      locale: "en_IN",
+      ...(ogImageEntry ? { images: ogImageEntry } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: ogDescription,
+      ...(ogImage ? { images: [ogImage] } : {}),
     },
   };
 }
@@ -146,6 +169,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   return (
     <main className="min-h-screen relative selection:bg-gold selection:text-white pt-[80px]">
+      {/* JSON-LD — BreadcrumbList + Product (real-estate listing) */}
+      <ProjectDetailJsonLd project={project} slug={slug} />
+
       {/* Premium Background Texture */}
       <div className="fixed inset-0 z-[-1] bg-[#F0EFEB]">
         <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
@@ -340,10 +366,16 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      {/* FAQs */}
+      {/* FAQs — SSR markup + FAQPage JSON-LD for SEO */}
       <section id="faqs">
         {details?.faqs && details.faqs.length > 0 && (
-          <ProjectFAQ faqs={details.faqs} heading={details.sectionHeadings?.faqs} />
+          <>
+            <ProjectFaqJsonLd faqs={details.faqs} />
+            <ProjectFAQ
+              faqs={details.faqs}
+              heading={details.sectionHeadings?.faqs}
+            />
+          </>
         )}
       </section>
 

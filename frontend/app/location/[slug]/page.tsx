@@ -7,6 +7,7 @@
 
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { getSiteUrl } from '@/lib/site-url';
 import { PropertyListingTemplate } from '@/components/PropertyListingTemplate';
 import { Footer } from '@/components/layout/Footer';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -43,15 +44,29 @@ export async function generateMetadata({
     };
   }
 
+  const base = getSiteUrl();
+  const canonicalUrl = `${base}/location/${location.slug}`;
+  const title = `${location.name} — Luxury Projects`;
+  const description = `Discover curated projects in ${location.name}. Explore developers and corridor fundamentals before you book a site visit.`;
+  const ogDescription = `Browse premium inventory in ${location.name}.`;
+
   return {
-    title: `${location.name} — Luxury Projects`,
-    description: `Discover curated projects in ${location.name}. Explore developers and corridor fundamentals before you book a site visit.`,
+    title,
+    description,
     keywords: [location.name, 'luxury real estate', 'micro-market', 'India', 'Superluxere'],
+    alternates: { canonical: canonicalUrl },
     openGraph: {
-      title: `${location.name} — Luxury Projects`,
-      description: `Browse premium inventory in ${location.name}.`,
+      title,
+      description: ogDescription,
       type: 'website',
-      url: `/location/${location.slug}`,
+      url: canonicalUrl,
+      siteName: 'Superluxere',
+      locale: 'en_IN',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: ogDescription,
     },
   };
 }

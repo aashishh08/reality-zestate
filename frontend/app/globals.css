@@ -264,3 +264,29 @@ video {
   border-radius: 0.5rem;
   margin: 1rem 0;
 }
+
+/* Property FAQ — server-rendered HTML answers; keep rich-text parity with old styled-jsx */
+.faq-prose p {
+  margin-bottom: 1rem;
+}
+.faq-prose ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+.faq-prose ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+.faq-prose a {
+  color: #c9a961;
+  text-decoration: underline;
+}
+.faq-prose a:hover {
+  color: #a88b4a;
+}
+
+details[open] .faq-chevron {
+  transform: rotate(180deg);
+}

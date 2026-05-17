@@ -6,6 +6,7 @@
 
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { getSiteUrl } from '@/lib/site-url';
 import { PropertyListingTemplate } from '@/components/PropertyListingTemplate';
 import { DeveloperHero } from '@/components/developer/DeveloperHero';
 import {
@@ -34,16 +35,29 @@ export async function generateMetadata({
     };
   }
 
+  const base = getSiteUrl();
+  const canonicalUrl = `${base}/developer/${developer.slug}`;
+  const title = `${developer.name} Projects & Properties`;
+  const description = `Explore all projects and properties by ${developer.name}. Discover residential and commercial developments with premium amenities.`;
+
   return {
-    title: `${developer.name} Projects & Properties`,
-    description: `Explore all projects and properties by ${developer.name}. Discover residential and commercial developments with premium amenities.`,
+    title,
+    description,
     keywords: [developer.name, 'properties', 'projects', 'real estate', 'developer'],
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title: `${developer.name} Properties`,
       description: `Browse all properties developed by ${developer.name}`,
       type: 'website',
-      url: `/developer/${developer.slug}`,
+      url: canonicalUrl,
+      siteName: 'Superluxere',
+      locale: 'en_IN',
       images: developer.logo ? [{ url: developer.logo }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${developer.name} Properties`,
+      description: `Browse all properties developed by ${developer.name}`,
     },
   };
 }

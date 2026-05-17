@@ -140,7 +140,7 @@ export function Footer({ locations = [] }: FooterProps) {
           <div className="flex items-center gap-8">
             <Link href="#" className="hover:text-[#C9A961] transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-[#C9A961] transition-colors">Terms of Service</Link>
-            <Link href="#" className="hover:text-[#C9A961] transition-colors">Sitemap</Link>
+            <Link href="/sitemap.xml" className="hover:text-[#C9A961] transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>

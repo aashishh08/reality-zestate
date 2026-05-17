@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { getSiteUrl } from "@/lib/site-url";
 import {
   getCategoryBySlug,
   getAllCategorySlugs,
@@ -38,13 +39,26 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  const base = getSiteUrl();
+  const canonicalUrl = `${base}/category/${slug}`;
+
   const staticCat = getCategoryBySlug(slug);
   if (staticCat) {
     return {
       title: staticCat.metaTitle,
       description: staticCat.metaDescription,
       keywords: [staticCat.title, "luxury real estate", "premium properties", "Superluxere"],
+      alternates: { canonical: canonicalUrl },
       openGraph: {
+        title: staticCat.metaTitle,
+        description: staticCat.metaDescription,
+        type: "website",
+        url: canonicalUrl,
+        siteName: "Superluxere",
+        locale: "en_IN",
+      },
+      twitter: {
+        card: "summary_large_image",
         title: staticCat.metaTitle,
         description: staticCat.metaDescription,
       },
@@ -60,6 +74,20 @@ export async function generateMetadata({
         title: fb.metaTitle,
         description: fb.metaDescription,
         keywords: [api.name, "luxury real estate", "Superluxere"],
+        alternates: { canonical: canonicalUrl },
+        openGraph: {
+          title: fb.metaTitle,
+          description: fb.metaDescription,
+          type: "website",
+          url: canonicalUrl,
+          siteName: "Superluxere",
+          locale: "en_IN",
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: fb.metaTitle,
+          description: fb.metaDescription,
+        },
       };
     }
   } catch {

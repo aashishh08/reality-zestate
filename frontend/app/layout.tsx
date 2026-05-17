@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Great_Vibes, Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
+import { getSiteUrl } from "@/lib/site-url";
 
 const greatVibes = Great_Vibes({
   weight: "400",
@@ -20,6 +21,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: "Superluxere - Luxury Real Estate & Premium Properties",
     template: "%s | Superluxere"
@@ -49,6 +51,7 @@ export const viewport: Viewport = {
 
 import { LeadModalProvider } from "@/lib/contexts/LeadModalContext";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { OrganizationJsonLd } from "@/components/OrganizationJsonLd";
 
 export default function RootLayout({
   children,
@@ -60,6 +63,7 @@ export default function RootLayout({
       <body
         className={`${greatVibes.variable} ${playfair.variable} ${montserrat.variable} font-sans antialiased overflow-x-clip min-h-[100dvh]`}
       >
+        <OrganizationJsonLd />
         <SiteHeader />
         <LeadModalProvider>{children}</LeadModalProvider>
       </body>

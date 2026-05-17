@@ -48,6 +48,13 @@ export interface PropertyListingTemplateProps {
     viewAll?: { href: string; label: string };
     sectionClassName?: string;
   };
+  /**
+   * When true, show city + category dropdowns (e.g. /projects index).
+   * Uses enum cities + category ids with `fetchProperties` / server actions.
+   */
+  showCityCategoryFilters?: boolean;
+  cityOptions?: Array<{ slug: string; label: string }>;
+  categoryOptions?: Array<{ id: string; slug: string; name: string }>;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -61,6 +68,9 @@ export function PropertyListingTemplate({
   loadingSkeletonCount = 12,
   noResultsMessage = 'No properties found',
   projectsSection,
+  showCityCategoryFilters = false,
+  cityOptions = [],
+  categoryOptions = [],
 }: PropertyListingTemplateProps) {
 
   const [data, setData]       = useState<PropertyListResponse>(initialData);
@@ -156,10 +166,43 @@ export function PropertyListingTemplate({
   };
 
   const handleClearFilters = () => {
-    setFilters({ ...contextFilters, limit: itemsPerPage, offset: 0 });
+    setFilters({
+      ...contextFilters,
+      limit: itemsPerPage,
+      offset: 0,
+      tags: undefined,
+      citySlug: contextFilters.citySlug,
+      localitySlug: contextFilters.localitySlug,
+      categoryIds: contextFilters.categoryIds,
+      developerSlug: contextFilters.developerSlug,
+      propertyType: contextFilters.propertyType,
+    });
   };
 
-  const hasActiveFilters = !!(filters.tags?.length);
+  const hasActiveFilters = !!(
+    filters.tags?.length ||
+    (showCityCategoryFilters && filters.citySlug) ||
+    (showCityCategoryFilters && (filters.categoryIds?.length ?? 0) > 0)
+  );
+
+  const handleCitySelect = (slug: string) => {
+    if (!showCityCategoryFilters) return;
+    setFilters((prev) => ({
+      ...prev,
+      citySlug: slug || undefined,
+      localitySlug: undefined,
+      offset: 0,
+    }));
+  };
+
+  const handleCategorySelect = (categoryId: string) => {
+    if (!showCityCategoryFilters) return;
+    setFilters((prev) => ({
+      ...prev,
+      categoryIds: categoryId ? [categoryId] : undefined,
+      offset: 0,
+    }));
+  };
 
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
@@ -170,56 +213,102 @@ export function PropertyListingTemplate({
 
       {/* ── Sticky Filter Bar ──────────────────────────────────────────────── */}
       <div className="sticky top-16 z-40 bg-white border-b border-border shadow-[0_2px_20px_rgba(44,44,44,0.05)] md:top-[4.25rem]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between gap-3 sm:gap-4 py-0 min-h-[52px] sm:min-h-[56px]">
-
-          {/* Left — status pills */}
-          <div className="flex items-center gap-[3px] overflow-x-auto no-scrollbar py-2 flex-1 min-w-0">
-
-            {/* All */}
-            <button
-              onClick={() => handleTagPill('all')}
-              className={`flex-shrink-0 text-[11px] font-medium tracking-[0.1em] uppercase px-[18px] py-2 border transition-all duration-200 whitespace-nowrap ${
-                activeTagSlug === 'all'
-                  ? 'bg-charcoal text-gold border-charcoal'
-                  : 'bg-transparent text-muted-foreground border-border hover:border-gold hover:text-charcoal'
-              }`}
-            >
-              All ({allTabTotal})
-            </button>
-
-            {/* Status tag pills — slugs match admin / `tags` table (see status-tags.ts) */}
-            {statusPills.map((tag) => (
+        <div className="mx-auto flex max-w-[1400px] flex-col px-4 sm:px-6 md:px-12">
+          <div className="flex min-h-[52px] items-center justify-between gap-3 py-0 sm:min-h-[56px] sm:gap-4">
+            {/* Left — status pills */}
+            <div className="flex min-w-0 flex-1 items-center gap-[3px] overflow-x-auto py-2 no-scrollbar">
+              {/* All */}
               <button
-                key={tag.slug}
-                type="button"
-                onClick={() => handleTagPill(tag.slug)}
+                onClick={() => handleTagPill('all')}
                 className={`flex-shrink-0 text-[11px] font-medium tracking-[0.1em] uppercase px-[18px] py-2 border transition-all duration-200 whitespace-nowrap ${
-                  activeTagSlug === tag.slug
+                  activeTagSlug === 'all'
                     ? 'bg-charcoal text-gold border-charcoal'
                     : 'bg-transparent text-muted-foreground border-border hover:border-gold hover:text-charcoal'
                 }`}
               >
-                {tag.name}
+                All ({allTabTotal})
               </button>
-            ))}
+
+              {/* Status tag pills — slugs match admin / `tags` table (see status-tags.ts) */}
+              {statusPills.map((tag) => (
+                <button
+                  key={tag.slug}
+                  type="button"
+                  onClick={() => handleTagPill(tag.slug)}
+                  className={`flex-shrink-0 text-[11px] font-medium tracking-[0.1em] uppercase px-[18px] py-2 border transition-all duration-200 whitespace-nowrap ${
+                    activeTagSlug === tag.slug
+                      ? 'bg-charcoal text-gold border-charcoal'
+                      : 'bg-transparent text-muted-foreground border-border hover:border-gold hover:text-charcoal'
+                  }`}
+                >
+                  {tag.name}
+                </button>
+              ))}
+            </div>
+
+            {/* Right — count + clear */}
+            <div className="flex flex-shrink-0 items-center gap-2 py-2">
+              <span className="hidden text-[11px] tracking-wide whitespace-nowrap text-muted-foreground/60 md:block">
+                Showing {data.data.length} of {pagination.totalItems}
+              </span>
+
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="ml-1 text-[11px] tracking-wide whitespace-nowrap text-gold transition-colors hover:text-gold-dark"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
           </div>
 
-          {/* Right — count + clear */}
-          <div className="flex items-center gap-2 flex-shrink-0 py-2">
-            <span className="text-[11px] text-muted-foreground/60 tracking-wide whitespace-nowrap hidden md:block">
-              Showing {data.data.length} of {pagination.totalItems}
-            </span>
-
-            {/* Clear active filters */}
-            {hasActiveFilters && (
-              <button
-                onClick={handleClearFilters}
-                className="text-[11px] text-gold hover:text-gold-dark transition-colors tracking-wide whitespace-nowrap ml-1"
-              >
-                Clear
-              </button>
+          {showCityCategoryFilters &&
+            (cityOptions.length > 0 || categoryOptions.length > 0) && (
+              <div className="flex flex-wrap items-center gap-3 border-t border-border py-3">
+                {cityOptions.length > 0 && (
+                  <label className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                    <span className="hidden font-medium uppercase tracking-wide sm:inline">
+                      City
+                    </span>
+                    <select
+                      value={filters.citySlug ?? ''}
+                      onChange={(e) => handleCitySelect(e.target.value)}
+                      className="max-w-[200px] rounded-md border border-border bg-white px-2.5 py-1.5 text-xs text-charcoal focus:outline-none focus:ring-1 focus:ring-gold"
+                      aria-label="Filter by city"
+                    >
+                      <option value="">All cities</option>
+                      {cityOptions.map((c) => (
+                        <option key={c.slug} value={c.slug}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
+                {categoryOptions.length > 0 && (
+                  <label className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                    <span className="hidden font-medium uppercase tracking-wide sm:inline">
+                      Category
+                    </span>
+                    <select
+                      value={filters.categoryIds?.[0] ?? ''}
+                      onChange={(e) => handleCategorySelect(e.target.value)}
+                      className="max-w-[220px] rounded-md border border-border bg-white px-2.5 py-1.5 text-xs text-charcoal focus:outline-none focus:ring-1 focus:ring-gold"
+                      aria-label="Filter by category"
+                    >
+                      <option value="">All categories</option>
+                      {categoryOptions.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
+              </div>
             )}
-          </div>
         </div>
       </div>
 
