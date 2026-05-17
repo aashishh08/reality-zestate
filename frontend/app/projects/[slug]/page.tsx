@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import Link from "next/link";
 import { getSiteUrl } from "@/lib/site-url";
+import { getDefaultOgImageUrl } from "@/lib/seo";
 
 // Always fetch fresh data — admin updates must be visible immediately
 export const dynamic = 'force-dynamic';
@@ -99,9 +101,9 @@ export async function generateMetadata({
   const base = getSiteUrl();
   const canonicalUrl = `${base}/projects/${slug}`;
   const ogDescription = project.details?.subtitle || description;
-  const ogImageEntry = ogImage
-    ? [{ url: ogImage, width: 1200, height: 630, alt: project.title }]
-    : undefined;
+  const fallbackImage = getDefaultOgImageUrl();
+  const effectiveImage = ogImage || fallbackImage;
+  const ogImageEntry = [{ url: effectiveImage, width: 1200, height: 630, alt: project.title }];
 
   return {
     title: titleSegment,
@@ -124,13 +126,13 @@ export async function generateMetadata({
       url: canonicalUrl,
       siteName: "Superluxere",
       locale: "en_IN",
-      ...(ogImageEntry ? { images: ogImageEntry } : {}),
+      images: ogImageEntry,
     },
     twitter: {
       card: "summary_large_image",
       title: project.title,
       description: ogDescription,
-      ...(ogImage ? { images: [ogImage] } : {}),
+      images: [effectiveImage],
     },
   };
 }
@@ -166,6 +168,24 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const { details } = project;
 
   const similarProjects = await getSimilarProjects(slug, project.id);
+  const relatedLinks = [
+    { href: "/projects", label: "All Projects" },
+    ...(project.Location?.slug
+      ? [{ href: `/location/${project.Location.slug}`, label: `Projects in ${project.Location.name}` }]
+      : []),
+    ...(project.Developer?.slug
+      ? [{ href: `/developer/${project.Developer.slug}`, label: `${project.Developer.name} Projects` }]
+      : []),
+    ...(project.Categories && project.Categories.length > 0
+      ? [
+          {
+            href: `/category/${project.Categories[0].slug}`,
+            label: `${project.Categories[0].name} Collection`,
+          },
+        ]
+      : []),
+    { href: "/blogs", label: "Market Insights & Guides" },
+  ];
 
   return (
     <main className="min-h-screen relative selection:bg-gold selection:text-white pt-[80px]">
@@ -385,6 +405,24 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <ProjectSimilar projects={similarProjects} />
         </section>
       )}
+
+      {/* Contextual internal links strengthen topical/entity connections for SEO */}
+      <section className="py-10 bg-[#F5F0E8] border-t border-[#C9A961]/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading label="Discover More">Explore This Market Further</SectionHeading>
+          <div className="mt-4 flex flex-wrap gap-3">
+            {relatedLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="inline-flex items-center rounded-full border border-[#C9A961]/30 bg-white px-4 py-2 text-sm font-medium text-[#2C2416] hover:border-[#C9A961] hover:text-gold transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Contact Form #2 - Final */}
       <ProjectBookingCTA

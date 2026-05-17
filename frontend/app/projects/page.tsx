@@ -6,6 +6,7 @@ import { PropertyListingTemplate } from '@/components/PropertyListingTemplate';
 import { fetchProperties, fetchPublicEnums } from '@/lib/api/properties-listing';
 import { getCategories } from '@/lib';
 import { getSiteUrl } from '@/lib/site-url';
+import { getDefaultOgImageUrl } from '@/lib/seo';
 import type { PropertyFilters, PropertyListResponse } from '@/types/property-listing';
 import { ProjectsIndexJsonLd } from '@/components/projects/ProjectsIndexJsonLd';
 
@@ -18,6 +19,8 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
   const base = getSiteUrl();
+  const canonicalUrl = `${base}/projects`;
+  const fallbackImage = getDefaultOgImageUrl();
   const title = 'All Projects';
   const description =
     'Browse luxury real estate projects across India. Filter by city, category, and launch status.';
@@ -34,17 +37,19 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       type: 'website',
-      url: '/projects',
+      url: canonicalUrl,
       siteName: 'Superluxere',
       locale: 'en_IN',
+      images: [{ url: fallbackImage, width: 1200, height: 630, alt: 'Superluxere Projects' }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [fallbackImage],
     },
     alternates: {
-      canonical: `${base}/projects`,
+      canonical: canonicalUrl,
     },
   };
 }

@@ -9,8 +9,8 @@ Superluxere helps buyers, investors, and NRIs discover and enquire about luxury 
 - [Blog](/blogs): Expert analysis, market reports, developer project reviews, investment guides, and price trend commentary for the Indian luxury real estate market.
 - [Projects directory](/projects): Full index of published listings with filters by **city**, **category**, and launch status. Each project has a detail page at `/projects/{slug}` with pricing context, floor plans, amenities, maps, FAQs, and developer information.
 - [Locations](/location/gurgaon) (example): City and locality corridor pages use `/location/{slug}` (e.g. Gurgaon, micro-markets) for area-specific market story and listings—not a single `/location` index.
-- [Developers](/developer): Profiles of top real estate developers in India including Godrej Properties, DLF, Adani Realty, Sobha, Brigade Group, and others (each at `/developer/{slug}`).
-- [Categories](/category): Property type collections — apartments, villas, penthouses, boutique residences, commercial spaces (each at `/category/{slug}`).
+- [Developers](/developer/godrej-properties) (example): Profiles of top real estate developers in India including Godrej Properties, DLF, Adani Realty, Sobha, Brigade Group, and others (each at `/developer/{slug}`).
+- [Categories](/category/apartments) (example): Property type collections — apartments, villas, penthouses, boutique residences, commercial spaces (each at `/category/{slug}`).
 - [Sitemap](/sitemap.xml): Machine-readable URL index for crawlers.
 
 ## Blog topics covered

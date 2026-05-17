@@ -7,6 +7,8 @@ import { getBlogBySlug, getBlogs, BlogPost } from '@/lib/api/blogs';
 import { CONTACT_INFO } from '@/lib/constants';
 import { LeadPopup } from '@/components/ui/LeadPopup';
 import { sanitizeHtml } from '@/lib/utils/sanitize-html';
+import { getSiteUrl } from '@/lib/site-url';
+import { getDefaultOgImageUrl } from '@/lib/seo';
 import { Calendar, Clock, User, ArrowLeft, Facebook, Twitter, Linkedin, ArrowRight } from 'lucide-react';
 
 interface BlogPostPageProps {
@@ -46,6 +48,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const { slug } = await params;
   try {
     const post = await getBlogBySlug(slug);
+    const base = getSiteUrl();
+    const canonicalUrl = `${base}/blogs/${slug}`;
+    const fallbackImage = getDefaultOgImageUrl();
     const rawSeoTitle = post.seo?.metaTitle?.trim() || post.title;
     // Root layout uses `title.template: "%s | Superluxere"` — strip a trailing brand so we never double it.
     const metaTitle = rawSeoTitle.replace(/\s*\|\s*Superluxere\s*$/i, '').trim() || post.title;
@@ -64,13 +69,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         title: metaTitle,
         description: metaDescription,
         type: 'article',
+        url: canonicalUrl,
         publishedTime: post.createdAt,
         modifiedTime: post.updatedAt,
         locale: 'en_IN',
         siteName: 'Superluxere',
         images: post.featuredImage
           ? [{ url: post.featuredImage, width: 1200, height: 630, alt: post.title }]
-          : [{ url: 'https://superluxere.com/images/luxury-living.jpg', width: 1200, height: 630, alt: 'Superluxere' }],
+          : [{ url: fallbackImage, width: 1200, height: 630, alt: 'Superluxere' }],
       },
       twitter: {
         card: 'summary_large_image',
@@ -78,10 +84,10 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         description: metaDescription,
         images: post.featuredImage
           ? [post.featuredImage]
-          : ['https://superluxere.com/images/luxury-living.jpg'],
+          : [fallbackImage],
       },
       alternates: {
-        canonical: `https://superluxere.com/blogs/${slug}`,
+        canonical: canonicalUrl,
       },
     };
   } catch {
@@ -92,6 +98,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
+  const base = getSiteUrl();
+  const fallbackImage = getDefaultOgImageUrl();
 
   let post: BlogPost | undefined;
   try {
@@ -134,7 +142,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     });
   }
 
-  const shareUrl = `https://superluxere.com/blogs/${slug}`;
+  const shareUrl = `${base}/blogs/${slug}`;
   const authorName = post.author?.name || 'Team Superluxere';
   const readTime = post.readTime ?? 1;
   const authorWhatsAppHref = `https://wa.me/${CONTACT_INFO.WHATSAPP_NUMBER.replace(/\D/g, '')}?text=${encodeURIComponent("Hi, I'd like to connect regarding SuperLuxeRE.")}`;
@@ -489,15 +497,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             url: shareUrl,
             headline: post.title,
             description: post.excerpt || cleanContent.replace(/<[^>]+>/g, '').substring(0, 160),
-            image: post.featuredImage || 'https://superluxere.com/images/luxury-living.jpg',
+            image: post.featuredImage || fallbackImage,
             datePublished: post.createdAt,
             dateModified: post.updatedAt || post.createdAt,
             author: { '@type': 'Person', name: authorName },
             publisher: {
               '@type': 'Organization',
               name: 'Superluxere',
-              url: 'https://superluxere.com',
-              logo: { '@type': 'ImageObject', url: 'https://superluxere.com/images/luxury-living.jpg' },
+              url: base,
+              logo: { '@type': 'ImageObject', url: fallbackImage },
             },
             mainEntityOfPage: { '@type': 'WebPage', '@id': shareUrl },
             keywords: (post.tags || []).join(', '),
@@ -516,8 +524,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://superluxere.com' },
-              { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://superluxere.com/blogs' },
+              { '@type': 'ListItem', position: 1, name: 'Home', item: base },
+              { '@type': 'ListItem', position: 2, name: 'Blog', item: `${base}/blogs` },
               { '@type': 'ListItem', position: 3, name: post.title, item: shareUrl },
             ],
           }),

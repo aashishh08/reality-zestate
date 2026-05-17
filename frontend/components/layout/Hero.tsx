@@ -42,19 +42,30 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="mb-6 md:mb-8 flex flex-wrap items-baseline justify-center gap-x-0 overflow-visible px-1 sm:px-2">
+          <h1 className="relative mb-6 md:mb-8 flex flex-wrap items-baseline justify-center gap-x-0 overflow-visible px-1 sm:px-2">
+            {/*
+              Visible styling splits “Superluxe” + “RE” for display; crawlers and assistive tech
+              need the contiguous brand “Superluxere” and a clear topical phrase.
+            */}
+            <span className="sr-only">
+              Superluxere — luxury real estate in India
+            </span>
             <span
-              className="text-superluxere-rose-metallic text-superluxere-rose-metallic--script font-[family-name:var(--font-great-vibes)] text-[3.5rem] leading-[1.12] sm:text-7xl sm:leading-[1.1] md:text-8xl md:leading-[1.08] lg:text-9xl lg:leading-[1.05] xl:text-9xl xl:leading-[1.05] min-[1920px]:text-[9.5rem] min-[1920px]:leading-[1.04]"
+              aria-hidden="true"
+              className="flex flex-wrap items-baseline justify-center gap-x-0"
             >
-              Superluxe
+              <span
+                className="text-superluxere-rose-metallic text-superluxere-rose-metallic--script font-[family-name:var(--font-great-vibes)] text-[3.5rem] leading-[1.12] sm:text-7xl sm:leading-[1.1] md:text-8xl md:leading-[1.08] lg:text-9xl lg:leading-[1.05] xl:text-9xl xl:leading-[1.05] min-[1920px]:text-[9.5rem] min-[1920px]:leading-[1.04]"
+              >
+                Superluxe
+              </span>
+              <span className="text-superluxere-rose-metallic -ms-1.5 sm:-ms-2 md:-ms-2.5 font-sans font-bold tracking-[-0.04em] leading-none text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6.5rem] min-[1920px]:text-[7.25rem]">
+                RE
+              </span>
             </span>
-            <span className="text-superluxere-rose-metallic -ms-1.5 sm:-ms-2 md:-ms-2.5 font-sans font-bold tracking-[-0.04em] leading-none text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6.5rem] min-[1920px]:text-[7.25rem]">
-              RE
-            </span>
-            <span className="sr-only"> — luxury real estate</span>
           </h1>
           <p className="max-w-2xl mx-auto text-white/95 text-lg font-light leading-relaxed drop-shadow-sm">
-            Discover a curated collection of the most exquisite properties.
+            At Superluxere, discover a curated collection of the most exquisite properties.
             Where elegance meets exclusivity.
           </p>
         </motion.div>

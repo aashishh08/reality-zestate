@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { Hero } from "@/components/layout/Hero";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingActions } from "@/components/layout/FloatingActions";
@@ -13,9 +14,43 @@ import { LeadPopup } from "@/components/ui/LeadPopup";
 import { getLocations, getDevelopers, getCategories } from "@/lib";
 import { fetchHomeSectionProperties } from "@/lib/homepage-properties";
 import { getFeaturedCorridorCards } from "@/lib/featured-corridors";
+import { getSiteUrl } from "@/lib/site-url";
+import { getDefaultOgImageUrl } from "@/lib/seo";
 
 // ISR: Revalidate every hour
 export const revalidate = 3600;
+
+export function generateMetadata(): Metadata {
+  const base = getSiteUrl();
+  const canonicalUrl = base;
+  const ogImage = getDefaultOgImageUrl();
+  const title = "Luxury Real Estate & Premium Properties";
+  const description =
+    "Discover curated luxury real estate properties in India. Trending projects, upcoming launches, and boutique collections.";
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: canonicalUrl,
+      siteName: "Superluxere",
+      locale: "en_IN",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: "Superluxere" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
+  };
+}
 
 async function getHomePageData() {
   try {

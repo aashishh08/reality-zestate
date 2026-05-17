@@ -5,6 +5,8 @@ import BlogNavigation from '@/components/blog/BlogNavigation';
 import BlogCard from '@/components/blog/BlogCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { NewTabLink } from '@/components/ui/NewTabLink';
+import { getSiteUrl } from '@/lib/site-url';
+import { getDefaultOgImageUrl } from '@/lib/seo';
 
 type SearchParamsShape = {
   category?: string;
@@ -17,12 +19,21 @@ interface BlogPageProps {
   searchParams: Promise<SearchParamsShape> | SearchParamsShape;
 }
 
-const OG_FALLBACK_IMAGE = 'https://superluxere.com/images/luxury-living.jpg';
-
 // Generate metadata for SEO
 export async function generateMetadata({ searchParams }: BlogPageProps): Promise<Metadata> {
   const resolvedParams = await Promise.resolve(searchParams);
-  const search = resolvedParams?.search;
+  const search = resolvedParams?.search?.trim();
+  const category = resolvedParams?.category?.trim();
+  const tag = resolvedParams?.tag?.trim();
+  const pageParam = Number(resolvedParams?.page || '1');
+  const hasQueryVariant =
+    Boolean(search) ||
+    Boolean(category) ||
+    Boolean(tag) ||
+    (Number.isFinite(pageParam) && pageParam > 1);
+  const base = getSiteUrl();
+  const canonicalUrl = `${base}/blogs`;
+  const ogFallbackImage = getDefaultOgImageUrl();
 
   let title = 'Blog - Luxury Real Estate Insights & Guides';
   let description = 'Explore expert insights, market trends, and guides on luxury real estate in India. Stay updated with the latest in premium properties and investment opportunities.';
@@ -40,20 +51,21 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
       title,
       description,
       type: 'website',
-      url: 'https://superluxere.com/blogs',
+      url: canonicalUrl,
       locale: 'en_IN',
       siteName: 'Superluxere',
-      images: [{ url: OG_FALLBACK_IMAGE, width: 1200, height: 630, alt: 'Superluxere Luxury Real Estate Blog' }],
+      images: [{ url: ogFallbackImage, width: 1200, height: 630, alt: 'Superluxere Luxury Real Estate Blog' }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [OG_FALLBACK_IMAGE],
+      images: [ogFallbackImage],
     },
     alternates: {
-      canonical: 'https://superluxere.com/blogs',
+      canonical: canonicalUrl,
     },
+    ...(hasQueryVariant ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
@@ -69,6 +81,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   const page = parseInt(searchParamsObj.page || '1');
   const pageSize = 9;
+  const base = getSiteUrl();
 
   const blogResponse = await getBlogs(
     {
@@ -249,12 +262,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               '@type': 'ItemList',
               name: 'Luxury Real Estate Insights — Superluxere Blog',
               description: 'Expert articles on luxury real estate trends, investment guides, and market analysis in India.',
-              url: 'https://superluxere.com/blogs',
+              url: `${base}/blogs`,
               numberOfItems: posts.length,
               itemListElement: posts.map((post, index) => ({
                 '@type': 'ListItem',
                 position: (page - 1) * pageSize + index + 1,
-                url: `https://superluxere.com/blogs/${post.slug}`,
+                url: `${base}/blogs/${post.slug}`,
                 name: post.title,
               })),
             }),
