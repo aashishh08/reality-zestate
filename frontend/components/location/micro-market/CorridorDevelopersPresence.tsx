@@ -29,9 +29,9 @@ export function CorridorDevelopersPresence({ locationTitle, sectionSubtitle, ite
           </div>
         </header>
 
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((d) => (
-            <Link key={d.href + d.name} href={d.href} className={`block p-7 ${corridorCard} hover:shadow-md`}>
+            <Link key={d.href + d.name} href={d.href} className={`block p-4 sm:p-7 ${corridorCard} hover:shadow-md`}>
               <div className="mb-4 flex h-11 w-11 items-center justify-center bg-charcoal font-serif text-sm font-semibold text-gold">
                 {d.initials}
               </div>

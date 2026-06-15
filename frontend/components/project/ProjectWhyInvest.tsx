@@ -156,10 +156,10 @@ export function ProjectWhyInvest({
         </div>
 
         <div
-          className={`grid gap-8 ${hasBoxes ? "md:grid-cols-2" : "md:grid-cols-1"}`}
+          className={`grid gap-6 md:gap-8 ${hasBoxes ? "md:grid-cols-2" : "md:grid-cols-1"}`}
         >
           {hasBoxes ? (
-            <div className="grid grid-cols-2 gap-3 items-stretch">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-stretch min-w-0">
               {visibleReasonCards.map((item, index) => {
                 const IconComponent =
                   (item.icon ? iconMap[item.icon as keyof typeof iconMap] : null) ?? TrendingUp;
@@ -172,20 +172,20 @@ export function ProjectWhyInvest({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group flex flex-col h-full ${
+                    className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group flex flex-col h-full min-w-0 overflow-hidden ${
                       isMarketTiming
                         ? "bg-gradient-to-br from-[#C9A961]/10 to-[#C9A961]/5"
                         : "bg-white"
                     }`}
                   >
-                    <div className="flex-1">
-                      <div className="w-10 h-10 bg-[#C9A961]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#C9A961]/20 transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <div className="w-10 h-10 bg-[#C9A961]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#C9A961]/20 transition-colors shrink-0">
                         <IconComponent className="w-5 h-5 text-[#C9A961]" />
                       </div>
-                      <h3 className="text-sm font-semibold text-[#2C2416] mb-1.5 leading-tight">
+                      <h3 className="text-sm font-semibold text-[#2C2416] mb-1.5 leading-tight break-words">
                         {item.title}
                       </h3>
-                      <p className="text-xs text-gray-600 leading-relaxed">
+                      <p className="text-xs text-gray-600 leading-relaxed break-words">
                         {item.subtitle}
                       </p>
                     </div>
@@ -220,18 +220,18 @@ export function ProjectWhyInvest({
             ) : null}
 
             {hasStats ? (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 min-w-0">
                 {whyInvestStats?.annualAppreciation?.trim() ? (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="bg-[#1A1A2E] rounded-xl p-6 text-center"
+                    className="bg-[#1A1A2E] rounded-xl p-5 sm:p-6 text-center min-w-0 overflow-hidden"
                   >
-                    <p className="text-[#C9A961] text-2xl font-bold mb-2">
+                    <p className="text-[#C9A961] text-2xl font-bold mb-2 break-words">
                       {whyInvestStats.annualAppreciation}
                     </p>
-                    <p className="text-gray-300 text-sm font-medium">Annual Appreciation</p>
+                    <p className="text-gray-300 text-sm font-medium break-words">Annual Appreciation</p>
                   </motion.div>
                 ) : null}
                 {whyInvestStats?.rentalYield?.trim() ? (
@@ -239,12 +239,12 @@ export function ProjectWhyInvest({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-[#1A1A2E] rounded-xl p-6 text-center"
+                    className="bg-[#1A1A2E] rounded-xl p-5 sm:p-6 text-center min-w-0 overflow-hidden"
                   >
-                    <p className="text-[#C9A961] text-2xl font-bold mb-2">
+                    <p className="text-[#C9A961] text-2xl font-bold mb-2 break-words">
                       {whyInvestStats.rentalYield}
                     </p>
-                    <p className="text-gray-300 text-sm font-medium">Rental Yield</p>
+                    <p className="text-gray-300 text-sm font-medium break-words">Rental Yield</p>
                   </motion.div>
                 ) : null}
                 {whyInvestStats?.preLaunchGain?.trim() ? (
@@ -252,12 +252,12 @@ export function ProjectWhyInvest({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="bg-[#1A1A2E] rounded-xl p-6 text-center"
+                    className="bg-[#1A1A2E] rounded-xl p-5 sm:p-6 text-center min-w-0 overflow-hidden"
                   >
-                    <p className="text-[#C9A961] text-2xl font-bold mb-2">
+                    <p className="text-[#C9A961] text-2xl font-bold mb-2 break-words">
                       {whyInvestStats.preLaunchGain}
                     </p>
-                    <p className="text-gray-300 text-sm font-medium">Pre-Launch Gain</p>
+                    <p className="text-gray-300 text-sm font-medium break-words">Pre-Launch Gain</p>
                   </motion.div>
                 ) : null}
               </div>

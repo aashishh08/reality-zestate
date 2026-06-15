@@ -83,7 +83,7 @@ export function ProjectFloorPlans({
             {heading}
           </SectionHeading>
 
-          <div className="w-full max-w-full overflow-x-auto no-scrollbar [-webkit-overflow-scrolling:touch] flex justify-center">
+          <div className="w-full max-w-full overflow-x-auto overscroll-x-contain no-scrollbar [-webkit-overflow-scrolling:touch] flex justify-center">
             <div className="inline-flex bg-white rounded-full p-1.5 shadow-sm border border-black/5 shrink-0">
               {safePlans.map((plan, index) => (
                 <button

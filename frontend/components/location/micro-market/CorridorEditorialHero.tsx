@@ -31,20 +31,20 @@ export function CorridorEditorialHero({
           {moodLine}
         </p>
 
-        <div className="mt-10 flex flex-col gap-6 border-t border-gold/20 pt-8 md:flex-row md:divide-x md:divide-gold/15 md:gap-0">
+        <div className="mt-10 grid grid-cols-2 gap-3 border-t border-gold/20 pt-8 md:flex md:flex-row md:divide-x md:divide-gold/15 md:gap-0">
           {stats.map((s) => (
             <div
               key={s.label}
-              className="flex-1 border-b border-gold/10 pb-6 last:border-b-0 last:pb-0 md:border-b-0 md:px-8 md:pb-0 first:md:pl-0 last:md:pr-0"
+              className="min-w-0 rounded-lg border border-gold/10 px-3 py-4 md:flex-1 md:rounded-none md:border-0 md:border-b-0 md:px-8 md:py-0 first:md:pl-0 last:md:pr-0"
             >
               <div className="font-serif text-3xl font-semibold leading-none text-gold-light md:text-4xl">
                 {s.value}
               </div>
-              <div className="mt-2 font-sans text-xs font-medium uppercase tracking-[0.2em] text-white/50">
+              <div className="mt-2 font-sans text-[10px] sm:text-xs font-medium uppercase tracking-[0.16em] md:tracking-[0.2em] text-white/50 break-words">
                 {s.label}
               </div>
               {s.sub && (
-                <div className="mt-1 font-sans text-xs font-normal text-white/35">{s.sub}</div>
+                <div className="mt-1 font-sans text-[11px] md:text-xs font-normal text-white/35 break-words">{s.sub}</div>
               )}
             </div>
           ))}
