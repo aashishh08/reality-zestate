@@ -351,8 +351,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
 
             {/* Content */}
-            <div
-              className="prose prose-lg max-w-none
+            <div className="overflow-x-auto [-webkit-overflow-scrolling:touch]">
+              <div
+                className="prose prose-lg max-w-none min-w-0
                 prose-headings:font-serif prose-headings:font-bold prose-headings:text-gray-900
                 prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-amber-200
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-amber-800
@@ -368,6 +369,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 prose-table:border-collapse prose-th:bg-amber-50 prose-th:p-3 prose-td:p-3 prose-td:border prose-td:border-gray-200"
               dangerouslySetInnerHTML={{ __html: contentWithIds }}
             >
+            </div>
             </div>
 
             {/* Tags */}

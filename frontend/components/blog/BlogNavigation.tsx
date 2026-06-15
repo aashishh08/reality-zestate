@@ -51,7 +51,7 @@ export default function BlogNavigation({ categories, currentCategory }: BlogNavi
   };
 
   return (
-    <nav className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm" aria-label="Blog navigation">
+    <nav className="sticky top-16 lg:top-20 z-40 bg-white border-b border-gray-200 shadow-sm" aria-label="Blog navigation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── Main bar ──────────────────────────────────────────────── */}

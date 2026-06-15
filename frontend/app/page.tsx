@@ -119,7 +119,7 @@ export default async function Home() {
   } = await getHomePageData();
 
   return (
-    <main className="min-h-screen relative selection:bg-gold selection:text-white">
+    <main className="min-h-screen relative selection:bg-gold selection:text-white pb-[calc(3.25rem+env(safe-area-inset-bottom))] md:pb-0">
       {/* Premium Background Texture */}
       <div className="fixed inset-0 z-[-1] bg-[#F0EFEB]">
         <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />

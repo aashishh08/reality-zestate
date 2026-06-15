@@ -12,7 +12,6 @@ import {
   transformListingPropertyToProject,
 } from "@/lib/property-transformer";
 import type { Property, Project as ProjectType } from "@/types";
-import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingActions } from "@/components/layout/FloatingActions";
 import { ProjectHero } from "@/components/project/ProjectHero";
@@ -188,16 +187,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   ];
 
   return (
-    <main className="min-h-screen relative selection:bg-gold selection:text-white pt-[80px]">
-      {/* JSON-LD — BreadcrumbList + Product (real-estate listing) */}
+    <main className="min-h-screen relative overflow-x-hidden selection:bg-gold selection:text-white pt-16 lg:pt-20 pb-[calc(3.25rem+env(safe-area-inset-bottom))] md:pb-0">
+      {/* JSON-LD — BreadcrumbList + RealEstateListing */}
       <ProjectDetailJsonLd project={project} slug={slug} />
 
       {/* Premium Background Texture */}
       <div className="fixed inset-0 z-[-1] bg-[#F0EFEB]">
         <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
       </div>
-
-      <Header />
 
       <Breadcrumbs
         items={[

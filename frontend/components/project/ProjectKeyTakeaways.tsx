@@ -108,7 +108,7 @@ export function ProjectKeyTakeaways({ data, heading = 'Key Takeaways' }: Project
 
       {/* 3-column card grid */}
       <div className="p-5">
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {mainCards.map((field, index) => {
             const value = data[field.key] as string;
             const icon = FIELD_ICONS[field.key];
@@ -125,7 +125,7 @@ export function ProjectKeyTakeaways({ data, heading = 'Key Takeaways' }: Project
                 {/* Icon + Label row */}
                 <div className="flex items-center gap-1.5">
                   <span className="text-base leading-none">{icon}</span>
-                  <span className="text-[#C9A961]/70 text-[10px] uppercase tracking-wider font-semibold">
+                  <span className="text-[#C9A961]/70 text-xs uppercase tracking-wider font-semibold">
                     {field.label}
                   </span>
                 </div>
@@ -149,7 +149,7 @@ export function ProjectKeyTakeaways({ data, heading = 'Key Takeaways' }: Project
           >
             <span className="text-base leading-none mt-0.5">📍</span>
             <div>
-              <span className="text-[#C9A961]/70 text-[10px] uppercase tracking-wider font-semibold block mb-1">
+              <span className="text-[#C9A961]/70 text-xs uppercase tracking-wider font-semibold block mb-1">
                 Address
               </span>
               <p className="text-white text-sm font-semibold leading-snug">

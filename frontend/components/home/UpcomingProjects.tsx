@@ -20,8 +20,8 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
   const { scrollXProgress } = useScroll({ container: containerRef });
 
   return (
-    <section id="upcoming-projects" className="py-24 bg-transparent overflow-hidden">
-      <div className="text-center mb-16 px-4 max-w-7xl mx-auto">
+    <section id="upcoming-projects" className="py-12 md:py-24 bg-transparent overflow-hidden">
+      <div className="text-center mb-8 md:mb-16 px-4 max-w-7xl mx-auto">
         <motion.h4
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -56,14 +56,14 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
       {/* Horizontal scroll container */}
       <div
         ref={containerRef}
-        className="flex gap-8 overflow-x-auto pb-12 px-6 snap-x snap-mandatory scrollbar-hide"
+        className="flex gap-4 md:gap-8 overflow-x-auto pb-6 md:pb-12 px-4 sm:px-6 snap-x snap-mandatory scrollbar-hide"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         <div className="w-0 md:w-[calc((100vw-80rem)/2)] shrink-0" />
 
         {properties.slice(0, 6).map((property) => (
           <NewTabLink key={property.id} href={`/projects/${property.slug}`}>
-            <div className="panel relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] h-[500px] shrink-0 snap-center rounded-2xl overflow-hidden group cursor-pointer">
+            <div className="panel relative min-w-[240px] sm:min-w-[280px] md:min-w-[400px] lg:min-w-[500px] h-[300px] sm:h-[360px] md:h-[500px] shrink-0 snap-center rounded-2xl overflow-hidden group cursor-pointer">
               <Image
                 src={listingCardImageUrl(property)}
                 alt={property.title}
@@ -74,11 +74,11 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
 
               {/* Tags ribbon */}
               {property.Tags && property.Tags.length > 0 && (
-                <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 flex flex-wrap gap-1.5 sm:gap-2">
                   {property.Tags.slice(0, 2).map(tag => (
                     <span
                       key={tag.slug}
-                      className="text-xs font-bold px-3 py-1 rounded-full"
+                      className="text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full"
                       style={{
                         background: `${tag.color || "#F59E0B"}22`,
                         color: tag.color || "#F59E0B",
@@ -92,24 +92,24 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
                 </div>
               )}
 
-              <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                <div className="bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded inline-block mb-3">
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 transform translate-y-2 md:translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                <div className="bg-gold/90 text-black text-[10px] sm:text-xs font-bold px-2.5 sm:px-3 py-0.5 sm:py-1 rounded inline-block mb-2 sm:mb-3">
                   COMING SOON
                 </div>
-                <h3 className="text-3xl font-serif font-bold text-white mb-2">
+                <h3 className="text-lg sm:text-2xl md:text-3xl font-serif font-bold text-white mb-1.5 sm:mb-2 line-clamp-2">
                   {property.title}
                 </h3>
-                <div className="flex items-center gap-2 text-white/80 mb-4">
-                  <MapPin className="w-4 h-4 text-gold" />
-                  <span>{property.Location?.name || "India"}</span>
+                <div className="flex items-center gap-2 text-white/80 mb-2 sm:mb-4 text-xs sm:text-sm">
+                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold shrink-0" />
+                  <span className="truncate">{property.Location?.name || "India"}</span>
                 </div>
                 {property.priceMin && (
-                  <p className="text-gold text-sm font-semibold mb-4">
+                  <p className="text-gold text-xs sm:text-sm font-semibold mb-2 sm:mb-4">
                     Starting ₹ {(property.priceMin / 10_000_000).toFixed(1)} Cr
                   </p>
                 )}
-                <button className="flex items-center gap-2 text-white font-medium border-b border-gold pb-1 hover:text-gold transition-colors">
-                  Register Interest <ArrowRight className="w-4 h-4" />
+                <button className="flex items-center gap-2 text-white text-xs sm:text-sm font-medium border-b border-gold pb-1 hover:text-gold transition-colors">
+                  Register Interest <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
               </div>
             </div>
@@ -120,7 +120,7 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
       </div>
 
       {/* Scroll progress */}
-      <div className="max-w-7xl mx-auto px-6 mt-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-2">
         <div className="h-1 bg-zinc-200 rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-gold"
@@ -134,7 +134,7 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
       </div>
 
       {/* Mobile CTA */}
-      <div className="mt-8 px-6 md:hidden">
+      <div className="mt-6 px-4 sm:px-6 md:hidden">
         <Link
           href="/tag/upcoming"
           className="flex items-center justify-center gap-3 px-6 py-3 border border-zinc-200 rounded-full hover:bg-black hover:text-white hover:border-black transition-all group w-full"
@@ -157,8 +157,8 @@ export function UpcomingProjects({ properties }: UpcomingProjectsProps) {
 
   if (!isClient) {
     return (
-      <section id="upcoming-projects" className="py-24 bg-transparent overflow-hidden">
-        <div className="text-center mb-16 px-4 max-w-7xl mx-auto">
+      <section id="upcoming-projects" className="py-12 md:py-24 bg-transparent overflow-hidden">
+        <div className="text-center mb-8 md:mb-16 px-4 max-w-7xl mx-auto">
           <h4 className="text-gold font-medium tracking-[0.3em] mb-4 uppercase text-xs sm:text-sm">
             Future Living
           </h4>

@@ -1,7 +1,7 @@
 /**
  * Server-only JSON-LD for property detail pages.
- * Emits two blocks: BreadcrumbList and Product (real-estate listing).
- * No "use client" — rendered on the server with project data already in scope.
+ * Emits BreadcrumbList + RealEstateListing (not Product — avoids Google Shopping
+ * requirements for aggregateRating/review on non-retail property listings).
  */
 import type { Project } from "@/types";
 import { getSiteUrl } from "@/lib/site-url";
@@ -36,6 +36,52 @@ function buildAdditionalProperties(
     }));
 }
 
+function resolveListingPrice(project: Project): number | null {
+  const min = project.priceMin;
+  const max = project.priceMax;
+  if (typeof min === "number" && min > 0) return min;
+  if (typeof max === "number" && max > 0) return max;
+  return null;
+}
+
+function buildOffer(
+  project: Project,
+  pageUrl: string,
+  priceLabel: string,
+): Record<string, unknown> | null {
+  const price = resolveListingPrice(project);
+  if (price == null) return null;
+
+  const offer: Record<string, unknown> = {
+    "@type": "Offer",
+    price: String(price),
+    priceCurrency: "INR",
+    availability: "https://schema.org/InStock",
+    url: pageUrl,
+    description: priceLabel,
+  };
+
+  const min = project.priceMin;
+  const max = project.priceMax;
+  if (
+    typeof min === "number" &&
+    min > 0 &&
+    typeof max === "number" &&
+    max > 0 &&
+    min !== max
+  ) {
+    offer.priceSpecification = {
+      "@type": "PriceSpecification",
+      price: String(min),
+      minPrice: String(min),
+      maxPrice: String(max),
+      priceCurrency: "INR",
+    };
+  }
+
+  return offer;
+}
+
 export function ProjectDetailJsonLd({ project, slug }: Props) {
   const base = getSiteUrl();
   const pageUrl = `${base}/projects/${slug}`;
@@ -54,7 +100,6 @@ export function ProjectDetailJsonLd({ project, slug }: Props) {
       ? formatPriceRange(project.priceMin ?? 0, project.priceMax ?? 0)
       : "Price on Request";
 
-  // ── BreadcrumbList ────────────────────────────────────────────────────────
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -70,31 +115,34 @@ export function ProjectDetailJsonLd({ project, slug }: Props) {
     ],
   };
 
-  // ── Product (real-estate listing) ─────────────────────────────────────────
-  const additionalProps = buildAdditionalProperties(
-    project.details?.highlights,
-  );
+  const additionalProps = buildAdditionalProperties(project.details?.highlights);
+  const offer = buildOffer(project, pageUrl, priceLabel);
 
-  const product: Record<string, unknown> = {
+  const listing: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "Product",
+    "@type": "RealEstateListing",
     name: project.title,
     description,
     url: pageUrl,
     ...(heroImage ? { image: heroImage } : {}),
-    brand: project.Developer?.name
-      ? { "@type": "Organization", name: project.Developer.name }
-      : { "@type": "Organization", name: "Superluxere" },
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "INR",
-      availability: "https://schema.org/InStock",
-      url: pageUrl,
-      description: priceLabel,
+    ...(project.createdAt ? { datePosted: project.createdAt } : {}),
+    ...(offer ? { offers: offer } : {}),
+    provider: {
+      "@type": "RealEstateAgent",
+      name: "Superluxere",
+      url: base,
     },
+    ...(project.Developer?.name
+      ? {
+          seller: {
+            "@type": "Organization",
+            name: project.Developer.name,
+          },
+        }
+      : {}),
     ...(project.location
       ? {
-          locationCreated: {
+          contentLocation: {
             "@type": "Place",
             name: project.location,
             address: {
@@ -105,9 +153,7 @@ export function ProjectDetailJsonLd({ project, slug }: Props) {
           },
         }
       : {}),
-    ...(additionalProps.length > 0
-      ? { additionalProperty: additionalProps }
-      : {}),
+    ...(additionalProps.length > 0 ? { additionalProperty: additionalProps } : {}),
   };
 
   return (
@@ -118,7 +164,7 @@ export function ProjectDetailJsonLd({ project, slug }: Props) {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(product) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(listing) }}
       />
     </>
   );

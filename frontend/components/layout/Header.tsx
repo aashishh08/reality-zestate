@@ -48,6 +48,15 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isMobileMenuOpen]);
+
   const openMega = (menu: MegaMenu) => { clearTimeout(closeTimer.current!); setActiveMega(menu); };
   const closeMega = () => { closeTimer.current = setTimeout(() => setActiveMega(null), 180); };
 
@@ -248,8 +257,9 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
             <div className="flex items-center gap-6">
               <button
                 onClick={() => setMobileMenu(!isMobileMenuOpen)}
-                className="lg:hidden flex items-center gap-2 text-gray-900 hover:text-gold transition-colors"
+                className="lg:hidden flex items-center justify-center min-h-11 min-w-11 -mr-2 text-gray-900 hover:text-gold transition-colors touch-manipulation"
                 aria-label="Toggle menu"
+                aria-expanded={isMobileMenuOpen}
               >
                 {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -260,7 +270,14 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
 
       {/* ── Mobile menu ──────────────────────────────────────────────────── */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 right-0 bg-[#FDFBF7] shadow-lg border-t border-black/5 max-h-[80vh] overflow-y-auto">
+        <>
+          <button
+            type="button"
+            aria-label="Close menu"
+            className="lg:hidden fixed inset-0 z-40 bg-black/30"
+            onClick={() => setMobileMenu(false)}
+          />
+          <div className="lg:hidden absolute top-full left-0 right-0 z-50 bg-[#FDFBF7] shadow-lg border-t border-black/5 max-h-[min(80vh,32rem)] overflow-y-auto overscroll-contain">
           <nav className="flex flex-col py-4">
             {[
               { label: "Home", href: "/" },
@@ -307,6 +324,44 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
               </div>
             </div>
 
+            {/* Mobile: By Developer */}
+            {devDisplay.length > 0 && (
+              <div className="px-6 pt-4 pb-2">
+                <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">Top Developers</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {devDisplay.slice(0, 6).map(dev => (
+                    <Link
+                      key={dev.id}
+                      href={`/developer/${dev.slug}`}
+                      className="text-sm text-zinc-600 hover:text-gold-dark py-1"
+                      onClick={() => setMobileMenu(false)}
+                    >
+                      {dev.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Mobile: By Type */}
+            {catDisplay.length > 0 && (
+              <div className="px-6 pt-4 pb-2">
+                <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">Project Types</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {catDisplay.slice(0, 6).map(cat => (
+                    <NewTabLink
+                      key={cat.id}
+                      href={`/category/${cat.slug}`}
+                      className="text-sm text-zinc-600 hover:text-gold-dark py-1"
+                      onClick={() => setMobileMenu(false)}
+                    >
+                      {cat.name}
+                    </NewTabLink>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Mobile: By Location */}
             {cities.length > 0 && (
               <div className="px-6 pt-4 pb-2">
@@ -326,7 +381,8 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
               </div>
             )}
           </nav>
-        </div>
+          </div>
+        </>
       )}
     </header>
   );

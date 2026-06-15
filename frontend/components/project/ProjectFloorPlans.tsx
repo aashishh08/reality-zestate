@@ -83,20 +83,22 @@ export function ProjectFloorPlans({
             {heading}
           </SectionHeading>
 
-          <div className="inline-flex bg-white rounded-full p-1.5 shadow-sm border border-black/5">
-            {safePlans.map((plan, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveTab(index)}
-                className={`px-8 py-3 rounded-full text-sm font-bold tracking-wide transition-all duration-300 ${
-                  activeTab === index
-                    ? "bg-black text-white shadow-md"
-                    : "text-zinc-500 hover:text-black hover:bg-zinc-50"
-                }`}
-              >
-                {plan.type}
-              </button>
-            ))}
+          <div className="w-full max-w-full overflow-x-auto no-scrollbar [-webkit-overflow-scrolling:touch] flex justify-center">
+            <div className="inline-flex bg-white rounded-full p-1.5 shadow-sm border border-black/5 shrink-0">
+              {safePlans.map((plan, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveTab(index)}
+                  className={`px-4 sm:px-8 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 whitespace-nowrap touch-manipulation ${
+                    activeTab === index
+                      ? "bg-black text-white shadow-md"
+                      : "text-zinc-500 hover:text-black hover:bg-zinc-50"
+                  }`}
+                >
+                  {plan.type}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

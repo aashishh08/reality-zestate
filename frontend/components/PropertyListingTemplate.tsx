@@ -212,7 +212,7 @@ export function PropertyListingTemplate({
       {heroComponent ? <>{heroComponent}</> : null}
 
       {/* ── Sticky Filter Bar ──────────────────────────────────────────────── */}
-      <div className="sticky top-16 z-40 bg-white border-b border-border shadow-[0_2px_20px_rgba(44,44,44,0.05)] md:top-[4.25rem]">
+      <div className="sticky top-16 lg:top-20 z-40 bg-white border-b border-border shadow-[0_2px_20px_rgba(44,44,44,0.05)]">
         <div className="mx-auto flex max-w-[1400px] flex-col px-4 sm:px-6 md:px-12">
           <div className="flex min-h-[52px] items-center justify-between gap-3 py-0 sm:min-h-[56px] sm:gap-4">
             {/* Left — status pills */}

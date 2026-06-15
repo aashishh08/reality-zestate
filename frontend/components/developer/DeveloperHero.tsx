@@ -58,13 +58,13 @@ export function DeveloperHero({ developer, tagline, heroImageSrc }: DeveloperHer
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex items-center gap-2 pt-[80px] text-sm text-white/80"
+          className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-16 lg:pt-20 text-sm text-white/80"
         >
-          <span>Home</span>
-          <ChevronRight className="w-4 h-4" />
-          <span>Developers</span>
-          <ChevronRight className="w-4 h-4" />
-          <span className="text-gold font-semibold">{developer.name}</span>
+          <span className="shrink-0">Home</span>
+          <ChevronRight className="w-4 h-4 shrink-0" />
+          <span className="shrink-0">Developers</span>
+          <ChevronRight className="w-4 h-4 shrink-0" />
+          <span className="text-gold font-semibold truncate">{developer.name}</span>
         </motion.div>
 
         {/* Main Content */}
@@ -72,7 +72,7 @@ export function DeveloperHero({ developer, tagline, heroImageSrc }: DeveloperHer
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-3xl flex items-end gap-8"
+          className="max-w-3xl flex flex-col sm:flex-row items-end gap-6 sm:gap-8"
         >
           {/* Developer Logo */}
           {developer.logo && (
@@ -95,12 +95,12 @@ export function DeveloperHero({ developer, tagline, heroImageSrc }: DeveloperHer
           )}
 
           {/* Text Content */}
-          <div className="flex-1">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="p-4 bg-gold/20 backdrop-blur-sm rounded-full border border-gold/30">
-                <Building2 className="w-8 h-8 text-gold" />
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+              <div className="p-3 sm:p-4 bg-gold/20 backdrop-blur-sm rounded-full border border-gold/30 w-fit shrink-0">
+                <Building2 className="w-7 h-7 sm:w-8 sm:h-8 text-gold" />
               </div>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold text-white leading-tight">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-bold text-white leading-tight break-words">
                 {developer.name}
               </h1>
             </div>

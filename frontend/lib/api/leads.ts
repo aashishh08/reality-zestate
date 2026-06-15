@@ -84,7 +84,7 @@ export async function updateLeadStatus(
   token: string
 ): Promise<Lead> {
   return fetchFromAPI<Lead>(
-    `/leads/${id}`,
+    `/leads/${id}/status`,
     {
       method: 'PUT',
       body: { status },

@@ -59,7 +59,7 @@ export function ProjectSectionNavigation({ sections = defaultSections }: Project
   };
 
   return (
-    <section className="sticky top-16 z-40 bg-[#1A1A2E] border-b border-gray-800 shadow-lg md:top-[4.25rem]">
+    <section className="sticky top-16 lg:top-20 z-40 bg-[#1A1A2E] border-b border-gray-800 shadow-lg">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Navigation Container */}
         <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto py-3 sm:py-5 scrollbar-hide [-webkit-overflow-scrolling:touch] snap-x snap-mandatory">
