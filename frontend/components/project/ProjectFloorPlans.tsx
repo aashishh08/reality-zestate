@@ -28,10 +28,14 @@ interface ProjectFloorPlansProps {
   /** From CMS. Sanitized + `prose` on render. Omitted/empty → default quote with active unit type. */
   floorPlanPanelQuote?: string;
   heading?: string;
+  description?: string;
   propertyId?: string;
   propertySlug: string;
   projectTitle: string;
 }
+
+const DEFAULT_FLOOR_PLANS_DESCRIPTION =
+  'Choose from our range of meticulously designed residences, each offering unparalleled luxury and comfort';
 
 const DEFAULT_FLOOR_PLAN_DESCRIPTIONS = [
   {
@@ -57,6 +61,7 @@ export function ProjectFloorPlans({
   descriptionSections,
   floorPlanPanelQuote,
   heading = "Sizes, Prices & Layouts",
+  description = DEFAULT_FLOOR_PLANS_DESCRIPTION,
   propertyId,
   propertySlug,
   projectTitle,
@@ -78,7 +83,7 @@ export function ProjectFloorPlans({
         <div className="text-center mb-12">
           <SectionHeading
             label="Configuration Options"
-            description="Choose from our range of meticulously designed residences, each offering unparalleled luxury and comfort"
+            description={description}
           >
             {heading}
           </SectionHeading>

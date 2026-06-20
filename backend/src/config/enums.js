@@ -19,6 +19,14 @@ export const LOCALITIES = [
   { slug: 'golf-course-road-extension', label: 'Golf Course Extension Road', city: 'gurgaon' },
   { slug: 'dwarka-expressway', label: 'Dwarka Expressway', city: 'gurgaon' },
   { slug: 'noida-expressway', label: 'Noida Expressway', city: 'noida' },
+  { slug: 'kamla-nagar', label: 'Kamla Nagar', city: 'new-delhi' },
+  { slug: 'new-friends-colony', label: 'New Friends Colony', city: 'new-delhi' },
+  { slug: 'south-delhi', label: 'South Delhi', city: 'new-delhi' },
+  { slug: 'dwarka', label: 'Dwarka', city: 'new-delhi' },
+  { slug: 'kirti-nagar', label: 'Kirti Nagar', city: 'new-delhi' },
+  { slug: 'moti-nagar', label: 'Moti Nagar', city: 'new-delhi' },
+  { slug: 'patel-road', label: 'Patel Road', city: 'new-delhi' },
+  { slug: 'connaught-place', label: 'Connaught Place', city: 'new-delhi' },
 ];
 
 export const LOCALITY_SLUGS = LOCALITIES.map(l => l.slug);

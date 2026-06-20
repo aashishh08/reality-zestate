@@ -9,13 +9,20 @@ import { HtmlRenderer } from "@/components/ui/HtmlRenderer";
 
 interface ProjectMasterPlanProps {
   masterPlanImage?: string;
+  /** Scrollable body copy beside the master plan image. */
   description?: string;
+  /** Subtitle under the section title (SectionHeading). */
+  sectionDescription?: string;
   heading?: string;
 }
+
+const DEFAULT_MASTER_PLAN_SECTION_DESCRIPTION =
+  'Explore the comprehensive layout and thoughtful design of our premium development';
 
 export function ProjectMasterPlan({
   masterPlanImage,
   description,
+  sectionDescription = DEFAULT_MASTER_PLAN_SECTION_DESCRIPTION,
   heading = "Master Plan",
 }: ProjectMasterPlanProps) {
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
@@ -57,7 +64,7 @@ export function ProjectMasterPlan({
           <div className="text-center mb-16">
             <SectionHeading
               label="Project Layout"
-              description="Explore the comprehensive layout and thoughtful design of our premium development"
+              description={sectionDescription}
             >
               {heading}
             </SectionHeading>

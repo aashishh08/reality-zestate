@@ -22,7 +22,11 @@ interface ProjectTeamProps {
     }[];
   };
   heading?: string;
+  description?: string;
 }
+
+const DEFAULT_TEAM_DESCRIPTION =
+  'World-class professionals coming together to create an architectural masterpiece';
 
 const roleIcons: Record<string, React.ElementType> = {
   architect: Building2,
@@ -48,7 +52,11 @@ function resolveColor(raw: string | undefined): string {
   return colorMap[raw.toLowerCase()] ?? "#3B82F6";
 }
 
-export function ProjectTeam({ team, heading = 'Design & Construction Team' }: ProjectTeamProps) {
+export function ProjectTeam({
+  team,
+  heading = 'Design & Construction Team',
+  description = DEFAULT_TEAM_DESCRIPTION,
+}: ProjectTeamProps) {
   if (!team || !team.members || team.members.length === 0) return null;
 
   return (
@@ -58,7 +66,7 @@ export function ProjectTeam({ team, heading = 'Design & Construction Team' }: Pr
         <div className="text-center mb-16">
           <SectionHeading
             label="The Visionaries"
-            description="World-class professionals coming together to create an architectural masterpiece"
+            description={description}
           >
             {heading}
           </SectionHeading>

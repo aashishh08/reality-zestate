@@ -312,6 +312,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               <ProjectMasterPlan
                 masterPlanImage={details.masterPlan}
                 description={details.masterPlanDescription}
+                sectionDescription={details.masterPlanIntro}
                 heading={details.sectionHeadings?.masterPlan}
               />
             </ErrorBoundary>
@@ -327,6 +328,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               location={details?.location ?? { nearby: [], connectivity: [] }}
               sublocality={project.sublocality}
               heading={details?.sectionHeadings?.location}
+              description={details.locationIntro}
             />
           </ErrorBoundary>
         )}
@@ -335,6 +337,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {/* Book a Private Tour Banner */}
       <ProjectBookingBanner
         projectTitle={project.title}
+        projectImage={project.details?.heroImage?.trim() || project.image?.trim()}
         propertyId={project.id}
         propertySlug={slug}
       />
@@ -343,7 +346,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.amenities && details.amenities.length > 0 && (
         <section id="amenities">
           <ErrorBoundary sectionName="Amenities">
-            <ProjectAmenities amenities={details.amenities} amenitiesStats={details.amenitiesStats} heading={details.sectionHeadings?.amenities} />
+            <ProjectAmenities
+              amenities={details.amenities}
+              amenitiesStats={details.amenitiesStats}
+              heading={details.sectionHeadings?.amenities}
+              description={details.amenitiesIntro}
+            />
           </ErrorBoundary>
         </section>
       )}
@@ -357,6 +365,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               descriptionSections={details.floorPlanDescriptionSections}
               floorPlanPanelQuote={details.floorPlanPanelQuote}
               heading={details.sectionHeadings?.floorPlans}
+              description={details.floorPlansIntro}
               propertyId={project.id}
               propertySlug={slug}
               projectTitle={project.title}
@@ -369,7 +378,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.paymentPlans && details.paymentPlans.length > 0 && (
         <section id="paymentplans">
           <ErrorBoundary sectionName="Payment Plans">
-            <ProjectPaymentPlan paymentPlans={details.paymentPlans} heading={details.sectionHeadings?.paymentPlans} />
+            <ProjectPaymentPlan
+              paymentPlans={details.paymentPlans}
+              heading={details.sectionHeadings?.paymentPlans}
+              description={details.paymentPlansIntro}
+            />
           </ErrorBoundary>
         </section>
       )}
@@ -378,7 +391,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.team && (
         <section id="team">
           <ErrorBoundary sectionName="Team">
-            <ProjectTeam team={details.team} heading={details.sectionHeadings?.team} />
+            <ProjectTeam
+              team={details.team}
+              heading={details.sectionHeadings?.team}
+              description={details.teamIntro}
+            />
           </ErrorBoundary>
         </section>
       )}
@@ -391,6 +408,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <ProjectFAQ
               faqs={details.faqs}
               heading={details.sectionHeadings?.faqs}
+              description={details.faqsIntro}
             />
           </>
         )}

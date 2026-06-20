@@ -16,9 +16,18 @@ interface ProjectAmenitiesProps {
     diningOptions?: string;
   };
   heading?: string;
+  description?: string;
 }
 
-export function ProjectAmenities({ amenities, amenitiesStats, heading = 'Amenities' }: ProjectAmenitiesProps) {
+const DEFAULT_AMENITIES_DESCRIPTION =
+  'Experience a lifestyle of unparalleled luxury with our comprehensive range of world-class amenities designed for your comfort and well-being';
+
+export function ProjectAmenities({
+  amenities,
+  amenitiesStats,
+  heading = 'Amenities',
+  description = DEFAULT_AMENITIES_DESCRIPTION,
+}: ProjectAmenitiesProps) {
   const safeAmenities = Array.isArray(amenities) ? amenities : [];
   const featuredImages = safeAmenities.filter(a => a.image && a.image.trim() !== '').slice(0, 2);
 
@@ -29,7 +38,7 @@ export function ProjectAmenities({ amenities, amenitiesStats, heading = 'Ameniti
         <div className="text-center mb-16">
           <SectionHeading
             label="World-Class Facilities"
-            description="Experience a lifestyle of unparalleled luxury with our comprehensive range of world-class amenities designed for your comfort and well-being"
+            description={description}
           >
             {heading}
           </SectionHeading>

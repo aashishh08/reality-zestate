@@ -1,0 +1,63 @@
+# Local development: Postgres + API in Docker, frontend on the host (yarn dev).
+#
+# Start:
+#   docker-compose -f docker-compose.dev.yml up -d --build
+#
+# Frontend (separate terminal):
+#   cd frontend && cp .env.local.example .env.local && yarn dev
+#
+# API: http://localhost:4002/api/v1
+# DB from host (migrations): localhost:5433
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: reality_estate_db
+    environment:
+      POSTGRES_USER: reality_estate_user
+      POSTGRES_PASSWORD: reality_estate_password
+      POSTGRES_DB: reality_estate_db
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U reality_estate_user']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: reality_estate_api
+    env_file:
+      - ./backend/.env
+    environment:
+      NODE_ENV: production
+      PORT: 4002
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: reality_estate_user
+      DB_PASSWORD: reality_estate_password
+      DB_NAME: reality_estate_db
+      # Allow local Next.js dev server (default port 3000)
+      CORS_ORIGIN: http://localhost:3000
+    ports:
+      - '4002:4002'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge

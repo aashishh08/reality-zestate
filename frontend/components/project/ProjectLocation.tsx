@@ -17,9 +17,13 @@ interface ProjectLocationProps {
     connectivity?: ConnectivityItem[];
   };
   heading?: string;
+  description?: string;
   /** Optional micro-area from property record; display-only (not used for filters). */
   sublocality?: string | null;
 }
+
+const DEFAULT_LOCATION_DESCRIPTION =
+  'Strategically located, offering unmatched connectivity to business districts, airports, and lifestyle destinations';
 
 const categoryIcons: Record<string, React.ElementType> = {
   education: BookOpen,
@@ -43,7 +47,12 @@ const connectivityIcons: Record<string, React.ElementType> = {
   default: MapPin,
 };
 
-export function ProjectLocation({ location, heading = 'Location Advantage', sublocality }: ProjectLocationProps) {
+export function ProjectLocation({
+  location,
+  heading = 'Location Advantage',
+  description = DEFAULT_LOCATION_DESCRIPTION,
+  sublocality,
+}: ProjectLocationProps) {
   if (!location) return null;
 
   const safeNearby: NearbyCategory[] = Array.isArray(location.nearby) ? location.nearby : [];
@@ -60,7 +69,7 @@ export function ProjectLocation({ location, heading = 'Location Advantage', subl
         <div className="text-center mb-16">
           <SectionHeading
             label="Prime Address"
-            description="Strategically located, offering unmatched connectivity to business districts, airports, and lifestyle destinations"
+            description={description}
           >
             {heading}
           </SectionHeading>

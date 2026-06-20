@@ -150,6 +150,20 @@ export interface Project extends Property {
     investmentAnalysis?: string;
     /** Short paragraph under the Why Invest heading (eyebrow + title); from admin "Intro" field. */
     whyInvestIntro?: string;
+    /** Short paragraph under the Amenities heading; from admin "Intro" field. */
+    amenitiesIntro?: string;
+    /** Short paragraph under the Location heading; from admin "Intro" field. */
+    locationIntro?: string;
+    /** Short paragraph under the Master Plan heading; from admin "Intro" field. */
+    masterPlanIntro?: string;
+    /** Short paragraph under the Floor Plans heading; from admin "Intro" field. */
+    floorPlansIntro?: string;
+    /** Short paragraph under the Payment Plans heading; from admin "Intro" field. */
+    paymentPlansIntro?: string;
+    /** Short paragraph under the Team heading; from admin "Intro" field. */
+    teamIntro?: string;
+    /** Short paragraph under the FAQs heading; from admin "Intro" field. */
+    faqsIntro?: string;
     whyInvestStats?: {
       annualAppreciation?: string;
       rentalYield?: string;

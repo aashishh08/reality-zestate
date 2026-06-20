@@ -11,7 +11,11 @@ interface FAQ {
 interface ProjectFAQProps {
   faqs: FAQ[];
   heading?: string;
+  description?: string;
 }
+
+const DEFAULT_FAQ_DESCRIPTION =
+  'Find answers to commonly asked questions about this project';
 
 function FAQItem({
   faq,
@@ -47,6 +51,7 @@ function FAQItem({
 export function ProjectFAQ({
   faqs,
   heading = "Frequently Asked Questions",
+  description = DEFAULT_FAQ_DESCRIPTION,
 }: ProjectFAQProps) {
   const displayFaqs = (faqs || []).slice(0, 10);
   const leftColumn = displayFaqs.slice(0, 5);
@@ -58,7 +63,7 @@ export function ProjectFAQ({
         <div className="text-center mb-16">
           <SectionHeading
             label="Got Questions?"
-            description="Find answers to commonly asked questions about this project"
+            description={description}
           >
             {heading}
           </SectionHeading>

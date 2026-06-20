@@ -11,9 +11,17 @@ interface ProjectPaymentPlanProps {
     description: string;
   }[];
   heading?: string;
+  description?: string;
 }
 
-export function ProjectPaymentPlan({ paymentPlans, heading = 'Payment Plans' }: ProjectPaymentPlanProps) {
+const DEFAULT_PAYMENT_PLAN_DESCRIPTION =
+  'Flexible payment options designed to suit your financial planning.';
+
+export function ProjectPaymentPlan({
+  paymentPlans,
+  heading = 'Payment Plans',
+  description = DEFAULT_PAYMENT_PLAN_DESCRIPTION,
+}: ProjectPaymentPlanProps) {
   const safePlans = Array.isArray(paymentPlans) ? paymentPlans : [];
 
   if (safePlans.length === 0) return null;
@@ -24,7 +32,7 @@ export function ProjectPaymentPlan({ paymentPlans, heading = 'Payment Plans' }: 
         <div className="text-center mb-16">
           <SectionHeading
             label="Flexible Options"
-            description="Flexible payment options designed to suit your financial planning."
+            description={description}
           >
             {heading}
           </SectionHeading>

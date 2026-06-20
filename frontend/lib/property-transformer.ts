@@ -56,6 +56,12 @@ function hasHighlightValues(h: Record<string, any>): boolean {
   return keys.some((k) => typeof h[k] === "string" && h[k].trim().length > 0);
 }
 
+function sectionIntroFrom(data: Record<string, any>): string | undefined {
+  if (typeof data.intro !== "string") return undefined;
+  const trimmed = data.intro.trim();
+  return trimmed || undefined;
+}
+
 /**
  * Transforms a backend Property (with PropertySections) into a frontend Project.
  */
@@ -116,6 +122,14 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
   const whyInvestIntroRaw =
     whyInvest && typeof whyInvest.intro === "string" ? whyInvest.intro.trim() : "";
   const whyInvestIntro = whyInvestIntroRaw || undefined;
+
+  const amenitiesIntroRaw =
+    amenities && typeof amenities.intro === "string" ? amenities.intro.trim() : "";
+  const amenitiesIntro = amenitiesIntroRaw || undefined;
+
+  const locationIntroRaw =
+    location && typeof location.intro === "string" ? location.intro.trim() : "";
+  const locationIntro = locationIntroRaw || undefined;
 
   let whyInvestStats:
     | {
@@ -321,6 +335,13 @@ function buildDetailsFromSections(sections: Property["PropertySections"] = []): 
     whyInvest: whyInvestList,
     investmentAnalysis,
     whyInvestIntro,
+    amenitiesIntro,
+    locationIntro,
+    masterPlanIntro: sm.has("masterPlan") ? sectionIntroFrom(masterPlan) : undefined,
+    floorPlansIntro: sm.has("floorPlans") ? sectionIntroFrom(floorPlans) : undefined,
+    paymentPlansIntro: sm.has("paymentPlans") ? sectionIntroFrom(paymentPlans) : undefined,
+    teamIntro: sm.has("team") ? sectionIntroFrom(team ?? {}) : undefined,
+    faqsIntro: sm.has("faqs") ? sectionIntroFrom(faqs) : undefined,
     whyInvestStats,
 
     location: locationBlock,
