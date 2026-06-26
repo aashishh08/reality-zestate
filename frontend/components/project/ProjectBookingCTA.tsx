@@ -6,6 +6,7 @@ import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { CONTACT_INFO } from "@/lib/constants";
 import { createLead } from "@/lib/api/leads";
 import { useApiCall } from "@/lib/hooks/useApiCall";
+import { TrackedWhatsAppLink } from "@/components/analytics/TrackedWhatsAppLink";
 
 interface ProjectBookingCTAProps {
   projectTitle: string;
@@ -172,17 +173,19 @@ export function ProjectBookingCTA({ projectTitle, propertyId, propertySlug }: Pr
             </div>
 
             {/* Visit Our Experience Center */}
-            <a
+            <TrackedWhatsAppLink
               href={`https://wa.me/${CONTACT_INFO.WHATSAPP_NUMBER.replace(/\D/g, '')}?text=Hi, I'd like to visit the experience center for ${encodeURIComponent(projectTitle)}`}
               target="_blank"
               rel="noopener noreferrer"
+              placement="project_booking_cta"
+              context={propertySlug}
               className="bg-[#232340] hover:bg-[#2a2a50] transition-colors rounded-xl p-5 text-center border border-[#C9A961]/20 hover:border-[#C9A961]/50 group"
             >
               <p className="text-white font-serif text-base font-semibold mb-1 group-hover:text-[#C9A961] transition-colors">
                 Visit Our Experience Center
               </p>
               <p className="text-gray-400 text-xs">Book a slot via WhatsApp — we're available 7 days a week</p>
-            </a>
+            </TrackedWhatsAppLink>
           </motion.div>
 
         </div>

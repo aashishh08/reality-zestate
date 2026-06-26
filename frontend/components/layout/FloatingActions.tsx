@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Phone, MessageCircle, ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SCROLL_THRESHOLDS, CONTACT_INFO } from "@/lib/constants";
+import { trackPhoneClick, trackWhatsAppClick } from "@/lib/analytics";
 
 const whatsappHref = `https://wa.me/${CONTACT_INFO.WHATSAPP_NUMBER.replace(/\D/g, "")}`;
 const telHref = `tel:${CONTACT_INFO.PHONE_NUMBER}`;
@@ -41,6 +42,7 @@ export function FloatingActions() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Contact us on WhatsApp"
+          onClick={() => trackWhatsAppClick({ placement: 'floating_actions_desktop' })}
           className="bg-[#25D366] text-white p-3 rounded-l-md shadow-lg hover:pr-4 transition-all duration-300 group flex items-center gap-2"
         >
           <MessageCircle className="w-6 h-6" />
@@ -51,6 +53,7 @@ export function FloatingActions() {
         <a
           href={telHref}
           aria-label="Call us now"
+          onClick={() => trackPhoneClick({ placement: 'floating_actions_desktop' })}
           className="bg-gold text-black p-3 rounded-l-md shadow-lg hover:pr-4 transition-all duration-300 group flex items-center gap-2"
         >
           <Phone className="w-5 h-5" />
@@ -67,6 +70,7 @@ export function FloatingActions() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Contact us on WhatsApp"
+          onClick={() => trackWhatsAppClick({ placement: 'floating_actions_mobile' })}
           className="flex-1 flex items-center justify-center gap-2 min-h-[3.25rem] bg-[#25D366] text-white text-sm font-semibold tracking-wide touch-manipulation active:bg-[#1fb855] transition-colors"
         >
           <MessageCircle className="w-5 h-5 shrink-0" />
@@ -75,6 +79,7 @@ export function FloatingActions() {
         <a
           href={telHref}
           aria-label="Call us now"
+          onClick={() => trackPhoneClick({ placement: 'floating_actions_mobile' })}
           className="flex-1 flex items-center justify-center gap-2 min-h-[3.25rem] bg-gold text-black text-sm font-semibold tracking-wide touch-manipulation active:bg-gold-dark transition-colors"
         >
           <Phone className="w-5 h-5 shrink-0" />

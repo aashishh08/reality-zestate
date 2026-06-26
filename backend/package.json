@@ -9,6 +9,7 @@
     "start": "node src/bootstrap.js",
     "db:migrate": "node src/scripts/migrate.js",
     "db:seed": "node src/scripts/seed.js",
+    "db:seed:delhi-localities": "node src/scripts/seed-delhi-localities.js",
     "db:setup": "node src/scripts/migrate.js && node src/scripts/seed.js",
     "db:truncate:keep-blogs": "node src/scripts/truncate-non-blog-data.js",
     "db:reset:keep-blogs": "node src/scripts/truncate-non-blog-data.js && node src/scripts/seed.js",

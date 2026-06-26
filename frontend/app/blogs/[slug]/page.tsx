@@ -6,6 +6,7 @@ import { NewTabLink } from '@/components/ui/NewTabLink';
 import { getBlogBySlug, getBlogs, BlogPost } from '@/lib/api/blogs';
 import { CONTACT_INFO } from '@/lib/constants';
 import { LeadPopup } from '@/components/ui/LeadPopup';
+import { TrackedWhatsAppLink } from '@/components/analytics/TrackedWhatsAppLink';
 import { sanitizeHtml } from '@/lib/utils/sanitize-html';
 import { getSiteUrl } from '@/lib/site-url';
 import { getDefaultOgImageUrl } from '@/lib/seo';
@@ -298,8 +299,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       </span>
                       LinkedIn
                     </NewTabLink>
-                    <NewTabLink
+                    <TrackedWhatsAppLink
                       href={authorWhatsAppHref}
+                      placement="blog_author"
+                      context={slug}
                       className="inline-flex items-center gap-2 text-sm font-medium text-[#25D366] hover:underline"
                     >
                       <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#25D366] text-white" aria-hidden>
@@ -308,7 +311,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         </svg>
                       </span>
                       WhatsApp
-                    </NewTabLink>
+                    </TrackedWhatsAppLink>
                   </div>
                 </div>
               </div>

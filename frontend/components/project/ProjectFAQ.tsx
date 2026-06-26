@@ -1,6 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CONTACT_INFO } from "@/lib/constants";
+import { TrackedWhatsAppLink } from "@/components/analytics/TrackedWhatsAppLink";
 
 interface FAQ {
   question: string;
@@ -89,14 +90,15 @@ export function ProjectFAQ({
           <p className="text-gray-400 text-sm mb-8">
             Our team is here to help. Reach out for personalized assistance.
           </p>
-          <a
+          <TrackedWhatsAppLink
             href={`https://wa.me/${CONTACT_INFO.WHATSAPP_NUMBER.replace(/\D/g, "")}`}
             target="_blank"
             rel="noopener noreferrer"
+            placement="project_faq"
             className="inline-block bg-[#C9A961] hover:bg-[#A88B4A] text-white text-sm font-bold tracking-widest uppercase px-10 py-4 rounded-lg transition-colors duration-300"
           >
             Contact Us
-          </a>
+          </TrackedWhatsAppLink>
         </div>
       </div>
     </section>

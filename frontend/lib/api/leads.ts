@@ -4,6 +4,7 @@
  */
 
 import { fetchFromAPI, buildQueryString } from '../api-client';
+import { trackGenerateLead } from '../analytics';
 
 export interface LeadFilters {
   limit?: number;
@@ -45,13 +46,21 @@ export async function createLead(data: {
   propertyId?: string;
   layoutDownload?: boolean;
 }): Promise<Lead> {
-  return fetchFromAPI<Lead>(
+  const lead = await fetchFromAPI<Lead>(
     '/leads',
     {
       method: 'POST',
       body: data,
     }
   );
+
+  trackGenerateLead({
+    source: data.source,
+    property_id: data.propertyId,
+    layout_download: data.layoutDownload,
+  });
+
+  return lead;
 }
 
 /**

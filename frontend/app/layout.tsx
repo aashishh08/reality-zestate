@@ -52,6 +52,7 @@ export const viewport: Viewport = {
 import { LeadModalProvider } from "@/lib/contexts/LeadModalContext";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { OrganizationJsonLd } from "@/components/OrganizationJsonLd";
+import { PublicGoogleAnalytics } from "@/components/analytics/PublicGoogleAnalytics";
 
 export default function RootLayout({
   children,
@@ -66,6 +67,7 @@ export default function RootLayout({
         <OrganizationJsonLd />
         <SiteHeader />
         <LeadModalProvider>{children}</LeadModalProvider>
+        <PublicGoogleAnalytics />
       </body>
     </html>
   );

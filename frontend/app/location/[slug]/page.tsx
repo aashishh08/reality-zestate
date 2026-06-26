@@ -28,6 +28,7 @@ import {
 import { getLocations, getDevelopers, getCategories } from '@/lib';
 import { buildMicroMarketPageModel } from '@/lib/location-micro-market';
 import { PropertyFilters } from '@/types/property-listing';
+import { LocationViewTracker } from '@/components/analytics/LocationViewTracker';
 
 export async function generateMetadata({
   params: paramsPromise,
@@ -163,6 +164,7 @@ export default async function LocationPage({
 
   return (
     <>
+      <LocationViewTracker locationSlug={slug} locationType={location.type} />
       <div className="relative min-h-screen selection:bg-gold selection:text-white pt-16 lg:pt-20">
         <div className="pointer-events-none fixed inset-0 z-[-1] bg-background">
           <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />

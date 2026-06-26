@@ -36,6 +36,7 @@ import { ProjectTeam } from "@/components/project/ProjectTeam";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import { HtmlRenderer } from "@/components/ui/HtmlRenderer";
+import { ProjectViewTracker } from "@/components/analytics/ProjectViewTracker";
 
 /** Published property from API only — no static fallback. */
 async function getPropertyData(slug: string) {
@@ -188,6 +189,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   return (
     <main className="min-h-screen relative overflow-x-hidden selection:bg-gold selection:text-white pt-16 lg:pt-20 pb-[calc(3.25rem+env(safe-area-inset-bottom))] md:pb-0">
+      <ProjectViewTracker
+        projectSlug={slug}
+        locationSlug={project.Location?.slug}
+        developerSlug={project.Developer?.slug}
+      />
       {/* JSON-LD — BreadcrumbList + RealEstateListing */}
       <ProjectDetailJsonLd project={project} slug={slug} />
 

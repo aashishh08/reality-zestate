@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { TrendingUp, BookOpen, Briefcase, type LucideIcon } from "lucide-react";
 import { CONTACT_INFO } from "@/lib/constants";
+import { trackWhatsAppClick } from "@/lib/analytics";
 
 interface ResourceItem {
     title: string;
@@ -63,6 +64,7 @@ function ResourceMobileCard({ item, index }: { item: ResourceItem; index: number
             href={`${waBase}?text=${encodeURIComponent(item.whatsappText)}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppClick({ placement: 'resources_insights_mobile', context: item.mobileTitle })}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -134,6 +136,7 @@ function ResourceDesktopCard({ item, index }: { item: ResourceItem; index: numbe
                     href={`${waBase}?text=${encodeURIComponent(item.whatsappText)}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => trackWhatsAppClick({ placement: 'resources_insights_desktop', context: item.mobileTitle })}
                     className="text-[#2D241E] font-bold text-xs tracking-widest uppercase border-b border-[#2D241E]/10 pb-2 w-fit group-hover:border-gold transition-all duration-300 group-hover:text-gold"
                 >
                     Explore Now
