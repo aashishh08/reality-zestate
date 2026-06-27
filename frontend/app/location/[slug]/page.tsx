@@ -86,11 +86,7 @@ export async function generateStaticParams() {
 
 const LOCATION_PAGE_CACHE_TTL = 3600;
 
-/**
- * Micro-market pages must not ship a stale SSG shell with empty listings (same issue as
- * `/category/[slug]`): filter pills triggered a fresh fetch; full refresh showed 0 again.
- */
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export default async function LocationPage({
   params: paramsPromise,

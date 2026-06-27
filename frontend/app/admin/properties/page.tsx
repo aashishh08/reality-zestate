@@ -6,7 +6,7 @@ import { ProtectedAdminRoute } from '@/components/admin/ProtectedAdminRoute';
 import {
     listAdminProperties, deleteAdminProperty, togglePublishProperty, AdminProperty,
 } from '@/lib/api/properties-admin';
-import { revalidateHomepagePropertySections } from '@/app/actions/revalidate-homepage';
+import { revalidatePropertyCaches } from '@/app/actions/revalidate-homepage';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -57,7 +57,7 @@ export default function AdminPropertiesPage() {
         setDeletingId(p.id);
         try {
             await deleteAdminProperty(p.id, token);
-            await revalidateHomepagePropertySections();
+            await revalidatePropertyCaches(p.slug);
             loadProperties();
         }
         catch (e: any) { alert(e.message || 'Delete failed'); }
@@ -69,7 +69,7 @@ export default function AdminPropertiesPage() {
         setTogglingId(p.id);
         try {
             await togglePublishProperty(p.id, !p.isPublished, token);
-            await revalidateHomepagePropertySections();
+            await revalidatePropertyCaches(p.slug);
             loadProperties();
         }
         catch (e: any) { alert(e.message || 'Update failed'); }

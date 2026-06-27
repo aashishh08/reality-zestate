@@ -4,6 +4,11 @@
  */
 
 import { fetchFromAPI, buildQueryString } from '../api-client';
+import {
+  PROPERTY_DETAIL_TAG,
+  PROPERTY_LIST_TAG,
+  propertyDetailTag,
+} from '../cache-tags';
 
 export interface PropertyFilters {
   propertyType?: string;
@@ -94,6 +99,7 @@ export async function getProperties(
       method: 'GET',
       next: {
         revalidate,
+        tags: [PROPERTY_LIST_TAG],
       },
     }
   );
@@ -105,7 +111,7 @@ export async function getProperties(
  */
 export async function getPropertyBySlug(
   slug: string,
-  revalidate: number | false = 3600
+  revalidate: number | false = 300
 ): Promise<Property> {
   return fetchFromAPI<Property>(
     `/properties/${slug}`,
@@ -113,6 +119,7 @@ export async function getPropertyBySlug(
       method: 'GET',
       next: {
         revalidate,
+        tags: [PROPERTY_DETAIL_TAG, propertyDetailTag(slug)],
       },
     }
   );

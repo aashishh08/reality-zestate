@@ -2,6 +2,14 @@ import { fetchFromAPI, buildQueryString } from '../api-client';
 import { getCategories } from './categories';
 import type { Location } from './locations';
 import { PropertyListResponse, PropertyFilters } from '@/types/property-listing';
+import {
+  CATEGORY_DETAIL_TAG,
+  LOCATION_DETAIL_TAG,
+  PROPERTY_LIST_TAG,
+  PROJECTS_INDEX_TAG,
+  categoryDetailTag,
+  locationDetailTag,
+} from '../cache-tags';
 
 // ─── Shared normaliser ────────────────────────────────────────────────────────
 
@@ -64,10 +72,15 @@ export async function fetchLocationPageProperties(
     q.citySlug = location.slug;
   }
 
-  /** Same rationale as category pages: avoid stale ISR/SSG empty `/properties` responses. */
+  /** Cached ISR fetch — tags allow on-demand revalidation after admin property changes. */
   const response = await fetchFromAPI<any>(
     `/properties${buildQueryString(q)}`,
-    { cache: 'no-store' },
+    {
+      next: {
+        revalidate: 3600,
+        tags: [PROPERTY_LIST_TAG, LOCATION_DETAIL_TAG, locationDetailTag(location.slug)],
+      },
+    },
   );
   return normaliseListResponse(response, filters);
 }
@@ -99,11 +112,20 @@ export async function fetchDeveloperProperties(
 export async function fetchCategoryProperties(
   categoryId: string,
   filters?: Omit<PropertyFilters, 'categoryIds'>,
+  categorySlug?: string,
 ): Promise<PropertyListResponse> {
-  /** Avoid Next fetch Data Cache serving a stale empty list from an older ISR/SSG build. */
   const response = await fetchFromAPI<any>(
     `/properties${buildQueryString({ categoryIds: [categoryId], ...filters })}`,
-    { cache: 'no-store' },
+    {
+      next: {
+        revalidate: 3600,
+        tags: [
+          PROPERTY_LIST_TAG,
+          CATEGORY_DETAIL_TAG,
+          ...(categorySlug ? [categoryDetailTag(categorySlug)] : []),
+        ],
+      },
+    },
   );
   return normaliseListResponse(response, filters);
 }
@@ -125,11 +147,19 @@ export async function fetchCategoryPropertiesBySlug(
       pagination: { limit: filters?.limit ?? 12, offset: filters?.offset ?? 0, total: 0 },
     };
   }
-  return fetchCategoryProperties(cat.id, { ...filters, isPublished: true });
+  return fetchCategoryProperties(cat.id, { ...filters, isPublished: true }, slug);
 }
 
-export async function fetchProperties(filters: PropertyFilters): Promise<PropertyListResponse> {
-  const response = await fetchFromAPI<any>(`/properties${buildQueryString(filters)}`);
+export async function fetchProperties(
+  filters: PropertyFilters,
+  revalidate: number | false = 300,
+): Promise<PropertyListResponse> {
+  const response = await fetchFromAPI<any>(`/properties${buildQueryString(filters)}`, {
+    next: {
+      revalidate,
+      tags: [PROPERTY_LIST_TAG, PROJECTS_INDEX_TAG],
+    },
+  });
   return normaliseListResponse(response, filters);
 }
 
@@ -151,7 +181,12 @@ export async function fetchCategoryDetail(slug: string) {
 
 export async function getLocationBySlug(slug: string) {
   try {
-    const response = await fetchFromAPI<any>(`/locations?slug=${slug}`);
+    const response = await fetchFromAPI<any>(`/locations?slug=${slug}`, {
+      next: {
+        revalidate: 3600,
+        tags: [LOCATION_DETAIL_TAG, locationDetailTag(slug)],
+      },
+    });
     const list = Array.isArray(response?.data) ? response.data : (Array.isArray(response) ? response : []);
     return list.find((l: any) => l.slug === slug) ?? null;
   } catch {

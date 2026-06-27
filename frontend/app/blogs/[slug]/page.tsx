@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { NewTabLink } from '@/components/ui/NewTabLink';
 import { getBlogBySlug, getBlogs, BlogPost } from '@/lib/api/blogs';
+import { getProperties } from '@/lib/api/properties';
+import { transformListingPropertyToProject } from '@/lib/property-transformer';
 import { CONTACT_INFO } from '@/lib/constants';
 import { LeadPopup } from '@/components/ui/LeadPopup';
 import { TrackedWhatsAppLink } from '@/components/analytics/TrackedWhatsAppLink';
@@ -114,6 +116,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const blogsForRelated = await getBlogs({ limit: 4 }, 3600).catch(() => ({ data: [] }));
 
   const relatedPosts = (blogsForRelated.data || []).filter((p) => p.slug !== slug).slice(0, 3);
+
+  const relatedProjectsRes = await getProperties({ isPublished: true, limit: 3 }, 300).catch(() => ({
+    data: [],
+  }));
+  const relatedProjects = (relatedProjectsRes.data ?? []).map((p) =>
+    transformListingPropertyToProject(p),
+  );
 
   const dateSource = post.publishedAt || post.createdAt || '';
   const formattedDate = dateSource
@@ -487,6 +496,55 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </NewTabLink>
               );
             })}
+          </div>
+        </section>
+      )}
+
+      {/* ── Related Projects ─────────────────────────────────────────────── */}
+      {relatedProjects.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 border-t border-gray-100">
+          <div className="flex items-center justify-between mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-gray-900">
+              Related Projects
+            </h2>
+            <NewTabLink
+              href="/projects"
+              className="inline-flex items-center gap-2 text-amber-700 font-semibold hover:underline text-xs sm:text-sm"
+            >
+              <span>View all</span>
+              <ArrowRight className="w-4 h-4" />
+            </NewTabLink>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+            {relatedProjects.map((project) => (
+              <NewTabLink key={project.id} href={`/projects/${project.slug}`} className="group block">
+                <article className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="relative h-40 sm:h-44 overflow-hidden">
+                    {project.image ? (
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        loading="lazy"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#2C2416] to-[#C9A961]" />
+                    )}
+                  </div>
+                  <div className="p-4 sm:p-5">
+                    <h3 className="font-serif font-bold text-gray-900 text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-amber-700 transition-colors mb-2">
+                      {project.title}
+                    </h3>
+                    <p className="text-gray-500 text-xs sm:text-sm line-clamp-1">
+                      {project.location || project.price}
+                    </p>
+                  </div>
+                </article>
+              </NewTabLink>
+            ))}
           </div>
         </section>
       )}

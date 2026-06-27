@@ -15,7 +15,7 @@ const EMPTY_LISTING: PropertyListResponse = {
   pagination: { limit: 12, offset: 0, total: 0 },
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const base = getSiteUrl();

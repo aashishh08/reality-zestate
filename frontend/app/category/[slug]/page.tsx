@@ -97,11 +97,7 @@ export async function generateMetadata({
   return { title: "Category Not Found" };
 }
 
-/**
- * Curated collection pages must not use stale SSG/ISR props for the grid: a static shell
- * with empty `initialData` was shown until a filter pill triggered a fresh server action fetch.
- */
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const CATEGORY_PAGE_CACHE_TTL = 3600;
 
@@ -161,7 +157,7 @@ export default async function CategoryPage({
       limit: filters.limit || 12,
       offset: filters.offset || 0,
       isPublished: filters.isPublished ?? true,
-    });
+    }, slug);
   };
 
   const mm = buildCategoryCollectionPageModel(displayName, editorial, initialData);

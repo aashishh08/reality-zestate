@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
@@ -55,10 +56,13 @@ export function ProjectAmenities({
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
                 className="relative h-80 rounded-2xl overflow-hidden shadow-lg group cursor-pointer"
               >
-                <img
-                  src={amenity.image}
+                <Image
+                  src={amenity.image!}
                   alt={amenity.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  fill
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60" />
                 <div className="absolute bottom-0 left-0 right-0 p-8 text-white">

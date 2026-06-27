@@ -82,6 +82,28 @@ function buildOffer(
   return offer;
 }
 
+function collectListingImages(project: Project): string[] {
+  const urls = new Set<string>();
+  const hero = project.details?.heroImage?.trim() || project.image?.trim();
+  if (hero) urls.add(hero);
+  for (const url of project.details?.gallery ?? []) {
+    const trimmed = url?.trim();
+    if (trimmed) urls.add(trimmed);
+  }
+  return [...urls];
+}
+
+function countOverviewWords(project: Project): number {
+  const paragraphs = project.details?.overview?.content ?? [];
+  const text = paragraphs
+    .join(" ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!text) return 0;
+  return text.split(" ").filter(Boolean).length;
+}
+
 export function ProjectDetailJsonLd({ project, slug }: Props) {
   const base = getSiteUrl();
   const pageUrl = `${base}/projects/${slug}`;
@@ -92,8 +114,7 @@ export function ProjectDetailJsonLd({ project, slug }: Props) {
     project.description ||
     `Luxury ${project.type ?? "property"} in ${project.location ?? "India"}.`;
 
-  const heroImage =
-    project.details?.heroImage?.trim() || project.image?.trim() || undefined;
+  const listingImages = collectListingImages(project);
 
   const priceLabel =
     project.priceMin || project.priceMax
@@ -117,15 +138,19 @@ export function ProjectDetailJsonLd({ project, slug }: Props) {
 
   const additionalProps = buildAdditionalProperties(project.details?.highlights);
   const offer = buildOffer(project, pageUrl, priceLabel);
+  const dateModified = project.updatedAt || project.createdAt;
 
   const listing: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "RealEstateListing",
+    "@id": pageUrl,
     name: project.title,
     description,
     url: pageUrl,
-    ...(heroImage ? { image: heroImage } : {}),
+    inLanguage: "en-IN",
+    ...(listingImages.length > 0 ? { image: listingImages } : {}),
     ...(project.createdAt ? { datePosted: project.createdAt } : {}),
+    ...(dateModified ? { dateModified } : {}),
     ...(offer ? { offers: offer } : {}),
     provider: {
       "@type": "RealEstateAgent",
@@ -156,6 +181,24 @@ export function ProjectDetailJsonLd({ project, slug }: Props) {
     ...(additionalProps.length > 0 ? { additionalProperty: additionalProps } : {}),
   };
 
+  const overviewWordCount = countOverviewWords(project);
+  const webPage =
+    overviewWordCount > 300
+      ? {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "@id": `${pageUrl}#overview`,
+          url: pageUrl,
+          name: project.details?.overview?.heading || `${project.title} Overview`,
+          description,
+          inLanguage: "en-IN",
+          isPartOf: { "@type": "WebSite", name: "Superluxere", url: base },
+          ...(dateModified ? { dateModified } : {}),
+          ...(project.createdAt ? { datePublished: project.createdAt } : {}),
+          wordCount: overviewWordCount,
+        }
+      : null;
+
   return (
     <>
       <script
@@ -166,6 +209,12 @@ export function ProjectDetailJsonLd({ project, slug }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(listing) }}
       />
+      {webPage ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webPage) }}
+        />
+      ) : null}
     </>
   );
 }

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAdminAuth } from '@/lib/contexts/AdminAuthContext';
@@ -8,12 +8,12 @@ import {
     createPropertyFull, fetchTags, fetchCategories, fetchEnums,
     RefTag, RefCategory, SectionPayload, EnumsData,
 } from '@/lib/api/properties-admin';
-import { revalidateHomepagePropertySections } from '@/app/actions/revalidate-homepage';
+import { revalidatePropertyCaches } from '@/app/actions/revalidate-homepage';
 import { orderCategoriesWithCuratedFirst } from '@/lib/constants';
 import { sortTagsForAdmin } from '@/lib/status-tags';
 import {
     Building2, Plus, TrendingUp, FileText, LogOut, Menu, X, Home,
-    ChevronRight, ChevronLeft, CheckCircle2, XCircle, RefreshCw, Trash2, Eye,
+    ChevronRight, ChevronLeft, CheckCircle2, XCircle, RefreshCw, Trash2, Eye, AlertTriangle,
 } from 'lucide-react';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { ImageUploadInput } from '@/components/admin/ImageUploadInput';
@@ -323,6 +323,23 @@ export default function CreatePropertyPage() {
         return sec;
     }, [hero, intro, highlights, keyTakeaways, overview, gallery, selectedPresetAmenities, customAmenities, floorPlans, floorPlanPanelQuote, paymentPlans, whyInvest, whyInvestIntro, investmentText, locSection, locationIntro, nearby, connectivity, masterPlan, masterPlanIntro, faqs, faqsIntro, teamMembers, teamHighlights, teamIntro, whyInvestStats, amenitiesStats, amenitiesIntro, floorPlansIntro, paymentPlansIntro, floorPlanDescSections, sectionTitles]);
 
+    const publishSeoWarnings = useMemo(() => {
+        if (!basic.isPublished) return [];
+        const warnings: string[] = [];
+        if (!basic.metaDescription?.trim()) {
+            warnings.push('Missing meta description — search snippets may be auto-generated.');
+        }
+        const overviewText = overview.content.filter(Boolean).join(' ');
+        if (!overviewText.trim()) {
+            warnings.push('No overview content — add project details for better SEO.');
+        }
+        const faqCount = faqs.filter((f) => f.question?.trim() && f.answer?.trim()).length;
+        if (!faqCount) {
+            warnings.push('No FAQs — FAQ rich results will not appear in search.');
+        }
+        return warnings;
+    }, [basic.isPublished, basic.metaDescription, overview.content, faqs]);
+
     // ── Submit ───────────────────────────────────────────────────────────────────
     const handleSubmit = async () => {
         if (!token) return;
@@ -334,7 +351,7 @@ export default function CreatePropertyPage() {
                 priceMax: basic.priceMax ? Number(basic.priceMax) : null,
                 sections: buildSections(),
             }, token);
-            await revalidateHomepagePropertySections();
+            await revalidatePropertyCaches(result.data?.property?.slug ?? basic.slug);
             setDone(result);
         } catch (e: any) {
             setFormError(e.message || 'Failed to create property');
@@ -1282,6 +1299,21 @@ export default function CreatePropertyPage() {
                                     <div>
                                         <p className="text-red-400 font-medium text-sm">Error</p>
                                         <p className="text-red-400/80 text-sm mt-0.5">{formError}</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {publishSeoWarnings.length > 0 && (
+                                <div className="flex items-start space-x-3 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+                                    <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                                    <div>
+                                        <p className="text-amber-300 font-medium text-sm">SEO recommendations</p>
+                                        <ul className="mt-1 space-y-1">
+                                            {publishSeoWarnings.map((warning) => (
+                                                <li key={warning} className="text-amber-200/90 text-sm">{warning}</li>
+                                            ))}
+                                        </ul>
+                                        <p className="text-amber-200/70 text-xs mt-2">These are hints only — publishing is not blocked.</p>
                                     </div>
                                 </div>
                             )}

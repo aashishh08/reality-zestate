@@ -1,11 +1,11 @@
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
+import dynamic from "next/dynamic";
 import { getSiteUrl } from "@/lib/site-url";
 import { getDefaultOgImageUrl } from "@/lib/seo";
-
-// Always fetch fresh data — admin updates must be visible immediately
-export const dynamic = 'force-dynamic';
 import { getPropertyBySlug, getProperties } from "@/lib/api/properties";
 import {
   transformBackendPropertyToProject,
@@ -17,7 +17,6 @@ import { FloatingActions } from "@/components/layout/FloatingActions";
 import { ProjectHero } from "@/components/project/ProjectHero";
 import { ProjectOverview } from "@/components/project/ProjectOverview";
 import { ProjectAmenities } from "@/components/project/ProjectAmenities";
-import { ProjectFloorPlans } from "@/components/project/ProjectFloorPlans";
 import { ProjectLocation } from "@/components/project/ProjectLocation";
 import { ProjectFAQ } from "@/components/project/ProjectFAQ";
 import { ProjectFaqJsonLd } from "@/components/project/ProjectFaqJsonLd";
@@ -25,12 +24,10 @@ import { ProjectDetailJsonLd } from "@/components/project/ProjectDetailJsonLd";
 import { ProjectMasterPlan } from "@/components/project/ProjectMasterPlan";
 import { ProjectPaymentPlan } from "@/components/project/ProjectPaymentPlan";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { ProjectGallery } from "@/components/project/ProjectGallery";
 import { ProjectKeyTakeaways } from "@/components/project/ProjectKeyTakeaways";
 import { ProjectBookingCTA } from "@/components/project/ProjectBookingCTA";
 import { ProjectBookingBanner } from "@/components/project/ProjectBookingBanner";
 import { ProjectWhyInvest } from "@/components/project/ProjectWhyInvest";
-import { ProjectSimilar } from "@/components/project/ProjectSimilar";
 import { ProjectSectionNavigation } from "@/components/project/ProjectSectionNavigation";
 import { ProjectTeam } from "@/components/project/ProjectTeam";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -38,29 +35,41 @@ import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import { HtmlRenderer } from "@/components/ui/HtmlRenderer";
 import { ProjectViewTracker } from "@/components/analytics/ProjectViewTracker";
 
-/** Published property from API only — no static fallback. */
-async function getPropertyData(slug: string) {
+const ProjectGallery = dynamic(() =>
+  import("@/components/project/ProjectGallery").then((m) => ({ default: m.ProjectGallery })),
+);
+const ProjectFloorPlans = dynamic(() =>
+  import("@/components/project/ProjectFloorPlans").then((m) => ({ default: m.ProjectFloorPlans })),
+);
+const ProjectSimilar = dynamic(() =>
+  import("@/components/project/ProjectSimilar").then((m) => ({ default: m.ProjectSimilar })),
+);
+
+export const revalidate = 300;
+
+/** Published property from API — deduped per request for metadata + page. */
+const getPropertyData = cache(async (slug: string) => {
   try {
-    const backendProperty = await getPropertyBySlug(slug, false);
+    const backendProperty = await getPropertyBySlug(slug, 300);
     return transformBackendPropertyToProject(backendProperty);
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    if (process.env.NODE_ENV === 'development') {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    if (process.env.NODE_ENV === "development") {
       console.warn(`[ProjectPage] Backend fetch failed for '${slug}': ${errorMessage}`);
     }
     return null;
   }
-}
+});
 
 /** Pre-render paths from published API properties only. */
 export async function generateStaticParams() {
   try {
-    const backendProperties = await getProperties({ isPublished: true, limit: 500 }, false);
+    const backendProperties = await getProperties({ isPublished: true, limit: 500 }, 300);
     const slugs = (backendProperties?.data ?? []).map((p) => p.slug);
     return slugs.map((slug) => ({ slug }));
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    if (process.env.NODE_ENV === 'development') {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    if (process.env.NODE_ENV === "development") {
       console.error(`[generateStaticParams] Backend API error: ${errorMessage}`);
     }
     return [];
@@ -71,9 +80,9 @@ export async function generateStaticParams() {
  * Generate metadata for SEO
  */
 export async function generateMetadata({
-  params
+  params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = await getPropertyData(slug);
@@ -85,25 +94,27 @@ export async function generateMetadata({
     };
   }
 
-  const description = project.metaDescription
-    || project.details?.overview?.content?.[0]
-    || project.description
-    || `Luxury ${project.type} in ${project.location}. ${project.price}`;
+  const description =
+    project.metaDescription ||
+    project.details?.overview?.content?.[0] ||
+    project.description ||
+    `Luxury ${project.type} in ${project.location}. ${project.price}`;
 
   const ogImage =
     project.details?.heroImage?.trim() || project.image?.trim() || undefined;
 
-  const titleSegment = `${project.seoTitle || project.title} - ${project.location}`.replace(
-    /\s*\|\s*Superluxere\s*$/i,
-    "",
-  ).trim();
+  const titleSegment = `${project.seoTitle || project.title} - ${project.location}`
+    .replace(/\s*\|\s*Superluxere\s*$/i, "")
+    .trim();
 
   const base = getSiteUrl();
   const canonicalUrl = `${base}/projects/${slug}`;
   const ogDescription = project.details?.subtitle || description;
   const fallbackImage = getDefaultOgImageUrl();
   const effectiveImage = ogImage || fallbackImage;
-  const ogImageEntry = [{ url: effectiveImage, width: 1200, height: 630, alt: project.title }];
+  const ogImageEntry = [
+    { url: effectiveImage, width: 1200, height: 630, alt: project.title },
+  ];
 
   return {
     title: titleSegment,
@@ -127,6 +138,10 @@ export async function generateMetadata({
       siteName: "Superluxere",
       locale: "en_IN",
       images: ogImageEntry,
+      ...(project.createdAt ? { publishedTime: project.createdAt } : {}),
+      ...(project.updatedAt || project.createdAt
+        ? { modifiedTime: project.updatedAt || project.createdAt }
+        : {}),
     },
     twitter: {
       card: "summary_large_image",
@@ -146,7 +161,7 @@ async function getSimilarProjects(
   currentId: string | undefined,
 ): Promise<ProjectType[]> {
   try {
-    const res = await getProperties({ isPublished: true, limit: 32 }, false);
+    const res = await getProperties({ isPublished: true, limit: 8 }, 3600);
     const rows = (res?.data ?? []) as Property[];
     return rows
       .filter((p) => p.slug !== currentSlug && (!currentId || p.id !== currentId))
@@ -171,10 +186,20 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const relatedLinks = [
     { href: "/projects", label: "All Projects" },
     ...(project.Location?.slug
-      ? [{ href: `/location/${project.Location.slug}`, label: `Projects in ${project.Location.name}` }]
+      ? [
+          {
+            href: `/location/${project.Location.slug}`,
+            label: `Projects in ${project.Location.name}`,
+          },
+        ]
       : []),
     ...(project.Developer?.slug
-      ? [{ href: `/developer/${project.Developer.slug}`, label: `${project.Developer.name} Projects` }]
+      ? [
+          {
+            href: `/developer/${project.Developer.slug}`,
+            label: `${project.Developer.name} Projects`,
+          },
+        ]
       : []),
     ...(project.Categories && project.Categories.length > 0
       ? [
@@ -205,7 +230,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <Breadcrumbs
         items={[
           { label: "Projects", href: "/projects" },
-          { label: project.title, href: "#" }
+          { label: project.title, href: "#" },
         ]}
       />
 
@@ -217,7 +242,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <section className="py-8 bg-[#F5F0E8]">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10 text-center">
-              <HtmlRenderer html={details.introText} fontSize="text-lg" className="text-[#2C2416]" />
+              <HtmlRenderer
+                html={details.introText}
+                fontSize="text-lg"
+                className="text-[#2C2416]"
+              />
             </div>
           </div>
         </section>
@@ -227,7 +256,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.keyTakeaways && (
         <section className="py-12 bg-[#F5F0E8]" id="key-takeaways">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <SectionHeading label="Highlights">{details.sectionHeadings?.keyTakeaways || 'Key Takeaways'}</SectionHeading>
+            <SectionHeading label="Highlights">
+              {details.sectionHeadings?.keyTakeaways || "Key Takeaways"}
+            </SectionHeading>
 
             {(() => {
               const ktImage = details.gallery?.[0]?.trim() || details.heroImage?.trim();
@@ -241,17 +272,23 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 >
                   {ktImage ? (
                     <div className="relative rounded-2xl overflow-hidden shadow-lg min-h-[320px]">
-                      <img
+                      <Image
                         src={ktImage}
                         alt="Project Details"
-                        className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                        fill
+                        loading="lazy"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover hover:scale-105 transition-transform duration-700"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                     </div>
                   ) : null}
 
                   <div className="flex flex-col">
-                    <ProjectKeyTakeaways data={details.keyTakeaways} heading={details.sectionHeadings?.keyTakeaways} />
+                    <ProjectKeyTakeaways
+                      data={details.keyTakeaways}
+                      heading={details.sectionHeadings?.keyTakeaways}
+                    />
                   </div>
                 </div>
               );
@@ -259,7 +296,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
         </section>
       )}
-
 
       {/* Investment — component returns null when CMS section has no content */}
       {details && (
@@ -299,12 +335,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {details?.gallery && (
         <section className="py-12 bg-white" id="gallery">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <SectionHeading centered={false} label="Visual Tour">{details.sectionHeadings?.gallery || 'Project Gallery'}</SectionHeading>
+            <SectionHeading centered={false} label="Visual Tour">
+              {details.sectionHeadings?.gallery || "Project Gallery"}
+            </SectionHeading>
             <ErrorBoundary sectionName="Gallery">
-              <ProjectGallery
-                images={details.gallery}
-                videoUrl={details.videoUrl}
-              />
+              <ProjectGallery images={details.gallery} videoUrl={details.videoUrl} />
             </ErrorBoundary>
           </div>
         </section>

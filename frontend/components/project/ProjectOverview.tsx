@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -64,10 +65,13 @@ export function ProjectOverview({ overview, featureImage }: ProjectOverviewProps
             >
               <div className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl">
                 {featureImage?.trim() ? (
-                  <img
+                  <Image
                     src={featureImage.trim()}
                     alt="Project Overview"
-                    className="w-full h-full object-cover"
+                    fill
+                    loading="lazy"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-[#2C2416] via-[#3d3429] to-[#1a1612]" />
