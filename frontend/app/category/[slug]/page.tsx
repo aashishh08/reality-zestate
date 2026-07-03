@@ -30,6 +30,11 @@ import {
   listingSearchParamsFromRecord,
   parseListingSearchParams,
 } from "@/lib/listing-search-params";
+import {
+  hasListingQueryVariant,
+  ROBOTS_NOINDEX_FOLLOW,
+  ROBOTS_NOINDEX_NOFOLLOW,
+} from "@/lib/seo/listing-metadata";
 
 export async function generateStaticParams() {
   const slugs = getAllCategorySlugs();
@@ -40,10 +45,18 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  const resolvedSearchParams = searchParams
+    ? await Promise.resolve(searchParams)
+    : {};
+  const urlSp = listingSearchParamsFromRecord(resolvedSearchParams);
+  const hasQueryVariant = hasListingQueryVariant(urlSp);
+
   const base = getSiteUrl();
   const canonicalUrl = `${base}/category/${slug}`;
 
@@ -67,6 +80,7 @@ export async function generateMetadata({
         title: staticCat.metaTitle,
         description: staticCat.metaDescription,
       },
+      ...(hasQueryVariant ? { robots: ROBOTS_NOINDEX_FOLLOW } : {}),
     };
   }
 
@@ -93,13 +107,14 @@ export async function generateMetadata({
           title: fb.metaTitle,
           description: fb.metaDescription,
         },
+        ...(hasQueryVariant ? { robots: ROBOTS_NOINDEX_FOLLOW } : {}),
       };
     }
   } catch {
     /* ignore */
   }
 
-  return { title: "Category Not Found" };
+  return { title: "Category Not Found", robots: ROBOTS_NOINDEX_NOFOLLOW };
 }
 
 export const revalidate = 3600;

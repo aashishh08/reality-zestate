@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://superluxere.com",
+    url: getSiteUrl(),
     siteName: "Superluxere",
     title: "Superluxere - Luxury Real Estate & Premium Properties",
     description: "Discover curated luxury real estate properties in India.",

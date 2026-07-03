@@ -64,9 +64,9 @@ export function ProjectLocation({
   if (!hasBody) return null;
 
   return (
-    <section className="py-12 bg-white overflow-x-hidden">
+    <section className="py-8 sm:py-10 md:py-12 bg-white overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
           <SectionHeading
             label="Prime Address"
             description={description}
@@ -75,7 +75,7 @@ export function ProjectLocation({
           </SectionHeading>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start min-w-0">
+        <div className="grid md:grid-cols-2 gap-8 sm:gap-10 lg:gap-16 items-start min-w-0">
           {/* Map Image */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -180,7 +180,7 @@ export function ProjectLocation({
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-20 pt-20 border-t border-gray-200"
+            className="mt-12 sm:mt-16 md:mt-20 pt-10 sm:pt-14 md:pt-20 border-t border-gray-200"
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 min-w-0">
               {safeConnectivity.map((item, index) => {

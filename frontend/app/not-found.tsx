@@ -1,3 +1,11 @@
+import { Metadata } from 'next';
+import { ROBOTS_NOINDEX_NOFOLLOW } from '@/lib/seo/listing-metadata';
+
+export const metadata: Metadata = {
+  title: 'Page Not Found',
+  robots: ROBOTS_NOINDEX_NOFOLLOW,
+};
+
 export default function NotFound() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">

@@ -59,9 +59,9 @@ export function ProjectMasterPlan({
 
   return (
     <>
-      <section className="py-14 bg-white overflow-x-hidden" id="master-plan">
+      <section className="py-8 sm:py-10 md:py-14 bg-white overflow-x-hidden" id="master-plan">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
-          <div className="text-center mb-16">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <SectionHeading
               label="Project Layout"
               description={sectionDescription}
@@ -71,7 +71,7 @@ export function ProjectMasterPlan({
           </div>
 
           <div
-            className={`grid grid-cols-1 gap-10 lg:gap-16 min-w-0 ${hasImage && hasDesc ? "lg:grid-cols-2" : ""}`}
+            className={`grid grid-cols-1 gap-10 sm:gap-12 lg:gap-16 min-w-0 ${hasImage && hasDesc ? "lg:grid-cols-2" : ""}`}
           >
             {hasImage ? (
               <motion.div

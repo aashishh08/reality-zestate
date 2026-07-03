@@ -18,6 +18,7 @@ import {
     Tag,
 } from '@/lib/api/properties-listing';
 import { PropertyFilters } from '@/types/property-listing';
+import { ROBOTS_NOINDEX_NOFOLLOW } from '@/lib/seo/listing-metadata';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Metadata
@@ -31,7 +32,7 @@ export async function generateMetadata({
     const tag = await getTagBySlug(slug);
 
     if (!tag) {
-        return { title: 'Tag Not Found' };
+        return { title: 'Tag Not Found', robots: ROBOTS_NOINDEX_NOFOLLOW };
     }
 
     const base = getSiteUrl();

@@ -74,9 +74,9 @@ export function ProjectFloorPlans({
   const safeTab = Math.min(activeTab, safePlans.length - 1);
 
   return (
-    <section id="floor-plans" className="py-14 bg-transparent overflow-x-hidden">
+    <section id="floor-plans" className="py-8 sm:py-10 md:py-14 bg-transparent overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-10 md:mb-12">
           <SectionHeading
             label="Configuration Options"
             description={description}

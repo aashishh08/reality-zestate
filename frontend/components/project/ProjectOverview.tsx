@@ -23,9 +23,9 @@ export function ProjectOverview({ overview, featureImage }: ProjectOverviewProps
 
   return (
     <>
-      <section className="py-14 bg-transparent overflow-x-hidden">
+      <section className="py-8 sm:py-10 md:py-14 bg-transparent overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 min-w-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 min-w-0">
           {/* Left: Scrollable Text Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

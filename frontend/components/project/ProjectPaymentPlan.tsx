@@ -27,9 +27,9 @@ export function ProjectPaymentPlan({
   if (safePlans.length === 0) return null;
 
   return (
-    <section id="payment-plans" className="py-14 bg-transparent overflow-x-hidden">
+    <section id="payment-plans" className="py-8 sm:py-10 md:py-14 bg-transparent overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
           <SectionHeading
             label="Flexible Options"
             description={description}

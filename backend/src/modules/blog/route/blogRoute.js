@@ -2,6 +2,7 @@ import express from 'express';
 import { validateRequest } from '../../../middleware/validationMiddleware.js';
 import { createBlogSchema, updateBlogSchema } from '../../../utils/validators.js';
 import authMiddleware from '../../../middleware/authMiddleware.js';
+import optionalAuthMiddleware from '../../../middleware/optionalAuthMiddleware.js';
 import { requireRole } from '../../../middleware/roleMiddleware.js';
 import blogController from '../controller/blogController.js';
 
@@ -34,7 +35,7 @@ router.get('/admin/:id', authMiddleware, requireRole('SUPER_ADMIN', 'ADMIN', 'ED
 });
 
 // Public slug route comes AFTER /admin/* fixed routes
-router.get('/:slug', async (req, res, next) => {
+router.get('/:slug', optionalAuthMiddleware, async (req, res, next) => {
   try {
     await blogController.getBlogBySlug(req, res);
   } catch (error) {

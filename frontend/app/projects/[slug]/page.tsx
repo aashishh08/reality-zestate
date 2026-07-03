@@ -6,6 +6,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { getSiteUrl } from "@/lib/site-url";
 import { getDefaultOgImageUrl } from "@/lib/seo";
+import { ROBOTS_NOINDEX_NOFOLLOW } from "@/lib/seo/listing-metadata";
 import { getPropertyBySlug, getProperties } from "@/lib/api/properties";
 import {
   transformBackendPropertyToProject,
@@ -117,6 +118,7 @@ export async function generateMetadata({
     return {
       title: "Project Not Found",
       description: "The requested property could not be found.",
+      robots: ROBOTS_NOINDEX_NOFOLLOW,
     };
   }
 
@@ -285,7 +287,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Key Takeaways Section */}
       {details?.keyTakeaways && (
-        <section className="py-12 bg-[#F5F0E8] overflow-x-hidden" id="key-takeaways">
+        <section className="py-8 sm:py-10 md:py-12 bg-[#F5F0E8] overflow-x-hidden" id="key-takeaways">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
             <SectionHeading label="Highlights">
               {details.sectionHeadings?.keyTakeaways || "Key Takeaways"}
@@ -297,8 +299,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 <div
                   className={
                     ktImage
-                      ? "grid md:grid-cols-2 gap-8 items-stretch min-w-0"
-                      : "grid grid-cols-1 gap-8 min-w-0"
+                      ? "grid md:grid-cols-2 gap-6 sm:gap-7 md:gap-8 items-stretch min-w-0"
+                      : "grid grid-cols-1 gap-6 sm:gap-7 md:gap-8 min-w-0"
                   }
                 >
                   {ktImage ? (
@@ -364,7 +366,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Gallery Section */}
       {details?.gallery && (
-        <section className="py-12 bg-white" id="gallery">
+        <section className="py-8 sm:py-10 md:py-12 bg-white" id="gallery">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <SectionHeading centered={false} label="Visual Tour">
               {details.sectionHeadings?.gallery || "Project Gallery"}
@@ -378,7 +380,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Master Plan */}
       {(details?.masterPlan || details?.masterPlanDescription) && (
-        <section id="masterplan" className="py-12 bg-white">
+        <section id="masterplan" className="py-8 sm:py-10 md:py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ErrorBoundary sectionName="Master Plan">
               <ProjectMasterPlan
@@ -494,7 +496,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       )}
 
       {/* Contextual internal links strengthen topical/entity connections for SEO */}
-      <section className="py-10 bg-[#F5F0E8] border-t border-[#C9A961]/10 overflow-x-hidden">
+      <section className="py-8 sm:py-9 md:py-10 bg-[#F5F0E8] border-t border-[#C9A961]/10 overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
           <SectionHeading label="Discover More">Explore This Market Further</SectionHeading>
           <div className="mt-4 flex flex-wrap gap-2 sm:gap-3 min-w-0">

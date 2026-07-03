@@ -1,5 +1,12 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { NewTabLink } from '@/components/ui/NewTabLink';
+import { ROBOTS_NOINDEX_NOFOLLOW } from '@/lib/seo/listing-metadata';
+
+export const metadata: Metadata = {
+  title: 'Blog Post Not Found',
+  robots: ROBOTS_NOINDEX_NOFOLLOW,
+};
 
 export default function NotFound() {
   return (

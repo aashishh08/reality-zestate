@@ -19,9 +19,9 @@ export function ProjectSimilar({ projects }: ProjectSimilarProps) {
   const items = projects.slice(0, 3);
 
   return (
-    <section className="py-12 bg-[#F0EFEB] overflow-hidden">
+    <section className="py-8 sm:py-10 md:py-12 bg-[#F0EFEB] overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-8 md:mb-12 px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8 sm:mb-10 md:mb-12 px-4 sm:px-6 lg:px-8">
           <SectionHeading
             label="You May Also Like"
             description="Explore other luxury properties that might interest you"

@@ -74,8 +74,15 @@ class BlogController {
 
   async getBlogBySlug(req, res) {
     const { slug } = req.params;
+    const isAdmin = Boolean(req.user);
 
     const blog = await blogService.getBlogBySlug(slug);
+
+    // Unpublished blogs are only visible to authenticated users — anonymous
+    // (including bot/crawler) requests get the same 404 as a non-existent slug.
+    if (!isAdmin && !blog.isPublished) {
+      throw { status: 404, message: 'Blog not found' };
+    }
 
     res.json({
       success: true,

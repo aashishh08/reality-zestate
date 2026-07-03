@@ -127,6 +127,12 @@ export function ProjectWhyInvest({
       (v) => typeof v === "string" && v.trim().length > 0,
     );
 
+  const statCards = [
+    { value: whyInvestStats?.annualAppreciation, label: "Annual Appreciation" },
+    { value: whyInvestStats?.rentalYield, label: "Rental Yield" },
+    { value: whyInvestStats?.preLaunchGain, label: "Pre-Launch Gain" },
+  ].filter((s) => typeof s.value === "string" && s.value.trim().length > 0);
+
   const introTrimmed = introDescription?.trim() ?? "";
   const hasIntro = introTrimmed.length > 0;
 
@@ -144,9 +150,9 @@ export function ProjectWhyInvest({
   const lastReasonCardIndex = visibleReasonCards.length > 0 ? visibleReasonCards.length - 1 : -1;
 
   return (
-    <section className="py-12 bg-[#F5F0E8] overflow-x-hidden" id="why-invest">
+    <section className="py-8 sm:py-10 md:py-12 bg-[#F5F0E8] overflow-x-hidden" id="why-invest">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
-        <div className="text-center mb-10 sm:mb-16 min-w-0">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16 min-w-0">
           <SectionHeading
             label="Investment Opportunity"
             description={subtitleParagraph}
@@ -156,7 +162,7 @@ export function ProjectWhyInvest({
         </div>
 
         <div
-          className={`grid gap-6 md:gap-8 min-w-0 ${hasBoxes ? "md:grid-cols-2" : "md:grid-cols-1"}`}
+          className={`grid gap-5 sm:gap-6 md:gap-8 min-w-0 ${hasBoxes ? "md:grid-cols-2" : "md:grid-cols-1"}`}
         >
           {hasBoxes ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-stretch min-w-0">
@@ -221,46 +227,24 @@ export function ProjectWhyInvest({
             ) : null}
 
             {hasStats ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 min-w-0">
-                {whyInvestStats?.annualAppreciation?.trim() ? (
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-3 md:gap-4 min-w-0">
+                {statCards.map((stat, index) => (
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 12 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="bg-[#1A1A2E] rounded-xl p-5 sm:p-6 text-center min-w-0"
+                    transition={{ delay: 0.1 + index * 0.08 }}
+                    viewport={{ once: true }}
+                    className="bg-[#1A1A2E] rounded-lg sm:rounded-xl px-1.5 py-2.5 sm:px-4 sm:py-4 md:px-6 md:py-5 text-center min-w-0"
                   >
-                    <p className="text-[#C9A961] text-2xl font-bold mb-2 break-words [overflow-wrap:anywhere]">
-                      {whyInvestStats.annualAppreciation}
+                    <p className="text-[#C9A961] text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1.5 md:mb-2 break-words [overflow-wrap:anywhere] leading-tight">
+                      {stat.value}
                     </p>
-                    <p className="text-gray-300 text-sm font-medium break-words [overflow-wrap:anywhere]">Annual Appreciation</p>
-                  </motion.div>
-                ) : null}
-                {whyInvestStats?.rentalYield?.trim() ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="bg-[#1A1A2E] rounded-xl p-5 sm:p-6 text-center min-w-0"
-                  >
-                    <p className="text-[#C9A961] text-2xl font-bold mb-2 break-words [overflow-wrap:anywhere]">
-                      {whyInvestStats.rentalYield}
+                    <p className="text-gray-300 text-[8px] sm:text-xs md:text-sm font-medium break-words [overflow-wrap:anywhere] leading-tight">
+                      {stat.label}
                     </p>
-                    <p className="text-gray-300 text-sm font-medium break-words [overflow-wrap:anywhere]">Rental Yield</p>
                   </motion.div>
-                ) : null}
-                {whyInvestStats?.preLaunchGain?.trim() ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="bg-[#1A1A2E] rounded-xl p-5 sm:p-6 text-center min-w-0"
-                  >
-                    <p className="text-[#C9A961] text-2xl font-bold mb-2 break-words [overflow-wrap:anywhere]">
-                      {whyInvestStats.preLaunchGain}
-                    </p>
-                    <p className="text-gray-300 text-sm font-medium break-words [overflow-wrap:anywhere]">Pre-Launch Gain</p>
-                  </motion.div>
-                ) : null}
+                ))}
               </div>
             ) : null}
           </motion.div>

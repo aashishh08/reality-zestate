@@ -11,6 +11,7 @@ import { TrackedWhatsAppLink } from '@/components/analytics/TrackedWhatsAppLink'
 import { sanitizeHtml } from '@/lib/utils/sanitize-html';
 import { getSiteUrl } from '@/lib/site-url';
 import { getDefaultOgImageUrl } from '@/lib/seo';
+import { ROBOTS_NOINDEX_NOFOLLOW } from '@/lib/seo/listing-metadata';
 import { Calendar, Clock, User, ArrowLeft, Facebook, Twitter, Linkedin, ArrowRight } from 'lucide-react';
 
 interface BlogPostPageProps {
@@ -50,6 +51,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const { slug } = await params;
   try {
     const post = await getBlogBySlug(slug);
+
+    if (!post.isPublished) {
+      return {
+        title: 'Post Not Found',
+        robots: ROBOTS_NOINDEX_NOFOLLOW,
+      };
+    }
+
     const base = getSiteUrl();
     const canonicalUrl = `${base}/blogs/${slug}`;
     const fallbackImage = getDefaultOgImageUrl();
@@ -93,7 +102,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       },
     };
   } catch {
-    return { title: 'Post Not Found' };
+    return { title: 'Post Not Found', robots: ROBOTS_NOINDEX_NOFOLLOW };
   }
 }
 
@@ -111,6 +120,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   if (!post) notFound();
+  if (!post.isPublished) notFound();
 
   const blogsForRelated = await getBlogs({ limit: 4 }, 3600).catch(() => ({ data: [] }));
 

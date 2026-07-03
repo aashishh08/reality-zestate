@@ -34,19 +34,33 @@ import {
   listingSearchParamsFromRecord,
   parseListingSearchParams,
 } from '@/lib/listing-search-params';
+import {
+  hasListingQueryVariant,
+  ROBOTS_NOINDEX_FOLLOW,
+  ROBOTS_NOINDEX_NOFOLLOW,
+} from '@/lib/seo/listing-metadata';
 
 export async function generateMetadata({
   params: paramsPromise,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }): Promise<Metadata> {
   const { slug } = await paramsPromise;
+  const resolvedSearchParams = searchParams
+    ? await Promise.resolve(searchParams)
+    : {};
+  const urlSp = listingSearchParamsFromRecord(resolvedSearchParams);
+  const hasQueryVariant = hasListingQueryVariant(urlSp);
+
   const location = await getLocationBySlug(slug);
 
   if (!location) {
     return {
       title: 'Location Not Found',
       description: 'The location you are looking for does not exist.',
+      robots: ROBOTS_NOINDEX_NOFOLLOW,
     };
   }
 
@@ -74,6 +88,7 @@ export async function generateMetadata({
       title,
       description: ogDescription,
     },
+    ...(hasQueryVariant ? { robots: ROBOTS_NOINDEX_FOLLOW } : {}),
   };
 }
 

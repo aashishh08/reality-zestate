@@ -33,10 +33,10 @@ export function ProjectAmenities({
   const featuredImages = safeAmenities.filter(a => a.image && a.image.trim() !== '').slice(0, 2);
 
   return (
-    <section id="amenities" className="py-14 bg-white overflow-x-hidden">
+    <section id="amenities" className="py-8 sm:py-10 md:py-14 bg-white overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
           <SectionHeading
             label="World-Class Facilities"
             description={description}
@@ -47,7 +47,7 @@ export function ProjectAmenities({
 
         {/* Featured Images */}
         {featuredImages.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7 md:gap-8 mb-8 sm:mb-10 md:mb-12">
             {featuredImages.map((amenity, idx) => (
               <motion.div
                 key={amenity.name}
@@ -76,7 +76,7 @@ export function ProjectAmenities({
 
         {/* Amenities Grid */}
         {safeAmenities.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-12 min-w-0">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-8 sm:mb-10 md:mb-12 min-w-0">
             {safeAmenities.map((amenity, idx) => (
               <motion.div
                 key={`${amenity.name}-${idx}`}

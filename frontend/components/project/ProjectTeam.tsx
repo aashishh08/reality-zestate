@@ -60,10 +60,10 @@ export function ProjectTeam({
   if (!team || !team.members || team.members.length === 0) return null;
 
   return (
-    <section className="py-12 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-8 sm:py-10 md:py-12 bg-white overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
           <SectionHeading
             label="The Visionaries"
             description={description}
@@ -73,7 +73,7 @@ export function ProjectTeam({
         </div>
 
         {/* Team Members Grid */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-5 sm:gap-6 mb-8 sm:mb-10 md:mb-12">
           {team.members.map((member, index) => {
             const resolvedColor = resolveColor(member.color);
 
@@ -124,35 +124,78 @@ export function ProjectTeam({
           })}
         </div>
 
-        {/* Highlights Section */}
+        {/* Highlights — first 3 in a compact row; any others as horizontal strips below */}
         {team.highlights && team.highlights.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-gradient-to-r from-[#1F2937] to-[#111827] rounded-2xl p-8 md:p-12"
+            className="bg-gradient-to-r from-[#1F2937] to-[#111827] rounded-xl sm:rounded-2xl p-2.5 sm:p-5 md:p-8 min-w-0 overflow-hidden space-y-2 sm:space-y-3"
           >
-            <div className="grid md:grid-cols-3 gap-8">
-              {team.highlights.map((highlight, index) => (
+            {team.highlights.length > 0 && (
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-3 md:gap-4 min-w-0">
+                {team.highlights.slice(0, 3).map((highlight, index) => {
+                  const IconComponent =
+                    (highlight.icon ? roleIcons[highlight.icon] : null) ?? roleIcons.default;
+
+                  return (
+                    <motion.div
+                      key={`${highlight.title}-${index}`}
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.08 }}
+                      className="flex flex-row sm:flex-col items-center sm:items-center gap-1.5 sm:gap-0 min-w-0 rounded-lg bg-white/5 border border-white/10 px-1.5 py-2 sm:px-3 sm:py-4 md:px-4 md:py-5 sm:text-center"
+                    >
+                      <div className="shrink-0 sm:flex sm:justify-center sm:mb-2 md:mb-3">
+                        <div className="w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11 rounded-full bg-[#C9A961]/20 flex items-center justify-center">
+                          <IconComponent className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-[#C9A961]" />
+                        </div>
+                      </div>
+                      <div className="min-w-0 flex-1 sm:flex-none">
+                        <h3 className="text-white text-[9px] sm:text-xs md:text-base font-serif font-bold leading-tight break-words [overflow-wrap:anywhere] line-clamp-2 sm:line-clamp-none">
+                          {highlight.title}
+                        </h3>
+                        <p className="hidden sm:block text-gray-400 text-[10px] md:text-xs leading-snug break-words [overflow-wrap:anywhere] mt-1">
+                          {highlight.subtitle}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
+
+            {team.highlights.slice(3).map((highlight, index) => {
+              const IconComponent =
+                (highlight.icon ? roleIcons[highlight.icon] : null) ?? roleIcons.default;
+
+              return (
                 <motion.div
-                  key={highlight.title}
-                  initial={{ opacity: 0, y: 20 }}
+                  key={`${highlight.title}-strip-${index}`}
+                  initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-center"
+                  transition={{ delay: 0.2 + index * 0.08 }}
+                  className="flex flex-row items-center gap-2.5 sm:gap-3 min-w-0 rounded-lg bg-white/5 border border-white/10 px-2.5 py-2 sm:px-4 sm:py-2.5 max-h-14 sm:max-h-none overflow-hidden"
                 >
-                  <div className="flex justify-center mb-4">
-                    <div className="w-12 h-12 rounded-full bg-[#C9A961]/20 flex items-center justify-center">
-                      <Palette className="w-6 h-6 text-[#C9A961]" />
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#C9A961]/20 flex items-center justify-center shrink-0">
+                    <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C9A961]" />
+                  </div>
+                  <div className="min-w-0 flex-1 overflow-hidden">
+                    <div className="flex flex-row items-center gap-1 sm:block min-w-0">
+                      <h3 className="text-white text-[10px] sm:text-sm font-serif font-bold leading-tight shrink-0 break-words [overflow-wrap:anywhere]">
+                        {highlight.title}
+                      </h3>
+                      {highlight.subtitle?.trim() ? (
+                        <p className="text-gray-400 text-[9px] sm:text-xs leading-tight truncate sm:whitespace-normal sm:mt-0.5 min-w-0 flex-1">
+                          <span className="sm:hidden text-gray-500 mx-1">·</span>
+                          {highlight.subtitle}
+                        </p>
+                      ) : null}
                     </div>
                   </div>
-                  <h3 className="text-white text-lg font-serif font-bold mb-2">
-                    {highlight.title}
-                  </h3>
-                  <p className="text-gray-400 text-sm">{highlight.subtitle}</p>
                 </motion.div>
-              ))}
-            </div>
+              );
+            })}
           </motion.div>
         )}
       </div>

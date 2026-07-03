@@ -2,6 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Award, Users, Building2, TrendingUp, Shield, Heart, Target, Sparkles, Star } from 'lucide-react';
+import { getSiteUrl } from '@/lib/site-url';
+
+const base = getSiteUrl();
 
 export const metadata: Metadata = {
   title: 'About Us - Luxury Real Estate Experts',
@@ -10,10 +13,10 @@ export const metadata: Metadata = {
     title: 'About Us - Luxury Real Estate Experts',
     description: 'Discover Superluxere - India\'s premier luxury real estate platform. Learn about our mission, values, and commitment to excellence.',
     type: 'website',
-    url: 'https://superluxere.com/about-us',
+    url: `${base}/about-us`,
   },
   alternates: {
-    canonical: 'https://superluxere.com/about-us',
+    canonical: `${base}/about-us`,
   },
 };
 

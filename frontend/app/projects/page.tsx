@@ -12,6 +12,10 @@ import {
   listingSearchParamsFromRecord,
   parseListingSearchParams,
 } from '@/lib/listing-search-params';
+import {
+  hasListingQueryVariant,
+  ROBOTS_NOINDEX_FOLLOW,
+} from '@/lib/seo/listing-metadata';
 
 const EMPTY_LISTING: PropertyListResponse = {
   data: [],
@@ -20,7 +24,17 @@ const EMPTY_LISTING: PropertyListResponse = {
 
 export const revalidate = 300;
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}): Promise<Metadata> {
+  const resolvedSearchParams = searchParams
+    ? await Promise.resolve(searchParams)
+    : {};
+  const urlSp = listingSearchParamsFromRecord(resolvedSearchParams);
+  const hasQueryVariant = hasListingQueryVariant(urlSp, { showCityCategory: true });
+
   const base = getSiteUrl();
   const canonicalUrl = `${base}/projects`;
   const fallbackImage = getDefaultOgImageUrl();
@@ -54,6 +68,7 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: canonicalUrl,
     },
+    ...(hasQueryVariant ? { robots: ROBOTS_NOINDEX_FOLLOW } : {}),
   };
 }
 

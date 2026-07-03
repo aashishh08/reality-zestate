@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getBlogs } from '@/lib/api/blogs';
 import { getProperties, getLocations, getDevelopers, getCategories, getAllTagSlugs } from '@/lib';
+import { fetchTagProperties } from '@/lib/api/properties-listing';
 import { getSiteUrl } from '@/lib/site-url';
 
 const BATCH = 500;
@@ -45,6 +46,24 @@ async function collectAllPublishedPropertySlugs(): Promise<
   return out;
 }
 
+async function collectTagSlugsWithProperties(): Promise<string[]> {
+  const allSlugs = await getAllTagSlugs().catch(() => [] as string[]);
+  if (!allSlugs.length) return [];
+
+  const results = await Promise.all(
+    allSlugs.map(async (slug) => {
+      const res = await fetchTagProperties(slug, {
+        limit: 1,
+        offset: 0,
+        isPublished: true,
+      }).catch(() => null);
+      return (res?.pagination?.total ?? 0) > 0 ? slug : null;
+    }),
+  );
+
+  return results.filter((slug): slug is string => Boolean(slug));
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getSiteUrl();
 
@@ -61,7 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getLocations({ limit: 500 }, false).catch(() => ({ data: [] })),
     getDevelopers({ limit: 200 }, false).catch(() => []),
     getCategories({ limit: 500 }, false).catch(() => ({ data: [] })),
-    getAllTagSlugs().catch(() => [] as string[]),
+    collectTagSlugsWithProperties(),
   ]);
 
   const normalise = (res: unknown): any[] =>

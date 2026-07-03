@@ -3,6 +3,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Twitter, Send } from 'lucide-react';
 import { CONTACT_INFO } from '@/lib/constants';
+import { getSiteUrl } from '@/lib/site-url';
+
+const base = getSiteUrl();
 
 export const metadata: Metadata = {
   title: 'Contact Us - Get in Touch',
@@ -11,10 +14,10 @@ export const metadata: Metadata = {
     title: 'Contact Us - Get in Touch',
     description: 'Contact Superluxere for luxury real estate inquiries. Visit our office, call us, or send a message.',
     type: 'website',
-    url: 'https://superluxere.com/contact',
+    url: `${base}/contact`,
   },
   alternates: {
-    canonical: 'https://superluxere.com/contact',
+    canonical: `${base}/contact`,
   },
 };
 

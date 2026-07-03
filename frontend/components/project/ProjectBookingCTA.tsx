@@ -67,11 +67,11 @@ export function ProjectBookingCTA({ projectTitle, propertyId, propertySlug }: Pr
   };
 
   return (
-    <section className="py-8 sm:py-12 bg-[#1A1A2E] overflow-x-hidden w-full" id="contact">
+    <section className="py-8 sm:py-10 md:py-12 bg-[#1A1A2E] overflow-x-hidden w-full" id="contact">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0 w-full box-border">
 
         {/* Header */}
-        <div className="text-center mb-8 sm:mb-10 min-w-0">
+        <div className="text-center mb-8 sm:mb-10 md:mb-10 min-w-0">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif text-white mb-2 break-words [overflow-wrap:anywhere] px-1">
             Schedule a Site Visit
           </h2>
