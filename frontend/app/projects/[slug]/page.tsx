@@ -13,27 +13,53 @@ import {
 } from "@/lib/property-transformer";
 import type { Property, Project as ProjectType } from "@/types";
 import { Footer } from "@/components/layout/Footer";
-import { FloatingActions } from "@/components/layout/FloatingActions";
 import { ProjectHero } from "@/components/project/ProjectHero";
-import { ProjectOverview } from "@/components/project/ProjectOverview";
-import { ProjectAmenities } from "@/components/project/ProjectAmenities";
-import { ProjectLocation } from "@/components/project/ProjectLocation";
-import { ProjectFAQ } from "@/components/project/ProjectFAQ";
+import { MAX_FAQS, ProjectFAQ } from "@/components/project/ProjectFAQ";
 import { ProjectFaqJsonLd } from "@/components/project/ProjectFaqJsonLd";
 import { ProjectDetailJsonLd } from "@/components/project/ProjectDetailJsonLd";
-import { ProjectMasterPlan } from "@/components/project/ProjectMasterPlan";
-import { ProjectPaymentPlan } from "@/components/project/ProjectPaymentPlan";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { ProjectKeyTakeaways } from "@/components/project/ProjectKeyTakeaways";
-import { ProjectBookingCTA } from "@/components/project/ProjectBookingCTA";
-import { ProjectBookingBanner } from "@/components/project/ProjectBookingBanner";
-import { ProjectWhyInvest } from "@/components/project/ProjectWhyInvest";
-import { ProjectSectionNavigation } from "@/components/project/ProjectSectionNavigation";
-import { ProjectTeam } from "@/components/project/ProjectTeam";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import { HtmlRenderer } from "@/components/ui/HtmlRenderer";
 import { ProjectViewTracker } from "@/components/analytics/ProjectViewTracker";
+import { ProjectLeadPageContext } from "@/components/project/ProjectLeadPageContext";
+
+const ProjectOverview = dynamic(() =>
+  import("@/components/project/ProjectOverview").then((m) => ({ default: m.ProjectOverview })),
+);
+const ProjectAmenities = dynamic(() =>
+  import("@/components/project/ProjectAmenities").then((m) => ({ default: m.ProjectAmenities })),
+);
+const ProjectLocation = dynamic(() =>
+  import("@/components/project/ProjectLocation").then((m) => ({ default: m.ProjectLocation })),
+);
+const ProjectMasterPlan = dynamic(() =>
+  import("@/components/project/ProjectMasterPlan").then((m) => ({ default: m.ProjectMasterPlan })),
+);
+const ProjectPaymentPlan = dynamic(() =>
+  import("@/components/project/ProjectPaymentPlan").then((m) => ({ default: m.ProjectPaymentPlan })),
+);
+const ProjectKeyTakeaways = dynamic(() =>
+  import("@/components/project/ProjectKeyTakeaways").then((m) => ({ default: m.ProjectKeyTakeaways })),
+);
+const ProjectBookingCTA = dynamic(() =>
+  import("@/components/project/ProjectBookingCTA").then((m) => ({ default: m.ProjectBookingCTA })),
+);
+const ProjectBookingBanner = dynamic(() =>
+  import("@/components/project/ProjectBookingBanner").then((m) => ({ default: m.ProjectBookingBanner })),
+);
+const ProjectWhyInvest = dynamic(() =>
+  import("@/components/project/ProjectWhyInvest").then((m) => ({ default: m.ProjectWhyInvest })),
+);
+const ProjectSectionNavigation = dynamic(() =>
+  import("@/components/project/ProjectSectionNavigation").then((m) => ({ default: m.ProjectSectionNavigation })),
+);
+const ProjectTeam = dynamic(() =>
+  import("@/components/project/ProjectTeam").then((m) => ({ default: m.ProjectTeam })),
+);
+const FloatingActions = dynamic(() =>
+  import("@/components/layout/FloatingActions").then((m) => ({ default: m.FloatingActions })),
+);
 
 const ProjectGallery = dynamic(() =>
   import("@/components/project/ProjectGallery").then((m) => ({ default: m.ProjectGallery })),
@@ -213,11 +239,16 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   ];
 
   return (
-    <main className="min-h-screen relative overflow-x-hidden selection:bg-gold selection:text-white pt-16 lg:pt-20 pb-[calc(3.25rem+env(safe-area-inset-bottom))] md:pb-0">
+    <main className="min-h-screen relative overflow-x-hidden selection:bg-gold selection:text-white pt-16 lg:pt-20 pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0">
       <ProjectViewTracker
         projectSlug={slug}
         locationSlug={project.Location?.slug}
         developerSlug={project.Developer?.slug}
+      />
+      <ProjectLeadPageContext
+        propertyId={project.id}
+        propertySlug={slug}
+        propertyTitle={project.title}
       />
       {/* JSON-LD — BreadcrumbList + RealEstateListing */}
       <ProjectDetailJsonLd project={project} slug={slug} />
@@ -239,9 +270,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Introduction Text Section */}
       {details?.introText && (
-        <section className="py-8 bg-[#F5F0E8]">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10 text-center">
+        <section className="py-8 bg-[#F5F0E8] overflow-x-hidden">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
+            <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-[#C9A961]/10 text-center min-w-0 overflow-hidden">
               <HtmlRenderer
                 html={details.introText}
                 fontSize="text-lg"
@@ -254,8 +285,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Key Takeaways Section */}
       {details?.keyTakeaways && (
-        <section className="py-12 bg-[#F5F0E8]" id="key-takeaways">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-12 bg-[#F5F0E8] overflow-x-hidden" id="key-takeaways">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
             <SectionHeading label="Highlights">
               {details.sectionHeadings?.keyTakeaways || "Key Takeaways"}
             </SectionHeading>
@@ -266,8 +297,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 <div
                   className={
                     ktImage
-                      ? "grid md:grid-cols-2 gap-8 items-stretch"
-                      : "grid grid-cols-1 gap-8"
+                      ? "grid md:grid-cols-2 gap-8 items-stretch min-w-0"
+                      : "grid grid-cols-1 gap-8 min-w-0"
                   }
                 >
                   {ktImage ? (
@@ -284,7 +315,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                     </div>
                   ) : null}
 
-                  <div className="flex flex-col">
+                  <div className="flex flex-col min-w-0 max-w-full">
                     <ProjectKeyTakeaways
                       data={details.keyTakeaways}
                       heading={details.sectionHeadings?.keyTakeaways}
@@ -445,7 +476,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <section id="faqs">
         {details?.faqs && details.faqs.length > 0 && (
           <>
-            <ProjectFaqJsonLd faqs={details.faqs} />
+            <ProjectFaqJsonLd faqs={details.faqs.slice(0, MAX_FAQS)} />
             <ProjectFAQ
               faqs={details.faqs}
               heading={details.sectionHeadings?.faqs}
@@ -463,15 +494,15 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       )}
 
       {/* Contextual internal links strengthen topical/entity connections for SEO */}
-      <section className="py-10 bg-[#F5F0E8] border-t border-[#C9A961]/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-10 bg-[#F5F0E8] border-t border-[#C9A961]/10 overflow-x-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
           <SectionHeading label="Discover More">Explore This Market Further</SectionHeading>
-          <div className="mt-4 flex flex-wrap gap-3">
+          <div className="mt-4 flex flex-wrap gap-2 sm:gap-3 min-w-0">
             {relatedLinks.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="inline-flex items-center rounded-full border border-[#C9A961]/30 bg-white px-4 py-2 text-sm font-medium text-[#2C2416] hover:border-[#C9A961] hover:text-gold transition-colors"
+                className="inline-flex items-center rounded-full border border-[#C9A961]/30 bg-white px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-[#2C2416] hover:border-[#C9A961] hover:text-gold transition-colors break-words max-w-full"
               >
                 {item.label}
               </Link>

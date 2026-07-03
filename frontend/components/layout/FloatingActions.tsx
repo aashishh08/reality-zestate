@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Phone, MessageCircle, ChevronUp } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { SCROLL_THRESHOLDS, CONTACT_INFO } from "@/lib/constants";
 import { trackPhoneClick, trackWhatsAppClick } from "@/lib/analytics";
 
@@ -88,20 +87,16 @@ export function FloatingActions() {
       </div>
 
       {/* Scroll to top — sits above mobile contact bar */}
-      <AnimatePresence>
-        {showScrollTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5 }}
-            onClick={scrollToTop}
-            aria-label="Scroll to top"
-            className="fixed z-40 bg-black text-gold border border-gold/30 p-3 rounded-full shadow-2xl hover:bg-gold hover:text-black transition-colors touch-manipulation bottom-[max(4.75rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] md:bottom-8 md:right-8"
-          >
-            <ChevronUp className="w-6 h-6" />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {showScrollTop && (
+        <button
+          type="button"
+          onClick={scrollToTop}
+          aria-label="Scroll to top"
+          className="fixed z-40 bg-black text-gold border border-gold/30 p-2.5 sm:p-3 rounded-full shadow-2xl hover:bg-gold hover:text-black transition-all duration-200 animate-fade-in-scale touch-manipulation bottom-[max(5.25rem,calc(4.5rem+env(safe-area-inset-bottom)))] right-[max(0.75rem,env(safe-area-inset-right))] md:bottom-8 md:right-8"
+        >
+          <ChevronUp className="w-6 h-6" />
+        </button>
+      )}
     </>
   );
 }

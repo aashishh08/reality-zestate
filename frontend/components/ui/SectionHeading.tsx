@@ -1,7 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
-
 interface SectionHeadingProps {
   children: React.ReactNode;
   label?: string;
@@ -19,49 +15,29 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <div
-      className={`mb-8 flex flex-col ${centered ? "items-center" : "items-start"}`}
+      className={`mb-8 flex flex-col min-w-0 max-w-full w-full ${centered ? "items-center" : "items-start"}`}
     >
-      {/* Optional label */}
       {label && (
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="mb-4 font-sans text-sm font-semibold uppercase tracking-widest text-[#C9A961]"
-        >
+        <p className="mb-4 font-sans text-sm font-semibold uppercase tracking-widest text-[#C9A961] animate-fade-in-up">
           {label}
-        </motion.p>
+        </p>
       )}
 
-      {/* Heading */}
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className={`text-4xl md:text-5xl font-serif text-[#1A1A2E] leading-tight ${centered ? "text-center" : ""} ${className}`}
+      <h2
+        className={`text-3xl sm:text-4xl md:text-5xl font-serif text-[#1A1A2E] leading-tight break-words [overflow-wrap:anywhere] animate-fade-in-up animation-delay-100 ${centered ? "text-center" : ""} ${className}`}
       >
         {children}
-      </motion.h2>
+      </h2>
 
-      {/* Optional description */}
       {description && (
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className={`mt-4 max-w-2xl font-sans text-lg leading-relaxed text-gray-500 ${centered ? "text-center" : ""}`}
+        <p
+          className={`mt-4 max-w-2xl font-sans text-base sm:text-lg leading-relaxed text-gray-500 break-words [overflow-wrap:anywhere] animate-fade-in-up animation-delay-200 ${centered ? "text-center" : ""}`}
         >
           {description}
-        </motion.p>
+        </p>
       )}
 
-      {/* Gold accent line — bottom */}
-      <motion.div
-        initial={{ width: 0 }}
-        whileInView={{ width: "80px" }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="h-[3px] bg-gradient-to-r from-[#C9A961] to-[#D4AF7C] rounded-full mt-6"
-      />
+      <div className="h-[3px] bg-gradient-to-r from-[#C9A961] to-[#D4AF7C] rounded-full mt-6 w-20 animate-grow-width animation-delay-300" />
     </div>
   );
 }

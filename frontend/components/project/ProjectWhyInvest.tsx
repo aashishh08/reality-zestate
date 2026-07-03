@@ -144,9 +144,9 @@ export function ProjectWhyInvest({
   const lastReasonCardIndex = visibleReasonCards.length > 0 ? visibleReasonCards.length - 1 : -1;
 
   return (
-    <section className="py-12 bg-[#F5F0E8]" id="why-invest">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+    <section className="py-12 bg-[#F5F0E8] overflow-x-hidden" id="why-invest">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
+        <div className="text-center mb-10 sm:mb-16 min-w-0">
           <SectionHeading
             label="Investment Opportunity"
             description={subtitleParagraph}
@@ -156,7 +156,7 @@ export function ProjectWhyInvest({
         </div>
 
         <div
-          className={`grid gap-6 md:gap-8 ${hasBoxes ? "md:grid-cols-2" : "md:grid-cols-1"}`}
+          className={`grid gap-6 md:gap-8 min-w-0 ${hasBoxes ? "md:grid-cols-2" : "md:grid-cols-1"}`}
         >
           {hasBoxes ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-stretch min-w-0">
@@ -206,21 +206,22 @@ export function ProjectWhyInvest({
           ) : null}
 
           <motion.div
-            initial={{ opacity: 0, x: hasBoxes ? 50 : 0 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col gap-6"
+            viewport={{ once: true }}
+            className="flex flex-col gap-6 min-w-0 max-w-full w-full"
           >
             {analysisText.trim() ? (
-              <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
-                <div className="h-[400px] overflow-y-auto pr-4 custom-scrollbar">
+              <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-[#C9A961]/10 min-w-0 max-w-full overflow-hidden">
+                <div className="h-[280px] sm:h-[400px] overflow-y-auto overflow-x-hidden pr-2 sm:pr-4 custom-scrollbar min-w-0">
                   <HtmlRenderer html={analysisText} />
                 </div>
               </div>
             ) : null}
 
             {hasStats ? (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 min-w-0">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 min-w-0">
                 {whyInvestStats?.annualAppreciation?.trim() ? (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -295,7 +296,7 @@ export function ProjectWhyInvest({
               <X className="w-5 h-5" />
             </button>
 
-            <div className="p-8">
+            <div className="p-4 sm:p-6 md:p-8">
               {submitStatus === "success" ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}

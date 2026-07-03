@@ -85,9 +85,10 @@ export function ProjectHero({ project }: ProjectHeroProps) {
               src={heroSrc}
               alt={project.title}
               fill
+              sizes="100vw"
               className="object-cover"
               priority
-              quality={100}
+              quality={80}
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#2C2416] via-[#3d3429] to-[#1a1612]" />
@@ -97,18 +98,18 @@ export function ProjectHero({ project }: ProjectHeroProps) {
 
         {/* Content */}
         <div className="relative h-full flex items-end pb-16 md:pb-24">
-          <div className="max-w-7xl mx-auto px-6 w-full">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full min-w-0">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="max-w-4xl"
+              className="max-w-4xl min-w-0"
             >
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-4 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-4 leading-tight break-words [overflow-wrap:anywhere]">
                 {project.h1Heading || project.title}
               </h1>
               {details.subtitle?.trim() ? (
-                <p className="text-xl md:text-2xl text-white/90 font-light mb-6">
+                <p className="text-lg sm:text-xl md:text-2xl text-white/90 font-light mb-6 break-words [overflow-wrap:anywhere]">
                   {details.subtitle}
                 </p>
               ) : null}

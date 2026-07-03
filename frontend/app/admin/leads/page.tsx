@@ -109,7 +109,8 @@ export default function AdminLeadsPage() {
     // ── Client-side filtering ──
     const filtered = leads.filter(l => {
         const q = search.toLowerCase();
-        const matchesSearch = !q || l.name.toLowerCase().includes(q) || l.email.toLowerCase().includes(q) || l.phone.includes(q);
+        const propertyTitle = l.Property?.title?.toLowerCase() ?? '';
+        const matchesSearch = !q || l.name.toLowerCase().includes(q) || l.email.toLowerCase().includes(q) || l.phone.includes(q) || propertyTitle.includes(q);
         const matchesStatus = !filterStatus || l.status === filterStatus;
         const matchesSource = !filterSource || (l.source || 'website') === filterSource;
         return matchesSearch && matchesStatus && matchesSource;
@@ -183,7 +184,7 @@ export default function AdminLeadsPage() {
                                 <input
                                     value={search}
                                     onChange={e => setSearch(e.target.value)}
-                                    placeholder="Search by name, email or phone…"
+                                    placeholder="Search by name, email, phone or project…"
                                     className="w-full pl-10 pr-4 py-2.5 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl text-sm focus:outline-none focus:border-amber-500 transition"
                                 />
                             </div>
@@ -262,10 +263,14 @@ export default function AdminLeadsPage() {
                             ) : (
                                 <>
                                     {/* Table Header */}
-                                    <div className="hidden md:grid grid-cols-[2fr_2fr_1.4fr_0.85fr_1.1fr_1.2fr_1.35fr] gap-4 px-6 py-3 border-b border-gray-700 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    <div className="hidden md:grid grid-cols-[2fr_2fr_1.4fr_1.5fr_0.85fr_1.1fr_1.2fr_1.35fr] gap-4 px-6 py-3 border-b border-gray-700 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                         <span>Name</span>
                                         <span>Contact</span>
                                         <span>Source</span>
+                                        <span className="flex items-center gap-1">
+                                            <Building2 className="w-3.5 h-3.5" />
+                                            Project
+                                        </span>
                                         <span className="flex items-center gap-1">
                                             <Layout className="w-3.5 h-3.5" />
                                             Layout
@@ -279,7 +284,7 @@ export default function AdminLeadsPage() {
                                         {filtered.map(lead => {
                                             const meta = STATUS_META[lead.status] ?? STATUS_META.new;
                                             return (
-                                                <div key={lead.id} className="grid grid-cols-1 md:grid-cols-[2fr_2fr_1.4fr_0.85fr_1.1fr_1.2fr_1.35fr] gap-4 px-6 py-4 hover:bg-gray-700/20 transition items-center">
+                                                <div key={lead.id} className="grid grid-cols-1 md:grid-cols-[2fr_2fr_1.4fr_1.5fr_0.85fr_1.1fr_1.2fr_1.35fr] gap-4 px-6 py-4 hover:bg-gray-700/20 transition items-center">
 
                                                     {/* Name */}
                                                     <div>
@@ -304,6 +309,27 @@ export default function AdminLeadsPage() {
                                                         <span className="text-xs px-2 py-1 rounded-full bg-gray-700 text-gray-300 font-medium">
                                                             {formatSource(lead.source)}
                                                         </span>
+                                                    </div>
+
+                                                    {/* Project */}
+                                                    <div>
+                                                        {lead.Property?.title ? (
+                                                            lead.Property.slug ? (
+                                                                <Link
+                                                                    href={`/projects/${lead.Property.slug}`}
+                                                                    className="text-xs text-amber-400 hover:text-amber-300 transition truncate block"
+                                                                    title={lead.Property.title}
+                                                                >
+                                                                    {lead.Property.title}
+                                                                </Link>
+                                                            ) : (
+                                                                <span className="text-xs text-gray-300 truncate block" title={lead.Property.title}>
+                                                                    {lead.Property.title}
+                                                                </span>
+                                                            )
+                                                        ) : (
+                                                            <span className="text-gray-600 text-xs">—</span>
+                                                        )}
                                                     </div>
 
                                                     {/* Layout download (Residences CTA) */}

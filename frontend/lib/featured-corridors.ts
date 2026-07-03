@@ -3,6 +3,7 @@ import {
   CORRIDOR_EDITORIAL_BY_SLUG,
   DEFAULT_CORRIDOR_DESCRIPTION,
   DEFAULT_CORRIDOR_MOOD,
+  FEATURED_CORRIDOR_SLUGS,
   type FeaturedCorridorConfig,
 } from '@/data/featured-corridors';
 import { getLocations, type Location } from '@/lib/api/locations';
@@ -46,9 +47,13 @@ async function publishedTotalForCorridor(
   }
 }
 
+const featuredSlugOrder = new Map(
+  FEATURED_CORRIDOR_SLUGS.map((slug, index) => [slug, index]),
+);
+
 /**
- * Homepage “India’s best corridors”: one card per `locality` row from the API (parent must be a city).
- * Optional mood/description from `CORRIDOR_EDITORIAL_BY_SLUG`; counts from the properties API.
+ * Homepage “India’s best corridors”: whitelisted localities from `FEATURED_CORRIDOR_SLUGS`.
+ * Mood/description from `CORRIDOR_EDITORIAL_BY_SLUG`; counts from the properties API.
  */
 export async function getFeaturedCorridorCards(
   revalidate: number | false = 3600,
@@ -58,7 +63,13 @@ export async function getFeaturedCorridorCards(
     const rows = Array.isArray(res) ? res : res?.data ?? [];
     const localities = rows.filter(
       (loc): loc is Location =>
-        Boolean(loc?.slug && loc?.name && loc?.type === 'locality' && isCityParent(loc.parent)),
+        Boolean(
+          loc?.slug &&
+            loc?.name &&
+            loc?.type === 'locality' &&
+            isCityParent(loc.parent) &&
+            featuredSlugOrder.has(loc.slug),
+        ),
     );
 
     const cards = await Promise.all(
@@ -85,7 +96,11 @@ export async function getFeaturedCorridorCards(
       }),
     );
 
-    return cards.sort((a, b) => a.displayName.localeCompare(b.displayName));
+    return cards.sort(
+      (a, b) =>
+        (featuredSlugOrder.get(a.localitySlug) ?? 0) -
+        (featuredSlugOrder.get(b.localitySlug) ?? 0),
+    );
   } catch {
     return [];
   }

@@ -7,7 +7,6 @@ import { getBlogBySlug, getBlogs, BlogPost } from '@/lib/api/blogs';
 import { getProperties } from '@/lib/api/properties';
 import { transformListingPropertyToProject } from '@/lib/property-transformer';
 import { CONTACT_INFO } from '@/lib/constants';
-import { LeadPopup } from '@/components/ui/LeadPopup';
 import { TrackedWhatsAppLink } from '@/components/analytics/TrackedWhatsAppLink';
 import { sanitizeHtml } from '@/lib/utils/sanitize-html';
 import { getSiteUrl } from '@/lib/site-url';
@@ -596,7 +595,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       />
       </div>
 
-      <LeadPopup />
     </main>
   );
 }

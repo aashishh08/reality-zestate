@@ -4,6 +4,7 @@
  * requirements for aggregateRating/review on non-retail property listings).
  */
 import type { Project } from "@/types";
+import type { KeyTakeawaysData } from "@/components/project/ProjectKeyTakeaways";
 import { getSiteUrl } from "@/lib/site-url";
 import { formatPriceRange } from "@/lib/property-transformer";
 
@@ -12,28 +13,255 @@ type Props = {
   slug: string;
 };
 
-function buildAdditionalProperties(
-  highlights: Project["details"]["highlights"],
-): Array<{ "@type": string; name: string; value: string }> {
+type PropertyValue = { "@type": "PropertyValue"; name: string; value: string };
+type ProjectDetails = NonNullable<Project["details"]>;
+type HighlightKey = keyof NonNullable<ProjectDetails["highlights"]>;
+
+const KEY_TAKEAWAY_FIELDS: { key: keyof KeyTakeawaysData; label: string }[] = [
+  { key: "status", label: "Status" },
+  { key: "type", label: "Type" },
+  { key: "area", label: "Area" },
+  { key: "configuration", label: "Configuration" },
+  { key: "sizes", label: "Sizes" },
+  { key: "towers", label: "Towers" },
+  { key: "floors", label: "Floors" },
+  { key: "totalUnits", label: "Total Units" },
+  { key: "clubhouse", label: "Clubhouse" },
+  { key: "priceRange", label: "Price Range" },
+  { key: "reraNo", label: "RERA Number" },
+  { key: "launchDate", label: "Launch Date" },
+  { key: "possessionDate", label: "Possession Date" },
+  { key: "phases", label: "Phases" },
+  { key: "developer", label: "Developer" },
+  { key: "address", label: "Address" },
+];
+
+const HIGHLIGHT_FIELDS: [HighlightKey, string][] = [
+  ["rera", "RERA Number"],
+  ["configuration", "Configuration"],
+  ["possession", "Possession"],
+  ["totalUnits", "Total Units"],
+  ["landArea", "Land Area"],
+  ["priceRange", "Price Range"],
+];
+
+/** Parse display prices like "₹3.5 Cr" or "₹ 45 Lac" into INR rupees. */
+function parseIndianPriceLabel(label: string): number | null {
+  const normalized = label.replace(/,/g, "").trim().toLowerCase();
+  if (!normalized || /on request|tbd|na\b/i.test(normalized)) return null;
+
+  const cr = normalized.match(/([\d.]+)\s*(?:cr|crore|crores)\b/);
+  if (cr) return Math.round(parseFloat(cr[1]) * 10_000_000);
+
+  const lac = normalized.match(/([\d.]+)\s*(?:lac|lakh|lacs|lakhs)\b/);
+  if (lac) return Math.round(parseFloat(lac[1]) * 100_000);
+
+  const plain = normalized.match(/₹?\s*([\d.]+)/);
+  if (plain) {
+    const n = parseFloat(plain[1]);
+    return Number.isFinite(n) && n > 0 ? Math.round(n) : null;
+  }
+
+  return null;
+}
+
+/** Extract lat/lng from common Google Maps URL patterns when CMS stores an embed link. */
+function extractGeoCoordinates(
+  ...sources: Array<string | undefined>
+): { latitude: number; longitude: number } | null {
+  for (const raw of sources) {
+    const s = raw?.trim();
+    if (!s) continue;
+
+    const atMatch = s.match(/@(-?\d+\.?\d*),\s*(-?\d+\.?\d*)/);
+    if (atMatch) {
+      return { latitude: parseFloat(atMatch[1]), longitude: parseFloat(atMatch[2]) };
+    }
+
+    const llMatch = s.match(/[?&]ll=(-?\d+\.?\d*),\s*(-?\d+\.?\d*)/i);
+    if (llMatch) {
+      return { latitude: parseFloat(llMatch[1]), longitude: parseFloat(llMatch[2]) };
+    }
+
+    const qCoord = s.match(/[?&]q=(-?\d+\.?\d*),\s*(-?\d+\.?\d*)(?:&|$)/i);
+    if (qCoord) {
+      return { latitude: parseFloat(qCoord[1]), longitude: parseFloat(qCoord[2]) };
+    }
+  }
+  return null;
+}
+
+function buildKeyTakeawayProperties(
+  keyTakeaways: ProjectDetails["keyTakeaways"],
+): PropertyValue[] {
+  if (!keyTakeaways || Array.isArray(keyTakeaways)) return [];
+
+  return KEY_TAKEAWAY_FIELDS.flatMap(({ key, label }) => {
+    const v = keyTakeaways[key];
+    if (typeof v !== "string" || !v.trim()) return [];
+    return [{ "@type": "PropertyValue" as const, name: label, value: v.trim() }];
+  });
+}
+
+function buildHighlightProperties(
+  highlights: ProjectDetails["highlights"],
+  usedNames: Set<string>,
+): PropertyValue[] {
   if (!highlights) return [];
-  const map: [keyof typeof highlights, string][] = [
-    ["rera", "RERA Number"],
-    ["configuration", "Configuration"],
-    ["possession", "Possession"],
-    ["totalUnits", "Total Units"],
-    ["landArea", "Land Area"],
-    ["priceRange", "Price Range"],
-  ];
-  return map
-    .filter(([key]) => {
-      const v = highlights[key];
-      return typeof v === "string" && v.trim().length > 0;
-    })
-    .map(([key, name]) => ({
-      "@type": "PropertyValue",
+
+  return HIGHLIGHT_FIELDS.flatMap(([key, name]) => {
+    if (usedNames.has(name.toLowerCase())) return [];
+    const v = highlights[key];
+    if (typeof v !== "string" || !v.trim()) return [];
+    return [{ "@type": "PropertyValue" as const, name, value: v.trim() }];
+  });
+}
+
+function buildFloorPlanProperties(
+  floorPlans: ProjectDetails["floorPlans"],
+): PropertyValue[] {
+  if (!floorPlans?.length) return [];
+
+  return floorPlans.flatMap((plan) => {
+    const type = plan.type?.trim();
+    if (!type) return [];
+    const parts = [plan.superArea?.trim(), plan.price?.trim()].filter(Boolean);
+    return [
+      {
+        "@type": "PropertyValue" as const,
+        name: `Floor plan — ${type}`,
+        value: parts.length ? parts.join(" · ") : type,
+      },
+    ];
+  });
+}
+
+function buildFloorPlanOffers(
+  floorPlans: ProjectDetails["floorPlans"],
+  pageUrl: string,
+): Record<string, unknown>[] {
+  if (!floorPlans?.length) return [];
+
+  return floorPlans.flatMap((plan) => {
+    const name = plan.type?.trim();
+    if (!name) return [];
+
+    const price = plan.price ? parseIndianPriceLabel(plan.price) : null;
+    const description = [plan.superArea?.trim(), plan.price?.trim()].filter(Boolean).join(" — ");
+
+    const offer: Record<string, unknown> = {
+      "@type": "Offer",
       name,
-      value: (highlights[key] as string).trim(),
-    }));
+      availability: "https://schema.org/InStock",
+      url: pageUrl,
+      ...(description ? { description } : {}),
+      itemOffered: {
+        "@type": "Accommodation",
+        name,
+        ...(plan.superArea?.trim()
+          ? {
+              floorSize: {
+                "@type": "QuantitativeValue",
+                value: plan.superArea.replace(/[^\d.]/g, "") || plan.superArea.trim(),
+                unitText: "sq.ft",
+              },
+            }
+          : {}),
+      },
+    };
+
+    if (price != null) {
+      offer.price = String(price);
+      offer.priceCurrency = "INR";
+    }
+
+    return [offer];
+  });
+}
+
+function buildOffersNode(
+  project: Project,
+  pageUrl: string,
+  priceLabel: string,
+): Record<string, unknown> | null {
+  const listingOffer = buildOffer(project, pageUrl, priceLabel);
+  const unitOffers = buildFloorPlanOffers(project.details?.floorPlans, pageUrl);
+
+  if (unitOffers.length > 0) {
+    const prices = unitOffers
+      .map((o) => (typeof o.price === "string" ? Number(o.price) : NaN))
+      .filter((n) => Number.isFinite(n) && n > 0);
+
+    const aggregate: Record<string, unknown> = {
+      "@type": "AggregateOffer",
+      priceCurrency: "INR",
+      availability: "https://schema.org/InStock",
+      url: pageUrl,
+      offerCount: unitOffers.length,
+      offers: unitOffers,
+    };
+
+    if (prices.length > 0) {
+      aggregate.lowPrice = String(Math.min(...prices));
+      aggregate.highPrice = String(Math.max(...prices));
+    }
+
+    return aggregate;
+  }
+
+  return listingOffer;
+}
+
+function buildContentLocation(project: Project): Record<string, unknown> | null {
+  const kt = project.details?.keyTakeaways;
+  const structuredKt = kt && !Array.isArray(kt) ? kt : null;
+  const locSection = project.details?.location;
+
+  const streetAddress =
+    structuredKt?.address?.trim() || locSection?.address?.trim() || undefined;
+  const locality = project.location?.trim();
+  const sublocality = project.sublocality?.trim();
+
+  if (!streetAddress && !locality && !sublocality) return null;
+
+  const postalAddress: Record<string, unknown> = {
+    "@type": "PostalAddress",
+    addressCountry: "IN",
+  };
+  if (streetAddress) postalAddress.streetAddress = streetAddress;
+  if (sublocality) {
+    postalAddress.addressLocality = sublocality;
+    if (locality) postalAddress.addressRegion = locality;
+  } else if (locality) {
+    postalAddress.addressLocality = locality;
+  }
+
+  const geo = extractGeoCoordinates(streetAddress, locSection?.mapImage);
+
+  const place: Record<string, unknown> = {
+    "@type": "Place",
+    name: locality || sublocality || streetAddress,
+    address: postalAddress,
+  };
+
+  if (geo) {
+    place.geo = {
+      "@type": "GeoCoordinates",
+      latitude: geo.latitude,
+      longitude: geo.longitude,
+    };
+  }
+
+  return place;
+}
+
+function buildAdditionalProperties(project: Project): PropertyValue[] {
+  const fromTakeaways = buildKeyTakeawayProperties(project.details?.keyTakeaways);
+  const usedNames = new Set(fromTakeaways.map((p) => p.name.toLowerCase()));
+  const fromHighlights = buildHighlightProperties(project.details?.highlights, usedNames);
+  const fromFloorPlans = buildFloorPlanProperties(project.details?.floorPlans);
+
+  return [...fromTakeaways, ...fromHighlights, ...fromFloorPlans];
 }
 
 function resolveListingPrice(project: Project): number | null {
@@ -136,8 +364,9 @@ export function ProjectDetailJsonLd({ project, slug }: Props) {
     ],
   };
 
-  const additionalProps = buildAdditionalProperties(project.details?.highlights);
-  const offer = buildOffer(project, pageUrl, priceLabel);
+  const additionalProps = buildAdditionalProperties(project);
+  const offers = buildOffersNode(project, pageUrl, priceLabel);
+  const contentLocation = buildContentLocation(project);
   const dateModified = project.updatedAt || project.createdAt;
 
   const listing: Record<string, unknown> = {
@@ -151,7 +380,7 @@ export function ProjectDetailJsonLd({ project, slug }: Props) {
     ...(listingImages.length > 0 ? { image: listingImages } : {}),
     ...(project.createdAt ? { datePosted: project.createdAt } : {}),
     ...(dateModified ? { dateModified } : {}),
-    ...(offer ? { offers: offer } : {}),
+    ...(offers ? { offers } : {}),
     provider: {
       "@type": "RealEstateAgent",
       name: "Superluxere",
@@ -165,19 +394,7 @@ export function ProjectDetailJsonLd({ project, slug }: Props) {
           },
         }
       : {}),
-    ...(project.location
-      ? {
-          contentLocation: {
-            "@type": "Place",
-            name: project.location,
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: project.location,
-              addressCountry: "IN",
-            },
-          },
-        }
-      : {}),
+    ...(contentLocation ? { contentLocation } : {}),
     ...(additionalProps.length > 0 ? { additionalProperty: additionalProps } : {}),
   };
 

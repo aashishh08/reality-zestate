@@ -35,7 +35,7 @@ interface PropertyCardProps {
   imageSizes?: string;
 }
 
-export function PropertyCard({ project, imageSizes }: PropertyCardProps) {
+export function PropertyCard({ project, index, imageSizes }: PropertyCardProps) {
   if (!project?.slug || !project?.title) return null;
 
   // First status-type tag drives the badge
@@ -68,6 +68,7 @@ export function PropertyCard({ project, imageSizes }: PropertyCardProps) {
               alt={project.title}
               fill
               sizes={imageSizes ?? DEFAULT_CARD_IMAGE_SIZES}
+              loading={index < 2 ? undefined : "lazy"}
               className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
           ) : (

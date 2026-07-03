@@ -1,7 +1,14 @@
 /**
- * Optional editorial lines for homepage corridor cards. The corridor *list* is built from
- * `GET /locations?type=locality` (plus parent city); slugs here only enrich copy when present.
+ * Homepage featured corridors — whitelist order (GCR → GCR Extension → Noida Expy → Dwarka Expy).
+ * Cards are built from matching `locality` rows in the locations API; editorial copy keyed by slug below.
  */
+export const FEATURED_CORRIDOR_SLUGS = [
+  'golf-course-road',
+  'golf-course-road-extension',
+  'noida-expressway',
+  'dwarka-expressway',
+] as const;
+
 export interface FeaturedCorridorConfig {
   locationSlug: string;
   citySlug: string;

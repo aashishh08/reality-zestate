@@ -8,6 +8,7 @@ RUN yarn install --frozen-lockfile
 
 COPY .sequelizerc ./
 COPY src/ ./src/
+COPY docs/ ./docs/
 COPY .env.example .env
 
 EXPOSE 4002

@@ -72,14 +72,10 @@ export function ProjectFloorPlans({
   if (!safePlans) return null;
 
   const safeTab = Math.min(activeTab, safePlans.length - 1);
-  const panelHtml =
-    floorPlanPanelQuote && floorPlanPanelQuote.trim()
-      ? floorPlanPanelQuote
-      : defaultPanelQuoteHtml(safePlans[safeTab].type);
 
   return (
-    <section id="floor-plans" className="py-14 bg-transparent">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="floor-plans" className="py-14 bg-transparent overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
         <div className="text-center mb-12">
           <SectionHeading
             label="Configuration Options"
@@ -107,28 +103,35 @@ export function ProjectFloorPlans({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          <motion.div
-            className="lg:col-span-4 order-2 lg:order-1"
-            key={`details-${activeTab}`}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="bg-white p-8 rounded-sm border border-black/5 shadow-sm">
-              <h3 className="text-3xl font-serif font-bold text-black mb-2">{safePlans[safeTab].type}</h3>
-              <p className="text-zinc-500 font-medium mb-8 uppercase tracking-widest text-xs">Unit Type</p>
+        {/*
+          All configs are rendered up-front (CSS `hidden` on inactive tabs) rather than
+          swapped via conditional rendering, so crawlers that don't execute JS still see
+          every unit type's area/price/image in the initial HTML.
+        */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center min-w-0">
+          <div className="lg:col-span-4 order-2 lg:order-1 min-w-0">
+            <div className="bg-white p-4 sm:p-6 md:p-8 rounded-sm border border-black/5 shadow-sm min-w-0 overflow-hidden">
+              {safePlans.map((plan, index) => (
+                <div
+                  key={`details-${index}`}
+                  aria-hidden={index !== safeTab}
+                  className={index === safeTab ? "block" : "hidden"}
+                >
+                  <h3 className="text-2xl sm:text-3xl font-serif font-bold text-black mb-2 break-words [overflow-wrap:anywhere]">{plan.type}</h3>
+                  <p className="text-zinc-500 font-medium mb-8 uppercase tracking-widest text-xs">Unit Type</p>
 
-              <div className="space-y-6 mb-10">
-                <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
-                  <span className="text-zinc-600">Super Area</span>
-                  <span className="font-bold text-black text-lg">{safePlans[safeTab].superArea}</span>
+                  <div className="space-y-6 mb-10">
+                    <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
+                      <span className="text-zinc-600">Super Area</span>
+                      <span className="font-bold text-black text-lg">{plan.superArea}</span>
+                    </div>
+                    <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
+                      <span className="text-zinc-600">Starting Price</span>
+                      <span className="font-bold text-gold-dark text-lg">{plan.price}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
-                  <span className="text-zinc-600">Starting Price</span>
-                  <span className="font-bold text-gold-dark text-lg">{safePlans[safeTab].price}</span>
-                </div>
-              </div>
+              ))}
 
               <ProjectFloorPlanLayoutDownload
                 propertyId={propertyId}
@@ -138,14 +141,25 @@ export function ProjectFloorPlans({
             </div>
 
             <div className="mt-6 p-6 bg-gold/5 rounded-sm border border-gold/10">
-              <HtmlRenderer
-                key={`panel-${safeTab}-${floorPlanPanelQuote ? "custom" : "def"}`}
-                html={panelHtml}
-                fontSize="text-sm"
-                className="prose-p:mb-0 prose-p:mt-0 max-w-none"
-              />
+              {safePlans.map((plan, index) => (
+                <div
+                  key={`quote-${index}`}
+                  aria-hidden={index !== safeTab}
+                  className={index === safeTab ? "block" : "hidden"}
+                >
+                  <HtmlRenderer
+                    html={
+                      floorPlanPanelQuote && floorPlanPanelQuote.trim()
+                        ? floorPlanPanelQuote
+                        : defaultPanelQuoteHtml(plan.type)
+                    }
+                    fontSize="text-sm"
+                    className="prose-p:mb-0 prose-p:mt-0 max-w-none"
+                  />
+                </div>
+              ))}
             </div>
-          </motion.div>
+          </div>
 
           <motion.div
             className="lg:col-span-8 order-1 lg:order-2"
@@ -155,18 +169,26 @@ export function ProjectFloorPlans({
             transition={{ duration: 0.5 }}
           >
             <div className="relative aspect-[16/10] bg-white rounded-sm overflow-hidden shadow-xl border border-black/5 group flex items-center justify-center">
-              {safePlans[safeTab].image?.trim() ? (
-                <Image
-                  src={safePlans[safeTab].image!.trim()}
-                  alt={safePlans[safeTab].type}
-                  fill
-                  className="object-contain p-8 group-hover:scale-105 transition-transform duration-700"
-                />
-              ) : (
-                <p className="text-zinc-500 text-sm font-medium px-6 text-center">
-                  Floor plan layout image not available for this configuration.
-                </p>
-              )}
+              {safePlans.map((plan, index) => (
+                <div
+                  key={`image-panel-${index}`}
+                  aria-hidden={index !== safeTab}
+                  className={`absolute inset-0 flex items-center justify-center ${index === safeTab ? "block" : "hidden"}`}
+                >
+                  {plan.image?.trim() ? (
+                    <Image
+                      src={plan.image.trim()}
+                      alt={plan.type}
+                      fill
+                      className="object-contain p-8 group-hover:scale-105 transition-transform duration-700"
+                    />
+                  ) : (
+                    <p className="text-zinc-500 text-sm font-medium px-6 text-center">
+                      Floor plan layout image not available for this configuration.
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
           </motion.div>
         </div>
@@ -180,7 +202,7 @@ export function ProjectFloorPlans({
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mt-16 bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10"
+              className="mt-12 sm:mt-16 bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-[#C9A961]/10 min-w-0 overflow-hidden"
             >
               <div className="h-[300px] overflow-y-auto pr-4 custom-scrollbar">
                 <div className="space-y-8">

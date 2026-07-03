@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { getBlogs } from '@/lib/api/blogs';
-import { LeadPopup } from '@/components/ui/LeadPopup';
 import BlogNavigation from '@/components/blog/BlogNavigation';
 import BlogCard from '@/components/blog/BlogCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -275,7 +274,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         />
       )}
 
-      <LeadPopup />
     </main>
   );
 }

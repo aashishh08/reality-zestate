@@ -59,8 +59,8 @@ export function ProjectMasterPlan({
 
   return (
     <>
-      <section className="py-14 bg-white" id="master-plan">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="py-14 bg-white overflow-x-hidden" id="master-plan">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
           <div className="text-center mb-16">
             <SectionHeading
               label="Project Layout"
@@ -71,15 +71,15 @@ export function ProjectMasterPlan({
           </div>
 
           <div
-            className={`grid grid-cols-1 gap-16 ${hasImage && hasDesc ? "lg:grid-cols-2" : ""}`}
+            className={`grid grid-cols-1 gap-10 lg:gap-16 min-w-0 ${hasImage && hasDesc ? "lg:grid-cols-2" : ""}`}
           >
             {hasImage ? (
               <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
-                className="relative h-[600px]"
+                className="relative h-[320px] sm:h-[450px] md:h-[600px] min-w-0"
               >
                 <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl">
                   <Image
@@ -113,11 +113,11 @@ export function ProjectMasterPlan({
 
             {hasDesc ? (
               <motion.div
-                initial={{ opacity: 0, x: hasImage ? 30 : 0 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
-                className="relative"
+                className="relative min-w-0 max-w-full"
               >
                 <h3 className="text-3xl font-serif font-bold text-[#2C2416] mb-6">
                   Thoughtfully Designed Layout

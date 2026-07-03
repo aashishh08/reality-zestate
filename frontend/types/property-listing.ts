@@ -82,6 +82,16 @@ export interface PropertyItem {
   image?: string;
   /** First visible heroImage section’s `data.image`, when list API enriches rows */
   thumbnailUrl?: string | null;
+  /** Typed facts (supplement JSONB sections) */
+  bedrooms?: number | null;
+  bathrooms?: number | null;
+  areaSqftMin?: number | null;
+  areaSqftMax?: number | null;
+  reraNumber?: string | null;
+  possessionDate?: string | null;
+  launchDate?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 export interface PropertyListResponse {

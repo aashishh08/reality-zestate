@@ -53,8 +53,16 @@ export function HtmlRenderer({ html, className = "", fontSize = "text-base" }: H
             "prose-li:text-gray-700",
             "prose-blockquote:border-l-[#C9A961]",
             "prose-blockquote:text-gray-600",
-            // Layout
+            // Layout — constrain CMS HTML on narrow viewports
             "max-w-none",
+            "break-words",
+            "[overflow-wrap:anywhere]",
+            "[&_img]:max-w-full",
+            "[&_table]:block",
+            "[&_table]:max-w-full",
+            "[&_table]:overflow-x-auto",
+            "[&_pre]:max-w-full",
+            "[&_pre]:overflow-x-auto",
             fontSize,
             className,
           ]

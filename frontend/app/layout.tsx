@@ -1,23 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Great_Vibes, Playfair_Display, Montserrat } from "next/font/google";
+import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
 import { getSiteUrl } from "@/lib/site-url";
-
-const greatVibes = Great_Vibes({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-great-vibes",
-  display: "swap",
-});
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
+  display: "swap",
 });
 
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -53,6 +48,7 @@ import { LeadModalProvider } from "@/lib/contexts/LeadModalContext";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { OrganizationJsonLd } from "@/components/OrganizationJsonLd";
 import { PublicGoogleAnalytics } from "@/components/analytics/PublicGoogleAnalytics";
+import { LazyLeadPopup } from "@/components/ui/LazyLeadPopup";
 
 export default function RootLayout({
   children,
@@ -62,11 +58,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${greatVibes.variable} ${playfair.variable} ${montserrat.variable} font-sans antialiased overflow-x-clip min-h-[100dvh]`}
+        className={`${playfair.variable} ${montserrat.variable} font-sans antialiased overflow-x-clip min-h-[100dvh]`}
       >
         <OrganizationJsonLd />
         <SiteHeader />
-        <LeadModalProvider>{children}</LeadModalProvider>
+        <LeadModalProvider>
+          {children}
+          <LazyLeadPopup />
+        </LeadModalProvider>
         <PublicGoogleAnalytics />
       </body>
     </html>

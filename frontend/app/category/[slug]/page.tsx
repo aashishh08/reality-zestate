@@ -9,7 +9,6 @@ import {
 } from "@/lib/category-data";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { LeadPopup } from "@/components/ui/LeadPopup";
 import { PropertyListingTemplate } from "@/components/PropertyListingTemplate";
 import {
   CorridorEditorialHero,
@@ -25,6 +24,12 @@ import {
 import { getLocations, getDevelopers, getCategories } from "@/lib";
 import { buildCategoryCollectionPageModel } from "@/lib/category-collection-page";
 import type { PropertyFilters } from "@/types/property-listing";
+import { CollectionJsonLd } from "@/components/collection/CollectionJsonLd";
+import { ProjectFaqJsonLd } from "@/components/project/ProjectFaqJsonLd";
+import {
+  listingSearchParamsFromRecord,
+  parseListingSearchParams,
+} from "@/lib/listing-search-params";
 
 export async function generateStaticParams() {
   const slugs = getAllCategorySlugs();
@@ -115,10 +120,17 @@ async function resolveEditorial(slug: string): Promise<CategoryData | null> {
 
 export default async function CategoryPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { slug } = await params;
+  const resolvedSearchParams = searchParams
+    ? await Promise.resolve(searchParams)
+    : {};
+  const urlSp = listingSearchParamsFromRecord(resolvedSearchParams);
+  const initialUrlFilters = parseListingSearchParams(urlSp, { itemsPerPage: 12 });
 
   const editorial = await resolveEditorial(slug);
   if (!editorial) {
@@ -129,7 +141,11 @@ export default async function CategoryPage({
     getLocations({ limit: 20, offset: 0 }, CATEGORY_PAGE_CACHE_TTL).catch(() => ({ data: [] })),
     getDevelopers({ limit: 12, offset: 0 }, CATEGORY_PAGE_CACHE_TTL).catch(() => []),
     getCategories({ limit: 300, offset: 0 }, CATEGORY_PAGE_CACHE_TTL).catch(() => ({ data: [] })),
-    fetchCategoryPropertiesBySlug(slug, { limit: 12, offset: 0 }),
+    fetchCategoryPropertiesBySlug(slug, {
+      ...initialUrlFilters,
+      limit: initialUrlFilters.limit ?? 12,
+      offset: initialUrlFilters.offset ?? 0,
+    }),
   ]);
 
   const apiCategory =
@@ -167,8 +183,38 @@ export default async function CategoryPage({
     { label: displayName, href: `/category/${slug}` },
   ];
 
+  const base = getSiteUrl();
+  const pageUrl = `${base}/category/${slug}`;
+  const categoryAbout = {
+    "@type": "Thing",
+    name: displayName,
+    description:
+      editorial.introText ||
+      `Curated ${displayName} luxury real estate listings across India.`,
+  };
+
   return (
     <>
+      <CollectionJsonLd
+        breadcrumbItems={[
+          { name: "Home", url: base },
+          { name: "All projects", url: `${base}/projects` },
+          { name: displayName, url: pageUrl },
+        ]}
+        collection={{
+          name: `${displayName} — curated collection — Superluxere`,
+          description:
+            editorial.introText ||
+            `Discover premium properties in the ${displayName} collection.`,
+          url: pageUrl,
+        }}
+        items={(initialData.data ?? []).map((p) => ({
+          title: p.title,
+          url: `${base}/projects/${p.slug}`,
+        }))}
+        itemListName={`${displayName} properties`}
+        about={categoryAbout}
+      />
       <div className="relative min-h-screen selection:bg-gold selection:text-white pt-16 lg:pt-20">
         <div className="pointer-events-none fixed inset-0 z-[-1] bg-background">
           <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
@@ -190,6 +236,8 @@ export default async function CategoryPage({
             itemsPerPage={12}
             noResultsMessage={`No properties found in ${displayName}`}
             projectsSection={mm.projectsSection}
+            syncUrl
+            initialUrlFilters={initialUrlFilters}
           />
 
           <CorridorCharacter {...mm.character} />
@@ -202,8 +250,8 @@ export default async function CategoryPage({
           <CorridorFaq locationName={displayName} items={mm.faqs} />
         </div>
       </div>
+      <ProjectFaqJsonLd faqs={mm.faqs} />
       <Footer />
-      <LeadPopup />
     </>
   );
 }

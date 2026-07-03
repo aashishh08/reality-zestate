@@ -9,13 +9,15 @@
 
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { PropertyCard } from './ui/PropertyCard';
 import { Pagination } from './ui/Pagination';
 import { PropertyListResponse, PropertyFilters } from '@/types/property-listing';
 import { Project } from '@/types';
 import { fetchAllTags } from '@/lib/api/properties-listing';
+import { buildListingSearchParams } from '@/lib/listing-search-params';
 import {
   STATUS_TAG_SLUGS,
   STATUS_TAG_DEFAULT_LABELS,
@@ -55,7 +57,15 @@ export interface PropertyListingTemplateProps {
   showCityCategoryFilters?: boolean;
   cityOptions?: Array<{ slug: string; label: string }>;
   categoryOptions?: Array<{ id: string; slug: string; name: string }>;
+  /** Sync filters/pagination to URL search params (shareable deep links). */
+  syncUrl?: boolean;
+  /** SSR-parsed filters from URL — merged with contextFilters on first render. */
+  initialUrlFilters?: Partial<PropertyFilters>;
 }
+
+// Stable defaults — inline `= []` creates a new array reference every render.
+const EMPTY_CITY_OPTIONS: Array<{ slug: string; label: string }> = [];
+const EMPTY_CATEGORY_OPTIONS: Array<{ id: string; slug: string; name: string }> = [];
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -69,16 +79,30 @@ export function PropertyListingTemplate({
   noResultsMessage = 'No properties found',
   projectsSection,
   showCityCategoryFilters = false,
-  cityOptions = [],
-  categoryOptions = [],
+  cityOptions = EMPTY_CITY_OPTIONS,
+  categoryOptions = EMPTY_CATEGORY_OPTIONS,
+  syncUrl = false,
+  initialUrlFilters = {},
 }: PropertyListingTemplateProps) {
 
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const categoryIdToSlug = useMemo(
+    () => Object.fromEntries(categoryOptions.map((c) => [c.id, c.slug])),
+    [categoryOptions],
+  );
+
+  const onFetchRef = useRef(onFetchProperties);
+  onFetchRef.current = onFetchProperties;
+
   const [data, setData]       = useState<PropertyListResponse>(initialData);
-  const [filters, setFilters] = useState<PropertyFilters>({
+  const [filters, setFilters] = useState<PropertyFilters>(() => ({
     ...contextFilters,
-    limit: itemsPerPage,
-    offset: 0,
-  });
+    ...initialUrlFilters,
+    limit: initialUrlFilters.limit ?? itemsPerPage,
+    offset: initialUrlFilters.offset ?? 0,
+  }));
   /** Total count with no status-tag filter — "All (n)" must not use tag-filtered pagination.total */
   const [allTabTotal, setAllTabTotal] = useState(() => initialData.pagination?.total ?? 0);
   const [loading, setLoading] = useState(false);
@@ -118,7 +142,7 @@ export function PropertyListingTemplate({
     try {
       setLoading(true);
       setError(null);
-      const result = await onFetchProperties(filters);
+      const result = await onFetchRef.current(filters);
       setData(result);
       if (!filters.tags?.length) {
         setAllTabTotal(result.pagination?.total ?? 0);
@@ -128,7 +152,7 @@ export function PropertyListingTemplate({
     } finally {
       setLoading(false);
     }
-  }, [filters, onFetchProperties]);
+  }, [filters]);
 
   useEffect(() => {
     if (skipFetchUntilFilterChange.current) {
@@ -137,6 +161,27 @@ export function PropertyListingTemplate({
     }
     void fetchProperties();
   }, [filters, fetchProperties]);
+
+  /** Keep URL in sync when filters change (skip first render — SSR already matched URL). */
+  const skipUrlSync = useRef(true);
+  useEffect(() => {
+    if (!syncUrl) return;
+    if (skipUrlSync.current) {
+      skipUrlSync.current = false;
+      return;
+    }
+    const qs = buildListingSearchParams(filters, {
+      itemsPerPage,
+      showCityCategory: showCityCategoryFilters,
+      categoryIdToSlug,
+    });
+    const next = qs.toString();
+    const current = window.location.search.replace(/^\?/, '');
+    if (next === current) return;
+
+    const target = next ? `${pathname}?${next}` : pathname;
+    router.replace(target, { scroll: false });
+  }, [filters, syncUrl, pathname, itemsPerPage, showCityCategoryFilters, categoryIdToSlug, router]);
 
   // ── Pagination ───────────────────────────────────────────────────────────────
   const pg = data?.pagination ?? { limit: 12, offset: 0, total: 0 };

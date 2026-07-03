@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { Footer } from '@/components/layout/Footer';
-import { LeadPopup } from '@/components/ui/LeadPopup';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { PropertyListingTemplate } from '@/components/PropertyListingTemplate';
 import { fetchProperties, fetchPublicEnums } from '@/lib/api/properties-listing';
@@ -9,6 +8,10 @@ import { getSiteUrl } from '@/lib/site-url';
 import { getDefaultOgImageUrl } from '@/lib/seo';
 import type { PropertyFilters, PropertyListResponse } from '@/types/property-listing';
 import { ProjectsIndexJsonLd } from '@/components/projects/ProjectsIndexJsonLd';
+import {
+  listingSearchParamsFromRecord,
+  parseListingSearchParams,
+} from '@/lib/listing-search-params';
 
 const EMPTY_LISTING: PropertyListResponse = {
   data: [],
@@ -70,9 +73,17 @@ async function fetchAllProjectsPage(filters: PropertyFilters) {
   }
 }
 
-export default async function ProjectsPage() {
-  const [propertiesResult, enums, categoriesRes] = await Promise.all([
-    fetchProperties({ isPublished: true, limit: 12, offset: 0 }).catch(() => null),
+export default async function ProjectsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const resolvedSearchParams = searchParams
+    ? await Promise.resolve(searchParams)
+    : {};
+  const urlSp = listingSearchParamsFromRecord(resolvedSearchParams);
+
+  const [enums, categoriesRes] = await Promise.all([
     fetchPublicEnums().catch(() => ({
       cities: [] as { slug: string; label: string }[],
       localities: [],
@@ -83,9 +94,6 @@ export default async function ProjectsPage() {
     })),
   ]);
 
-  const initialData = propertiesResult ?? EMPTY_LISTING;
-  const listingsUnavailable = propertiesResult === null;
-
   const cityOptions = (enums.cities ?? []).map((c) => ({
     slug: c.slug,
     label: c.label,
@@ -95,6 +103,25 @@ export default async function ProjectsPage() {
     slug: c.slug,
     name: c.name,
   }));
+  const categorySlugToId = Object.fromEntries(
+    categoryOptions.map((c) => [c.slug, c.id]),
+  );
+
+  const initialUrlFilters = parseListingSearchParams(urlSp, {
+    itemsPerPage: 12,
+    showCityCategory: true,
+    categorySlugToId,
+  });
+
+  const propertiesResult = await fetchProperties({
+    ...initialUrlFilters,
+    isPublished: true,
+    limit: initialUrlFilters.limit ?? 12,
+    offset: initialUrlFilters.offset ?? 0,
+  }).catch(() => null);
+
+  const initialData = propertiesResult ?? EMPTY_LISTING;
+  const listingsUnavailable = propertiesResult === null;
 
   return (
     <>
@@ -148,12 +175,13 @@ export default async function ProjectsPage() {
           showCityCategoryFilters
           cityOptions={cityOptions}
           categoryOptions={categoryOptions}
+          syncUrl
+          initialUrlFilters={initialUrlFilters}
           itemsPerPage={12}
           noResultsMessage="No properties match your filters. Try clearing filters or choose another city."
         />
 
         <Footer />
-        <LeadPopup />
       </div>
     </>
   );

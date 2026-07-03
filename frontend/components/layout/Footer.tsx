@@ -37,14 +37,14 @@ export function Footer({ locations = [] }: FooterProps) {
   ];
 
   return (
-    <footer className="bg-[#F5F2EC] text-[#2C2416] pt-10 pb-6 md:pt-16 md:pb-8 border-t border-[#C9A961]/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12 mb-8 md:mb-12">
+    <footer className="bg-[#F5F2EC] text-[#2C2416] pt-10 pb-8 md:pt-16 md:pb-8 border-t border-[#C9A961]/20 overflow-x-hidden w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0 w-full box-border">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-8 md:mb-12 min-w-0">
 
           {/* ── Brand ─────────────────────────────────────────────────── */}
-          <div className="col-span-2 lg:col-span-1">
+          <div className="sm:col-span-2 lg:col-span-1 min-w-0">
             <Link href="/">
-              <h2 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-6 hover:text-[#C9A961] transition-colors">
+              <h2 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-6 hover:text-[#C9A961] transition-colors break-words">
                 SUPERLUXERE
               </h2>
             </Link>
@@ -66,7 +66,7 @@ export function Footer({ locations = [] }: FooterProps) {
           </div>
 
           {/* ── Quick Links ───────────────────────────────────────────── */}
-          <div>
+          <div className="min-w-0">
             <h3 className="text-xs md:text-sm font-bold mb-3 md:mb-6 tracking-widest uppercase text-[#2C2416]">
               Explore
             </h3>
@@ -82,7 +82,7 @@ export function Footer({ locations = [] }: FooterProps) {
           </div>
 
           {/* ── Locations ─────────────────────────────────────────────── */}
-          <div>
+          <div className="min-w-0">
             <h3 className="text-xs md:text-sm font-bold mb-3 md:mb-6 tracking-widest uppercase text-[#2C2416]">
               Locations
             </h3>
@@ -99,26 +99,26 @@ export function Footer({ locations = [] }: FooterProps) {
           </div>
 
           {/* ── Contact ───────────────────────────────────────────────── */}
-          <div className="col-span-2 lg:col-span-1">
+          <div className="sm:col-span-2 lg:col-span-1 min-w-0">
             <h3 className="text-xs md:text-sm font-bold mb-3 md:mb-6 tracking-widest uppercase text-[#2C2416]">
               Get in Touch
             </h3>
-            <ul className="space-y-3 md:space-y-5 text-zinc-500">
-              <li className="flex items-start gap-2 md:gap-3">
+            <ul className="space-y-3 md:space-y-5 text-zinc-500 min-w-0">
+              <li className="flex items-start gap-2 md:gap-3 min-w-0">
                 <MapPin className="w-4 h-4 text-[#C9A961] shrink-0 mt-0.5" />
-                <span className="text-xs md:text-sm leading-snug">{CONTACT_INFO.ADDRESS}</span>
+                <span className="text-xs md:text-sm leading-snug break-words [overflow-wrap:anywhere] min-w-0">{CONTACT_INFO.ADDRESS}</span>
               </li>
-              <li className="flex items-center gap-2 md:gap-3">
+              <li className="flex items-center gap-2 md:gap-3 min-w-0">
                 <Phone className="w-4 h-4 text-[#C9A961] shrink-0" />
-                <a href={phoneHref} className="text-xs md:text-sm hover:text-[#C9A961] transition-colors touch-manipulation">
+                <a href={phoneHref} className="text-xs md:text-sm hover:text-[#C9A961] transition-colors touch-manipulation break-all">
                   {footerPhoneDisplay}
                 </a>
               </li>
-              <li className="flex items-center gap-2 md:gap-3 min-w-0">
-                <Mail className="w-4 h-4 text-[#C9A961] shrink-0" />
+              <li className="flex items-start gap-2 md:gap-3 min-w-0">
+                <Mail className="w-4 h-4 text-[#C9A961] shrink-0 mt-0.5" />
                 <a
                   href={`mailto:${CONTACT_INFO.EMAIL}`}
-                  className="text-xs md:text-sm hover:text-[#C9A961] transition-colors truncate touch-manipulation"
+                  className="text-xs md:text-sm hover:text-[#C9A961] transition-colors break-all [overflow-wrap:anywhere] min-w-0 touch-manipulation"
                 >
                   {CONTACT_INFO.EMAIL}
                 </a>
@@ -143,9 +143,9 @@ export function Footer({ locations = [] }: FooterProps) {
         </div>
 
         {/* ── Bottom bar ─────────────────────────────────────────────── */}
-        <div className="border-t border-[#C9A961]/20 pt-4 md:pt-6 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4 text-xs md:text-sm text-zinc-400 text-center md:text-left">
-          <p>© 2026 Superluxere. All rights reserved.</p>
-          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
+        <div className="border-t border-[#C9A961]/20 pt-4 md:pt-6 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4 text-xs md:text-sm text-zinc-400 text-center md:text-left min-w-0">
+          <p className="break-words">© 2026 Superluxere. All rights reserved.</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 md:gap-8">
             <Link href="#" className="hover:text-[#C9A961] transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-[#C9A961] transition-colors">Terms of Service</Link>
             <Link href="/sitemap.xml" className="hover:text-[#C9A961] transition-colors">Sitemap</Link>

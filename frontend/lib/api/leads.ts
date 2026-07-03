@@ -11,6 +11,12 @@ export interface LeadFilters {
   offset?: number;
 }
 
+export interface LeadProperty {
+  id: string;
+  slug: string;
+  title: string;
+}
+
 export interface Lead {
   id: string;
   name: string;
@@ -19,6 +25,7 @@ export interface Lead {
   status: 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
   source?: string;
   propertyId?: string;
+  Property?: LeadProperty | null;
   /** True when the lead came from Residences → Download Layout */
   layoutDownload?: boolean;
   createdAt?: string;

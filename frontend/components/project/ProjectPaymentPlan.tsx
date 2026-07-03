@@ -27,8 +27,8 @@ export function ProjectPaymentPlan({
   if (safePlans.length === 0) return null;
 
   return (
-    <section id="payment-plans" className="py-14 bg-transparent">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="payment-plans" className="py-14 bg-transparent overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
         <div className="text-center mb-16">
           <SectionHeading
             label="Flexible Options"
@@ -38,7 +38,7 @@ export function ProjectPaymentPlan({
           </SectionHeading>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 min-w-0">
           {safePlans.map((plan, index) => (
             <motion.div
               key={index}
@@ -46,11 +46,11 @@ export function ProjectPaymentPlan({
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-white rounded-sm border border-black/5 p-8 hover:border-gold-dark hover:shadow-lg transition-all duration-300 relative group"
+              className="bg-white rounded-sm border border-black/5 p-4 sm:p-6 md:p-8 hover:border-gold-dark hover:shadow-lg transition-all duration-300 relative group min-w-0"
             >
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold to-gold-dark transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
 
-              <h3 className="text-xl font-serif font-bold text-black mb-2">{plan.title}</h3>
+              <h3 className="text-xl font-serif font-bold text-black mb-2 break-words [overflow-wrap:anywhere]">{plan.title}</h3>
               <p className="text-xs font-bold text-gold-dark uppercase tracking-wider mb-6">{plan.type}</p>
 
               <div 

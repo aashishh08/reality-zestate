@@ -23,22 +23,22 @@ export function ProjectOverview({ overview, featureImage }: ProjectOverviewProps
 
   return (
     <>
-      <section className="py-14 bg-transparent">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <section className="py-14 bg-transparent overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 min-w-0">
           {/* Left: Scrollable Text Content */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="relative"
+            className="relative min-w-0 max-w-full"
           >
             <SectionHeading centered={false}>{overview.heading}</SectionHeading>
 
             {/* Scrollable Content Container - Why Invest Style */}
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-[#C9A961]/10">
-              <div className="h-[400px] overflow-y-auto pr-4 scrollbar-custom">
+            <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-[#C9A961]/10 min-w-0 max-w-full overflow-hidden">
+              <div className="h-[280px] sm:h-[400px] overflow-y-auto overflow-x-hidden pr-2 sm:pr-4 scrollbar-custom min-w-0">
                 {safeContent.map((paragraph, index) => (
                   <motion.div
                     key={index}
@@ -57,11 +57,11 @@ export function ProjectOverview({ overview, featureImage }: ProjectOverviewProps
           {/* Right: optional CMS image with overlapping Key Features Card */}
           {safeFeatures.length > 0 && (
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="relative h-[600px]"
+              className="relative h-[400px] sm:h-[500px] md:h-[600px] min-w-0 max-w-full"
             >
               <div className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl">
                 {featureImage?.trim() ? (
@@ -85,7 +85,7 @@ export function ProjectOverview({ overview, featureImage }: ProjectOverviewProps
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
                 viewport={{ once: true }}
-                className="absolute bottom-8 left-8 right-8 md:right-auto md:w-[380px]"
+                className="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8 md:right-auto md:w-[380px]"
               >
                 {/* Decorative Background Glow */}
                 <div className="absolute -inset-4 bg-gold/20 rounded-2xl blur-2xl" />
@@ -114,7 +114,7 @@ export function ProjectOverview({ overview, featureImage }: ProjectOverviewProps
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
 
                   {/* Content Container with Glassmorphism */}
-                  <div className="relative backdrop-blur-sm bg-white/5 p-8 border border-white/10">
+                  <div className="relative backdrop-blur-sm bg-white/5 p-4 sm:p-6 md:p-8 border border-white/10 min-w-0">
                     {/* Header with Premium Styling */}
                     <div className="mb-6">
                       <motion.h3
@@ -165,7 +165,7 @@ export function ProjectOverview({ overview, featureImage }: ProjectOverviewProps
                           </div>
 
                           {/* Feature Text */}
-                          <span className="text-white/90 font-medium leading-relaxed group-hover/item:text-white group-hover/item:translate-x-1 transition-all duration-300">
+                          <span className="text-white/90 font-medium leading-relaxed break-words [overflow-wrap:anywhere] group-hover/item:text-white group-hover/item:translate-x-1 transition-all duration-300">
                             {feature}
                           </span>
                         </motion.li>

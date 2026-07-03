@@ -11,7 +11,6 @@ import { getSiteUrl } from '@/lib/site-url';
 import { PropertyListingTemplate } from '@/components/PropertyListingTemplate';
 import { Footer } from '@/components/layout/Footer';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
-import { LeadPopup } from '@/components/ui/LeadPopup';
 import {
   CorridorEditorialHero,
   CorridorCharacter,
@@ -29,6 +28,12 @@ import { getLocations, getDevelopers, getCategories } from '@/lib';
 import { buildMicroMarketPageModel } from '@/lib/location-micro-market';
 import { PropertyFilters } from '@/types/property-listing';
 import { LocationViewTracker } from '@/components/analytics/LocationViewTracker';
+import { ProjectFaqJsonLd } from '@/components/project/ProjectFaqJsonLd';
+import { CollectionJsonLd } from '@/components/collection/CollectionJsonLd';
+import {
+  listingSearchParamsFromRecord,
+  parseListingSearchParams,
+} from '@/lib/listing-search-params';
 
 export async function generateMetadata({
   params: paramsPromise,
@@ -90,10 +95,17 @@ export const revalidate = 3600;
 
 export default async function LocationPage({
   params: paramsPromise,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { slug } = await paramsPromise;
+  const resolvedSearchParams = searchParams
+    ? await Promise.resolve(searchParams)
+    : {};
+  const urlSp = listingSearchParamsFromRecord(resolvedSearchParams);
+  const initialUrlFilters = parseListingSearchParams(urlSp, { itemsPerPage: 12 });
 
   const location = await getLocationBySlug(slug);
 
@@ -123,8 +135,9 @@ export default async function LocationPage({
     getDevelopers({ limit: 12, offset: 0 }, LOCATION_PAGE_CACHE_TTL).catch(() => []),
     getCategories({ limit: 50, offset: 0 }, LOCATION_PAGE_CACHE_TTL).catch(() => ({ data: [] })),
     fetchLocationPageProperties(listingContext, {
-      limit: 12,
-      offset: 0,
+      ...initialUrlFilters,
+      limit: initialUrlFilters.limit ?? 12,
+      offset: initialUrlFilters.offset ?? 0,
       isPublished: true,
     }),
   ]);
@@ -158,6 +171,27 @@ export default async function LocationPage({
     { label: location.name, href: `/location/${slug}` },
   ];
 
+  const base = getSiteUrl();
+  const pageUrl = `${base}/location/${slug}`;
+  const placeEntity = {
+    '@type': 'Place',
+    name: location.name,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: location.name,
+      ...(location.parent ? { addressRegion: location.parent.name } : {}),
+      addressCountry: 'IN',
+    },
+    ...(location.parent
+      ? {
+          containedInPlace: {
+            '@type': 'Place',
+            name: location.parent.name,
+          },
+        }
+      : {}),
+  };
+
   return (
     <>
       <LocationViewTracker locationSlug={slug} locationType={location.type} />
@@ -190,6 +224,8 @@ export default async function LocationPage({
           itemsPerPage={12}
           noResultsMessage={`No properties found in ${location.name}`}
           projectsSection={mm.projectsSection}
+          syncUrl
+          initialUrlFilters={initialUrlFilters}
         />
 
         <CorridorCharacter {...mm.character} />
@@ -202,8 +238,26 @@ export default async function LocationPage({
         <CorridorFaq locationName={location.name} items={mm.faqs} />
         </div>
       </div>
+      <CollectionJsonLd
+        breadcrumbItems={[
+          { name: 'Home', url: base },
+          { name: 'All projects', url: `${base}/projects` },
+          { name: location.name, url: pageUrl },
+        ]}
+        collection={{
+          name: `${location.name} — Luxury Projects`,
+          description: `Curated premium properties and developer presence in ${location.name}.`,
+          url: pageUrl,
+        }}
+        items={(initialData.data ?? []).map((p) => ({
+          title: p.title,
+          url: `${base}/projects/${p.slug}`,
+        }))}
+        itemListName={`Properties in ${location.name}`}
+        about={placeEntity}
+      />
+      <ProjectFaqJsonLd faqs={mm.faqs} />
       <Footer />
-      <LeadPopup />
     </>
   );
 }

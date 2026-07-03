@@ -2,6 +2,7 @@ import express from 'express';
 import { validateRequest } from '../../../middleware/validationMiddleware.js';
 import { createPropertySchema, updatePropertySchema } from '../../../utils/validators.js';
 import authMiddleware from '../../../middleware/authMiddleware.js';
+import optionalAuthMiddleware from '../../../middleware/optionalAuthMiddleware.js';
 import propertyController from '../controller/propertyController.js';
 
 const router = express.Router();
@@ -44,8 +45,18 @@ router.get('/admin/:id', authMiddleware, async (req, res, next) => {
   }
 });
 
-// Public routes
-router.get('/', async (req, res, next) => {
+// Agent/crawler JSON-LD feed (published properties only)
+router.get('/feed', async (req, res, next) => {
+  try {
+    await propertyController.getPropertiesFeed(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Public routes — optionalAuthMiddleware lets authenticated admins preview
+// unpublished properties while forcing isPublished=true for everyone else.
+router.get('/', optionalAuthMiddleware, async (req, res, next) => {
   try {
     await propertyController.listProperties(req, res);
   } catch (error) {
@@ -53,7 +64,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:slug', async (req, res, next) => {
+router.get('/:slug', optionalAuthMiddleware, async (req, res, next) => {
   try {
     await propertyController.getPropertyBySlug(req, res);
   } catch (error) {

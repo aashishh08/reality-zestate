@@ -15,6 +15,8 @@ interface ProjectFAQProps {
   description?: string;
 }
 
+export const MAX_FAQS = 10;
+
 const DEFAULT_FAQ_DESCRIPTION =
   'Find answers to commonly asked questions about this project';
 
@@ -54,7 +56,7 @@ export function ProjectFAQ({
   heading = "Frequently Asked Questions",
   description = DEFAULT_FAQ_DESCRIPTION,
 }: ProjectFAQProps) {
-  const displayFaqs = (faqs || []).slice(0, 10);
+  const displayFaqs = (faqs || []).slice(0, MAX_FAQS);
   const leftColumn = displayFaqs.slice(0, 5);
   const rightColumn = displayFaqs.slice(5, 10);
 

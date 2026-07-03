@@ -33,8 +33,8 @@ export function ProjectAmenities({
   const featuredImages = safeAmenities.filter(a => a.image && a.image.trim() !== '').slice(0, 2);
 
   return (
-    <section id="amenities" className="py-14 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="amenities" className="py-14 bg-white overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
         {/* Header */}
         <div className="text-center mb-16">
           <SectionHeading
@@ -65,9 +65,9 @@ export function ProjectAmenities({
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60" />
-                <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                  <div className="text-4xl mb-3">{amenity.icon}</div>
-                  <h3 className="text-3xl font-serif font-bold">{amenity.name}</h3>
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-8 text-white min-w-0">
+                  <div className="text-3xl sm:text-4xl mb-3">{amenity.icon}</div>
+                  <h3 className="text-2xl sm:text-3xl font-serif font-bold break-words [overflow-wrap:anywhere]">{amenity.name}</h3>
                 </div>
               </motion.div>
             ))}
@@ -76,18 +76,18 @@ export function ProjectAmenities({
 
         {/* Amenities Grid */}
         {safeAmenities.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-12 min-w-0">
             {safeAmenities.map((amenity, idx) => (
               <motion.div
                 key={`${amenity.name}-${idx}`}
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.04 }}
-                className="flex items-start gap-3"
+                className="flex items-start gap-3 min-w-0"
               >
                 <div className="text-2xl flex-shrink-0 mt-1">{amenity.icon}</div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 text-sm">{amenity.name}</h4>
+                <div className="min-w-0">
+                  <h4 className="font-semibold text-gray-900 text-sm break-words [overflow-wrap:anywhere]">{amenity.name}</h4>
                 </div>
               </motion.div>
             ))}
@@ -99,29 +99,29 @@ export function ProjectAmenities({
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-gradient-to-r from-[#1A1A2E] to-[#2C2C3E] rounded-2xl p-8 text-white"
+          className="bg-gradient-to-r from-[#1A1A2E] to-[#2C2C3E] rounded-2xl p-4 sm:p-6 md:p-8 text-white min-w-0 overflow-hidden"
         >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <p className="text-4xl font-bold text-[#C9A961] mb-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center min-w-0">
+            <div className="min-w-0">
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#C9A961] mb-2 break-words [overflow-wrap:anywhere]">
                 {amenitiesStats?.clubhouseSqFt ?? '100K'}
               </p>
               <p className="text-gray-300 text-sm">Sq Ft Clubhouse</p>
             </div>
-            <div>
-              <p className="text-4xl font-bold text-[#C9A961] mb-2">
+            <div className="min-w-0">
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#C9A961] mb-2 break-words [overflow-wrap:anywhere]">
                 {amenitiesStats?.amenitiesCount ?? '25+'}
               </p>
               <p className="text-gray-300 text-sm">Amenities</p>
             </div>
-            <div>
-              <p className="text-4xl font-bold text-[#C9A961] mb-2">
+            <div className="min-w-0">
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#C9A961] mb-2 break-words [overflow-wrap:anywhere]">
                 {amenitiesStats?.swimmingPools ?? '5'}
               </p>
               <p className="text-gray-300 text-sm">Swimming Pools</p>
             </div>
-            <div>
-              <p className="text-4xl font-bold text-[#C9A961] mb-2">
+            <div className="min-w-0">
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#C9A961] mb-2 break-words [overflow-wrap:anywhere]">
                 {amenitiesStats?.diningOptions ?? '5'}
               </p>
               <p className="text-gray-300 text-sm">Dining Options</p>

@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 import { Property, Developer, Location, Category, PropertySection, Tag, PropertyCategory, PropertyTag, sequelize } from '../../../models/index.js';
 import tagService from '../../tag/service/tagService.js';
 import { isValidCity, isValidLocality, isValidDeveloper } from '../../../config/enums.js';
+import { parseTypedFacts, buildPropertiesFeedJsonLd } from '../utils/propertyFeedJsonLd.js';
 
 /**
  * Validate enum slug fields and throw a descriptive 400 if any are invalid.
@@ -123,6 +124,8 @@ class PropertyService {
             ? sublocality.trim().slice(0, 255)
             : null;
       }
+
+      Object.assign(updateData, parseTypedFacts(data));
 
       if (citySlug !== undefined || localitySlug !== undefined) {
         const nextCity = citySlug !== undefined ? (citySlug || null) : property.citySlug;
@@ -478,6 +481,7 @@ class PropertyService {
         metaDescription: metaDescription?.trim?.()
           ? metaDescription.trim().slice(0, 158)
           : null,
+        ...parseTypedFacts(data),
       }, { transaction });
 
       if (sections.length > 0) {
@@ -548,6 +552,27 @@ class PropertyService {
       distinct: true,
     });
     return { total: count, properties: rows };
+  }
+
+  /**
+   * Agent/crawler feed — published properties as Schema.org ItemList JSON-LD.
+   * Limit capped at 100 per page.
+   */
+  async getPropertiesFeed(filters = {}) {
+    const MAX_LIMIT = 100;
+    const rawLimit = parseInt(filters.limit ?? 50, 10);
+    const limit = Math.min(Math.max(rawLimit, 1), MAX_LIMIT);
+    const offset = Math.max(parseInt(filters.offset ?? 0, 10), 0);
+
+    const result = await this.listProperties({
+      ...filters,
+      isPublished: true,
+      limit,
+      offset,
+    });
+
+    const jsonLd = buildPropertiesFeedJsonLd(result.properties, { offset });
+    return { jsonLd, total: result.total, limit, offset };
   }
 }
 

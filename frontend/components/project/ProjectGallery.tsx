@@ -47,15 +47,16 @@ export function ProjectGallery({ images, videoUrl }: ProjectGalleryProps) {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-w-0 max-w-full overflow-x-hidden">
       {/* Main Gallery Container - Side by Side Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 min-w-0">
         {/* Left Side - Large Image Display */}
         <motion.div
-          className="relative aspect-[4/3] lg:aspect-auto lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl bg-black group"
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          className="relative aspect-[4/3] lg:aspect-auto lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl bg-black group min-w-0"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
         >
           <AnimatePresence mode="wait">
             {isVideo ? (
@@ -120,10 +121,11 @@ export function ProjectGallery({ images, videoUrl }: ProjectGalleryProps) {
 
         {/* Right Side - Thumbnail Cards */}
         <motion.div
-          className="flex flex-col gap-2 h-[500px]"
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          className="flex flex-col gap-2 h-auto lg:h-[500px] min-w-0"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
+          viewport={{ once: true }}
         >
           {/* Scroll Up Button */}
           {canScroll && thumbnailScroll > 0 && (

@@ -16,6 +16,11 @@ import {
 } from '@/lib/api/properties-listing';
 import { PropertyFilters } from '@/types/property-listing';
 import { getDeveloperPageOverrides } from '@/data/page-copy-overrides';
+import { CollectionJsonLd } from '@/components/collection/CollectionJsonLd';
+import {
+  listingSearchParamsFromRecord,
+  parseListingSearchParams,
+} from '@/lib/listing-search-params';
 
 /**
  * Generate metadata for the page
@@ -82,10 +87,17 @@ export async function generateStaticParams() {
  */
 export default async function DeveloperPage({ 
   params: paramsPromise,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { slug } = await paramsPromise;
+  const resolvedSearchParams = searchParams
+    ? await Promise.resolve(searchParams)
+    : {};
+  const urlSp = listingSearchParamsFromRecord(resolvedSearchParams);
+  const initialUrlFilters = parseListingSearchParams(urlSp, { itemsPerPage: 12 });
   
   // Fetch developer details
   const developer = await getDeveloperBySlug(slug);
@@ -96,8 +108,9 @@ export default async function DeveloperPage({
 
   // Fetch initial properties — filtered by developerSlug (URL slug IS the enum developerSlug)
   const initialData = await fetchDeveloperSlugProperties(slug, {
-    limit: 12,
-    offset: 0,
+    ...initialUrlFilters,
+    limit: initialUrlFilters.limit ?? 12,
+    offset: initialUrlFilters.offset ?? 0,
   });
 
   // Handler for fetching properties with filters
@@ -115,24 +128,55 @@ export default async function DeveloperPage({
 
   const copy = getDeveloperPageOverrides(slug);
 
+  const base = getSiteUrl();
+  const pageUrl = `${base}/developer/${slug}`;
+  const developerEntity = {
+    '@type': 'RealEstateAgent',
+    name: developer.name,
+    url: pageUrl,
+    ...(developer.logo ? { logo: developer.logo, image: developer.logo } : {}),
+  };
+
   return (
-    <PropertyListingTemplate
-      key={slug}
-      initialData={initialData}
-      onFetchProperties={handleFetchProperties}
-      title={copy?.title ?? `${developer.name} Projects`}
-      subtitle={copy?.subtitle ?? `Discover premium properties and projects by ${developer.name}`}
-      heroComponent={
-        <DeveloperHero
-          developer={developer}
-          tagline={copy?.heroTagline}
-          heroImageSrc={copy?.heroImageUrl}
-        />
-      }
-      contextFilters={{ developerSlug: slug }}
-      itemsPerPage={12}
-      noResultsMessage={copy?.noResultsMessage ?? `No properties found from ${developer.name}`}
-    />
+    <>
+      <CollectionJsonLd
+        breadcrumbItems={[
+          { name: 'Home', url: base },
+          { name: 'All projects', url: `${base}/projects` },
+          { name: developer.name, url: pageUrl },
+        ]}
+        collection={{
+          name: `${developer.name} Projects & Properties — Superluxere`,
+          description: `Explore all projects and properties by ${developer.name}.`,
+          url: pageUrl,
+        }}
+        items={(initialData.data ?? []).map((p) => ({
+          title: p.title,
+          url: `${base}/projects/${p.slug}`,
+        }))}
+        itemListName={`Properties by ${developer.name}`}
+        about={developerEntity}
+      />
+      <PropertyListingTemplate
+        key={slug}
+        initialData={initialData}
+        onFetchProperties={handleFetchProperties}
+        title={copy?.title ?? `${developer.name} Projects`}
+        subtitle={copy?.subtitle ?? `Discover premium properties and projects by ${developer.name}`}
+        heroComponent={
+          <DeveloperHero
+            developer={developer}
+            tagline={copy?.heroTagline}
+            heroImageSrc={copy?.heroImageUrl}
+          />
+        }
+        contextFilters={{ developerSlug: slug }}
+        itemsPerPage={12}
+        noResultsMessage={copy?.noResultsMessage ?? `No properties found from ${developer.name}`}
+        syncUrl
+        initialUrlFilters={initialUrlFilters}
+      />
+    </>
   );
 }
 

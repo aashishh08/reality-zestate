@@ -64,8 +64,8 @@ export function ProjectLocation({
   if (!hasBody) return null;
 
   return (
-    <section className="py-12 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-12 bg-white overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
         <div className="text-center mb-16">
           <SectionHeading
             label="Prime Address"
@@ -75,13 +75,14 @@ export function ProjectLocation({
           </SectionHeading>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start min-w-0">
           {/* Map Image */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="relative h-[500px]"
+            viewport={{ once: true }}
+            className="relative h-[320px] sm:h-[400px] md:h-[500px] min-w-0"
           >
             <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl">
               {location.mapImage?.trim() ? (
@@ -97,13 +98,13 @@ export function ProjectLocation({
                 </div>
               )}
               <div className="absolute inset-0 bg-black/30" />
-              <div className="absolute top-6 left-6 bg-white rounded-lg p-4 shadow-lg max-w-xs">
+              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-[calc(100%-2rem)] sm:max-w-xs min-w-0">
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-lg bg-[#C9A961]/10 flex items-center justify-center shrink-0">
                     <MapPin className="w-5 h-5 text-[#C9A961]" />
                   </div>
                   <div>
-                    <p className="font-serif font-bold text-[#2C2416] text-base">
+                    <p className="font-serif font-bold text-[#2C2416] text-base break-words [overflow-wrap:anywhere]">
                       {addr || sub || "Prime Location"}
                     </p>
                     {addr && sub ? (
@@ -117,10 +118,11 @@ export function ProjectLocation({
 
           {/* Nearby Categories */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="space-y-8"
+            viewport={{ once: true }}
+            className="space-y-8 min-w-0 max-w-full"
           >
             {safeNearby.length === 0 ? (
               <p className="text-gray-400 text-sm italic">No nearby places listed.</p>
@@ -147,11 +149,11 @@ export function ProjectLocation({
                       >
                         <IconComponent className="w-5 h-5" style={{ color: iconColor }} />
                       </div>
-                      <h3 className="text-lg font-serif font-bold text-[#2C2416]">
+                      <h3 className="text-lg font-serif font-bold text-[#2C2416] break-words [overflow-wrap:anywhere]">
                         {category.category}
                       </h3>
                     </div>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-3 pl-11">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-3 pl-0 sm:pl-11 min-w-0">
                       {safeItems.map((item, index) => (
                         <motion.div
                           key={`${item.name || "item"}-${index}`}
@@ -161,7 +163,7 @@ export function ProjectLocation({
                           className="flex items-center gap-2"
                         >
                           <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: iconColor }} />
-                          <span className="text-sm text-gray-700 font-medium">{item.name}</span>
+                          <span className="text-sm text-gray-700 font-medium break-words [overflow-wrap:anywhere] min-w-0">{item.name}</span>
                         </motion.div>
                       ))}
                     </div>
@@ -180,7 +182,7 @@ export function ProjectLocation({
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-20 pt-20 border-t border-gray-200"
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 min-w-0">
               {safeConnectivity.map((item, index) => {
                 const IconComponent: React.ElementType =
                   (item.icon ? connectivityIcons[item.icon] : null) ?? connectivityIcons.default;
@@ -191,15 +193,15 @@ export function ProjectLocation({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-white rounded-lg border border-gray-200 p-4 hover:border-[#C9A961] hover:shadow-md transition-all"
+                    className="bg-white rounded-lg border border-gray-200 p-4 hover:border-[#C9A961] hover:shadow-md transition-all min-w-0"
                   >
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-start gap-3 min-w-0">
                       <div className="w-10 h-10 rounded-lg bg-[#C9A961]/10 flex items-center justify-center shrink-0">
                         <IconComponent className="w-5 h-5 text-[#C9A961]" />
                       </div>
-                      <div>
-                        <p className="text-[#C9A961] font-bold text-sm">{item.time}</p>
-                        <p className="text-gray-700 text-xs font-medium">{item.place}</p>
+                      <div className="min-w-0">
+                        <p className="text-[#C9A961] font-bold text-sm break-words [overflow-wrap:anywhere]">{item.time}</p>
+                        <p className="text-gray-700 text-xs font-medium break-words [overflow-wrap:anywhere]">{item.place}</p>
                       </div>
                     </div>
                   </motion.div>

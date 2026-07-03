@@ -1,4 +1,7 @@
 import express from 'express';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import authRoute from '../modules/auth/route/authRoute.js';
 import propertyRoute from '../modules/property/route/propertyRoute.js';
 import locationRoute from '../modules/location/route/locationRoute.js';
@@ -10,6 +13,9 @@ import leadRoute from '../modules/lead/route/leadRoute.js';
 import integrationRoute from '../modules/integration/route/integrationRoute.js';
 import healthRoute from '../modules/health/route/healthRoute.js';
 import enumsRoute from '../modules/enums/route/enumsRoute.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const OPENAPI_PATH = join(__dirname, '../../docs/openapi.yaml');
 
 const router = express.Router();
 
@@ -25,6 +31,11 @@ router.use('/crm', integrationRoute);
 router.use('/health', healthRoute);
 router.use('/enums', enumsRoute);
 
+router.get('/openapi.yaml', (_req, res) => {
+  const yaml = readFileSync(OPENAPI_PATH, 'utf8');
+  res.type('text/yaml').send(yaml);
+});
+
 router.get('/', (_req, res) => {
   res.json({
     success: true,
@@ -33,6 +44,8 @@ router.get('/', (_req, res) => {
     endpoints: {
       auth: '/auth/login, /auth/register',
       properties: '/properties?tags=upcoming,trending&citySlug=gurgaon&localitySlug=golf-course-road&developerSlug=dlf',
+      propertiesFeed: '/properties/feed?limit=50&offset=0 (JSON-LD ItemList)',
+      openapi: '/openapi.yaml',
       locations: '/locations',
       categories: '/categories',
       developers: '/developers',

@@ -1,21 +1,37 @@
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Hero } from "@/components/layout/Hero";
 import { Footer } from "@/components/layout/Footer";
-import { FloatingActions } from "@/components/layout/FloatingActions";
 import { TrendingProjects } from "@/components/home/TrendingProjects";
 import { LocationCategories } from "@/components/home/LocationCategories";
 import { CityLocations } from "@/components/home/CityLocations";
-import { UpcomingProjects } from "@/components/home/UpcomingProjects";
-import { BrowseByDeveloper } from "@/components/home/BrowseByDeveloper";
-import { BoutiqueCollection } from "@/components/home/BoutiqueCollection";
-import { FeaturedCorridors } from "@/components/home/FeaturedCorridors";
-import { SuperluxereExclusive } from "@/components/home/OpulnzExclusive";
-import { LeadPopup } from "@/components/ui/LeadPopup";
 import { getLocations, getDevelopers, getCategories } from "@/lib";
 import { fetchHomeSectionProperties } from "@/lib/homepage-properties";
 import { getFeaturedCorridorCards } from "@/lib/featured-corridors";
 import { getSiteUrl } from "@/lib/site-url";
 import { getDefaultOgImageUrl } from "@/lib/seo";
+
+const FloatingActions = dynamic(() =>
+  import("@/components/layout/FloatingActions").then((m) => ({ default: m.FloatingActions })),
+);
+const UpcomingProjects = dynamic(() =>
+  import("@/components/home/UpcomingProjects").then((m) => ({ default: m.UpcomingProjects })),
+);
+const BrowseByDeveloper = dynamic(() =>
+  import("@/components/home/BrowseByDeveloper").then((m) => ({ default: m.BrowseByDeveloper })),
+);
+const BoutiqueCollection = dynamic(() =>
+  import("@/components/home/BoutiqueCollection").then((m) => ({ default: m.BoutiqueCollection })),
+);
+const FeaturedCorridors = dynamic(() =>
+  import("@/components/home/FeaturedCorridors").then((m) => ({ default: m.FeaturedCorridors })),
+);
+const ResourcesInsights = dynamic(() =>
+  import("@/components/home/ResourcesInsights").then((m) => ({ default: m.ResourcesInsights })),
+);
+const SuperluxereExclusive = dynamic(() =>
+  import("@/components/home/OpulnzExclusive").then((m) => ({ default: m.SuperluxereExclusive })),
+);
 
 // ISR: Revalidate every hour
 export const revalidate = 3600;
@@ -105,8 +121,6 @@ async function getHomePageData() {
   }
 }
 
-import { ResourcesInsights } from "@/components/home/ResourcesInsights";
-
 export default async function Home() {
   const {
     trendingProperties,
@@ -119,7 +133,7 @@ export default async function Home() {
   } = await getHomePageData();
 
   return (
-    <main className="min-h-screen relative selection:bg-gold selection:text-white pb-[calc(3.25rem+env(safe-area-inset-bottom))] md:pb-0">
+    <main className="min-h-screen relative selection:bg-gold selection:text-white pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0">
       {/* Premium Background Texture */}
       <div className="fixed inset-0 z-[-1] bg-[#F0EFEB]">
         <div className="absolute inset-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center opacity-[0.03] grayscale" />
@@ -150,7 +164,6 @@ export default async function Home() {
 
       <Footer locations={locations} />
       <FloatingActions />
-      <LeadPopup />
     </main>
   );
 }

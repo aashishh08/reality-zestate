@@ -32,7 +32,15 @@ class PropertyController {
   }
 
   async getPropertyBySlug(req, res) {
+    const isAdmin = Boolean(req.user);
     const property = await propertyService.getPropertyBySlug(req.params.slug);
+
+    // Unpublished properties are only visible to authenticated users — anonymous
+    // (including bot/crawler) requests get the same 404 as a non-existent slug.
+    if (!isAdmin && !property.isPublished) {
+      throw { status: 404, message: 'Property not found' };
+    }
+
     res.json({ success: true, data: property });
   }
 
@@ -51,6 +59,13 @@ class PropertyController {
       ? (Array.isArray(tags) ? tags : tags.split(',').map(s => s.trim())).filter(Boolean)
       : undefined;
 
+    const isAdmin = Boolean(req.user);
+    // Anonymous callers can never see unpublished listings, regardless of the
+    // isPublished query param — only authenticated admins may request drafts.
+    const resolvedIsPublished = isAdmin
+      ? (isPublished !== undefined ? isPublished === 'true' : undefined)
+      : true;
+
     const filters = {
       propertyType,
       citySlug,
@@ -62,7 +77,7 @@ class PropertyController {
       tagSlugs,
       priceMin: priceMin ? parseFloat(priceMin) : undefined,
       priceMax: priceMax ? parseFloat(priceMax) : undefined,
-      isPublished: isPublished !== undefined ? isPublished === 'true' : undefined,
+      isPublished: resolvedIsPublished,
       sort,
       limit,
       offset,
@@ -139,6 +154,62 @@ class PropertyController {
       success: true,
       data: result.properties,
       pagination: { total: result.total, limit: parseInt(limit, 10), offset: parseInt(offset, 10) },
+    });
+  }
+
+  /** JSON-LD ItemList feed for agents and crawlers (published only). */
+  async getPropertiesFeed(req, res) {
+    const {
+      propertyType, categoryIds,
+      citySlug, localitySlug, developerSlug,
+      tags,
+      priceMin, priceMax,
+      sort = 'newest',
+      limit = 50, offset = 0,
+      format,
+    } = req.query;
+
+    const tagSlugs = tags
+      ? (Array.isArray(tags) ? tags : tags.split(',').map(s => s.trim())).filter(Boolean)
+      : undefined;
+
+    const result = await propertyService.getPropertiesFeed({
+      propertyType,
+      citySlug,
+      localitySlug,
+      developerSlug,
+      categoryIds: categoryIds
+        ? (Array.isArray(categoryIds) ? categoryIds : [categoryIds])
+        : undefined,
+      tagSlugs,
+      priceMin: priceMin ? parseFloat(priceMin) : undefined,
+      priceMax: priceMax ? parseFloat(priceMax) : undefined,
+      sort,
+      limit,
+      offset,
+    });
+
+    const wantsLdJson =
+      format === 'ld+json' ||
+      (req.accepts(['application/ld+json', 'application/json']) === 'application/ld+json');
+
+    res.set('X-Total-Count', String(result.total));
+    res.set('X-Limit', String(result.limit));
+    res.set('X-Offset', String(result.offset));
+
+    if (wantsLdJson) {
+      res.type('application/ld+json');
+      return res.json(result.jsonLd);
+    }
+
+    res.json({
+      success: true,
+      data: result.jsonLd,
+      pagination: {
+        total: result.total,
+        limit: result.limit,
+        offset: result.offset,
+      },
     });
   }
 }

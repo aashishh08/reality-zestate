@@ -88,6 +88,43 @@ export default (sequelize) => {
       type: DataTypes.STRING(158),
       allowNull: true,
     },
+    // ── Typed facts (supplement JSONB sections; backfilled from keyTakeaways) ──
+    bedrooms: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    bathrooms: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    areaSqftMin: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    areaSqftMax: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    reraNumber: {
+      type: DataTypes.STRING(120),
+      allowNull: true,
+    },
+    possessionDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+    },
+    launchDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+    },
+    latitude: {
+      type: DataTypes.DECIMAL(10, 7),
+      allowNull: true,
+    },
+    longitude: {
+      type: DataTypes.DECIMAL(10, 7),
+      allowNull: true,
+    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,

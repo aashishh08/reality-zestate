@@ -1,0 +1,357 @@
+openapi: 3.0.3
+info:
+  title: Superluxere Properties API
+  description: |
+    Public read-only endpoints for published luxury real estate listings.
+    Designed for integrations, agents, and crawlers.
+  version: 1.0.0
+  contact:
+    name: Superluxere
+    url: https://superluxere.com
+    email: aspire@superluxere.com
+servers:
+  - url: https://api.superluxere.com/api/v1
+    description: Production
+  - url: http://localhost:4002/api/v1
+    description: Local development
+tags:
+  - name: Properties
+    description: Published property listings
+paths:
+  /properties:
+    get:
+      tags: [Properties]
+      summary: List published properties
+      description: |
+        Returns paginated property listings. Anonymous callers always receive
+        `isPublished=true` rows only.
+      operationId: listProperties
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/propertyType'
+        - $ref: '#/components/parameters/citySlug'
+        - $ref: '#/components/parameters/localitySlug'
+        - $ref: '#/components/parameters/developerSlug'
+        - $ref: '#/components/parameters/categoryIds'
+        - $ref: '#/components/parameters/tags'
+        - $ref: '#/components/parameters/priceMin'
+        - $ref: '#/components/parameters/priceMax'
+      responses:
+        '200':
+          description: Paginated property list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /properties/feed:
+    get:
+      tags: [Properties]
+      summary: JSON-LD ItemList feed
+      description: |
+        Returns Schema.org `ItemList` of `RealEstateListing` objects for bulk
+        agent/crawler consumption. Only published properties. Limit capped at 100.
+      operationId: getPropertiesFeed
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/propertyType'
+        - $ref: '#/components/parameters/citySlug'
+        - $ref: '#/components/parameters/localitySlug'
+        - $ref: '#/components/parameters/developerSlug'
+        - $ref: '#/components/parameters/categoryIds'
+        - $ref: '#/components/parameters/tags'
+        - $ref: '#/components/parameters/priceMin'
+        - $ref: '#/components/parameters/priceMax'
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [ld+json]
+          description: Set to `ld+json` to receive raw `application/ld+json` body
+      responses:
+        '200':
+          description: JSON-LD feed (wrapped or raw depending on Accept/format)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyFeedResponse'
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/ItemListJsonLd'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /properties/{slug}:
+    get:
+      tags: [Properties]
+      summary: Get property by slug
+      description: |
+        Full property detail including sections (floor plans, FAQs, gallery, etc.).
+        Unpublished properties return 404 for anonymous callers.
+      operationId: getPropertyBySlug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+          example: sobha-ayana
+      responses:
+        '200':
+          description: Property detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyDetailResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+    offset:
+      name: offset
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        enum: [newest, price-asc, price-desc, name-asc]
+        default: newest
+    propertyType:
+      name: propertyType
+      in: query
+      schema:
+        type: string
+        enum: [residential, commercial]
+    citySlug:
+      name: citySlug
+      in: query
+      schema:
+        type: string
+      example: gurgaon
+    localitySlug:
+      name: localitySlug
+      in: query
+      schema:
+        type: string
+      example: golf-course-road
+    developerSlug:
+      name: developerSlug
+      in: query
+      schema:
+        type: string
+      example: sobha
+    categoryIds:
+      name: categoryIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+          format: uuid
+      style: form
+      explode: true
+    tags:
+      name: tags
+      in: query
+      description: Comma-separated tag slugs (AND logic)
+      schema:
+        type: string
+      example: upcoming,featured
+    priceMin:
+      name: priceMin
+      in: query
+      schema:
+        type: number
+    priceMax:
+      name: priceMax
+      in: query
+      schema:
+        type: number
+  responses:
+    BadRequest:
+      description: Invalid filter parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+    PropertyListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertySummary'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    PropertyDetailResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: '#/components/schemas/PropertyDetail'
+    PropertyFeedResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: '#/components/schemas/ItemListJsonLd'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+    PropertySummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        slug:
+          type: string
+        title:
+          type: string
+        propertyType:
+          type: string
+          enum: [residential, commercial]
+        priceMin:
+          type: number
+          nullable: true
+        priceMax:
+          type: number
+          nullable: true
+        citySlug:
+          type: string
+          nullable: true
+        localitySlug:
+          type: string
+          nullable: true
+        developerSlug:
+          type: string
+          nullable: true
+        bedrooms:
+          type: integer
+          nullable: true
+        bathrooms:
+          type: integer
+          nullable: true
+        areaSqftMin:
+          type: integer
+          nullable: true
+        areaSqftMax:
+          type: integer
+          nullable: true
+        reraNumber:
+          type: string
+          nullable: true
+        possessionDate:
+          type: string
+          format: date
+          nullable: true
+        launchDate:
+          type: string
+          format: date
+          nullable: true
+        latitude:
+          type: number
+          nullable: true
+        longitude:
+          type: number
+          nullable: true
+        thumbnailUrl:
+          type: string
+          nullable: true
+        Developer:
+          type: object
+          nullable: true
+        Location:
+          type: object
+          nullable: true
+        Categories:
+          type: array
+          items:
+            type: object
+        Tags:
+          type: array
+          items:
+            type: object
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PropertyDetail:
+      allOf:
+        - $ref: '#/components/schemas/PropertySummary'
+        - type: object
+          properties:
+            PropertySections:
+              type: array
+              items:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  title:
+                    type: string
+                  order:
+                    type: integer
+                  isVisible:
+                    type: boolean
+                  data:
+                    type: object
+    ItemListJsonLd:
+      type: object
+      properties:
+        '@context':
+          type: string
+          example: https://schema.org
+        '@type':
+          type: string
+          example: ItemList
+        itemListElement:
+          type: array
+          items:
+            type: object

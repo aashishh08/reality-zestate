@@ -3,26 +3,10 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { FORM_CONFIG } from '@/lib/constants';
 
-/** Once set, we do not show the delayed auto popup again in this tab session. */
-const LEAD_AUTO_POPUP_SESSION_KEY = 'leadPopup_auto_handled';
-
-function markLeadAutoPopupHandled() {
-    try {
-        if (typeof sessionStorage !== 'undefined') {
-            sessionStorage.setItem(LEAD_AUTO_POPUP_SESSION_KEY, '1');
-        }
-    } catch {
-        // ignore
-    }
-}
-
-function isLeadAutoPopupHandled() {
-    try {
-        if (typeof sessionStorage === 'undefined') return true;
-        return sessionStorage.getItem(LEAD_AUTO_POPUP_SESSION_KEY) === '1';
-    } catch {
-        return true;
-    }
+export interface LeadPageContext {
+    propertyId?: string;
+    propertySlug?: string;
+    propertyTitle?: string;
 }
 
 interface LeadModalContextType {
@@ -30,6 +14,8 @@ interface LeadModalContextType {
     openModal: (source?: string) => void;
     closeModal: () => void;
     modalSource: string;
+    pageContext: LeadPageContext;
+    setLeadPageContext: (context: LeadPageContext) => void;
 }
 
 const LeadModalContext = createContext<LeadModalContextType | undefined>(undefined);
@@ -37,24 +23,40 @@ const LeadModalContext = createContext<LeadModalContextType | undefined>(undefin
 export function LeadModalProvider({ children }: { children: React.ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
     const [modalSource, setModalSource] = useState('lead-popup');
+    const [pageContext, setPageContext] = useState<LeadPageContext>({});
     const isOpenRef = useRef(false);
+    const pageContextRef = useRef<LeadPageContext>({});
     useEffect(() => {
         isOpenRef.current = isOpen;
     }, [isOpen]);
-
-    /** One delayed auto-open for the whole app (LeadPopup remounts on route changes). */
     useEffect(() => {
-        if (isLeadAutoPopupHandled()) return;
+        pageContextRef.current = pageContext;
+    }, [pageContext]);
 
-        const t = setTimeout(() => {
-            if (isLeadAutoPopupHandled()) return;
+    const setLeadPageContext = useCallback((context: LeadPageContext) => {
+        setPageContext(context);
+    }, []);
+
+    /** Recurring auto-open for the whole app (LeadPopup remounts on route changes). */
+    useEffect(() => {
+        const showAutoPopup = () => {
             if (isOpenRef.current) return;
+
+            // Fallback: derive project slug from route when page has not set context yet
+            if (!pageContextRef.current.propertySlug && typeof window !== 'undefined') {
+                const match = window.location.pathname.match(/^\/projects\/([^/]+)\/?$/);
+                if (match) {
+                    setPageContext((prev) => ({ ...prev, propertySlug: match[1] }));
+                }
+            }
+
             setModalSource('lead-popup-timer');
             setIsOpen(true);
-            markLeadAutoPopupHandled();
-        }, FORM_CONFIG.LEAD_POPUP_DELAY);
+        };
 
-        return () => clearTimeout(t);
+        const intervalId = setInterval(showAutoPopup, FORM_CONFIG.LEAD_POPUP_DELAY);
+
+        return () => clearInterval(intervalId);
     }, []);
 
     const openModal = useCallback((source: string = 'lead-popup') => {
@@ -63,12 +65,11 @@ export function LeadModalProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     const closeModal = useCallback(() => {
-        markLeadAutoPopupHandled();
         setIsOpen(false);
     }, []);
 
     return (
-        <LeadModalContext.Provider value={{ isOpen, openModal, closeModal, modalSource }}>
+        <LeadModalContext.Provider value={{ isOpen, openModal, closeModal, modalSource, pageContext, setLeadPageContext }}>
             {children}
         </LeadModalContext.Provider>
     );

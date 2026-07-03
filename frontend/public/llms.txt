@@ -13,6 +13,51 @@ Superluxere helps buyers, investors, and NRIs discover and enquire about luxury 
 - [Categories](/category/apartments) (example): Property type collections — apartments, villas, penthouses, boutique residences, commercial spaces (each at `/category/{slug}`).
 - [Sitemap](/sitemap.xml): Machine-readable URL index for crawlers.
 
+## Machine-readable property API
+
+Published property listings are available as JSON for agents, crawlers, and integrations.
+
+- **Base URL:** `https://api.superluxere.com/api/v1`
+- **List endpoint:** `GET /properties`
+- **Detail endpoint:** `GET /properties/{slug}`
+- **JSON-LD feed:** `GET /properties/feed` — Schema.org `ItemList` of `RealEstateListing` objects (add `?format=ld+json` or `Accept: application/ld+json` for raw JSON-LD). Limit capped at 100.
+- **OpenAPI spec:** `GET /openapi.yaml` — machine-readable API documentation for property GET routes.
+
+### List response shape
+
+```json
+{
+  "success": true,
+  "data": [ { "id", "slug", "title", "propertyType", "priceMin", "priceMax", "bedrooms", "bathrooms", "areaSqftMin", "areaSqftMax", "reraNumber", "possessionDate", "launchDate", "latitude", "longitude", "Developer", "Location", "Categories", "Tags", "createdAt", "updatedAt" } ],
+  "pagination": { "total": 0, "limit": 10, "offset": 0 }
+}
+```
+
+Only published listings are returned to anonymous callers (`isPublished` is always enforced as `true`).
+
+### Query parameters (`GET /properties`)
+
+| Parameter | Description |
+|-----------|-------------|
+| `limit` | Page size (default `10`) |
+| `offset` | Pagination offset (default `0`) |
+| `sort` | Sort order — `newest` (default) |
+| `propertyType` | `residential` or `commercial` |
+| `citySlug` | Filter by city location slug |
+| `localitySlug` | Filter by locality / micro-market slug |
+| `developerSlug` | Filter by developer slug |
+| `categoryIds` | One or more category UUIDs |
+| `tags` | Comma-separated tag slugs (e.g. `upcoming,featured`) |
+| `priceMin` / `priceMax` | Numeric price range in INR |
+
+**Example:** `GET https://api.superluxere.com/api/v1/properties?citySlug=gurgaon&limit=20&offset=0`
+
+**Feed example:** `GET https://api.superluxere.com/api/v1/properties/feed?limit=50&format=ld+json`
+
+**OpenAPI:** `GET https://api.superluxere.com/api/v1/openapi.yaml`
+
+Full property detail (sections, floor plans, FAQs, etc.) is returned from `GET /properties/{slug}`.
+
 ## Blog topics covered
 
 - Luxury residential and commercial market trends in India
