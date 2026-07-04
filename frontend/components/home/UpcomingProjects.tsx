@@ -20,8 +20,8 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
   const { scrollXProgress } = useScroll({ container: containerRef });
 
   return (
-    <section id="upcoming-projects" className="py-12 md:py-24 bg-transparent overflow-hidden">
-      <div className="text-center mb-8 md:mb-16 px-4 max-w-7xl mx-auto">
+    <section id="upcoming-projects" className="py-6 md:py-24 bg-transparent overflow-hidden">
+      <div className="text-center mb-6 md:mb-16 px-4 max-w-7xl mx-auto">
         <motion.h4
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -157,8 +157,8 @@ export function UpcomingProjects({ properties }: UpcomingProjectsProps) {
 
   if (!isClient) {
     return (
-      <section id="upcoming-projects" className="py-12 md:py-24 bg-transparent overflow-hidden">
-        <div className="text-center mb-8 md:mb-16 px-4 max-w-7xl mx-auto">
+      <section id="upcoming-projects" className="py-6 md:py-24 bg-transparent overflow-hidden">
+        <div className="text-center mb-6 md:mb-16 px-4 max-w-7xl mx-auto">
           <h4 className="text-gold font-medium tracking-[0.3em] mb-4 uppercase text-xs sm:text-sm">
             Future Living
           </h4>

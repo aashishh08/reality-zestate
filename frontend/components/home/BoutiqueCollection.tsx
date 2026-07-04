@@ -28,9 +28,9 @@ export function BoutiqueCollection({ properties }: BoutiqueCollectionProps) {
   ];
 
   return (
-    <section id="boutique-projects" className="py-12 md:py-24 bg-transparent overflow-hidden">
+    <section id="boutique-projects" className="py-6 md:py-24 bg-transparent overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-8 md:mb-16 px-4 sm:px-6">
+        <div className="text-center mb-6 md:mb-16 px-4 sm:px-6">
           <motion.h4
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}

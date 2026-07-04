@@ -40,16 +40,52 @@ export function ProjectGallery({ images, videoUrl }: ProjectGalleryProps) {
     }
   };
 
-  const visibleThumbnails = totalItems;
   const thumbnailItems = [
     ...(videoUrl ? [{ type: "video", src: undefined }] : []),
     ...safeImages.map((img) => ({ type: "image", src: img })),
   ];
 
   return (
-    <div className="space-y-6 min-w-0 max-w-full overflow-x-hidden">
-      {/* Main Gallery Container - Side by Side Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 min-w-0">
+    <div className="space-y-6 min-w-0 max-w-full">
+      {/* Mobile — horizontal scroll gallery */}
+      <div className="lg:hidden">
+        <div
+          className="-mx-4 sm:-mx-6 flex gap-3 overflow-x-auto overscroll-x-contain px-4 sm:px-6 pb-2 snap-x snap-mandatory no-scrollbar [-webkit-overflow-scrolling:touch]"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {thumbnailItems.map((item, index) => (
+            <div
+              key={index}
+              className="relative shrink-0 snap-center w-[85vw] max-w-[360px] aspect-[4/3] rounded-xl overflow-hidden shadow-lg bg-black"
+            >
+              {item.type === "video" ? (
+                <iframe
+                  src={videoUrl}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title="Project video"
+                />
+              ) : (
+                <Image
+                  src={item.src!}
+                  alt={`Project view ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="85vw"
+                />
+              )}
+              <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs font-medium">
+                {index + 1} / {totalItems}
+              </div>
+            </div>
+          ))}
+          <div className="w-2 shrink-0" aria-hidden />
+        </div>
+      </div>
+
+      {/* Desktop — main image + thumbnail sidebar */}
+      <div className="hidden lg:grid grid-cols-[1fr_280px] gap-8 min-w-0">
         {/* Left Side - Large Image Display */}
         <motion.div
           className="relative aspect-[4/3] lg:aspect-auto lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl bg-black group min-w-0"
@@ -194,28 +230,6 @@ export function ProjectGallery({ images, videoUrl }: ProjectGalleryProps) {
             </button>
           )}
         </motion.div>
-      </div>
-
-      {/* Bottom Controls - Mobile Only */}
-      <div className="lg:hidden flex gap-2">
-        <button
-          onClick={() => setSelectedIndex((prev) => (prev === 0 ? totalItems - 1 : prev - 1))}
-          className="flex-1 bg-black text-white p-3 rounded-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Previous
-        </button>
-        <button
-          onClick={() => setSelectedIndex((prev) => (prev === totalItems - 1 ? 0 : prev + 1))}
-          className="flex-1 bg-gold text-black p-3 rounded-lg hover:bg-gold-dark transition-all flex items-center justify-center gap-2"
-        >
-          Next
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
       </div>
     </div>
   );

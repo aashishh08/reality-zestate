@@ -39,7 +39,6 @@ function collectionImage(cat: Category): string {
 
 /** Mobile card — matches Browse by Location (`CityLocations`). */
 function CollectionMobileCard({ category: cat, index }: { category: Category; index: number }) {
-  const desc = collectionDescription(cat);
   const img = collectionImage(cat);
 
   return (
@@ -50,7 +49,7 @@ function CollectionMobileCard({ category: cat, index }: { category: Category; in
       viewport={{ once: true }}
     >
       <NewTabLink href={`/category/${cat.slug}`} className="block h-full">
-        <div className="group relative h-[300px] overflow-hidden rounded-xl shadow-lg cursor-pointer transform transition-all duration-300 hover:-translate-y-2">
+        <div className="group relative h-[140px] overflow-hidden rounded-lg shadow-md cursor-pointer transform transition-all duration-300 active:scale-[0.98]">
           <Image
             src={img}
             alt={cat.name}
@@ -58,24 +57,16 @@ function CollectionMobileCard({ category: cat, index }: { category: Category; in
             className="object-cover transition-transform duration-700 group-hover:scale-110"
             sizes="50vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
 
-          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-            <div className="flex items-center gap-2 mb-2 text-gold/90 text-xs font-medium tracking-wide uppercase">
-              <LayoutGrid className="w-3.5 h-3.5 shrink-0" />
+          <div className="absolute bottom-0 left-0 right-0 p-2.5">
+            <div className="flex items-center gap-1 mb-0.5 text-gold/90 text-[9px] font-medium tracking-wide uppercase min-w-0">
+              <LayoutGrid className="w-2.5 h-2.5 shrink-0" />
               <span className="truncate">Collection</span>
             </div>
-            <h3 className="text-lg sm:text-2xl font-serif font-bold text-white mb-1 leading-tight line-clamp-2">
+            <h3 className="text-xs font-serif font-bold text-white leading-tight line-clamp-2">
               {cat.name}
             </h3>
-            <div className="h-auto sm:h-0 sm:group-hover:h-auto overflow-hidden transition-all duration-300">
-              <p className="text-white/80 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2 sm:transform sm:translate-y-4 sm:group-hover:translate-y-0 sm:transition-transform sm:duration-300">
-                {desc}
-              </p>
-              <span className="inline-flex items-center gap-1.5 text-white text-xs sm:text-sm font-medium border-b border-gold pb-1">
-                View properties <ArrowRight className="w-3.5 h-3.5" />
-              </span>
-            </div>
           </div>
         </div>
       </NewTabLink>
@@ -104,15 +95,15 @@ export function LocationCategories({ categories }: LocationCategoriesProps) {
   ];
 
   return (
-    <section className="py-24 bg-transparent">
+    <section className="py-6 md:py-24 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16 px-4">
+        <div className="text-center mb-6 md:mb-16 px-2 md:px-4">
           <motion.h4
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-gold font-medium tracking-[0.3em] mb-4 uppercase text-xs sm:text-sm"
+            className="text-gold font-medium tracking-[0.3em] mb-2 md:mb-4 uppercase text-[10px] sm:text-sm"
           >
             Explore by Category
           </motion.h4>
@@ -122,7 +113,7 @@ export function LocationCategories({ categories }: LocationCategoriesProps) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-serif font-bold text-black mb-6 leading-tight"
+            className="text-2xl sm:text-4xl md:text-6xl font-serif font-bold text-black mb-3 md:mb-6 leading-tight"
           >
             Curated <span className="text-gold">Collections</span>
           </motion.h2>
@@ -132,14 +123,14 @@ export function LocationCategories({ categories }: LocationCategoriesProps) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="text-zinc-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+            className="text-zinc-500 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed line-clamp-2 md:line-clamp-none"
           >
             Discover exclusive properties by lifestyle—from golf-side compounds to Himalayan retreats and off-market access.
           </motion.p>
         </div>
 
-        {/* Mobile — same 2-col grid as Browse by Location */}
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 md:hidden">
+        {/* Mobile — compact 2-col grid */}
+        <div className="grid grid-cols-2 gap-2 sm:gap-6 md:hidden">
           {displayCollections.map((cat, index) => (
             <CollectionMobileCard key={cat.id} category={cat} index={index} />
           ))}

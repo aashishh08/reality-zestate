@@ -36,7 +36,7 @@ function CorridorMobileCard({ corridor: c, index }: { corridor: FeaturedCorridor
       viewport={{ once: true }}
     >
       <Link href={`/location/${c.locationSlug}`} className="block h-full">
-        <div className="group relative h-[300px] overflow-hidden rounded-xl shadow-lg cursor-pointer transform transition-all duration-300 hover:-translate-y-2">
+        <div className="group relative h-[140px] overflow-hidden rounded-lg shadow-md cursor-pointer transform transition-all duration-300 active:scale-[0.98]">
           <Image
             src="/images/hero-bg.png"
             alt={`${c.displayName} — luxury corridor`}
@@ -44,28 +44,20 @@ function CorridorMobileCard({ corridor: c, index }: { corridor: FeaturedCorridor
             className="object-cover transition-transform duration-700 group-hover:scale-110"
             sizes="50vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
 
-          <div className="absolute top-3 right-3 z-10 bg-gold/90 text-black text-[10px] font-bold px-2 py-0.5 rounded tracking-wide">
+          <div className="absolute top-2 right-2 z-10 bg-gold/90 text-black text-[8px] font-bold px-1.5 py-0.5 rounded tracking-wide">
             CORRIDOR
           </div>
 
-          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-            <div className="flex items-center gap-2 mb-2 text-gold/90 text-xs font-medium tracking-wide uppercase">
-              <MapPin className="w-3.5 h-3.5 shrink-0" />
+          <div className="absolute bottom-0 left-0 right-0 p-2.5">
+            <div className="flex items-center gap-1 mb-0.5 text-gold/90 text-[9px] font-medium tracking-wide uppercase min-w-0">
+              <MapPin className="w-2.5 h-2.5 shrink-0" />
               <span className="truncate">{cityLabelFromSlug(c.citySlug)}</span>
             </div>
-            <h3 className="text-lg sm:text-2xl font-serif font-bold text-white mb-1 leading-tight line-clamp-2">
+            <h3 className="text-xs font-serif font-bold text-white leading-tight line-clamp-2">
               {c.displayName}
             </h3>
-            <div className="h-auto sm:h-0 sm:group-hover:h-auto overflow-hidden transition-all duration-300">
-              <p className="text-white/80 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2 sm:transform sm:translate-y-4 sm:group-hover:translate-y-0 sm:transition-transform sm:duration-300">
-                {c.moodLine}
-              </p>
-              <span className="inline-flex items-center gap-1.5 text-white text-xs sm:text-sm font-medium border-b border-gold pb-1">
-                View corridor <ArrowRight className="w-3.5 h-3.5" />
-              </span>
-            </div>
           </div>
         </div>
       </Link>
@@ -132,14 +124,14 @@ export function FeaturedCorridors({ corridors }: FeaturedCorridorsProps) {
   const columns = corridorColumns(corridors);
 
   return (
-    <section className="py-24 bg-transparent overflow-hidden">
-      <div className="text-center mb-16 px-4 max-w-7xl mx-auto">
+    <section className="py-6 md:py-24 bg-transparent overflow-hidden">
+      <div className="text-center mb-6 md:mb-16 px-2 md:px-4 max-w-7xl mx-auto">
         <motion.h4
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-gold font-medium tracking-[0.3em] mb-4 uppercase text-xs sm:text-sm"
+          className="text-gold font-medium tracking-[0.3em] mb-2 md:mb-4 uppercase text-[10px] sm:text-sm"
         >
           Location intelligence
         </motion.h4>
@@ -149,7 +141,7 @@ export function FeaturedCorridors({ corridors }: FeaturedCorridorsProps) {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-6xl font-serif font-bold text-black mb-6 leading-tight"
+          className="text-2xl sm:text-4xl md:text-6xl font-serif font-bold text-black mb-3 md:mb-6 leading-tight"
         >
           India&apos;s best <span className="text-gold">corridors</span>
         </motion.h2>
@@ -159,7 +151,7 @@ export function FeaturedCorridors({ corridors }: FeaturedCorridorsProps) {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
-          className="text-zinc-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+          className="text-zinc-500 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed line-clamp-2 md:line-clamp-none"
         >
           Micro-markets we watch closely — curated addresses where developer quality,
           infrastructure depth, and rental liquidity align for serious buyers.
@@ -170,7 +162,7 @@ export function FeaturedCorridors({ corridors }: FeaturedCorridorsProps) {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.25 }}
           viewport={{ once: true }}
-          className="mt-8 flex justify-center"
+          className="mt-4 md:mt-8 hidden md:flex justify-center"
         >
           <Link
             href="/projects"
@@ -184,7 +176,7 @@ export function FeaturedCorridors({ corridors }: FeaturedCorridorsProps) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Mobile — same 2-col grid as Browse by Location */}
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 md:hidden">
+        <div className="grid grid-cols-2 gap-2 sm:gap-6 md:hidden">
           {corridors.map((c, index) => (
             <CorridorMobileCard key={c.locationSlug} corridor={c} index={index} />
           ))}

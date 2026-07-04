@@ -122,7 +122,7 @@ export function ProjectLocation({
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="space-y-8 min-w-0 max-w-full"
+            className="space-y-4 sm:space-y-8 min-w-0 max-w-full"
           >
             {safeNearby.length === 0 ? (
               <p className="text-gray-400 text-sm italic">No nearby places listed.</p>
@@ -141,29 +141,35 @@ export function ProjectLocation({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: categoryIndex * 0.1 }}
+                    className="min-w-0"
                   >
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-4">
                       <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center"
+                        className="w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg flex items-center justify-center shrink-0"
                         style={{ backgroundColor: `${iconColor}15` }}
                       >
-                        <IconComponent className="w-5 h-5" style={{ color: iconColor }} />
+                        <IconComponent className="w-3.5 h-3.5 sm:w-5 sm:h-5" style={{ color: iconColor }} />
                       </div>
-                      <h3 className="text-lg font-serif font-bold text-[#2C2416] break-words [overflow-wrap:anywhere]">
+                      <h3 className="text-sm sm:text-lg font-serif font-bold text-[#2C2416] break-words [overflow-wrap:anywhere] leading-tight">
                         {category.category}
                       </h3>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-3 pl-0 sm:pl-11 min-w-0">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 gap-x-2 gap-y-1.5 sm:gap-x-6 sm:gap-y-3 sm:pl-11 min-w-0">
                       {safeItems.map((item, index) => (
                         <motion.div
                           key={`${item.name || "item"}-${index}`}
                           initial={{ opacity: 0, x: -10 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           transition={{ delay: categoryIndex * 0.1 + index * 0.05 }}
-                          className="flex items-center gap-2"
+                          className="flex items-start gap-1.5 sm:gap-2 min-w-0"
                         >
-                          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: iconColor }} />
-                          <span className="text-sm text-gray-700 font-medium break-words [overflow-wrap:anywhere] min-w-0">{item.name}</span>
+                          <span
+                            className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full mt-1.5 sm:mt-2 shrink-0"
+                            style={{ backgroundColor: iconColor }}
+                          />
+                          <span className="text-[11px] sm:text-sm text-gray-700 font-medium break-words [overflow-wrap:anywhere] min-w-0 leading-snug line-clamp-2 sm:line-clamp-none">
+                            {item.name}
+                          </span>
                         </motion.div>
                       ))}
                     </div>
@@ -180,9 +186,9 @@ export function ProjectLocation({
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-12 sm:mt-16 md:mt-20 pt-10 sm:pt-14 md:pt-20 border-t border-gray-200"
+            className="mt-8 sm:mt-16 md:mt-20 pt-6 sm:pt-14 md:pt-20 border-t border-gray-200"
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 min-w-0">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 min-w-0">
               {safeConnectivity.map((item, index) => {
                 const IconComponent: React.ElementType =
                   (item.icon ? connectivityIcons[item.icon] : null) ?? connectivityIcons.default;
@@ -193,15 +199,19 @@ export function ProjectLocation({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-white rounded-lg border border-gray-200 p-4 hover:border-[#C9A961] hover:shadow-md transition-all min-w-0"
+                    className="bg-white rounded-lg border border-gray-200 p-2.5 sm:p-4 hover:border-[#C9A961] hover:shadow-md transition-all min-w-0 overflow-hidden"
                   >
-                    <div className="flex items-start gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-lg bg-[#C9A961]/10 flex items-center justify-center shrink-0">
-                        <IconComponent className="w-5 h-5 text-[#C9A961]" />
+                    <div className="flex items-start gap-2 sm:gap-3 min-w-0">
+                      <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-md sm:rounded-lg bg-[#C9A961]/10 flex items-center justify-center shrink-0">
+                        <IconComponent className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-[#C9A961]" />
                       </div>
-                      <div className="min-w-0">
-                        <p className="text-[#C9A961] font-bold text-sm break-words [overflow-wrap:anywhere]">{item.time}</p>
-                        <p className="text-gray-700 text-xs font-medium break-words [overflow-wrap:anywhere]">{item.place}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[#C9A961] font-bold text-[11px] sm:text-sm break-words [overflow-wrap:anywhere] leading-tight line-clamp-1 sm:line-clamp-none">
+                          {item.time}
+                        </p>
+                        <p className="text-gray-700 text-[10px] sm:text-xs font-medium break-words [overflow-wrap:anywhere] leading-snug line-clamp-2 sm:line-clamp-none mt-0.5">
+                          {item.place}
+                        </p>
                       </div>
                     </div>
                   </motion.div>

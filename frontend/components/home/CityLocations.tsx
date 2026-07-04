@@ -35,15 +35,15 @@ export function CityLocations({ locations }: CityLocationsProps) {
   }
 
   return (
-    <section className="py-24 bg-[#F5F5F0]">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16 px-4">
+    <section className="py-6 md:py-24 bg-[#F5F5F0]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="text-center mb-6 md:mb-16 px-2 md:px-4">
           <motion.h4
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-gold font-medium tracking-[0.3em] mb-4 uppercase text-xs sm:text-sm"
+            className="text-gold font-medium tracking-[0.3em] mb-2 md:mb-4 uppercase text-[10px] sm:text-sm"
           >
             Find Your Dream Home
           </motion.h4>
@@ -53,7 +53,7 @@ export function CityLocations({ locations }: CityLocationsProps) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-serif font-bold text-black mb-6 leading-tight"
+            className="text-2xl sm:text-4xl md:text-6xl font-serif font-bold text-black mb-3 md:mb-6 leading-tight"
           >
             Browse by <span className="text-gold">Location</span>
           </motion.h2>
@@ -63,7 +63,7 @@ export function CityLocations({ locations }: CityLocationsProps) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="text-zinc-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+            className="text-zinc-500 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed line-clamp-2 md:line-clamp-none"
           >
             Explore our exclusive properties across India's most prime locations,
             offering the best in luxury and connectivity.
@@ -71,7 +71,7 @@ export function CityLocations({ locations }: CityLocationsProps) {
         </div>
 
         {/* Grid Layout - Scalable for more locations */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6 md:gap-8">
           {displayCities.map((location, index) => (
             <motion.div
               key={location.id}
@@ -81,7 +81,7 @@ export function CityLocations({ locations }: CityLocationsProps) {
               viewport={{ once: true }}
             >
               <Link href={`/location/${location.slug}`} className="block h-full">
-                <div className="group relative h-[300px] overflow-hidden rounded-xl shadow-lg cursor-pointer transform transition-all duration-300 hover:-translate-y-2">
+                <div className="group relative h-[140px] md:h-[300px] overflow-hidden rounded-lg md:rounded-xl shadow-md md:shadow-lg cursor-pointer transform transition-all duration-300 md:hover:-translate-y-2 active:scale-[0.98] md:active:scale-100">
                   <Image
                     src={
                       locationImages[location.slug.toLowerCase()] || "/images/hero-bg.png"
@@ -89,20 +89,21 @@ export function CityLocations({ locations }: CityLocationsProps) {
                     alt={location.name}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    sizes="(max-width: 768px) 50vw, 33vw"
                   />
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent md:from-black/70 md:via-black/10" />
 
                   {/* Content */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <div className="flex items-center gap-2 mb-2 text-gold/90 text-sm font-medium tracking-wide uppercase">
-                      <MapPin className="w-4 h-4" />
-                      <span>{location.name}</span>
+                  <div className="absolute bottom-0 left-0 right-0 p-2.5 md:p-6">
+                    <div className="flex items-center gap-1 md:gap-2 mb-0.5 md:mb-2 text-gold/90 text-[9px] md:text-sm font-medium tracking-wide uppercase min-w-0">
+                      <MapPin className="w-2.5 h-2.5 md:w-4 md:h-4 shrink-0" />
+                      <span className="truncate">{location.name}</span>
                     </div>
-                    <h3 className="text-2xl font-serif font-bold text-white mb-2">
+                    <h3 className="text-xs md:text-2xl font-serif font-bold text-white leading-tight line-clamp-2 md:line-clamp-none md:mb-2">
                       {location.name}
                     </h3>
-                    <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-300">
+                    <div className="hidden md:block h-0 group-hover:h-auto overflow-hidden transition-all duration-300">
                       <p className="text-white/80 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                         {locationSubtitles[location.slug.toLowerCase()] || `Luxury properties in ${location.name}`}
                       </p>

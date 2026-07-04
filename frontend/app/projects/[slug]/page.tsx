@@ -272,13 +272,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       {/* Introduction Text Section */}
       {details?.introText && (
-        <section className="py-8 bg-[#F5F0E8] overflow-x-hidden">
+        <section className="py-4 bg-[#F5F0E8] overflow-x-hidden">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
-            <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-[#C9A961]/10 text-center min-w-0 overflow-hidden">
+            <div className="bg-white rounded-xl px-4 py-3 sm:px-5 sm:py-3.5 shadow-sm border border-[#C9A961]/10 text-center min-w-0 max-h-48 sm:max-h-56 md:max-h-64 overflow-y-auto overflow-x-hidden overscroll-contain [-webkit-overflow-scrolling:touch]">
               <HtmlRenderer
                 html={details.introText}
-                fontSize="text-lg"
-                className="text-[#2C2416]"
+                fontSize="text-base"
+                className="text-[#2C2416] prose-p:my-0 prose-p:leading-snug"
               />
             </div>
           </div>

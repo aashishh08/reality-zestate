@@ -19,17 +19,17 @@ export function TrendingProjects({ properties }: TrendingProjectsProps) {
   const display = properties.slice(0, 8);
 
   return (
-    <section id="trending-projects" className="py-24 px-6 bg-transparent overflow-hidden">
+    <section id="trending-projects" className="py-6 md:py-24 px-4 sm:px-6 bg-transparent overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16 px-4">
+        <div className="text-center mb-6 md:mb-16 px-2 md:px-4">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="flex items-center justify-center gap-2 mb-4"
+            className="flex items-center justify-center gap-2 mb-2 md:mb-4"
           >
-            <h4 className="text-gold font-medium tracking-[0.3em] uppercase text-xs sm:text-sm">
+            <h4 className="text-gold font-medium tracking-[0.3em] uppercase text-[10px] sm:text-sm">
               Trending Now
             </h4>
           </motion.div>
@@ -39,7 +39,7 @@ export function TrendingProjects({ properties }: TrendingProjectsProps) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-serif font-bold text-black mb-6 leading-tight"
+            className="text-2xl sm:text-4xl md:text-6xl font-serif font-bold text-black mb-3 md:mb-6 leading-tight"
           >
             Trending <span className="text-gold">Projects</span>
           </motion.h2>
@@ -49,13 +49,13 @@ export function TrendingProjects({ properties }: TrendingProjectsProps) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="text-zinc-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+            className="text-zinc-500 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed line-clamp-2 md:line-clamp-none"
           >
             High-interest properties our clients are actively enquiring about this week.
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6 lg:gap-8">
           {display.map((property, index) => {
             if (!property?.slug || !property?.title) return null;
 
@@ -67,6 +67,7 @@ export function TrendingProjects({ properties }: TrendingProjectsProps) {
             return (
               <PropertyCard
                 key={property.id}
+                compact
                 imageSizes="(max-width: 1024px) 50vw, 25vw"
                 project={{
                   id: property.id,
@@ -96,7 +97,7 @@ export function TrendingProjects({ properties }: TrendingProjectsProps) {
         </div>
 
         {/* Mobile CTA */}
-        <div className="mt-12 flex justify-center md:hidden">
+        <div className="mt-6 md:mt-12 flex justify-center md:hidden">
           <Link
             href="/tag/trending"
             className="flex items-center gap-3 px-6 py-3 border border-zinc-200 rounded-full hover:bg-black hover:text-white hover:border-black transition-all group w-full justify-center"

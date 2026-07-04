@@ -165,7 +165,7 @@ export function ProjectWhyInvest({
           className={`grid gap-5 sm:gap-6 md:gap-8 min-w-0 ${hasBoxes ? "md:grid-cols-2" : "md:grid-cols-1"}`}
         >
           {hasBoxes ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-stretch min-w-0">
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3 items-stretch min-w-0">
               {visibleReasonCards.map((item, index) => {
                 const IconComponent =
                   (item.icon ? iconMap[item.icon as keyof typeof iconMap] : null) ?? TrendingUp;
@@ -178,20 +178,20 @@ export function ProjectWhyInvest({
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className={`rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group flex flex-col h-full min-w-0 ${
+                    className={`rounded-lg p-2.5 sm:p-4 shadow-sm hover:shadow-md transition-all border border-[#C9A961]/10 group flex flex-col h-full min-w-0 overflow-hidden ${
                       isMarketTiming
                         ? "bg-gradient-to-br from-[#C9A961]/10 to-[#C9A961]/5"
                         : "bg-white"
                     }`}
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="w-10 h-10 bg-[#C9A961]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#C9A961]/20 transition-colors shrink-0">
-                        <IconComponent className="w-5 h-5 text-[#C9A961]" />
+                      <div className="w-7 h-7 sm:w-10 sm:h-10 bg-[#C9A961]/10 rounded-md sm:rounded-lg flex items-center justify-center mb-1.5 sm:mb-3 group-hover:bg-[#C9A961]/20 transition-colors shrink-0">
+                        <IconComponent className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-[#C9A961]" />
                       </div>
-                      <h3 className="text-sm font-semibold text-[#2C2416] mb-1.5 leading-tight break-words [overflow-wrap:anywhere]">
+                      <h3 className="text-[11px] sm:text-sm font-semibold text-[#2C2416] mb-1 sm:mb-1.5 leading-tight break-words [overflow-wrap:anywhere] line-clamp-2 sm:line-clamp-none">
                         {item.title}
                       </h3>
-                      <p className="text-xs text-gray-600 leading-relaxed break-words [overflow-wrap:anywhere]">
+                      <p className="text-[10px] sm:text-xs text-gray-600 leading-snug sm:leading-relaxed break-words [overflow-wrap:anywhere] line-clamp-3 sm:line-clamp-none">
                         {item.subtitle}
                       </p>
                     </div>
@@ -200,7 +200,7 @@ export function ProjectWhyInvest({
                       <button
                         type="button"
                         onClick={() => setShowForm(true)}
-                        className="mt-auto pt-3 w-full bg-[#C9A961] hover:bg-[#A88B4A] text-black text-xs font-semibold py-2 px-2 rounded transition-all"
+                        className="mt-auto pt-2 sm:pt-3 w-full bg-[#C9A961] hover:bg-[#A88B4A] text-black text-[10px] sm:text-xs font-semibold py-1.5 sm:py-2 px-1.5 sm:px-2 rounded transition-all truncate"
                       >
                         More insights
                       </button>

@@ -148,9 +148,9 @@ function ResourceDesktopCard({ item, index }: { item: ResourceItem; index: numbe
 
 export function ResourcesInsights() {
     return (
-        <section className="py-24 px-4 sm:px-6 bg-transparent">
+        <section className="py-6 md:py-24 px-4 sm:px-6 bg-transparent">
             <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-10 sm:mb-16 px-4">
+                <div className="text-center mb-6 md:mb-16 px-2 md:px-4">
                     <motion.h4
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}

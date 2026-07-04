@@ -33,9 +33,11 @@ interface PropertyCardProps {
   index: number;
   /** next/image `sizes` — set when the card sits in a 2+ column grid on small viewports */
   imageSizes?: string;
+  /** Denser card on mobile — used on homepage trending grid */
+  compact?: boolean;
 }
 
-export function PropertyCard({ project, index, imageSizes }: PropertyCardProps) {
+export function PropertyCard({ project, index, imageSizes, compact = false }: PropertyCardProps) {
   if (!project?.slug || !project?.title) return null;
 
   // First status-type tag drives the badge
@@ -61,7 +63,11 @@ export function PropertyCard({ project, index, imageSizes }: PropertyCardProps) 
       <div className="group bg-white overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
 
         {/* ── Image / Gradient area ──────────────────────────── */}
-        <div className="relative h-[220px] overflow-hidden">
+        <div
+          className={`relative overflow-hidden ${
+            compact ? "h-[88px] md:h-[220px]" : "h-[220px]"
+          }`}
+        >
           {project.image ? (
             <Image
               src={project.image}
@@ -90,7 +96,11 @@ export function PropertyCard({ project, index, imageSizes }: PropertyCardProps) 
           {/* Status badge — top left */}
           {statusTag && badgeStyle && (
             <div
-              className="absolute top-3 left-3 z-10 px-2.5 py-[5px] font-sans text-[10px] font-semibold uppercase tracking-[0.16em] sm:text-xs"
+              className={`absolute z-10 font-sans font-semibold uppercase tracking-[0.16em] ${
+                compact
+                  ? "top-1.5 left-1.5 px-1.5 py-0.5 text-[8px] md:top-3 md:left-3 md:px-2.5 md:py-[5px] md:text-xs"
+                  : "top-3 left-3 px-2.5 py-[5px] text-[10px] sm:text-xs"
+              }`}
               style={badgeStyle}
             >
               {statusTag.name}
@@ -99,8 +109,18 @@ export function PropertyCard({ project, index, imageSizes }: PropertyCardProps) 
 
           {/* Price tag — bottom right */}
           {priceDisplay && (
-            <div className="absolute bottom-3 right-3 z-10 bg-black/75 backdrop-blur-sm px-3 py-1.5">
-              <span className="font-serif text-sm font-medium tracking-wide text-gold">
+            <div
+              className={`absolute z-10 bg-black/75 backdrop-blur-sm ${
+                compact
+                  ? "bottom-1.5 right-1.5 px-1.5 py-0.5 md:bottom-3 md:right-3 md:px-3 md:py-1.5"
+                  : "bottom-3 right-3 px-3 py-1.5"
+              }`}
+            >
+              <span
+                className={`font-serif font-medium tracking-wide text-gold ${
+                  compact ? "text-[10px] md:text-sm" : "text-sm"
+                }`}
+              >
                 {priceDisplay}
               </span>
             </div>
@@ -108,32 +128,62 @@ export function PropertyCard({ project, index, imageSizes }: PropertyCardProps) 
         </div>
 
         {/* ── Card body ─────────────────────────────────────── */}
-        <div className="px-5 pt-4 pb-5">
+        <div
+          className={
+            compact ? "px-2 pt-2 pb-2 md:px-5 md:pt-4 md:pb-5" : "px-5 pt-4 pb-5"
+          }
+        >
 
           {/* Developer */}
           {developerName && (
-            <p className="mb-1 font-sans text-xs font-semibold uppercase tracking-widest text-gold">
+            <p
+              className={`font-sans font-semibold uppercase tracking-widest text-gold ${
+                compact
+                  ? "mb-0.5 text-[8px] leading-tight line-clamp-1 md:mb-1 md:text-xs"
+                  : "mb-1 text-xs"
+              }`}
+            >
               {developerName}
             </p>
           )}
 
           {/* Project name */}
-          <h3 className="mb-2 font-serif text-lg font-medium leading-snug text-charcoal sm:text-xl line-clamp-2">
+          <h3
+            className={`font-serif font-medium leading-snug text-charcoal ${
+              compact
+                ? "mb-1 text-xs line-clamp-2 md:mb-2 md:text-xl md:line-clamp-2"
+                : "mb-2 text-lg sm:text-xl line-clamp-2"
+            }`}
+          >
             {project.title}
           </h3>
 
           {/* Location */}
           {locationName && (
-            <div className="flex items-center gap-1.5 mb-3">
-              <span className="w-[4px] h-[4px] rounded-full bg-gold flex-shrink-0" />
-              <span className="font-sans text-xs text-muted-foreground tracking-wide">
+            <div
+              className={`flex items-center gap-1 min-w-0 ${
+                compact ? "mb-0 md:mb-3" : "mb-3 gap-1.5"
+              }`}
+            >
+              <span className="w-[3px] h-[3px] md:w-[4px] md:h-[4px] rounded-full bg-gold flex-shrink-0" />
+              <span
+                className={`font-sans text-muted-foreground tracking-wide truncate ${
+                  compact ? "text-[9px] md:text-xs" : "text-xs"
+                }`}
+              >
                 {locationName}
               </span>
             </div>
           )}
 
           {/* Specs row */}
-          <div className="flex flex-wrap items-center gap-4 pt-3 border-t border-border mb-4">
+          <div
+            className={`flex-wrap items-center gap-4 border-t border-border ${
+              compact
+                ? "hidden md:flex pt-3 mb-4"
+                : "flex pt-3 mb-4"
+            }`}
+          >
             {project.propertyType && (
               <span className="font-sans text-xs text-muted-foreground tracking-wide">
                 Type{' '}
@@ -153,7 +203,13 @@ export function PropertyCard({ project, index, imageSizes }: PropertyCardProps) 
           </div>
 
           {/* CTA */}
-          <button className="w-full border border-border bg-transparent py-3 font-sans text-xs font-semibold uppercase tracking-widest text-charcoal transition-all duration-300 group-hover:border-charcoal group-hover:bg-charcoal group-hover:text-gold">
+          <button
+            className={`w-full border border-border bg-transparent font-sans font-semibold uppercase tracking-widest text-charcoal transition-all duration-300 group-hover:border-charcoal group-hover:bg-charcoal group-hover:text-gold ${
+              compact
+                ? "hidden md:block py-3 text-xs"
+                : "py-3 text-xs"
+            }`}
+          >
             View Project →
           </button>
         </div>

@@ -21,7 +21,7 @@ export function SuperluxereExclusive({ developers }: SuperluxereExclusiveProps) 
       : null;
 
   return (
-    <section id="superluxere-exclusive" className="relative py-32 px-6 bg-[#F5F5F0] text-foreground overflow-hidden">
+    <section id="superluxere-exclusive" className="relative py-6 md:py-32 px-4 sm:px-6 bg-[#F5F5F0] text-foreground overflow-hidden">
       {/* Background with Overlay */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -34,48 +34,48 @@ export function SuperluxereExclusive({ developers }: SuperluxereExclusiveProps) 
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <div className="flex items-center gap-2 text-gold-dark mb-6">
-              <Star className="w-5 h-5 fill-gold-dark" />
-              <span className="tracking-[0.2em] uppercase text-sm font-bold">Members Only</span>
+            <div className="flex items-center gap-1.5 md:gap-2 text-gold-dark mb-3 md:mb-6">
+              <Star className="w-3.5 h-3.5 md:w-5 md:h-5 fill-gold-dark shrink-0" />
+              <span className="tracking-[0.2em] uppercase text-[10px] md:text-sm font-bold">Members Only</span>
             </div>
 
-            <h2 className="text-3xl sm:text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight text-black">
+            <h2 className="text-2xl sm:text-5xl md:text-7xl font-serif font-bold mb-4 md:mb-8 leading-tight text-black">
               Superluxere <br />
               <span className="text-gold-dark">Exclusive</span>
             </h2>
 
             <p
-              className={`text-xl text-zinc-600 font-light leading-relaxed max-w-lg ${
-                partnerLine ? "mb-6" : "mb-10"
+              className={`text-sm md:text-xl text-zinc-600 font-light leading-relaxed max-w-lg line-clamp-3 md:line-clamp-none ${
+                partnerLine ? "mb-3 md:mb-6" : "mb-5 md:mb-10"
               }`}
             >
               Unlock access to off-market listings, pre-launch opportunities, and high-yield real estate investments reserved strictly for our inner circle.
             </p>
             {partnerLine ? (
-              <p className="text-sm text-zinc-500 font-medium leading-relaxed mb-10 max-w-lg">
+              <p className="text-xs md:text-sm text-zinc-500 font-medium leading-relaxed mb-5 md:mb-10 max-w-lg line-clamp-2 md:line-clamp-none">
                 {partnerLine}
               </p>
             ) : null}
 
-            <ul className="space-y-4 mb-10">
+            <ul className="space-y-2 md:space-y-4 mb-5 md:mb-10">
               {["Off-Market Listings", "Priority Allocations", "Dedicated Wealth Manager"].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-zinc-700 font-medium">
-                  <div className="w-1.5 h-1.5 rounded-full bg-gold-dark" />
-                  {item}
+                <li key={item} className="flex items-center gap-2 md:gap-3 text-zinc-700 font-medium text-xs md:text-base">
+                  <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-gold-dark shrink-0" />
+                  <span className="leading-snug">{item}</span>
                 </li>
               ))}
             </ul>
 
             <button
               onClick={() => openModal("superluxere-exclusive-section")}
-              className="bg-gradient-to-r from-gold to-gold-dark text-white px-10 py-4 rounded-sm font-bold tracking-wide hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300 transform hover:-translate-y-1"
+              className="w-full sm:w-auto bg-gradient-to-r from-gold to-gold-dark text-white px-6 py-3 md:px-10 md:py-4 rounded-sm text-xs md:text-base font-bold tracking-wide hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300 md:transform md:hover:-translate-y-1"
             >
               JOIN THE INNER CIRCLE
             </button>
