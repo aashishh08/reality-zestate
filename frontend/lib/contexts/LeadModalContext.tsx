@@ -1,7 +1,12 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { FORM_CONFIG } from '@/lib/constants';
+
+function isAdminPath(pathname: string | null): boolean {
+    return pathname?.startsWith('/admin') ?? false;
+}
 
 export interface LeadPageContext {
     propertyId?: string;
@@ -21,6 +26,8 @@ interface LeadModalContextType {
 const LeadModalContext = createContext<LeadModalContextType | undefined>(undefined);
 
 export function LeadModalProvider({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
+    const isAdminRoute = isAdminPath(pathname);
     const [isOpen, setIsOpen] = useState(false);
     const [modalSource, setModalSource] = useState('lead-popup');
     const [pageContext, setPageContext] = useState<LeadPageContext>({});
@@ -37,13 +44,22 @@ export function LeadModalProvider({ children }: { children: React.ReactNode }) {
         setPageContext(context);
     }, []);
 
-    /** Recurring auto-open for the whole app (LeadPopup remounts on route changes). */
     useEffect(() => {
+        if (isAdminRoute) {
+            setIsOpen(false);
+        }
+    }, [isAdminRoute]);
+
+    /** Recurring auto-open on public pages (LeadPopup remounts on route changes). */
+    useEffect(() => {
+        if (isAdminRoute) return;
+
         const showAutoPopup = () => {
             if (isOpenRef.current) return;
+            if (isAdminPath(window.location.pathname)) return;
 
             // Fallback: derive project slug from route when page has not set context yet
-            if (!pageContextRef.current.propertySlug && typeof window !== 'undefined') {
+            if (!pageContextRef.current.propertySlug) {
                 const match = window.location.pathname.match(/^\/projects\/([^/]+)\/?$/);
                 if (match) {
                     setPageContext((prev) => ({ ...prev, propertySlug: match[1] }));
@@ -57,12 +73,13 @@ export function LeadModalProvider({ children }: { children: React.ReactNode }) {
         const intervalId = setInterval(showAutoPopup, FORM_CONFIG.LEAD_POPUP_DELAY);
 
         return () => clearInterval(intervalId);
-    }, []);
+    }, [isAdminRoute]);
 
     const openModal = useCallback((source: string = 'lead-popup') => {
+        if (isAdminPath(pathname)) return;
         setModalSource(source);
         setIsOpen(true);
-    }, []);
+    }, [pathname]);
 
     const closeModal = useCallback(() => {
         setIsOpen(false);
