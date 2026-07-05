@@ -106,7 +106,9 @@ export async function generateStaticParams() {
 
 const LOCATION_PAGE_CACHE_TTL = 3600;
 
-export const revalidate = 3600;
+// searchParams makes this page dynamically rendered.
+// export const revalidate conflicts with searchParams in Next.js 15+ (DYNAMIC_SERVER_USAGE).
+export const dynamic = 'force-dynamic';
 
 export default async function LocationPage({
   params: paramsPromise,

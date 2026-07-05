@@ -22,7 +22,9 @@ const EMPTY_LISTING: PropertyListResponse = {
   pagination: { limit: 12, offset: 0, total: 0 },
 };
 
-export const revalidate = 300;
+// searchParams makes this page dynamically rendered.
+// export const revalidate conflicts with searchParams in Next.js 15+ (DYNAMIC_SERVER_USAGE).
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   searchParams,

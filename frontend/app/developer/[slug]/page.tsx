@@ -196,10 +196,10 @@ export default async function DeveloperPage({
 }
 
 /**
- * ISR Configuration
- * Revalidate every 1 hour (3600 seconds)
+ * searchParams makes this page dynamically rendered.
+ * export const revalidate conflicts with searchParams in Next.js 15+ (DYNAMIC_SERVER_USAGE).
  */
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 /**
  * Dynamic segment configuration

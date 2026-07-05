@@ -117,7 +117,9 @@ export async function generateMetadata({
   return { title: "Category Not Found", robots: ROBOTS_NOINDEX_NOFOLLOW };
 }
 
-export const revalidate = 3600;
+// searchParams makes this page dynamically rendered.
+// export const revalidate conflicts with searchParams in Next.js 15+ (DYNAMIC_SERVER_USAGE).
+export const dynamic = 'force-dynamic';
 
 const CATEGORY_PAGE_CACHE_TTL = 3600;
 
