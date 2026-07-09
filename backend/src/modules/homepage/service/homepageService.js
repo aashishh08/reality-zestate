@@ -26,6 +26,17 @@ async function propertiesForTag(tagSlug, limit = 8) {
   return properties;
 }
 
+/** Run one homepage data fetch; on failure return fallback so other sections still load. */
+async function loadHomepagePart(label, fallback, loader) {
+  try {
+    return await loader();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`[Homepage] ${label} failed: ${message}`);
+    return fallback;
+  }
+}
+
 async function buildFeaturedCorridors() {
   const localities = await Location.findAll({
     where: { slug: { [Op.in]: FEATURED_CORRIDOR_SLUGS }, type: 'locality' },
@@ -81,13 +92,13 @@ class HomepageService {
         allCategories,
         featuredCorridors,
       ] = await Promise.all([
-        propertiesForTag(SECTION_TAGS.trending, 8),
-        propertiesForTag(SECTION_TAGS.upcoming, 8),
-        propertiesForTag(SECTION_TAGS.boutique, 8),
-        locationService.listLocations(),
-        developerService.listDevelopers(12, 0),
-        categoryService.listCategories(),
-        buildFeaturedCorridors(),
+        loadHomepagePart('trending', [], () => propertiesForTag(SECTION_TAGS.trending, 8)),
+        loadHomepagePart('upcoming', [], () => propertiesForTag(SECTION_TAGS.upcoming, 8)),
+        loadHomepagePart('boutique', [], () => propertiesForTag(SECTION_TAGS.boutique, 8)),
+        loadHomepagePart('locations', [], () => locationService.listLocations()),
+        loadHomepagePart('developers', { developers: [] }, () => developerService.listDevelopers(12, 0)),
+        loadHomepagePart('categories', [], () => categoryService.listCategories()),
+        loadHomepagePart('featuredCorridors', [], () => buildFeaturedCorridors()),
       ]);
 
       // Prefer cities for CityLocations (needs type=city); keep enough rows for footer/browse.
@@ -103,7 +114,7 @@ class HomepageService {
         upcoming,
         boutique,
         locations,
-        developers: developersResult.developers,
+        developers: developersResult?.developers ?? [],
         categories,
         featuredCorridors,
       };
