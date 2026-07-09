@@ -20,6 +20,9 @@ Published property listings are available as JSON for agents, crawlers, and inte
 - **Base URL:** `https://api.superluxere.com/api/v1`
 - **List endpoint:** `GET /properties`
 - **Detail endpoint:** `GET /properties/{slug}`
+- **Homepage bundle:** `GET /homepage` — all homepage data in one response (trending, upcoming, boutique, locations, developers, categories, corridor counts)
+- **Sitemap data:** `GET /sitemap-data` — all public slugs in one response (for crawlers)
+- **Tag slugs with listings:** `GET /tags/published/slugs`
 - **JSON-LD feed:** `GET /properties/feed` — Schema.org `ItemList` of `RealEstateListing` objects (add `?format=ld+json` or `Accept: application/ld+json` for raw JSON-LD). Limit capped at 100.
 - **OpenAPI spec:** `GET /openapi.yaml` — machine-readable API documentation for property GET routes.
 

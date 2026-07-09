@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
         hostname: '**',
       },
     ],
+    minimumCacheTTL: 3600,
+    formats: ['image/webp'],
   },
   typescript: {
     // Ignore build-time TypeScript errors to allow deployment with known type issues

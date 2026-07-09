@@ -13,6 +13,8 @@ import leadRoute from '../modules/lead/route/leadRoute.js';
 import integrationRoute from '../modules/integration/route/integrationRoute.js';
 import healthRoute from '../modules/health/route/healthRoute.js';
 import enumsRoute from '../modules/enums/route/enumsRoute.js';
+import homepageRoute from '../modules/homepage/route/homepageRoute.js';
+import sitemapRoute from '../modules/sitemap/route/sitemapRoute.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OPENAPI_PATH = join(__dirname, '../../docs/openapi.yaml');
@@ -30,6 +32,8 @@ router.use('/leads', leadRoute);
 router.use('/crm', integrationRoute);
 router.use('/health', healthRoute);
 router.use('/enums', enumsRoute);
+router.use('/homepage', homepageRoute);
+router.use('/sitemap-data', sitemapRoute);
 
 router.get('/openapi.yaml', (_req, res) => {
   const yaml = readFileSync(OPENAPI_PATH, 'utf8');
@@ -55,6 +59,8 @@ router.get('/', (_req, res) => {
       crm: '/crm (requires x-api-key)',
       health: '/health',
       enums: '/enums (GET cities, localities, developers) | /enums?city=gurgaon',
+      homepage: '/homepage (GET consolidated homepage payload — 1 call replaces 6+)',
+      sitemapData: '/sitemap-data (GET all sitemap slugs in one response)',
     },
   });
 });

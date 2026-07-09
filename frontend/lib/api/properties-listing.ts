@@ -296,8 +296,10 @@ export async function fetchTagProperties(
 
 export async function getAllTagSlugs(): Promise<string[]> {
   try {
-    const tags = await fetchAllTags();
-    return tags.map(t => t.slug).filter(Boolean);
+    const response = await fetchFromAPI<any>('/tags/published/slugs', {
+      next: { revalidate: 3600 },
+    });
+    return Array.isArray(response) ? response : (response?.data ?? []);
   } catch {
     return [];
   }

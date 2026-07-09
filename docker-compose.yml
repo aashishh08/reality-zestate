@@ -48,6 +48,7 @@ services:
     networks:
       - app_network
     restart: unless-stopped
+    # First deploy: docker compose run --rm backend node src/scripts/migrate.js
 
   frontend:
     build:

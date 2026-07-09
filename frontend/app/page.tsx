@@ -5,9 +5,8 @@ import { Footer } from "@/components/layout/Footer";
 import { TrendingProjects } from "@/components/home/TrendingProjects";
 import { LocationCategories } from "@/components/home/LocationCategories";
 import { CityLocations } from "@/components/home/CityLocations";
-import { getLocations, getDevelopers, getCategories } from "@/lib";
-import { fetchHomeSectionProperties } from "@/lib/homepage-properties";
-import { getFeaturedCorridorCards } from "@/lib/featured-corridors";
+import { fetchHomepageData } from "@/lib/api/homepage";
+import { buildFeaturedCorridorCardsFromApi } from "@/lib/featured-corridors";
 import { getSiteUrl } from "@/lib/site-url";
 import { getDefaultOgImageUrl } from "@/lib/seo";
 
@@ -70,39 +69,16 @@ export function generateMetadata(): Metadata {
 
 async function getHomePageData() {
   try {
-    const [
-      trendingProperties,
-      upcomingProperties,
-      boutiqueProperties,
-      locationsRes,
-      developersRes,
-      categoriesRes,
-    ] = await Promise.all([
-      fetchHomeSectionProperties("trending", { limit: 8, revalidate: 3600 }),
-      fetchHomeSectionProperties("upcoming", { limit: 8, revalidate: 3600 }),
-      fetchHomeSectionProperties("boutique", { limit: 8, revalidate: 3600 }),
-      getLocations({ limit: 20, offset: 0 }, 3600)
-        .catch(e => { console.error('Locations fetch failed:', e.message); return { data: [] }; }),
-      getDevelopers({ limit: 12, offset: 0 }, 3600)
-        .catch(e => { console.error('Developers fetch failed:', e.message); return { data: [] }; }),
-      getCategories({ limit: 120, offset: 0 }, 3600)
-        .catch(e => { console.error('Categories fetch failed:', e.message); return { data: [] }; }),
-    ]);
-
-    const normalise = (res: any) =>
-      Array.isArray(res) ? res : res?.data || [];
-
-    const locations = normalise(locationsRes);
-
-    const featuredCorridors = await getFeaturedCorridorCards(3600);
+    const data = await fetchHomepageData(3600);
+    const featuredCorridors = buildFeaturedCorridorCardsFromApi(data.featuredCorridors);
 
     return {
-      trendingProperties,
-      upcomingProperties,
-      boutiqueProperties,
-      locations,
-      developers: normalise(developersRes),
-      categories: normalise(categoriesRes),
+      trendingProperties: data.trending,
+      upcomingProperties: data.upcoming,
+      boutiqueProperties: data.boutique,
+      locations: data.locations,
+      developers: data.developers,
+      categories: data.categories,
       featuredCorridors,
     };
   } catch (error) {

@@ -2,6 +2,7 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache';
 import {
+  HOMEPAGE_DATA_TAG,
   HOMEPAGE_PROPERTY_SECTIONS_TAG,
   PROPERTY_DETAIL_TAG,
   PROPERTY_LIST_TAG,
@@ -12,6 +13,7 @@ import {
 /** Invalidate property detail, listing, homepage, and projects index caches after admin changes. */
 export async function revalidatePropertyCaches(slug?: string): Promise<void> {
   revalidateTag(HOMEPAGE_PROPERTY_SECTIONS_TAG, 'max');
+  revalidateTag(HOMEPAGE_DATA_TAG, 'max');
   revalidateTag(PROPERTY_LIST_TAG, 'max');
   revalidateTag(PROJECTS_INDEX_TAG, 'max');
   revalidateTag(PROPERTY_DETAIL_TAG, 'max');

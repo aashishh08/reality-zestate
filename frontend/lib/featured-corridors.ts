@@ -47,6 +47,34 @@ async function publishedTotalForCorridor(
   }
 }
 
+/**
+ * Build featured corridor cards from consolidated homepage API payload.
+ */
+export function buildFeaturedCorridorCardsFromApi(
+  corridors: Array<{
+    localitySlug: string;
+    citySlug: string;
+    name: string;
+    activeProjects: number;
+    locationSlug?: string;
+  }>,
+): FeaturedCorridorCard[] {
+  return corridors.map((row) => {
+    const localitySlug = row.localitySlug;
+    const editorial = editorialForSlug(localitySlug);
+    return {
+      locationSlug: row.locationSlug ?? localitySlug,
+      citySlug: row.citySlug,
+      localitySlug,
+      name: row.name,
+      moodLine: editorial.moodLine,
+      description: editorial.description,
+      displayName: row.name,
+      activeProjects: row.activeProjects,
+    };
+  });
+}
+
 const featuredSlugOrder = new Map(
   FEATURED_CORRIDOR_SLUGS.map((slug, index) => [slug, index]),
 );
@@ -54,6 +82,7 @@ const featuredSlugOrder = new Map(
 /**
  * Homepage “India’s best corridors”: whitelisted localities from `FEATURED_CORRIDOR_SLUGS`.
  * Mood/description from `CORRIDOR_EDITORIAL_BY_SLUG`; counts from the properties API.
+ * Prefer `buildFeaturedCorridorCardsFromApi` when homepage payload is already loaded.
  */
 export async function getFeaturedCorridorCards(
   revalidate: number | false = 3600,

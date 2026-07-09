@@ -2,6 +2,7 @@
  * Next.js `fetch` cache tags — use with `next: { tags: [...] }` and `revalidateTag()`.
  */
 export const HOMEPAGE_PROPERTY_SECTIONS_TAG = 'homepage-property-sections';
+export const HOMEPAGE_DATA_TAG = 'homepage-data';
 export const PROPERTY_DETAIL_TAG = 'property-detail';
 export const PROPERTY_LIST_TAG = 'property-list';
 export const PROJECTS_INDEX_TAG = 'projects-index';

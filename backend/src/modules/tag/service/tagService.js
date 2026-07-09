@@ -16,6 +16,19 @@ class TagService {
         return Tag.findAll({ order: [['name', 'ASC']] });
     }
 
+    /** Tags that have at least one published property (for sitemap / SEO). */
+    async listPublishedTagSlugs() {
+        const rows = await sequelize.query(
+            `SELECT DISTINCT t.slug
+             FROM tags t
+             INNER JOIN "property_tags" pt ON pt."tagId" = t.id
+             INNER JOIN properties p ON p.id = pt."propertyId" AND p."isPublished" = true
+             ORDER BY t.slug ASC`,
+            { type: sequelize.QueryTypes.SELECT },
+        );
+        return rows.map((row) => row.slug);
+    }
+
     async getTagBySlug(slug) {
         const tag = await Tag.findOne({ where: { slug } });
         if (!tag) throw { status: 404, message: `Tag "${slug}" not found.` };

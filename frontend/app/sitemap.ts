@@ -1,101 +1,52 @@
 import { MetadataRoute } from 'next';
-import { getBlogs } from '@/lib/api/blogs';
-import { getProperties, getLocations, getDevelopers, getCategories, getAllTagSlugs } from '@/lib';
-import { fetchTagProperties } from '@/lib/api/properties-listing';
+import { fetchFromAPI } from '@/lib/api-client';
 import { getSiteUrl } from '@/lib/site-url';
 
-const BATCH = 500;
+/** ISR: regenerate sitemap at most once per hour (crawlers still get fresh URLs). */
+export const revalidate = 3600;
 
-async function collectAllBlogSlugs(): Promise<
-  { slug: string; updatedAt?: string }[]
-> {
-  const first = await getBlogs({ limit: BATCH, offset: 0 }, false).catch(() => ({
-    data: [] as { slug: string; updatedAt?: string }[],
-    pagination: { total: 0, limit: BATCH, offset: 0 },
-  }));
-  const total = first.pagination?.total ?? first.data?.length ?? 0;
-  const out = [...(first.data || [])];
-  for (let offset = BATCH; offset < total; offset += BATCH) {
-    const res = await getBlogs({ limit: BATCH, offset }, false).catch(() => ({
-      data: [] as { slug: string; updatedAt?: string }[],
-    }));
-    out.push(...(res.data || []));
-  }
-  return out;
+interface SitemapSlugRow {
+  slug: string;
+  updatedAt?: string;
+  createdAt?: string;
 }
 
-async function collectAllPublishedPropertySlugs(): Promise<
-  { slug: string; updatedAt?: string }[]
-> {
-  const first = await getProperties(
-    { limit: BATCH, offset: 0, isPublished: true },
-    false,
-  ).catch(() => ({
-    data: [] as { slug: string; updatedAt?: string }[],
-    pagination: { total: 0, limit: BATCH, offset: 0 },
-  }));
-  const total = first.pagination?.total ?? first.data?.length ?? 0;
-  const out = [...(first.data || [])];
-  for (let offset = BATCH; offset < total; offset += BATCH) {
-    const res = await getProperties(
-      { limit: BATCH, offset, isPublished: true },
-      false,
-    ).catch(() => ({ data: [] as { slug: string; updatedAt?: string }[] }));
-    out.push(...(res.data || []));
-  }
-  return out;
-}
-
-async function collectTagSlugsWithProperties(): Promise<string[]> {
-  const allSlugs = await getAllTagSlugs().catch(() => [] as string[]);
-  if (!allSlugs.length) return [];
-
-  const results = await Promise.all(
-    allSlugs.map(async (slug) => {
-      const res = await fetchTagProperties(slug, {
-        limit: 1,
-        offset: 0,
-        isPublished: true,
-      }).catch(() => null);
-      return (res?.pagination?.total ?? 0) > 0 ? slug : null;
-    }),
-  );
-
-  return results.filter((slug): slug is string => Boolean(slug));
+interface SitemapApiData {
+  blogs: SitemapSlugRow[];
+  properties: SitemapSlugRow[];
+  locations: SitemapSlugRow[];
+  developers: SitemapSlugRow[];
+  categories: SitemapSlugRow[];
+  tagSlugs: string[];
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getSiteUrl();
 
-  const [
-    blogPosts,
-    properties,
-    locationsRes,
-    developersRes,
-    categoriesRes,
-    tagSlugs,
-  ] = await Promise.all([
-    collectAllBlogSlugs(),
-    collectAllPublishedPropertySlugs(),
-    getLocations({ limit: 500 }, false).catch(() => ({ data: [] })),
-    getDevelopers({ limit: 200 }, false).catch(() => []),
-    getCategories({ limit: 500 }, false).catch(() => ({ data: [] })),
-    collectTagSlugsWithProperties(),
-  ]);
+  const data = await fetchFromAPI<SitemapApiData>('/sitemap-data', {
+    next: { revalidate: 3600 },
+  }).catch(() => ({
+    blogs: [],
+    properties: [],
+    locations: [],
+    developers: [],
+    categories: [],
+    tagSlugs: [],
+  }));
 
-  const normalise = (res: unknown): any[] =>
-    Array.isArray(res) ? res : (res as { data?: unknown[] })?.data || [];
-
-  const locations = normalise(locationsRes);
-  const developers = normalise(developersRes);
-  const categories = normalise(categoriesRes);
+  const blogPosts = data.blogs ?? [];
+  const properties = data.properties ?? [];
+  const locations = data.locations ?? [];
+  const developers = data.developers ?? [];
+  const categories = data.categories ?? [];
+  const tagSlugs = data.tagSlugs ?? [];
 
   const latestBlogDate =
     blogPosts.length > 0
       ? new Date(
           Math.max(
-            ...blogPosts.map((p: { updatedAt?: string; publishedAt?: string; createdAt?: string }) =>
-              new Date(p.updatedAt || p.publishedAt || p.createdAt || 0).getTime(),
+            ...blogPosts.map((p) =>
+              new Date(p.updatedAt || p.createdAt || 0).getTime(),
             ),
           ),
         )
@@ -134,35 +85,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post: { slug: string; updatedAt?: string }) => ({
+  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${baseUrl}/blogs/${post.slug}`,
     lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
 
-  const propertyPages: MetadataRoute.Sitemap = properties.map((p: { slug: string; updatedAt?: string }) => ({
+  const propertyPages: MetadataRoute.Sitemap = properties.map((p) => ({
     url: `${baseUrl}/projects/${p.slug}`,
     lastModified: p.updatedAt ? new Date(p.updatedAt) : new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.9,
   }));
 
-  const locationPages: MetadataRoute.Sitemap = locations.map((l: { slug: string; updatedAt?: string }) => ({
+  const locationPages: MetadataRoute.Sitemap = locations.map((l) => ({
     url: `${baseUrl}/location/${l.slug}`,
     lastModified: l.updatedAt ? new Date(l.updatedAt) : new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
 
-  const developerPages: MetadataRoute.Sitemap = developers.map((d: { slug: string; updatedAt?: string }) => ({
+  const developerPages: MetadataRoute.Sitemap = developers.map((d) => ({
     url: `${baseUrl}/developer/${d.slug}`,
     lastModified: d.updatedAt ? new Date(d.updatedAt) : new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
 
-  const categoryPages: MetadataRoute.Sitemap = categories.map((c: { slug: string; updatedAt?: string }) => ({
+  const categoryPages: MetadataRoute.Sitemap = categories.map((c) => ({
     url: `${baseUrl}/category/${c.slug}`,
     lastModified: c.updatedAt ? new Date(c.updatedAt) : new Date(),
     changeFrequency: 'monthly' as const,

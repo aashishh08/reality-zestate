@@ -3,6 +3,7 @@ import { validateRequest } from '../../../middleware/validationMiddleware.js';
 import { createPropertySchema, updatePropertySchema } from '../../../utils/validators.js';
 import authMiddleware from '../../../middleware/authMiddleware.js';
 import optionalAuthMiddleware from '../../../middleware/optionalAuthMiddleware.js';
+import { cacheControl } from '../../../middleware/cacheControlMiddleware.js';
 import propertyController from '../controller/propertyController.js';
 
 const router = express.Router();
@@ -46,7 +47,7 @@ router.get('/admin/:id', authMiddleware, async (req, res, next) => {
 });
 
 // Agent/crawler JSON-LD feed (published properties only)
-router.get('/feed', async (req, res, next) => {
+router.get('/feed', cacheControl(300, 3600), async (req, res, next) => {
   try {
     await propertyController.getPropertiesFeed(req, res);
   } catch (error) {
