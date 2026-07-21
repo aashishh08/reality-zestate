@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
+import { ListingCardImage } from "@/components/ui/ListingCardImage";
 import { NewTabLink } from "@/components/ui/NewTabLink";
 import { motion, useScroll } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
@@ -70,7 +70,6 @@ export function BoutiqueCollection({ properties }: BoutiqueCollectionProps) {
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {display.map((property, index) => {
-            const img = listingCardImageUrl(property);
             const tagLabel = property.Tags?.find((t) => t.slug?.toLowerCase() === "featured")?.name ?? "Featured";
 
             return (
@@ -84,10 +83,9 @@ export function BoutiqueCollection({ properties }: BoutiqueCollectionProps) {
               >
                 <NewTabLink href={`/projects/${property.slug}`} className="block h-full w-full">
                   <div className="relative h-full w-full">
-                    <Image
-                      src={img}
+                    <ListingCardImage
+                      src={listingCardImageUrl(property)}
                       alt={property.title}
-                      fill
                       className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
                       sizes="(max-width: 768px) 80vw, 50vw"
                     />
@@ -141,7 +139,6 @@ export function BoutiqueCollection({ properties }: BoutiqueCollectionProps) {
         {/* Desktop/tablet: existing bento layout */}
         <div className="hidden md:grid grid-cols-1 md:grid-cols-6 md:grid-rows-2 gap-6 h-auto md:h-[900px] px-6">
           {display.map((property, index) => {
-            const img = listingCardImageUrl(property);
             const tagLabel = property.Tags?.find((t) => t.slug?.toLowerCase() === "featured")?.name ?? "Featured";
 
             return (
@@ -155,10 +152,9 @@ export function BoutiqueCollection({ properties }: BoutiqueCollectionProps) {
               >
                 <NewTabLink href={`/projects/${property.slug}`} className="block h-full w-full">
                   <div className="relative h-full w-full min-h-[400px] md:min-h-0">
-                    <Image
-                      src={img}
+                    <ListingCardImage
+                      src={listingCardImageUrl(property)}
                       alt={property.title}
-                      fill
                       className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />

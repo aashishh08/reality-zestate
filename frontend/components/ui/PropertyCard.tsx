@@ -1,7 +1,7 @@
 "use client";
 
 import { NewTabLink } from "@/components/ui/NewTabLink";
-import Image from "next/image";
+import { ListingCardImage } from "@/components/ui/ListingCardImage";
 import { Project } from "@/types";
 import {
   STATUS_TAG_SLUGS,
@@ -68,27 +68,12 @@ export function PropertyCard({ project, index, imageSizes, compact = false }: Pr
             compact ? "h-[88px] md:h-[220px]" : "h-[220px]"
           }`}
         >
-          {project.image ? (
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              sizes={imageSizes ?? DEFAULT_CARD_IMAGE_SIZES}
-              loading={index < 2 ? undefined : "lazy"}
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-          ) : (
-            /* Gradient fallback with diagonal gold pattern */
-            <div className="absolute inset-0 bg-gradient-to-br from-charcoal via-[#3a3a3a] to-[#505050]">
-              <div
-                className="absolute inset-0 opacity-[0.06]"
-                style={{
-                  backgroundImage:
-                    'repeating-linear-gradient(45deg,#D4AF37 0,#D4AF37 1px,transparent 1px,transparent 22px)',
-                }}
-              />
-            </div>
-          )}
+          <ListingCardImage
+            src={project.image ?? ""}
+            alt={project.title}
+            sizes={imageSizes ?? DEFAULT_CARD_IMAGE_SIZES}
+            loading={index < 2 ? undefined : "lazy"}
+          />
 
           {/* Gradient overlay for price tag legibility */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />

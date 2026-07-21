@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import Image from "next/image";
+import { ListingCardImage } from "@/components/ui/ListingCardImage";
 import { PropertyItem } from "@/types/property-listing";
 import { motion, useScroll } from "framer-motion";
 import { ArrowRight, Calendar, MapPin } from "lucide-react";
@@ -64,11 +64,11 @@ function UpcomingProjectsContent({ properties }: UpcomingProjectsProps) {
         {properties.slice(0, 6).map((property) => (
           <NewTabLink key={property.id} href={`/projects/${property.slug}`}>
             <div className="panel relative min-w-[240px] sm:min-w-[280px] md:min-w-[400px] lg:min-w-[500px] h-[300px] sm:h-[360px] md:h-[500px] shrink-0 snap-center rounded-2xl overflow-hidden group cursor-pointer">
-              <Image
+              <ListingCardImage
                 src={listingCardImageUrl(property)}
                 alt={property.title}
-                fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
+                sizes="(max-width: 768px) 80vw, 50vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 

@@ -1,5 +1,9 @@
 version: '3.8'
 
+# Restart policy: on-failure:N stops after N crashes (avoids infinite restart loops).
+# Resource limits cap CPU/RAM per container so one failing service can't take down the host.
+# Backend waits for Postgres via depends_on + connectDatabase() retries with backoff.
+
 services:
   postgres:
     image: postgres:15-alpine
@@ -13,10 +17,19 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U reality_estate_user"]
+      test: ["CMD-SHELL", "pg_isready -U reality_estate_user -d reality_estate_db"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
+    restart: on-failure:3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          memory: 256M
     networks:
       - app_network
 
@@ -45,9 +58,16 @@ services:
     # NOTE: Do NOT volume-mount ./backend/src in production.
     # The image already contains the compiled src. Mounting would override it
     # and cause bootstrap.js / migration paths to break.
+    restart: on-failure:5
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 384M
+        reservations:
+          memory: 128M
     networks:
       - app_network
-    restart: unless-stopped
     # First deploy: docker compose run --rm backend node src/scripts/migrate.js
 
   frontend:
@@ -70,9 +90,16 @@ services:
       - "3002:3002"
     depends_on:
       - backend
+    restart: on-failure:5
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 768M
+        reservations:
+          memory: 256M
     networks:
       - app_network
-    restart: unless-stopped
 
 volumes:
   postgres_data:

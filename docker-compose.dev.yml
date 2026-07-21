@@ -22,10 +22,17 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U reality_estate_user']
+      test: ['CMD-SHELL', 'pg_isready -U reality_estate_user -d reality_estate_db']
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
+    restart: on-failure:3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
     networks:
       - app_network
 
@@ -51,9 +58,14 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    restart: on-failure:5
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 384M
     networks:
       - app_network
-    restart: unless-stopped
 
 volumes:
   postgres_data:
