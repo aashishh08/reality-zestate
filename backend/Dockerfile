@@ -14,7 +14,7 @@ COPY .env.example .env
 EXPOSE 4002
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
-  CMD node -e "require('http').get('http://localhost:4002/api/v1/health', (r) => { if (r.statusCode !== 200) throw new Error(r.statusCode) })"
+  CMD node -e "require('http').get('http://localhost:4002/api/v1/health/live', (r) => { if (r.statusCode !== 200) throw new Error(r.statusCode) })"
 
 # Start API only. Do NOT use bootstrap.js here — migrate/seed on every container
 # restart spikes CPU/RAM on Hostinger. Run schema setup once manually:

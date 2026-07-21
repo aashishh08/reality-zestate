@@ -51,6 +51,7 @@ services:
       DB_USER: reality_estate_user
       DB_PASSWORD: reality_estate_password
       DB_NAME: reality_estate_db
+      FRONTEND_HEALTH_URL: http://frontend:3002/api/health
       # Allow local Next.js dev server (default port 3000)
       CORS_ORIGIN: http://localhost:3000
     ports:

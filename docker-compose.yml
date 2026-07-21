@@ -46,6 +46,7 @@ services:
       DB_USER: reality_estate_user
       DB_PASSWORD: reality_estate_password
       DB_NAME: reality_estate_db
+      FRONTEND_HEALTH_URL: http://frontend:3002/api/health
       JWT_SECRET: your_jwt_secret_key_here_change_in_production
       JWT_EXPIRE: 7d
       CRM_API_KEY: your_crm_api_key_here_change_in_production

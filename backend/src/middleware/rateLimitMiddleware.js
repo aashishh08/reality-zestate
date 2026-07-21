@@ -39,6 +39,7 @@ export const apiRateLimiter = rateLimit({
   legacyHeaders: false,
   skip: (req) => {
     const path = req.path || '';
+    if (path.endsWith('/health/live') || path.endsWith('/health/live/')) return true;
     if (path.endsWith('/health') || path.endsWith('/health/')) return true;
     // Frontend SSR → API is internal; rate-limit only public internet clients
     if (isInternalCaller(req)) return true;
