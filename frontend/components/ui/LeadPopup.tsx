@@ -8,9 +8,12 @@ import { createLead } from "@/lib/api/leads";
 import { useApiCall } from "@/lib/hooks/useApiCall";
 import { validateLeadForm } from "@/lib/validation/lead-form";
 import { FORM_CONFIG, SUCCESS_MESSAGES, UI_CONFIG } from "@/lib/constants";
+import { usePathname } from "next/navigation";
 import { useLeadModal } from "@/lib/contexts/LeadModalContext";
+import { resolveLeadPopupSource } from "@/lib/lead-source";
 
 export function LeadPopup() {
+  const pathname = usePathname();
   const { isOpen, closeModal, modalSource, pageContext } = useLeadModal();
   const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
@@ -67,9 +70,11 @@ export function LeadPopup() {
 
     // Submit to API
     try {
-      const source = pageContext.propertySlug
-        ? `${modalSource} | ${pageContext.propertySlug}`
-        : modalSource;
+      const source = resolveLeadPopupSource(
+        pathname,
+        modalSource,
+        pageContext.propertySlug,
+      );
 
       await submitLead(() =>
         createLead({

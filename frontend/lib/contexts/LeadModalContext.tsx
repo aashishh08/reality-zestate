@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { FORM_CONFIG } from '@/lib/constants';
+import { getLeadSourceFromPathname } from '@/lib/lead-source';
 
 function isAdminPath(pathname: string | null): boolean {
     return pathname?.startsWith('/admin') ?? false;
@@ -66,7 +67,8 @@ export function LeadModalProvider({ children }: { children: React.ReactNode }) {
                 }
             }
 
-            setModalSource('lead-popup-timer');
+            const pageSource = getLeadSourceFromPathname(window.location.pathname);
+            setModalSource(pageSource ?? 'lead-popup-timer');
             setIsOpen(true);
         };
 
@@ -77,7 +79,8 @@ export function LeadModalProvider({ children }: { children: React.ReactNode }) {
 
     const openModal = useCallback((source: string = 'lead-popup') => {
         if (isAdminPath(pathname)) return;
-        setModalSource(source);
+        const pageSource = getLeadSourceFromPathname(pathname);
+        setModalSource(pageSource ?? source);
         setIsOpen(true);
     }, [pathname]);
 
