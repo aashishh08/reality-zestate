@@ -11,6 +11,7 @@ import { FORM_CONFIG, SUCCESS_MESSAGES, UI_CONFIG } from "@/lib/constants";
 import { usePathname } from "next/navigation";
 import { useLeadModal } from "@/lib/contexts/LeadModalContext";
 import { resolveLeadPopupSource } from "@/lib/lead-source";
+import { markLeadPopupSubmitted } from "@/lib/lead-popup-storage";
 
 export function LeadPopup() {
   const pathname = usePathname();
@@ -26,6 +27,7 @@ export function LeadPopup() {
 
   const { execute: submitLead, loading: isSubmitting, error: submitError } = useApiCall({
     onSuccess: () => {
+      markLeadPopupSubmitted();
       setSubmitStatus("success");
       setTimeout(() => {
         setFormData({ name: "", email: "", phone: "" });

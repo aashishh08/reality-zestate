@@ -15,7 +15,7 @@ export const API_CONFIG = {
 export const FORM_CONFIG = {
   SUBMIT_DELAY: 500, // Artificial delay to show loading state
   SUCCESS_DISPLAY_TIME: 3000, // How long to show success message
-  LEAD_POPUP_DELAY: 30_000, // Auto popup interval (every 30 seconds)
+  LEAD_POPUP_DELAY: 40_000, // Auto popup interval (every 40 seconds)
 } as const;
 
 // Lead Form Validation

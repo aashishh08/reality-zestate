@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect, use
 import { usePathname } from 'next/navigation';
 import { FORM_CONFIG } from '@/lib/constants';
 import { getLeadSourceFromPathname } from '@/lib/lead-source';
+import { hasSubmittedLeadPopup } from '@/lib/lead-popup-storage';
 
 function isAdminPath(pathname: string | null): boolean {
     return pathname?.startsWith('/admin') ?? false;
@@ -54,9 +55,11 @@ export function LeadModalProvider({ children }: { children: React.ReactNode }) {
     /** Recurring auto-open on public pages (LeadPopup remounts on route changes). */
     useEffect(() => {
         if (isAdminRoute) return;
+        if (hasSubmittedLeadPopup()) return;
 
         const showAutoPopup = () => {
             if (isOpenRef.current) return;
+            if (hasSubmittedLeadPopup()) return;
             if (isAdminPath(window.location.pathname)) return;
 
             // Fallback: derive project slug from route when page has not set context yet
