@@ -13,6 +13,7 @@ import { getSiteUrl } from '@/lib/site-url';
 import { getDefaultOgImageUrl } from '@/lib/seo';
 import { ROBOTS_NOINDEX_NOFOLLOW } from '@/lib/seo/listing-metadata';
 import { Calendar, Clock, User, ArrowLeft, Facebook, Twitter, Linkedin, ArrowRight } from 'lucide-react';
+import { BlogLeadPageContext } from '@/components/blog/BlogLeadPageContext';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -168,6 +169,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <main className="min-h-screen bg-white">
+      <BlogLeadPageContext blogSlug={slug} blogTitle={post.title} />
       <div className="pt-16 lg:pt-20">
       {/* ── Hero Image ────────────────────────────────────────────────────── */}
       {post.featuredImage ? (

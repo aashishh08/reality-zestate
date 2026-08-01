@@ -13,13 +13,32 @@ export function getLeadSourceFromPathname(pathname: string | null): string | nul
   return null;
 }
 
+function getBlogSlugFromPathname(pathname: string | null): string | null {
+  const match = normalizePathname(pathname ?? '').match(/^\/blogs\/([^/]+)$/);
+  return match?.[1] ?? null;
+}
+
+export interface LeadPopupContext {
+  propertySlug?: string;
+  blogSlug?: string;
+  blogTitle?: string;
+}
+
 export function resolveLeadPopupSource(
   pathname: string | null,
   modalSource: string,
-  propertySlug?: string,
+  context: LeadPopupContext = {},
 ): string {
   const pageSource = getLeadSourceFromPathname(pathname);
+
+  if (pageSource === 'blogs') {
+    const blogSlug = context.blogSlug ?? getBlogSlugFromPathname(pathname);
+    if (context.blogTitle?.trim()) return `blogs | ${context.blogTitle.trim()}`;
+    if (blogSlug) return `blogs | ${blogSlug}`;
+    return 'blogs';
+  }
+
   if (pageSource) return pageSource;
-  if (propertySlug) return `${modalSource} | ${propertySlug}`;
+  if (context.propertySlug) return `${modalSource} | ${context.propertySlug}`;
   return modalSource;
 }

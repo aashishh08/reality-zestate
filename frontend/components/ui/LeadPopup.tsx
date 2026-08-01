@@ -72,11 +72,11 @@ export function LeadPopup() {
 
     // Submit to API
     try {
-      const source = resolveLeadPopupSource(
-        pathname,
-        modalSource,
-        pageContext.propertySlug,
-      );
+      const source = resolveLeadPopupSource(pathname, modalSource, {
+        propertySlug: pageContext.propertySlug,
+        blogSlug: pageContext.blogSlug,
+        blogTitle: pageContext.blogTitle,
+      });
 
       await submitLead(() =>
         createLead({

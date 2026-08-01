@@ -14,6 +14,8 @@ export interface LeadPageContext {
     propertyId?: string;
     propertySlug?: string;
     propertyTitle?: string;
+    blogSlug?: string;
+    blogTitle?: string;
 }
 
 interface LeadModalContextType {
@@ -62,11 +64,17 @@ export function LeadModalProvider({ children }: { children: React.ReactNode }) {
             if (hasSubmittedLeadPopup()) return;
             if (isAdminPath(window.location.pathname)) return;
 
-            // Fallback: derive project slug from route when page has not set context yet
+            // Fallback: derive slugs from route when page has not set context yet
             if (!pageContextRef.current.propertySlug) {
                 const match = window.location.pathname.match(/^\/projects\/([^/]+)\/?$/);
                 if (match) {
                     setPageContext((prev) => ({ ...prev, propertySlug: match[1] }));
+                }
+            }
+            if (!pageContextRef.current.blogSlug) {
+                const match = window.location.pathname.match(/^\/blogs\/([^/]+)\/?$/);
+                if (match) {
+                    setPageContext((prev) => ({ ...prev, blogSlug: match[1] }));
                 }
             }
 
