@@ -30,6 +30,17 @@ export default (sequelize) => {
       },
       onDelete: 'SET NULL',
     },
+    isFeatured: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      comment: 'Show on homepage featured corridors (localities only)',
+    },
+    featuredOrder: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      comment: 'Sort order on homepage featured corridors (lower first)',
+    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,

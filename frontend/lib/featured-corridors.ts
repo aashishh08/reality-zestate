@@ -54,6 +54,7 @@ export function buildFeaturedCorridorCardsFromApi(
   corridors: Array<{
     localitySlug: string;
     citySlug: string;
+    cityName?: string;
     name: string;
     activeProjects: number;
     locationSlug?: string;
@@ -62,9 +63,11 @@ export function buildFeaturedCorridorCardsFromApi(
   return corridors.map((row) => {
     const localitySlug = row.localitySlug;
     const editorial = editorialForSlug(localitySlug);
+    const cityName = row.cityName?.trim() || formatSlugLabel(row.citySlug);
     return {
       locationSlug: row.locationSlug ?? localitySlug,
       citySlug: row.citySlug,
+      cityName,
       localitySlug,
       name: row.name,
       moodLine: editorial.moodLine,
@@ -73,6 +76,13 @@ export function buildFeaturedCorridorCardsFromApi(
       activeProjects: row.activeProjects,
     };
   });
+}
+
+function formatSlugLabel(slug: string): string {
+  return slug
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
 }
 
 const featuredSlugOrder = new Map(
@@ -111,6 +121,7 @@ export async function getFeaturedCorridorCards(
         const base: FeaturedCorridorConfig = {
           locationSlug: localitySlug,
           citySlug,
+          cityName: loc.parent!.name,
           localitySlug,
           name: loc.name,
           moodLine: editorial.moodLine,

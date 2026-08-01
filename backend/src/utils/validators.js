@@ -112,3 +112,32 @@ export const paginationSchema = z.object({
     offset: z.string().optional(),
   }),
 });
+
+const slugSchema = z.string()
+  .min(1, 'Slug is required')
+  .max(100)
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase letters, numbers, and hyphens');
+
+export const createCitySchema = z.object({
+  body: z.object({
+    name: z.string().min(1, 'Name is required').max(200),
+    slug: slugSchema,
+  }),
+});
+
+export const createLocalitySchema = z.object({
+  body: z.object({
+    name: z.string().min(1, 'Name is required').max(200),
+    slug: slugSchema,
+    parentId: z.string().uuid('Parent city is required'),
+  }),
+});
+
+export const updateLocationSchema = z.object({
+  body: z.object({
+    name: z.string().min(1, 'Name is required').max(200),
+    parentId: z.string().uuid().optional(),
+    isFeatured: z.boolean().optional(),
+    featuredOrder: z.number().int().min(0).max(999).nullable().optional(),
+  }),
+});

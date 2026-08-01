@@ -10,13 +10,6 @@ interface FeaturedCorridorsProps {
   corridors: FeaturedCorridorCard[];
 }
 
-function cityLabelFromSlug(slug: string): string {
-  return slug
-    .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
-}
-
 /** Group corridors into columns of up to 2 cards (desktop layout). */
 function corridorColumns(items: FeaturedCorridorCard[]): FeaturedCorridorCard[][] {
   const columns: FeaturedCorridorCard[][] = [];
@@ -26,7 +19,6 @@ function corridorColumns(items: FeaturedCorridorCard[]): FeaturedCorridorCard[][
   return columns;
 }
 
-/** Mobile card — matches Browse by Location (`CityLocations`). */
 function CorridorMobileCard({ corridor: c, index }: { corridor: FeaturedCorridorCard; index: number }) {
   return (
     <motion.div
@@ -53,7 +45,7 @@ function CorridorMobileCard({ corridor: c, index }: { corridor: FeaturedCorridor
           <div className="absolute bottom-0 left-0 right-0 p-2.5">
             <div className="flex items-center gap-1 mb-0.5 text-gold/90 text-[9px] font-medium tracking-wide uppercase min-w-0">
               <MapPin className="w-2.5 h-2.5 shrink-0" />
-              <span className="truncate">{cityLabelFromSlug(c.citySlug)}</span>
+              <span className="truncate">{c.cityName}</span>
             </div>
             <h3 className="text-xs font-serif font-bold text-white leading-tight line-clamp-2">
               {c.displayName}
@@ -102,7 +94,7 @@ function CorridorDesktopCard({ corridor: c }: { corridor: FeaturedCorridorCard }
           </p>
           <div className="flex items-center gap-2 text-white/80 mb-4">
             <MapPin className="w-4 h-4 shrink-0 text-gold" />
-            <span className="text-sm">{cityLabelFromSlug(c.citySlug)}</span>
+            <span className="text-sm">{c.cityName}</span>
           </div>
           <p className="text-gold text-sm font-semibold mb-4">
             <span className="tabular-nums">{c.activeProjects}</span>

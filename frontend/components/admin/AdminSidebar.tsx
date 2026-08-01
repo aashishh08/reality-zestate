@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-    TrendingUp, Building2, Plus, FileText, Users, LogOut, Menu, X, Home
+    TrendingUp, Building2, Plus, FileText, Users, LogOut, Menu, X, Home, MapPin
 } from 'lucide-react';
 import { useAdminAuth } from '@/lib/contexts/AdminAuthContext';
 
@@ -12,6 +12,7 @@ const SIDEBAR_LINKS = [
     { href: '/admin/dashboard', icon: TrendingUp, label: 'Dashboard' },
     { href: '/admin/properties', icon: Building2, label: 'Properties' },
     { href: '/admin/properties/create', icon: Plus, label: 'Create Property' },
+    { href: '/admin/locations', icon: MapPin, label: 'Cities & Localities' },
     { href: '/admin/blogs', icon: FileText, label: 'Blogs' },
     { href: '/admin/blogs/create', icon: Plus, label: 'Create Blog' },
     { href: '/admin/leads', icon: Users, label: 'Leads' },

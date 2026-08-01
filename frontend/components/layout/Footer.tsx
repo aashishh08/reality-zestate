@@ -15,17 +15,7 @@ export function Footer({ locations = [] }: FooterProps) {
   const footerPhoneDisplay = CONTACT_INFO.PHONE_NUMBER.replace(/^\+91/, "");
 
   const cities = locations.filter(l => l.type === "city").slice(0, 6);
-  const displayLocations: Array<{ name: string; slug: string }> =
-    cities.length > 0
-      ? cities.map(l => ({ name: l.name, slug: l.slug }))
-      : [
-        { name: "Gurgaon", slug: "gurgaon" },
-        { name: "Delhi", slug: "delhi" },
-        { name: "Mumbai", slug: "mumbai" },
-        { name: "Bangalore", slug: "bangalore" },
-        { name: "Pune", slug: "pune" },
-        { name: "Hyderabad", slug: "hyderabad" },
-      ];
+  const displayLocations = cities;
 
   const quickLinks = [
     { label: "Trending Projects", href: "/tag/trending" },
@@ -82,6 +72,7 @@ export function Footer({ locations = [] }: FooterProps) {
           </div>
 
           {/* ── Locations ─────────────────────────────────────────────── */}
+          {displayLocations.length > 0 && (
           <div className="min-w-0">
             <h3 className="text-xs md:text-sm font-bold mb-3 md:mb-6 tracking-widest uppercase text-[#2C2416]">
               Locations
@@ -97,6 +88,7 @@ export function Footer({ locations = [] }: FooterProps) {
               ))}
             </ul>
           </div>
+          )}
 
           {/* ── Contact ───────────────────────────────────────────────── */}
           <div className="sm:col-span-2 lg:col-span-1 min-w-0">

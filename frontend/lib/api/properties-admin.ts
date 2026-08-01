@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4002/api/v1';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -15,7 +15,7 @@ export interface CreatePropertyFullPayload {
     slug: string;
     title: string;
     propertyType: 'residential' | 'commercial';
-    // Enum slugs (validated server-side against enums.js)
+    // Enum slugs (validated server-side against locations in DB)
     citySlug?: string | null;
     localitySlug?: string | null;
     sublocality?: string | null;

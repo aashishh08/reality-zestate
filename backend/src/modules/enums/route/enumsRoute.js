@@ -1,29 +1,34 @@
 import express from 'express';
-import { CITIES, LOCALITIES, DEVELOPERS, getLocalitiesForCity } from '../../../config/enums.js';
+import { DEVELOPERS } from '../../../config/enums.js';
+import geographyService from '../../location/service/geographyService.js';
 
 const router = express.Router();
 
 /**
  * GET /api/enums
- * Returns all valid enumeration values for cities, localities, and developers.
- * The frontend uses this to populate dropdowns — no hard-coding needed.
+ * Returns cities and localities from the database, plus developers from config.
  *
  * Optional query param:
- *   ?city=gurgaon   → returns only localities for that city (useful for cascading selects)
+ *   ?city=gurgaon   → returns only localities for that city (cascading selects)
  */
-router.get('/', (req, res) => {
-  const { city } = req.query;
+router.get('/', async (req, res, next) => {
+  try {
+    const { city } = req.query;
+    const { cities, localities } = await geographyService.getEnumData(
+      typeof city === 'string' ? city : null,
+    );
 
-  const localities = city ? getLocalitiesForCity(city) : LOCALITIES;
-
-  res.json({
-    success: true,
-    data: {
-      cities: CITIES,
-      localities,
-      developers: DEVELOPERS,
-    },
-  });
+    res.json({
+      success: true,
+      data: {
+        cities,
+        localities,
+        developers: DEVELOPERS,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 export default router;

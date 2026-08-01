@@ -1,28 +1,16 @@
 import { Op } from 'sequelize';
 import { Property, Developer, Location, Category, PropertySection, Tag, PropertyCategory, PropertyTag, sequelize } from '../../../models/index.js';
 import tagService from '../../tag/service/tagService.js';
-import { isValidCity, isValidLocality, isValidDeveloper } from '../../../config/enums.js';
+import { isValidDeveloper } from '../../../config/enums.js';
+import geographyService from '../../location/service/geographyService.js';
 import { parseTypedFacts, buildPropertiesFeedJsonLd } from '../utils/propertyFeedJsonLd.js';
 
 /**
- * Validate enum slug fields and throw a descriptive 400 if any are invalid.
- * All three params are optional — only validates what is supplied.
+ * Validate geography and developer slug fields and throw a descriptive 400 if invalid.
  */
-function validateEnumSlugs({ citySlug, localitySlug, developerSlug } = {}) {
-  if (citySlug !== undefined && citySlug !== null) {
-    if (!isValidCity(citySlug)) {
-      throw { status: 400, message: `Unknown city slug: "${citySlug}". See GET /api/enums for valid values.` };
-    }
-  }
-  if (localitySlug !== undefined && localitySlug !== null) {
-    // If a city is also supplied, verify that the locality belongs to it
-    if (!isValidLocality(localitySlug, citySlug || null)) {
-      const detail = citySlug
-        ? `"${localitySlug}" is not a known locality in city "${citySlug}"`
-        : `Unknown locality slug: "${localitySlug}"`;
-      throw { status: 400, message: `${detail}. See GET /api/enums for valid values.` };
-    }
-  }
+async function validateEnumSlugs({ citySlug, localitySlug, developerSlug } = {}) {
+  await geographyService.validateSlugs({ citySlug, localitySlug });
+
   if (developerSlug !== undefined && developerSlug !== null) {
     if (!isValidDeveloper(developerSlug)) {
       throw { status: 400, message: `Unknown developer slug: "${developerSlug}". See GET /api/enums for valid values.` };
@@ -77,7 +65,7 @@ class PropertyService {
     } = data;
 
     // Validate enum slugs before touching the DB
-    validateEnumSlugs({ citySlug, localitySlug, developerSlug });
+    await validateEnumSlugs({ citySlug, localitySlug, developerSlug });
 
     const property = await Property.findByPk(id);
     if (!property) throw { status: 404, message: 'Property not found' };
@@ -243,15 +231,11 @@ class PropertyService {
     if (propertyType) where.propertyType = propertyType;
 
     // ── Enum slug filters ──────────────────────────────────────────────────────
-    if (citySlug) {
-      if (!isValidCity(citySlug)) throw { status: 400, message: `Unknown city slug: "${citySlug}"` };
-      where.citySlug = citySlug;
+    if (citySlug || localitySlug) {
+      await geographyService.validateSlugs({ citySlug, localitySlug });
     }
-    if (localitySlug) {
-      if (!isValidLocality(localitySlug, citySlug || null))
-        throw { status: 400, message: `Unknown/mismatched locality slug: "${localitySlug}"` };
-      where.localitySlug = localitySlug;
-    }
+    if (citySlug) where.citySlug = citySlug;
+    if (localitySlug) where.localitySlug = localitySlug;
     if (developerSlug) {
       if (!isValidDeveloper(developerSlug)) throw { status: 400, message: `Unknown developer slug: "${developerSlug}"` };
       where.developerSlug = developerSlug;
@@ -438,7 +422,7 @@ class PropertyService {
     }
 
     // Validate enum slugs before touching the DB
-    validateEnumSlugs({ citySlug, localitySlug, developerSlug });
+    await validateEnumSlugs({ citySlug, localitySlug, developerSlug });
 
     const existing = await Property.findOne({ where: { slug } });
     if (existing) throw { status: 409, message: `A property with slug "${slug}" already exists.` };

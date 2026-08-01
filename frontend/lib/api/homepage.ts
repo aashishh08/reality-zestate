@@ -7,6 +7,7 @@ import type { Category } from './categories';
 export interface HomepageCorridorPayload {
   locationSlug: string;
   citySlug: string;
+  cityName: string;
   localitySlug: string;
   name: string;
   activeProjects: number;

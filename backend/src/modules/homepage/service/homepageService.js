@@ -7,7 +7,7 @@ import { FEATURED_CORRIDOR_SLUGS } from '../../../config/featuredCorridors.js';
 import { Location, Property, sequelize } from '../../../models/index.js';
 import { withMemoryCache } from '../../../utils/memoryCache.js';
 
-const CACHE_KEY = 'homepage:public:v1';
+const CACHE_KEY = 'homepage:public:v2';
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
 const SECTION_TAGS = {
@@ -37,14 +37,41 @@ async function loadHomepagePart(label, fallback, loader) {
   }
 }
 
-async function buildFeaturedCorridors() {
-  const localities = await Location.findAll({
+async function fetchFeaturedLocalities(parentInclude) {
+  try {
+    const featured = await Location.findAll({
+      where: { isFeatured: true, type: 'locality' },
+      include: parentInclude,
+      order: [
+        ['featuredOrder', 'ASC'],
+        ['name', 'ASC'],
+      ],
+    });
+    if (featured.length) return featured;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn(`[Homepage] Featured flag query failed, using slug fallback: ${message}`);
+  }
+
+  return Location.findAll({
     where: { slug: { [Op.in]: FEATURED_CORRIDOR_SLUGS }, type: 'locality' },
-    include: [{ model: Location, as: 'parent', attributes: ['id', 'name', 'slug', 'type'] }],
+    include: parentInclude,
     order: [['name', 'ASC']],
   });
+}
+
+async function buildFeaturedCorridors() {
+  const parentInclude = [{
+    model: Location,
+    as: 'parent',
+    attributes: ['id', 'name', 'slug', 'type'],
+  }];
+
+  const localities = await fetchFeaturedLocalities(parentInclude);
 
   if (!localities.length) return [];
+
+  const localitySlugs = localities.map((loc) => loc.slug);
 
   const countRows = await Property.findAll({
     attributes: [
@@ -54,7 +81,7 @@ async function buildFeaturedCorridors() {
     ],
     where: {
       isPublished: true,
-      localitySlug: { [Op.in]: FEATURED_CORRIDOR_SLUGS },
+      localitySlug: { [Op.in]: localitySlugs },
     },
     group: ['localitySlug', 'citySlug'],
     raw: true,
@@ -64,20 +91,25 @@ async function buildFeaturedCorridors() {
     countRows.map((row) => [row.localitySlug, parseInt(row.activeProjects, 10) || 0]),
   );
 
-  const order = new Map(FEATURED_CORRIDOR_SLUGS.map((slug, index) => [slug, index]));
+  const legacySlugOrder = new Map(FEATURED_CORRIDOR_SLUGS.map((slug, index) => [slug, index]));
 
   return localities
     .filter((loc) => loc.parent?.slug)
     .map((loc) => ({
       locationSlug: loc.slug,
       citySlug: loc.parent.slug,
+      cityName: loc.parent.name,
       localitySlug: loc.slug,
       name: loc.name,
       activeProjects: countByLocality.get(loc.slug) ?? 0,
+      featuredOrder: loc.featuredOrder,
     }))
-    .sort(
-      (a, b) => (order.get(a.localitySlug) ?? 0) - (order.get(b.localitySlug) ?? 0),
-    );
+    .sort((a, b) => {
+      const orderA = a.featuredOrder ?? legacySlugOrder.get(a.localitySlug) ?? 999;
+      const orderB = b.featuredOrder ?? legacySlugOrder.get(b.localitySlug) ?? 999;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.name.localeCompare(b.name);
+    });
 }
 
 class HomepageService {

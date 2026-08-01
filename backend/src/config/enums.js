@@ -1,8 +1,7 @@
 /**
- * Launch geography — source of truth for cities and micro-market localities.
- * `src/seeders/20260403120100-seed-reference-data.js` seeds the `locations` table from
- * CITIES and LOCALITIES (cities are top-level rows with parentId null; localities reference their city).
- * Admin dropdowns and property API validation use this file via GET /api/enums.
+ * Launch geography — cities and localities are stored in the `locations` table (source of truth).
+ * This file keeps seed data for `src/seeders/*` and developer enums for admin dropdowns.
+ * Runtime validation and GET /api/enums read cities/localities from the database.
  */
 export const CITIES = [
   { slug: 'gurgaon', label: 'Gurgaon' },

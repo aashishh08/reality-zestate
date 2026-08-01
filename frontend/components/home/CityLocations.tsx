@@ -10,17 +10,12 @@ interface CityLocationsProps {
   locations: Location[];
 }
 
-// Sample images for locations
+// Optional hero images keyed by city slug (cosmetic only — names always from DB)
 const locationImages: Record<string, string> = {
-  delhi: "/images/category-delhi.jpg",
-  gurgaon: "/images/category-gurugram.jpg",
-  noida: "/images/category-noida.jpg",
-};
-
-const locationSubtitles: Record<string, string> = {
-  delhi: "Premium Properties in the Capital",
-  gurgaon: "Luxury Living in Millennium City",
-  noida: "Modern Residences in NCR",
+  'new-delhi': '/images/category-delhi.jpg',
+  delhi: '/images/category-delhi.jpg',
+  gurgaon: '/images/category-gurugram.jpg',
+  noida: '/images/category-noida.jpg',
 };
 
 export function CityLocations({ locations }: CityLocationsProps) {
@@ -105,7 +100,7 @@ export function CityLocations({ locations }: CityLocationsProps) {
                     </h3>
                     <div className="hidden md:block h-0 group-hover:h-auto overflow-hidden transition-all duration-300">
                       <p className="text-white/80 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                        {locationSubtitles[location.slug.toLowerCase()] || `Luxury properties in ${location.name}`}
+                        {`Luxury properties in ${location.name}`}
                       </p>
                       <span className="inline-flex items-center gap-2 text-white text-sm font-medium border-b border-gold pb-1">
                         View Properties <ArrowRight className="w-4 h-4" />

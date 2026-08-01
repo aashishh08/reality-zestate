@@ -1,6 +1,6 @@
 /**
- * Homepage featured corridors — whitelist order (GCR → GCR Extension → Noida Expy → Dwarka Expy).
- * Cards are built from matching `locality` rows in the locations API; editorial copy keyed by slug below.
+ * Homepage featured corridors — locality slugs used only as a legacy fallback when
+ * no rows have `isFeatured` in the database. Names come from the locations API.
  */
 export const FEATURED_CORRIDOR_SLUGS = [
   'golf-course-road',
@@ -12,6 +12,7 @@ export const FEATURED_CORRIDOR_SLUGS = [
 export interface FeaturedCorridorConfig {
   locationSlug: string;
   citySlug: string;
+  cityName: string;
   localitySlug: string;
   name: string;
   moodLine: string;
