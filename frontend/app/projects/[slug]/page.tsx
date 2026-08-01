@@ -304,14 +304,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                   }
                 >
                   {ktImage ? (
-                    <div className="relative rounded-2xl overflow-hidden shadow-lg min-h-[320px]">
+                    <div className="relative rounded-2xl overflow-hidden shadow-lg min-h-[320px] aspect-[4/3] md:aspect-auto md:min-h-[320px] bg-zinc-200">
                       <Image
                         src={ktImage}
-                        alt="Project Details"
+                        alt={`${project.title} highlights`}
                         fill
                         loading="lazy"
                         sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover hover:scale-105 transition-transform duration-700"
+                        className="object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                     </div>

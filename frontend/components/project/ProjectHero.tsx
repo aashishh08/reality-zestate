@@ -7,6 +7,7 @@ import { Calendar, X, AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { createLead } from "@/lib/api/leads";
 import { useApiCall } from "@/lib/hooks/useApiCall";
+import { enterProps, useLiteMotion } from "@/lib/motion-prefs";
 
 interface ProjectHeroProps {
   project: Project;
@@ -14,6 +15,8 @@ interface ProjectHeroProps {
 
 export function ProjectHero({ project }: ProjectHeroProps) {
   const { details } = project;
+  const liteMotion = useLiteMotion();
+  const heroMotion = enterProps(liteMotion);
 
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", date: "" });
@@ -85,10 +88,10 @@ export function ProjectHero({ project }: ProjectHeroProps) {
               src={heroSrc}
               alt={project.title}
               fill
-              sizes="100vw"
+              sizes="(max-width: 768px) 100vw, 1400px"
               className="object-cover"
               priority
-              quality={80}
+              quality={75}
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#2C2416] via-[#3d3429] to-[#1a1612]" />
@@ -100,9 +103,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
         <div className="relative h-full flex items-end pb-16 md:pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full min-w-0">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              {...heroMotion}
               className="max-w-4xl min-w-0"
             >
               <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-4 leading-tight break-words [overflow-wrap:anywhere]">
@@ -146,6 +147,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
               })()}
 
               <button
+                type="button"
                 id="hero-schedule-visit-btn"
                 onClick={() => setShowModal(true)}
                 className="bg-gradient-to-r from-gold to-gold-dark text-white px-8 py-4 rounded-sm font-bold tracking-wide hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-3 group transform hover:-translate-y-1"
@@ -160,14 +162,23 @@ export function ProjectHero({ project }: ProjectHeroProps) {
 
       {/* ── Site Visit Form Modal ── */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          role="presentation"
+          onClick={() => setShowModal(false)}
+        >
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            {...(liteMotion
+              ? { initial: { opacity: 0, scale: 0.96 }, animate: { opacity: 1, scale: 1 } }
+              : { initial: false })}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="site-visit-dialog-title"
             className="bg-white rounded-2xl p-6 max-w-sm w-full sm:max-w-md relative"
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Close */}
             <button
+              type="button"
               onClick={() => setShowModal(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
               aria-label="Close"
@@ -191,7 +202,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
               </motion.div>
             ) : (
               <>
-                <h3 className="text-2xl font-serif text-[#2C2416] mb-1">Schedule Your Visit</h3>
+                <h3 id="site-visit-dialog-title" className="text-2xl font-serif text-[#2C2416] mb-1">Schedule Your Visit</h3>
                 <p className="text-xs text-gray-500 mb-6">{project.title}</p>
 
                 {/* API error */}

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { BookOpen, Heart, ShoppingBag, MapPin, Plane, Map, Building2 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { useLiteMotion, viewRevealProps } from "@/lib/motion-prefs";
 
 interface NearbyItem { name: string; distance?: string }
 interface NearbyCategory { category: string; icon?: string; items: NearbyItem[] }
@@ -53,6 +54,10 @@ export function ProjectLocation({
   description = DEFAULT_LOCATION_DESCRIPTION,
   sublocality,
 }: ProjectLocationProps) {
+  const liteMotion = useLiteMotion();
+  const mapReveal = viewRevealProps(liteMotion);
+  const listReveal = viewRevealProps(liteMotion);
+
   if (!location) return null;
 
   const safeNearby: NearbyCategory[] = Array.isArray(location.nearby) ? location.nearby : [];
@@ -78,19 +83,18 @@ export function ProjectLocation({
         <div className="grid md:grid-cols-2 gap-8 sm:gap-10 lg:gap-16 items-start min-w-0">
           {/* Map Image */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
+            {...mapReveal}
             className="relative h-[320px] sm:h-[400px] md:h-[500px] min-w-0"
           >
-            <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl">
+            <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl bg-zinc-200">
               {location.mapImage?.trim() ? (
                 <Image
                   src={location.mapImage.trim()}
-                  alt="Location Map"
+                  alt="Location map"
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  loading="lazy"
                 />
               ) : (
                 <div className="absolute inset-0 bg-gradient-to-br from-zinc-200 via-zinc-100 to-zinc-300 flex items-center justify-center">
@@ -118,10 +122,7 @@ export function ProjectLocation({
 
           {/* Nearby Categories */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
+            {...listReveal}
             className="space-y-4 sm:space-y-8 min-w-0 max-w-full"
           >
             {safeNearby.length === 0 ? (
@@ -138,9 +139,7 @@ export function ProjectLocation({
                 return (
                   <motion.div
                     key={`${category.category}-${categoryIndex}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: categoryIndex * 0.1 }}
+                    {...viewRevealProps(liteMotion, liteMotion ? categoryIndex * 0.05 : 0)}
                     className="min-w-0"
                   >
                     <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-4">
@@ -158,9 +157,7 @@ export function ProjectLocation({
                       {safeItems.map((item, index) => (
                         <motion.div
                           key={`${item.name || "item"}-${index}`}
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: categoryIndex * 0.1 + index * 0.05 }}
+                          {...viewRevealProps(liteMotion)}
                           className="flex items-start gap-1.5 sm:gap-2 min-w-0"
                         >
                           <span
@@ -183,9 +180,7 @@ export function ProjectLocation({
         {/* Connectivity */}
         {safeConnectivity.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            {...viewRevealProps(liteMotion, liteMotion ? 0.1 : 0)}
             className="mt-8 sm:mt-16 md:mt-20 pt-6 sm:pt-14 md:pt-20 border-t border-gray-200"
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 min-w-0">
@@ -196,9 +191,7 @@ export function ProjectLocation({
                 return (
                   <motion.div
                     key={`${item.place || "place"}-${index}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    {...viewRevealProps(liteMotion, liteMotion ? index * 0.05 : 0)}
                     className="bg-white rounded-lg border border-gray-200 p-2.5 sm:p-4 hover:border-[#C9A961] hover:shadow-md transition-all min-w-0 overflow-hidden"
                   >
                     <div className="flex items-start gap-2 sm:gap-3 min-w-0">
