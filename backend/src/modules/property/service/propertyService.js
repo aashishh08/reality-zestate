@@ -3,7 +3,10 @@ import { Property, Developer, Location, Category, PropertySection, Tag, Property
 import tagService from '../../tag/service/tagService.js';
 import { isValidDeveloper } from '../../../config/enums.js';
 import geographyService from '../../location/service/geographyService.js';
+import { LOCATION_BASE_ATTRIBUTES } from '../../../constants/locationAttributes.js';
 import { parseTypedFacts, buildPropertiesFeedJsonLd } from '../utils/propertyFeedJsonLd.js';
+
+const locationInclude = { model: Location, attributes: LOCATION_BASE_ATTRIBUTES };
 
 /**
  * Validate geography and developer slug fields and throw a descriptive 400 if invalid.
@@ -24,7 +27,7 @@ async function validateEnumSlugs({ citySlug, localitySlug, developerSlug } = {})
 async function resolveLocationIdFromSlugs(localitySlug, citySlug, transaction) {
   const slug = localitySlug || citySlug || null;
   if (!slug) return null;
-  const loc = await Location.findOne({ where: { slug }, transaction });
+  const loc = await Location.findOne({ where: { slug }, attributes: ['id'], transaction });
   return loc ? loc.id : null;
 }
 
@@ -44,7 +47,7 @@ class PropertyService {
     const property = await Property.findByPk(id, {
       include: [
         { model: Developer },
-        { model: Location },
+        locationInclude,
         { model: PropertySection, order: [['order', 'ASC']] },
         { model: Category, as: 'Categories', through: { attributes: [] } },
         { model: Tag, as: 'Tags', through: { attributes: [] } },
@@ -182,7 +185,7 @@ class PropertyService {
       where: { slug },
       include: [
         { model: Developer },
-        { model: Location },
+        locationInclude,
         { model: PropertySection, order: [['order', 'ASC']] },
         { model: Category, as: 'Categories', through: { attributes: [] } },
         { model: Tag, as: 'Tags', through: { attributes: [] } },
@@ -224,7 +227,7 @@ class PropertyService {
     };
     const include = [
       { model: Developer },
-      { model: Location },
+      locationInclude,
       categoryInclude,
     ];
 
@@ -525,7 +528,7 @@ class PropertyService {
       where,
       include: [
         { model: Developer },
-        { model: Location },
+        locationInclude,
         { model: PropertySection, attributes: ['id', 'type'] },
         { model: Category, as: 'Categories', through: { attributes: [] } },
         { model: Tag, as: 'Tags', through: { attributes: [] } },

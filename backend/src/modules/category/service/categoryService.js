@@ -1,4 +1,7 @@
 import { Category, Property, Developer, Location, Tag } from '../../../models/index.js';
+import { LOCATION_BASE_ATTRIBUTES } from '../../../constants/locationAttributes.js';
+
+const locationInclude = { model: Location, attributes: LOCATION_BASE_ATTRIBUTES };
 
 class CategoryService {
   async getCategoryById(id) {
@@ -61,7 +64,7 @@ class CategoryService {
     const { count, rows } = await Property.findAndCountAll({
       include: [
         { model: Developer },
-        { model: Location },
+        locationInclude,
         {
           model: Category,
           as: 'Categories',

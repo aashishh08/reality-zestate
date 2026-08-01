@@ -1,5 +1,8 @@
 import { Developer, Property, Location, Category, Tag } from '../../../models/index.js';
+import { LOCATION_BASE_ATTRIBUTES } from '../../../constants/locationAttributes.js';
 import { Op } from 'sequelize';
+
+const locationInclude = { model: Location, attributes: LOCATION_BASE_ATTRIBUTES };
 
 class DeveloperService {
   async getDeveloperById(id) {
@@ -60,7 +63,7 @@ class DeveloperService {
       where: { developerId },
       include: [
         { model: Developer },
-        { model: Location },
+        locationInclude,
         { model: Category, as: 'Categories', through: { attributes: [] } },
         { model: Tag, as: 'Tags', through: { attributes: [] } },
       ],

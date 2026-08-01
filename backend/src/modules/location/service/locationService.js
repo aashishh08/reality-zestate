@@ -1,19 +1,29 @@
 import { Op } from 'sequelize';
 import { Location, Property, Developer, Category, Tag } from '../../../models/index.js';
 import geographyService from './geographyService.js';
+import {
+  LOCATION_BASE_ATTRIBUTES,
+  LOCATION_ADMIN_ATTRIBUTES,
+  LOCATION_PARENT_ATTRIBUTES,
+} from '../../../constants/locationAttributes.js';
+
+const locationInclude = { model: Location, attributes: LOCATION_BASE_ATTRIBUTES };
 
 class LocationService {
   async getLocationById(id) {
     const location = await Location.findByPk(id, {
+      attributes: LOCATION_BASE_ATTRIBUTES,
       include: [
         {
           model: Location,
           as: 'children',
-          include: [{ model: Location, as: 'children' }],
+          attributes: LOCATION_BASE_ATTRIBUTES,
+          include: [{ model: Location, as: 'children', attributes: LOCATION_BASE_ATTRIBUTES }],
         },
         {
           model: Location,
           as: 'parent',
+          attributes: LOCATION_PARENT_ATTRIBUTES,
         },
       ],
     });
@@ -40,7 +50,8 @@ class LocationService {
       {
         model: Location,
         as: 'children',
-        include: [{ model: Location, as: 'children' }],
+        attributes: LOCATION_BASE_ATTRIBUTES,
+        include: [{ model: Location, as: 'children', attributes: LOCATION_BASE_ATTRIBUTES }],
       },
     ];
 
@@ -48,12 +59,13 @@ class LocationService {
       {
         model: Location,
         as: 'parent',
-        attributes: ['id', 'name', 'slug', 'type'],
+        attributes: LOCATION_PARENT_ATTRIBUTES,
       },
     ];
 
     const locations = await Location.findAll({
       where,
+      attributes: LOCATION_BASE_ATTRIBUTES,
       include: type === 'locality' ? localityIncludes : treeIncludes,
       order: [['name', 'ASC']],
     });
@@ -64,18 +76,38 @@ class LocationService {
   async listAdminLocations() {
     const cities = await Location.findAll({
       where: { type: 'city' },
+      attributes: LOCATION_BASE_ATTRIBUTES,
       order: [['name', 'ASC']],
     });
 
-    const localities = await Location.findAll({
-      where: { type: 'locality' },
-      include: [{
-        model: Location,
-        as: 'parent',
-        attributes: ['id', 'name', 'slug', 'type'],
-      }],
-      order: [['name', 'ASC']],
-    });
+    let localities;
+    try {
+      localities = await Location.findAll({
+        where: { type: 'locality' },
+        attributes: LOCATION_ADMIN_ATTRIBUTES,
+        include: [{
+          model: Location,
+          as: 'parent',
+          attributes: LOCATION_PARENT_ATTRIBUTES,
+        }],
+        order: [['name', 'ASC']],
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      if (!message.includes('isFeatured') && !message.includes('featuredOrder')) {
+        throw error;
+      }
+      localities = await Location.findAll({
+        where: { type: 'locality' },
+        attributes: LOCATION_BASE_ATTRIBUTES,
+        include: [{
+          model: Location,
+          as: 'parent',
+          attributes: LOCATION_PARENT_ATTRIBUTES,
+        }],
+        order: [['name', 'ASC']],
+      });
+    }
 
     return Promise.all(cities.map(async (city) => {
       const cityChildren = localities.filter((loc) => loc.parentId === city.id);
@@ -85,6 +117,8 @@ class LocationService {
         propertyCount: await geographyService.countPropertyReferences(city),
         children: await Promise.all(cityChildren.map(async (locality) => ({
           ...locality.toJSON(),
+          isFeatured: locality.isFeatured ?? false,
+          featuredOrder: locality.featuredOrder ?? null,
           propertyCount: await geographyService.countPropertyReferences(locality),
         }))),
       };
@@ -176,7 +210,9 @@ class LocationService {
   async getPropertiesByLocation(locationId, filters = {}) {
     const { limit = 10, offset = 0 } = filters;
 
-    const location = await Location.findByPk(locationId);
+    const location = await Location.findByPk(locationId, {
+      attributes: LOCATION_BASE_ATTRIBUTES,
+    });
     if (!location) {
       throw {
         status: 404,
@@ -188,7 +224,7 @@ class LocationService {
       where: { locationId },
       include: [
         { model: Developer },
-        { model: Location },
+        locationInclude,
         { model: Category, as: 'Categories', through: { attributes: [] } },
         { model: Tag, as: 'Tags', through: { attributes: [] } },
       ],

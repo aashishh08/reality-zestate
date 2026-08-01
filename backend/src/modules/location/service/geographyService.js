@@ -1,5 +1,9 @@
 import { Op } from 'sequelize';
 import { Location, Property } from '../../../models/index.js';
+import {
+  LOCATION_BASE_ATTRIBUTES,
+  LOCATION_PARENT_ATTRIBUTES,
+} from '../../../constants/locationAttributes.js';
 
 function formatCity(row) {
   return { slug: row.slug, label: row.name };
@@ -18,6 +22,7 @@ class GeographyService {
   async getCities() {
     const rows = await Location.findAll({
       where: { type: 'city' },
+      attributes: LOCATION_BASE_ATTRIBUTES,
       order: [['name', 'ASC']],
     });
     return rows.map(formatCity);
@@ -27,12 +32,13 @@ class GeographyService {
     const include = [{
       model: Location,
       as: 'parent',
-      attributes: ['id', 'name', 'slug', 'type'],
+      attributes: LOCATION_PARENT_ATTRIBUTES,
       ...(citySlug ? { where: { slug: citySlug, type: 'city' }, required: true } : {}),
     }];
 
     const rows = await Location.findAll({
       where: { type: 'locality' },
+      attributes: LOCATION_BASE_ATTRIBUTES,
       include,
       order: [['name', 'ASC']],
     });
@@ -48,7 +54,10 @@ class GeographyService {
 
   async validateSlugs({ citySlug, localitySlug } = {}) {
     if (citySlug !== undefined && citySlug !== null && citySlug !== '') {
-      const city = await Location.findOne({ where: { slug: citySlug, type: 'city' } });
+      const city = await Location.findOne({
+        where: { slug: citySlug, type: 'city' },
+        attributes: LOCATION_BASE_ATTRIBUTES,
+      });
       if (!city) {
         throw {
           status: 400,
@@ -60,6 +69,7 @@ class GeographyService {
     if (localitySlug !== undefined && localitySlug !== null && localitySlug !== '') {
       const locality = await Location.findOne({
         where: { slug: localitySlug, type: 'locality' },
+        attributes: LOCATION_BASE_ATTRIBUTES,
         include: [{
           model: Location,
           as: 'parent',
@@ -96,12 +106,15 @@ class GeographyService {
   async isSlugTaken(slug, excludeId = null) {
     const where = { slug };
     if (excludeId) where.id = { [Op.ne]: excludeId };
-    const existing = await Location.findOne({ where });
+    const existing = await Location.findOne({ where, attributes: ['id'] });
     return Boolean(existing);
   }
 
   async getCityById(id) {
-    const city = await Location.findOne({ where: { id, type: 'city' } });
+    const city = await Location.findOne({
+      where: { id, type: 'city' },
+      attributes: LOCATION_BASE_ATTRIBUTES,
+    });
     if (!city) {
       throw { status: 404, message: 'City not found' };
     }
@@ -111,10 +124,11 @@ class GeographyService {
   async getLocalityById(id) {
     const locality = await Location.findOne({
       where: { id, type: 'locality' },
+      attributes: LOCATION_BASE_ATTRIBUTES,
       include: [{
         model: Location,
         as: 'parent',
-        attributes: ['id', 'name', 'slug', 'type'],
+        attributes: LOCATION_PARENT_ATTRIBUTES,
       }],
     });
     if (!locality) {

@@ -5,9 +5,13 @@ import developerService from '../../developer/service/developerService.js';
 import categoryService from '../../category/service/categoryService.js';
 import { FEATURED_CORRIDOR_SLUGS } from '../../../config/featuredCorridors.js';
 import { Location, Property, sequelize } from '../../../models/index.js';
+import {
+  LOCATION_BASE_ATTRIBUTES,
+  LOCATION_PARENT_ATTRIBUTES,
+} from '../../../constants/locationAttributes.js';
 import { withMemoryCache } from '../../../utils/memoryCache.js';
 
-const CACHE_KEY = 'homepage:public:v2';
+const CACHE_KEY = 'homepage:public:v3';
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
 const SECTION_TAGS = {
@@ -55,6 +59,7 @@ async function fetchFeaturedLocalities(parentInclude) {
 
   return Location.findAll({
     where: { slug: { [Op.in]: FEATURED_CORRIDOR_SLUGS }, type: 'locality' },
+    attributes: LOCATION_BASE_ATTRIBUTES,
     include: parentInclude,
     order: [['name', 'ASC']],
   });
@@ -64,7 +69,7 @@ async function buildFeaturedCorridors() {
   const parentInclude = [{
     model: Location,
     as: 'parent',
-    attributes: ['id', 'name', 'slug', 'type'],
+    attributes: LOCATION_PARENT_ATTRIBUTES,
   }];
 
   const localities = await fetchFeaturedLocalities(parentInclude);

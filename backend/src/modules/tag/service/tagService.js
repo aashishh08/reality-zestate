@@ -1,5 +1,8 @@
 import { Op } from 'sequelize';
 import { Tag, PropertyTag, Property, Developer, Location, Category, sequelize } from '../../../models/index.js';
+import { LOCATION_BASE_ATTRIBUTES } from '../../../constants/locationAttributes.js';
+
+const locationInclude = { model: Location, attributes: LOCATION_BASE_ATTRIBUTES };
 
 class TagService {
     // ── CRUD ────────────────────────────────────────────────────────────────────
@@ -107,7 +110,7 @@ class TagService {
             where,
             include: [
                 { model: Developer },
-                { model: Location },
+                locationInclude,
                 { model: Category, as: 'Categories', through: { attributes: [] } },
                 {
                     model: Tag,
