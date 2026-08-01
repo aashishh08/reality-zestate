@@ -14,6 +14,7 @@ import {
   slugify,
   updateLocation,
 } from '@/lib/api/locations-admin';
+import { revalidateLocationCaches } from '@/app/actions/revalidate-location';
 
 type EditTarget =
   | { kind: 'city'; item: AdminCity }
@@ -72,17 +73,22 @@ export default function AdminLocationsPage() {
     );
   });
 
+  const parentSlugForCityId = (cityId: string) =>
+    cities.find((city) => city.id === cityId)?.slug;
+
   const handleCreateCity = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) return;
     try {
       setSaving(true);
       setError('');
-      await createCity(token, { name: cityName.trim(), slug: citySlug.trim() });
+      const slug = citySlug.trim();
+      await createCity(token, { name: cityName.trim(), slug });
       setCityName('');
       setCitySlug('');
       setCitySlugTouched(false);
       await loadLocations();
+      await revalidateLocationCaches({ slug });
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to create city');
     } finally {
@@ -96,15 +102,21 @@ export default function AdminLocationsPage() {
     try {
       setSaving(true);
       setError('');
+      const slug = localitySlug.trim();
+      const parentSlug = parentSlugForCityId(localityParentId);
       await createLocality(token, {
         name: localityName.trim(),
-        slug: localitySlug.trim(),
+        slug,
         parentId: localityParentId,
       });
       setLocalityName('');
       setLocalitySlug('');
       setLocalitySlugTouched(false);
       await loadLocations();
+      await revalidateLocationCaches({
+        slug,
+        relatedSlugs: parentSlug ? [parentSlug] : undefined,
+      });
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to create locality');
     } finally {
@@ -148,6 +160,17 @@ export default function AdminLocationsPage() {
       await updateLocation(token, editTarget.item.id, payload);
       setEditTarget(null);
       await loadLocations();
+
+      const relatedSlugs: string[] = [];
+      if (editTarget.kind === 'locality') {
+        if (editTarget.item.parent?.slug) relatedSlugs.push(editTarget.item.parent.slug);
+        const newParentSlug = parentSlugForCityId(editParentId);
+        if (newParentSlug) relatedSlugs.push(newParentSlug);
+      }
+      await revalidateLocationCaches({
+        slug: editTarget.item.slug,
+        relatedSlugs: relatedSlugs.length ? relatedSlugs : undefined,
+      });
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to update location');
     } finally {
