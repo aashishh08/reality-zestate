@@ -35,11 +35,15 @@ export async function adminRegister(data: RegisterRequest): Promise<AuthResponse
   });
 }
 
-export async function getAllBlogs(token: string, filters?: { search?: string; limit?: number; offset?: number }) {
+export async function getAllBlogs(
+  token: string,
+  filters?: { search?: string; limit?: number; offset?: number; isPublished?: boolean },
+) {
   const params = new URLSearchParams();
   if (filters?.search) params.append('search', filters.search);
   if (filters?.limit) params.append('limit', filters.limit.toString());
   if (filters?.offset) params.append('offset', filters.offset.toString());
+  if (filters?.isPublished !== undefined) params.append('isPublished', String(filters.isPublished));
 
   const queryString = params.toString() ? `?${params.toString()}` : '';
 

@@ -7,6 +7,7 @@ import { FileText, LogOut, Menu, X, Save, Eye, EyeOff, AlertCircle, ArrowLeft, U
 import Link from 'next/link';
 import { useState } from 'react';
 import { createBlog } from '@/lib/api/blogs';
+import { revalidateBlogCaches } from '@/app/actions/revalidate-homepage';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { ImageUploadInput } from '@/components/admin/ImageUploadInput';
 
@@ -82,6 +83,8 @@ export default function CreateBlogPage() {
         } as any,
         token!
       );
+
+      await revalidateBlogCaches(slug.trim());
 
       setSuccess(publish ? 'Blog published successfully!' : 'Blog saved as draft!');
       setTimeout(() => {

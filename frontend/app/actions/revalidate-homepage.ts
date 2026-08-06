@@ -31,3 +31,11 @@ export async function revalidatePropertyCaches(slug?: string): Promise<void> {
 export async function revalidateHomepagePropertySections(): Promise<void> {
   await revalidatePropertyCaches();
 }
+
+/** Invalidate blog listing and detail caches after admin create/update/delete/toggle. */
+export async function revalidateBlogCaches(slug?: string): Promise<void> {
+  revalidatePath('/blogs');
+  if (slug) {
+    revalidatePath(`/blogs/${slug}`);
+  }
+}

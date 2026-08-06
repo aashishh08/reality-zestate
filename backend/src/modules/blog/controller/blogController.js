@@ -118,9 +118,14 @@ class BlogController {
   }
 
   async listAllBlogs(req, res) {
-    const { limit = 20, offset = 0, search = '' } = req.query;
+    const { limit = 20, offset = 0, search = '', isPublished } = req.query;
 
-    const result = await blogService.listAllBlogs(limit, offset, search);
+    const result = await blogService.listAllBlogs(
+      limit,
+      offset,
+      search,
+      isPublished !== undefined ? isPublished === 'true' : undefined,
+    );
 
     res.json({
       success: true,

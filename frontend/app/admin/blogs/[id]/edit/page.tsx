@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getBlogById } from '@/lib/api/admin';
 import { updateBlog } from '@/lib/api/blogs';
+import { revalidateBlogCaches } from '@/app/actions/revalidate-homepage';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { ImageUploadInput } from '@/components/admin/ImageUploadInput';
 
@@ -108,6 +109,8 @@ export default function EditBlogPage() {
         } as any,
         token!
       );
+
+      await revalidateBlogCaches(slug.trim());
 
       setSuccess(publish ? 'Blog published successfully!' : 'Blog saved as draft!');
       setTimeout(() => {

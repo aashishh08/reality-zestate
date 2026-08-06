@@ -2,12 +2,12 @@
 
 import { useAdminAuth } from '@/lib/contexts/AdminAuthContext';
 import { ProtectedAdminRoute } from '@/components/admin/ProtectedAdminRoute';
-import { useRouter } from 'next/navigation';
-import { FileText, LogOut, Menu, X, Plus, Eye, EyeOff, Trash2, Edit2, Search, Users } from 'lucide-react';
+import { FileText, Plus, Eye, EyeOff, Trash2, Edit2, Search, RefreshCw, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getAllBlogs, deleteBlog } from '@/lib/api/admin';
 import { updateBlog } from '@/lib/api/blogs';
+import { revalidateBlogCaches } from '@/app/actions/revalidate-homepage';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 
 interface Blog {
@@ -21,44 +21,50 @@ interface Blog {
 }
 
 export default function BlogsListPage() {
-  const router = useRouter();
-  const { user, token, logout } = useAdminAuth();
+  const { token } = useAdminAuth();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [appliedSearch, setAppliedSearch] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
   const [error, setError] = useState('');
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (token) {
-      loadBlogs();
-    }
-  }, [token]);
-
-  const loadBlogs = async () => {
+  const loadBlogs = useCallback(async () => {
+    if (!token) return;
     try {
       setLoading(true);
-      const response: any = await getAllBlogs(token!, { search });
+      setError('');
+      const filters: { search?: string; isPublished?: boolean } = {};
+      if (appliedSearch) filters.search = appliedSearch;
+      if (filterStatus !== '') filters.isPublished = filterStatus === 'published';
+      const response: any = await getAllBlogs(token, filters);
       setBlogs(response.data || []);
     } catch (err: any) {
       setError(err?.message || 'Failed to load blogs');
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, appliedSearch, filterStatus]);
+
+  useEffect(() => {
+    loadBlogs();
+  }, [loadBlogs]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    loadBlogs();
+    setAppliedSearch(search);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (blog: Blog) => {
     if (!confirm('Are you sure you want to delete this blog?')) return;
 
     try {
-      setDeleteLoading(id);
-      await deleteBlog(id, token!);
-      setBlogs(blogs.filter((b) => b.id !== id));
+      setDeleteLoading(blog.id);
+      await deleteBlog(blog.id, token!);
+      await revalidateBlogCaches(blog.slug);
+      setBlogs(blogs.filter((b) => b.id !== blog.id));
     } catch (err: any) {
       setError(err?.message || 'Failed to delete blog');
     } finally {
@@ -68,16 +74,15 @@ export default function BlogsListPage() {
 
   const handleTogglePublish = async (blog: Blog) => {
     try {
+      setTogglingId(blog.id);
       await updateBlog(blog.id, { isPublished: !blog.isPublished }, token!);
+      await revalidateBlogCaches(blog.slug);
       setBlogs(blogs.map((b) => (b.id === blog.id ? { ...b, isPublished: !b.isPublished } : b)));
     } catch (err: any) {
       setError(err?.message || 'Failed to update blog');
+    } finally {
+      setTogglingId(null);
     }
-  };
-
-  const handleLogout = () => {
-    logout();
-    router.push('/admin/login');
   };
 
   return (
@@ -108,9 +113,9 @@ export default function BlogsListPage() {
               </div>
             )}
 
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="mb-6">
-              <div className="relative">
+            {/* Search + Status filter */}
+            <form onSubmit={handleSearch} className="mb-6 flex items-center gap-3 flex-wrap">
+              <div className="relative flex-1 min-w-[200px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                 <input
                   type="text"
@@ -120,6 +125,23 @@ export default function BlogsListPage() {
                   className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition"
                 />
               </div>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="px-4 py-3 bg-gray-800 border border-gray-700 text-gray-300 rounded-lg text-sm focus:outline-none focus:border-amber-500"
+              >
+                <option value="">All Status</option>
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+              </select>
+              <button
+                type="button"
+                onClick={loadBlogs}
+                className="flex items-center space-x-2 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg text-sm transition"
+              >
+                <RefreshCw className="w-4 h-4" />
+                <span>Refresh</span>
+              </button>
             </form>
 
             {/* Blogs Table */}
@@ -158,16 +180,16 @@ export default function BlogsListPage() {
                         <td className="px-6 py-4 text-sm text-white truncate max-w-xs">{blog.title}</td>
                         <td className="px-6 py-4 text-sm text-gray-400 truncate max-w-xs">{blog.slug}</td>
                         <td className="px-6 py-4 text-sm">
-                          <button
-                            onClick={() => handleTogglePublish(blog)}
-                            className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-medium transition ${blog.isPublished
-                              ? 'bg-green-500/20 text-green-500 hover:bg-green-500/30'
-                              : 'bg-blue-500/20 text-blue-500 hover:bg-blue-500/30'
-                              }`}
+                          <span
+                            className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-medium ${
+                              blog.isPublished
+                                ? 'bg-emerald-500/15 text-emerald-400'
+                                : 'bg-gray-700 text-gray-400'
+                            }`}
                           >
                             {blog.isPublished ? (
                               <>
-                                <Eye className="w-3 h-3" />
+                                <CheckCircle2 className="w-3 h-3" />
                                 <span>Published</span>
                               </>
                             ) : (
@@ -176,7 +198,7 @@ export default function BlogsListPage() {
                                 <span>Draft</span>
                               </>
                             )}
-                          </button>
+                          </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-400">
                           {new Date(blog.createdAt).toLocaleDateString()}
@@ -190,7 +212,21 @@ export default function BlogsListPage() {
                             <Edit2 className="w-4 h-4" />
                           </Link>
                           <button
-                            onClick={() => handleDelete(blog.id)}
+                            onClick={() => handleTogglePublish(blog)}
+                            disabled={togglingId === blog.id}
+                            className="p-2 text-gray-400 hover:text-amber-400 hover:bg-gray-700 rounded-lg transition disabled:opacity-50"
+                            title={blog.isPublished ? 'Unpublish / hide' : 'Publish'}
+                          >
+                            {togglingId === blog.id ? (
+                              <RefreshCw className="w-4 h-4 animate-spin" />
+                            ) : blog.isPublished ? (
+                              <EyeOff className="w-4 h-4" />
+                            ) : (
+                              <Eye className="w-4 h-4" />
+                            )}
+                          </button>
+                          <button
+                            onClick={() => handleDelete(blog)}
                             disabled={deleteLoading === blog.id}
                             className="p-2 text-red-500 hover:bg-gray-700 rounded-lg transition disabled:opacity-50"
                             title="Delete"

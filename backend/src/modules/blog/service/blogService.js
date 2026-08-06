@@ -101,14 +101,20 @@ class BlogService {
     };
   }
 
-  async listAllBlogs(limit = 20, offset = 0, search = '') {
-    const where = search ? {
-      [Op.or]: [
+  async listAllBlogs(limit = 20, offset = 0, search = '', isPublished) {
+    const where = {};
+
+    if (search) {
+      where[Op.or] = [
         { title: { [Op.iLike]: `%${search}%` } },
         { content: { [Op.iLike]: `%${search}%` } },
         { slug: { [Op.iLike]: `%${search}%` } },
-      ],
-    } : {};
+      ];
+    }
+
+    if (isPublished !== undefined) {
+      where.isPublished = isPublished;
+    }
 
     const { count, rows } = await Blog.findAndCountAll({
       where,
