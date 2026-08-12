@@ -4,12 +4,15 @@
  * Use ADMIN when reading/writing isFeatured / featuredOrder (admin + homepage featured).
  */
 
+export const LOCATION_SEO_ATTRIBUTES = ['seoTitle', 'metaDescription', 'heroImageUrl'];
+
 export const LOCATION_BASE_ATTRIBUTES = [
   'id',
   'name',
   'slug',
   'type',
   'parentId',
+  ...LOCATION_SEO_ATTRIBUTES,
   'createdAt',
   'updatedAt',
 ];

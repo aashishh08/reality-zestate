@@ -21,6 +21,20 @@ export default (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    seoTitle: {
+      type: DataTypes.STRING(90),
+      allowNull: true,
+      comment: 'Optional override for page title and OG title',
+    },
+    metaDescription: {
+      type: DataTypes.STRING(320),
+      allowNull: true,
+    },
+    heroImageUrl: {
+      type: DataTypes.STRING(2048),
+      allowNull: true,
+      comment: 'Hero and Open Graph image URL (falls back to logo)',
+    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,

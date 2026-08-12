@@ -1,4 +1,5 @@
 import { fetchFromAPI, buildQueryString } from '../api-client';
+import { fetchSitemapData } from '../sitemap-data';
 import { getCategories } from './categories';
 import type { Location } from './locations';
 import { PropertyListResponse, PropertyFilters } from '@/types/property-listing';
@@ -207,9 +208,8 @@ export async function getDeveloperBySlug(slug: string) {
 
 export async function getAllLocationSlugs(): Promise<string[]> {
   try {
-    const response = await fetchFromAPI<any>('/locations?type=city&limit=100');
-    const data = Array.isArray(response?.data) ? response.data : [];
-    return data.map((loc: any) => loc.slug).filter(Boolean);
+    const data = await fetchSitemapData(3600);
+    return (data.locations ?? []).map((loc) => loc.slug).filter(Boolean);
   } catch {
     return [];
   }
@@ -217,9 +217,8 @@ export async function getAllLocationSlugs(): Promise<string[]> {
 
 export async function getAllDeveloperSlugs(): Promise<string[]> {
   try {
-    const response = await fetchFromAPI<any>('/developers?limit=100');
-    const data = Array.isArray(response?.data) ? response.data : [];
-    return data.map((dev: any) => dev.slug).filter(Boolean);
+    const data = await fetchSitemapData(3600);
+    return (data.developers ?? []).map((dev) => dev.slug).filter(Boolean);
   } catch {
     return [];
   }

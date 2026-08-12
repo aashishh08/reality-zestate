@@ -42,6 +42,9 @@ export default function AdminLocationsPage() {
   const [editParentId, setEditParentId] = useState('');
   const [editIsFeatured, setEditIsFeatured] = useState(false);
   const [editFeaturedOrder, setEditFeaturedOrder] = useState('');
+  const [editSeoTitle, setEditSeoTitle] = useState('');
+  const [editMetaDescription, setEditMetaDescription] = useState('');
+  const [editHeroImageUrl, setEditHeroImageUrl] = useState('');
 
   const loadLocations = async () => {
     if (!token) return;
@@ -127,6 +130,9 @@ export default function AdminLocationsPage() {
   const openEdit = (target: EditTarget) => {
     setEditTarget(target);
     setEditName(target.item.name);
+    setEditSeoTitle(target.item.seoTitle ?? '');
+    setEditMetaDescription(target.item.metaDescription ?? '');
+    setEditHeroImageUrl(target.item.heroImageUrl ?? '');
     if (target.kind === 'locality') {
       setEditParentId(target.item.parentId);
       setEditIsFeatured(Boolean(target.item.isFeatured));
@@ -147,7 +153,15 @@ export default function AdminLocationsPage() {
         parentId?: string;
         isFeatured?: boolean;
         featuredOrder?: number | null;
-      } = { name: editName.trim() };
+        seoTitle?: string | null;
+        metaDescription?: string | null;
+        heroImageUrl?: string | null;
+      } = {
+        name: editName.trim(),
+        seoTitle: editSeoTitle.trim() || null,
+        metaDescription: editMetaDescription.trim() || null,
+        heroImageUrl: editHeroImageUrl.trim() || null,
+      };
       if (editTarget.kind === 'locality' && editTarget.item.propertyCount === 0) {
         payload.parentId = editParentId;
       }
@@ -400,7 +414,7 @@ export default function AdminLocationsPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
             <form
               onSubmit={handleSaveEdit}
-              className="w-full max-w-md bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-4"
+              className="w-full max-w-lg bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-4 max-h-[90vh] overflow-y-auto"
             >
               <h3 className="text-lg font-semibold text-white">
                 Edit {editTarget.kind === 'city' ? 'City' : 'Locality'}
@@ -469,6 +483,47 @@ export default function AdminLocationsPage() {
                 </div>
                 </>
               )}
+
+              <div className="border-t border-gray-700 pt-4 space-y-3">
+                <p className="text-sm font-medium text-amber-400">SEO (optional)</p>
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">
+                    SEO title (max 90 chars)
+                  </label>
+                  <input
+                    value={editSeoTitle}
+                    onChange={(e) => setEditSeoTitle(e.target.value)}
+                    maxLength={90}
+                    placeholder="e.g. Golf Course Road Luxury Projects — Superluxere"
+                    className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">
+                    Meta description (max 320 chars)
+                  </label>
+                  <textarea
+                    value={editMetaDescription}
+                    onChange={(e) => setEditMetaDescription(e.target.value)}
+                    maxLength={320}
+                    rows={3}
+                    placeholder="Search snippet shown on Google..."
+                    className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm resize-y"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">
+                    Hero / OG image URL
+                  </label>
+                  <input
+                    type="url"
+                    value={editHeroImageUrl}
+                    onChange={(e) => setEditHeroImageUrl(e.target.value)}
+                    placeholder="https://..."
+                    className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm"
+                  />
+                </div>
+              </div>
 
               <div className="flex justify-end gap-3 pt-2">
                 <button

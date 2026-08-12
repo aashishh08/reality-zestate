@@ -39,6 +39,7 @@ import {
   ROBOTS_NOINDEX_FOLLOW,
   ROBOTS_NOINDEX_NOFOLLOW,
 } from '@/lib/seo/listing-metadata';
+import { buildCollectionPageMetadata } from '@/lib/seo/collection-metadata';
 
 export async function generateMetadata({
   params: paramsPromise,
@@ -66,30 +67,16 @@ export async function generateMetadata({
 
   const base = getSiteUrl();
   const canonicalUrl = `${base}/location/${location.slug}`;
-  const title = `${location.name} — Luxury Projects`;
-  const description = `Discover curated projects in ${location.name}. Explore developers and corridor fundamentals before you book a site visit.`;
-  const ogDescription = `Browse premium inventory in ${location.name}.`;
 
-  return {
-    title,
-    description,
+  return buildCollectionPageMetadata(location, {
+    canonicalPath: canonicalUrl,
+    defaultTitle: `${location.name} — Luxury Projects`,
+    defaultDescription: `Discover curated projects in ${location.name}. Explore developers and corridor fundamentals before you book a site visit.`,
+    defaultOgDescription: `Browse premium inventory in ${location.name}.`,
     keywords: [location.name, 'luxury real estate', 'micro-market', 'India', 'Superluxere'],
-    alternates: { canonical: canonicalUrl },
-    openGraph: {
-      title,
-      description: ogDescription,
-      type: 'website',
-      url: canonicalUrl,
-      siteName: 'Superluxere',
-      locale: 'en_IN',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description: ogDescription,
-    },
+    locationSlug: location.slug,
     ...(hasQueryVariant ? { robots: ROBOTS_NOINDEX_FOLLOW } : {}),
-  };
+  });
 }
 
 export async function generateStaticParams() {

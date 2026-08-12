@@ -9,6 +9,9 @@ export interface AdminLocality {
   propertyCount: number;
   isFeatured?: boolean;
   featuredOrder?: number | null;
+  seoTitle?: string | null;
+  metaDescription?: string | null;
+  heroImageUrl?: string | null;
   parent?: {
     id: string;
     name: string;
@@ -23,6 +26,9 @@ export interface AdminCity {
   slug: string;
   type: 'city';
   propertyCount: number;
+  seoTitle?: string | null;
+  metaDescription?: string | null;
+  heroImageUrl?: string | null;
   children: AdminLocality[];
 }
 
@@ -79,6 +85,9 @@ export async function updateLocation(
     parentId?: string;
     isFeatured?: boolean;
     featuredOrder?: number | null;
+    seoTitle?: string | null;
+    metaDescription?: string | null;
+    heroImageUrl?: string | null;
   },
 ): Promise<AdminCity | AdminLocality> {
   const json = await authFetch<AdminCity | AdminLocality>(`/locations/${id}`, token, {

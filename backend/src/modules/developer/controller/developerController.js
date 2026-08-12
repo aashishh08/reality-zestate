@@ -48,6 +48,26 @@ class DeveloperController {
       },
     });
   }
+
+  async listAdminDevelopers(req, res) {
+    const developers = await developerService.listAdminDevelopers();
+
+    res.json({
+      success: true,
+      data: developers,
+    });
+  }
+
+  async updateDeveloper(req, res) {
+    const { id } = req.params;
+    const developer = await developerService.updateDeveloper(id, req.body);
+
+    res.json({
+      success: true,
+      data: developer,
+      message: 'Developer updated successfully',
+    });
+  }
 }
 
 export default new DeveloperController();

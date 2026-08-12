@@ -21,15 +21,22 @@ class TagService {
 
     /** Tags that have at least one published property (for sitemap / SEO). */
     async listPublishedTagSlugs() {
+        const rows = await this.listPublishedTagsForSitemap();
+        return rows.map((row) => row.slug);
+    }
+
+    /** Tags with inventory — includes latest property update for sitemap lastmod. */
+    async listPublishedTagsForSitemap() {
         const rows = await sequelize.query(
-            `SELECT DISTINCT t.slug
+            `SELECT t.slug, MAX(p."updatedAt") AS "updatedAt"
              FROM tags t
              INNER JOIN "property_tags" pt ON pt."tagId" = t.id
              INNER JOIN properties p ON p.id = pt."propertyId" AND p."isPublished" = true
+             GROUP BY t.slug
              ORDER BY t.slug ASC`,
             { type: sequelize.QueryTypes.SELECT },
         );
-        return rows.map((row) => row.slug);
+        return rows;
     }
 
     async getTagBySlug(slug) {

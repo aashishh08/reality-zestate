@@ -18,6 +18,9 @@ export interface Location {
   slug: string;
   type: 'country' | 'state' | 'city' | 'locality' | 'sector';
   parentId?: string;
+  seoTitle?: string | null;
+  metaDescription?: string | null;
+  heroImageUrl?: string | null;
   /** Present on `type=locality` list responses (parent city for filters and corridor cards). */
   parent?: Pick<Location, 'id' | 'name' | 'slug' | 'type'>;
   createdAt?: string;

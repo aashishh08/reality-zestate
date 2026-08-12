@@ -63,9 +63,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     const base = getSiteUrl();
     const canonicalUrl = `${base}/blogs/${slug}`;
     const fallbackImage = getDefaultOgImageUrl();
-    const rawSeoTitle = post.seo?.metaTitle?.trim() || post.title;
-    // Root layout uses `title.template: "%s | Superluxere"` — strip a trailing brand so we never double it.
-    const metaTitle = rawSeoTitle.replace(/\s*\|\s*Superluxere\s*$/i, '').trim() || post.title;
+    const metaTitle = post.seo?.metaTitle?.trim() || post.title;
     const metaDescription =
       post.seo?.metaDescription ||
       post.excerpt ||

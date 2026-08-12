@@ -11,7 +11,8 @@ Superluxere helps buyers, investors, and NRIs discover and enquire about luxury 
 - [Locations](/location/gurgaon) (example): City and locality corridor pages use `/location/{slug}` (e.g. Gurgaon, micro-markets) for area-specific market story and listings—not a single `/location` index.
 - [Developers](/developer/godrej-properties) (example): Profiles of top real estate developers in India including Godrej Properties, DLF, Adani Realty, Sobha, Brigade Group, and others (each at `/developer/{slug}`).
 - [Categories](/category/apartments) (example): Property type collections — apartments, villas, penthouses, boutique residences, commercial spaces (each at `/category/{slug}`).
-- [Sitemap](/sitemap.xml): Machine-readable URL index for crawlers.
+- [Sitemap](/sitemap.xml): Machine-readable URL index for crawlers (only pages with published inventory).
+- [Blog RSS](/blogs/feed.xml): RSS 2.0 feed of latest published articles for aggregators and Google News.
 
 ## Machine-readable property API
 

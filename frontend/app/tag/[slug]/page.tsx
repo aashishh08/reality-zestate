@@ -10,7 +10,9 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getSiteUrl } from '@/lib/site-url';
+import { getDefaultOgImageUrl } from '@/lib/seo';
 import { PropertyListingTemplate } from '@/components/PropertyListingTemplate';
+import { CollectionJsonLd } from '@/components/collection/CollectionJsonLd';
 import {
     getTagBySlug,
     getAllTagSlugs,
@@ -42,11 +44,12 @@ export async function generateMetadata({
         ? `${tag.description} Browse ${tag.name.toLowerCase()} properties with detailed pricing, amenities and location info.`
         : `Explore all ${tag.name} properties on Superluxere.`;
     const ogDescription = tag.description ?? `Browse ${tag.name} properties on Superluxere.`;
+    const ogImage = getDefaultOgImageUrl();
 
     return {
         title,
         description,
-        keywords: [tag.name, 'properties', 'real estate', 'buy', 'invest'],
+        keywords: [tag.name, 'properties', 'real estate', 'buy', 'invest', 'luxury'],
         alternates: { canonical: canonicalUrl },
         openGraph: {
             title,
@@ -55,11 +58,13 @@ export async function generateMetadata({
             url: canonicalUrl,
             siteName: 'Superluxere',
             locale: 'en_IN',
+            images: [{ url: ogImage, width: 1200, height: 630, alt: `${tag.name} luxury properties` }],
         },
         twitter: {
             card: 'summary_large_image',
             title,
             description: ogDescription,
+            images: [ogImage],
         },
     };
 }
@@ -136,6 +141,9 @@ export default async function TagPage({
     // Initial data load
     const initialData = await fetchTagProperties(slug, { limit: 12, offset: 0 });
 
+    const base = getSiteUrl();
+    const pageUrl = `${base}/tag/${slug}`;
+
     // Server action for filter/sort/pagination — passes the tag slug through
     const handleFetchProperties = async (filters: PropertyFilters) => {
         'use server';
@@ -147,6 +155,29 @@ export default async function TagPage({
     };
 
     return (
+        <>
+        <CollectionJsonLd
+            breadcrumbItems={[
+                { name: 'Home', url: base },
+                { name: 'All projects', url: `${base}/projects` },
+                { name: tag.name, url: pageUrl },
+            ]}
+            collection={{
+                name: `${tag.name} Properties — Superluxere`,
+                description: tag.description ?? `Curated ${tag.name.toLowerCase()} luxury properties on Superluxere.`,
+                url: pageUrl,
+            }}
+            items={(initialData.data ?? []).map((p) => ({
+                title: p.title,
+                url: `${base}/projects/${p.slug}`,
+            }))}
+            itemListName={`${tag.name} properties`}
+            about={{
+                '@type': 'Thing',
+                name: tag.name,
+                description: tag.description,
+            }}
+        />
         <PropertyListingTemplate
             key={slug}
             initialData={initialData}
@@ -158,6 +189,7 @@ export default async function TagPage({
             itemsPerPage={12}
             noResultsMessage={`No properties found under "${tag.name}" tag yet.`}
         />
+        </>
     );
 }
 

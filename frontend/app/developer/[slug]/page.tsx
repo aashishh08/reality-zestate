@@ -26,6 +26,7 @@ import {
   ROBOTS_NOINDEX_FOLLOW,
   ROBOTS_NOINDEX_NOFOLLOW,
 } from '@/lib/seo/listing-metadata';
+import { buildCollectionPageMetadata } from '@/lib/seo/collection-metadata';
 
 /**
  * Generate metadata for the page
@@ -56,30 +57,15 @@ export async function generateMetadata({
 
   const base = getSiteUrl();
   const canonicalUrl = `${base}/developer/${developer.slug}`;
-  const title = `${developer.name} Projects & Properties`;
-  const description = `Explore all projects and properties by ${developer.name}. Discover residential and commercial developments with premium amenities.`;
 
-  return {
-    title,
-    description,
+  return buildCollectionPageMetadata(developer, {
+    canonicalPath: canonicalUrl,
+    defaultTitle: `${developer.name} Projects & Properties`,
+    defaultDescription: `Explore all projects and properties by ${developer.name}. Discover residential and commercial developments with premium amenities.`,
+    defaultOgDescription: `Browse all properties developed by ${developer.name}`,
     keywords: [developer.name, 'properties', 'projects', 'real estate', 'developer'],
-    alternates: { canonical: canonicalUrl },
-    openGraph: {
-      title: `${developer.name} Properties`,
-      description: `Browse all properties developed by ${developer.name}`,
-      type: 'website',
-      url: canonicalUrl,
-      siteName: 'Superluxere',
-      locale: 'en_IN',
-      images: developer.logo ? [{ url: developer.logo }] : undefined,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${developer.name} Properties`,
-      description: `Browse all properties developed by ${developer.name}`,
-    },
     ...(hasQueryVariant ? { robots: ROBOTS_NOINDEX_FOLLOW } : {}),
-  };
+  });
 }
 
 /**
@@ -182,7 +168,7 @@ export default async function DeveloperPage({
           <DeveloperHero
             developer={developer}
             tagline={copy?.heroTagline}
-            heroImageSrc={copy?.heroImageUrl}
+            heroImageSrc={developer.heroImageUrl || copy?.heroImageUrl}
           />
         }
         contextFilters={{ developerSlug: slug }}

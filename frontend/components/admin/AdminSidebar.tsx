@@ -13,6 +13,7 @@ const SIDEBAR_LINKS = [
     { href: '/admin/properties', icon: Building2, label: 'Properties' },
     { href: '/admin/properties/create', icon: Plus, label: 'Create Property' },
     { href: '/admin/locations', icon: MapPin, label: 'Cities & Localities' },
+    { href: '/admin/developers', icon: Building2, label: 'Developer SEO' },
     { href: '/admin/blogs', icon: FileText, label: 'Blogs' },
     { href: '/admin/blogs/create', icon: Plus, label: 'Create Blog' },
     { href: '/admin/leads', icon: Users, label: 'Leads' },

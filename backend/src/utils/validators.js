@@ -139,5 +139,16 @@ export const updateLocationSchema = z.object({
     parentId: z.string().uuid().optional(),
     isFeatured: z.boolean().optional(),
     featuredOrder: z.number().int().min(0).max(999).nullable().optional(),
+    seoTitle: z.string().max(90).optional().nullable(),
+    metaDescription: z.string().max(320).optional().nullable(),
+    heroImageUrl: z.string().max(2048).optional().nullable(),
+  }),
+});
+
+export const updateDeveloperSchema = z.object({
+  body: z.object({
+    seoTitle: z.string().max(90).optional().nullable(),
+    metaDescription: z.string().max(320).optional().nullable(),
+    heroImageUrl: z.string().max(2048).optional().nullable(),
   }),
 });

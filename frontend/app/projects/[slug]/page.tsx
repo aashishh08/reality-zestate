@@ -131,9 +131,7 @@ export async function generateMetadata({
   const ogImage =
     project.details?.heroImage?.trim() || project.image?.trim() || undefined;
 
-  const titleSegment = `${project.seoTitle || project.title} - ${project.location}`
-    .replace(/\s*\|\s*Superluxere\s*$/i, "")
-    .trim();
+  const titleSegment = `${project.seoTitle || project.title} - ${project.location}`.trim();
 
   const base = getSiteUrl();
   const canonicalUrl = `${base}/projects/${slug}`;

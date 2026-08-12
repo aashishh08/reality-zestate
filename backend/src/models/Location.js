@@ -41,6 +41,20 @@ export default (sequelize) => {
       allowNull: true,
       comment: 'Sort order on homepage featured corridors (lower first)',
     },
+    seoTitle: {
+      type: DataTypes.STRING(90),
+      allowNull: true,
+      comment: 'Optional override for page title and OG title',
+    },
+    metaDescription: {
+      type: DataTypes.STRING(320),
+      allowNull: true,
+    },
+    heroImageUrl: {
+      type: DataTypes.STRING(2048),
+      allowNull: true,
+      comment: 'Hero and Open Graph image URL',
+    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,

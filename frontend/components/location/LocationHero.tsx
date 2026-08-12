@@ -9,6 +9,7 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ChevronRight, MapPin } from 'lucide-react';
+import { getLocationHeroImageUrl } from '@/lib/seo/location-hero-images';
 
 interface LocationHeroProps {
   location: {
@@ -16,25 +17,18 @@ interface LocationHeroProps {
     name: string;
     slug: string;
     type?: string;
+    heroImageUrl?: string | null;
     parent?: {
       name: string;
     };
   };
 }
 
-// Default hero images for different location types
-const LOCATION_IMAGES: Record<string, string> = {
-  'delhi': 'https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?w=1200&h=600&fit=crop',
-  'new-delhi': 'https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?w=1200&h=600&fit=crop',
-  'mumbai': 'https://images.unsplash.com/photo-1580573916550-e323be2ae537?w=1200&h=600&fit=crop',
-  'bangalore': 'https://images.unsplash.com/photo-1596521222512-f1b99a8b2d0d?w=1200&h=600&fit=crop',
-  'gurgaon': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=600&fit=crop',
-  'noida': 'https://images.unsplash.com/photo-1486328803556-cb3e53108c30?w=1200&h=600&fit=crop',
-  'default': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=600&fit=crop',
-};
+// Default hero images for different location types — shared with OG metadata via lib/seo/location-hero-images.ts
 
 export function LocationHero({ location }: LocationHeroProps) {
-  const heroImage = LOCATION_IMAGES[location.slug.toLowerCase()] || LOCATION_IMAGES['default'];
+  const heroImage =
+    location.heroImageUrl?.trim() || getLocationHeroImageUrl(location.slug);
 
   return (
     <section className="relative h-[60vh] md:h-[70vh] w-full overflow-hidden">

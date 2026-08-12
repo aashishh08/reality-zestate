@@ -9,6 +9,28 @@ import {
 
 const locationInclude = { model: Location, attributes: LOCATION_BASE_ATTRIBUTES };
 
+function normalizeOptionalSeoString(value) {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  const trimmed = String(value).trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function applySeoUpdates(updates, { seoTitle, metaDescription, heroImageUrl }) {
+  const title = normalizeOptionalSeoString(seoTitle);
+  const description = normalizeOptionalSeoString(metaDescription);
+  const heroImage = normalizeOptionalSeoString(heroImageUrl);
+
+  if (title !== undefined) updates.seoTitle = title;
+  if (description !== undefined) updates.metaDescription = description;
+  if (heroImage !== undefined) {
+    if (heroImage && !/^https?:\/\//i.test(heroImage)) {
+      throw { status: 400, message: 'heroImageUrl must be a valid http(s) URL' };
+    }
+    updates.heroImageUrl = heroImage;
+  }
+}
+
 class LocationService {
   async getLocationById(id) {
     const location = await Location.findByPk(id, {
@@ -163,7 +185,7 @@ class LocationService {
     });
   }
 
-  async updateLocation(id, { name, parentId, isFeatured, featuredOrder }) {
+  async updateLocation(id, { name, parentId, isFeatured, featuredOrder, seoTitle, metaDescription, heroImageUrl }) {
     const location = await Location.findByPk(id);
     if (!location) {
       throw { status: 404, message: 'Location not found' };
@@ -197,6 +219,8 @@ class LocationService {
           : parseInt(featuredOrder, 10);
       }
     }
+
+    applySeoUpdates(updates, { seoTitle, metaDescription, heroImageUrl });
 
     await location.update(updates);
 
