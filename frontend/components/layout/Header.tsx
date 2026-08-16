@@ -7,17 +7,7 @@ import { Menu, X, ChevronDown, MapPin, Building2, Tag, LayoutGrid } from "lucide
 import { cn } from "@/lib/utils";
 import { SCROLL_THRESHOLDS } from "@/lib/constants";
 import { Location, Developer, Category } from "@/lib";
-// Status tags — hardcoded because they are a fixed product concept
-const STATUS_TAGS = [
-  { label: "Trending", slug: "trending", color: "#EF4444", emoji: "🔥" },
-  { label: "Upcoming", slug: "upcoming", color: "#F59E0B", emoji: "📅" },
-  { label: "New Launch", slug: "new-launch", color: "#10B981", emoji: "🚀" },
-  { label: "Ready to Move", slug: "ready-to-move", color: "#06B6D4", emoji: "🏠" },
-  { label: "Under Construction", slug: "under-construction", color: "#F97316", emoji: "🏗️" },
-  { label: "Featured", slug: "featured", color: "#8B5CF6", emoji: "⭐" },
-  { label: "Luxury", slug: "luxury", color: "#D97706", emoji: "👑" },
-  { label: "Investment Pick", slug: "investment-pick", color: "#DB2777", emoji: "💰" },
-];
+import { STATUS_TAG_LINKS } from "@/lib/seo/navigation-links";
 
 interface HeaderProps {
   locations?: Location[];
@@ -196,7 +186,7 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
                         <>
                           <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-4">By Status</p>
                           <div className="grid grid-cols-2 gap-2">
-                            {STATUS_TAGS.map(tag => (
+                            {STATUS_TAG_LINKS.map(tag => (
                               <Link
                                 key={tag.slug}
                                 href={`/tag/${tag.slug}`}
@@ -310,7 +300,7 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
             <div className="px-6 pt-4 pb-2">
               <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-3">Browse by Status</p>
               <div className="grid grid-cols-2 gap-2">
-                {STATUS_TAGS.map(tag => (
+                {STATUS_TAG_LINKS.map(tag => (
                   <Link
                     key={tag.slug}
                     href={`/tag/${tag.slug}`}

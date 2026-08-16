@@ -5,6 +5,10 @@ import { NewTabLink } from "@/components/ui/NewTabLink";
 import { Facebook, Instagram, Linkedin, Mail, Phone, Twitter, MapPin } from "lucide-react";
 import { Location } from "@/lib";
 import { CONTACT_INFO } from "@/lib/constants";
+import {
+  FOOTER_CATEGORY_LINKS,
+  FOOTER_EXPLORE_LINKS,
+} from "@/lib/seo/navigation-links";
 
 interface FooterProps {
   locations?: Location[];
@@ -17,14 +21,7 @@ export function Footer({ locations = [] }: FooterProps) {
   const cities = locations.filter(l => l.type === "city").slice(0, 6);
   const displayLocations = cities;
 
-  const quickLinks = [
-    { label: "Trending Projects", href: "/tag/trending" },
-    { label: "Upcoming Launches", href: "/tag/upcoming" },
-    { label: "New Launch", href: "/tag/new-launch" },
-    { label: "Ready to Move", href: "/tag/ready-to-move" },
-    { label: "Luxury Homes", href: "/tag/luxury" },
-    { label: "About Us", href: "/about-us" },
-  ];
+  const quickLinks = FOOTER_EXPLORE_LINKS;
 
   return (
     <footer className="bg-[#F5F2EC] text-[#2C2416] pt-10 pb-8 md:pt-16 md:pb-8 border-t border-[#C9A961]/20 overflow-x-hidden w-full">
@@ -120,13 +117,13 @@ export function Footer({ locations = [] }: FooterProps) {
             <div className="hidden md:block mt-8">
               <h3 className="text-xs font-bold mb-4 tracking-widest uppercase text-[#2C2416]">Project Types</h3>
               <div className="flex flex-wrap gap-2">
-                {["luxury", "villas", "penthouse", "affordable", "golf-residences"].map(slug => (
+                {FOOTER_CATEGORY_LINKS.map((link) => (
                   <NewTabLink
-                    key={slug}
-                    href={`/category/${slug}`}
+                    key={link.href}
+                    href={link.href}
                     className="text-xs px-3 py-1 rounded-full border border-[#C9A961]/30 text-zinc-500 hover:bg-[#C9A961] hover:text-white hover:border-[#C9A961] transition-all capitalize"
                   >
-                    {slug.replace(/-/g, " ")}
+                    {link.label}
                   </NewTabLink>
                 ))}
               </div>

@@ -20,7 +20,10 @@ import {
     Tag,
 } from '@/lib/api/properties-listing';
 import { PropertyFilters } from '@/types/property-listing';
-import { ROBOTS_NOINDEX_NOFOLLOW } from '@/lib/seo/listing-metadata';
+import {
+    ROBOTS_NOINDEX_FOLLOW,
+    ROBOTS_NOINDEX_NOFOLLOW,
+} from '@/lib/seo/listing-metadata';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Metadata
@@ -36,6 +39,9 @@ export async function generateMetadata({
     if (!tag) {
         return { title: 'Tag Not Found', robots: ROBOTS_NOINDEX_NOFOLLOW };
     }
+
+    const listing = await fetchTagProperties(slug, { limit: 1, offset: 0 }).catch(() => null);
+    const hasInventory = (listing?.pagination?.total ?? 0) > 0;
 
     const base = getSiteUrl();
     const canonicalUrl = `${base}/tag/${tag.slug}`;
@@ -66,6 +72,7 @@ export async function generateMetadata({
             description: ogDescription,
             images: [ogImage],
         },
+        ...(!hasInventory ? { robots: ROBOTS_NOINDEX_FOLLOW } : {}),
     };
 }
 
@@ -138,8 +145,11 @@ export default async function TagPage({
     const tag = await getTagBySlug(slug);
     if (!tag) notFound();
 
-    // Initial data load
     const initialData = await fetchTagProperties(slug, { limit: 12, offset: 0 });
+
+    if ((initialData.pagination?.total ?? 0) === 0) {
+        notFound();
+    }
 
     const base = getSiteUrl();
     const pageUrl = `${base}/tag/${slug}`;
