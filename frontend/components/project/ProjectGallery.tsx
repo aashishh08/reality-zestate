@@ -58,7 +58,7 @@ export function ProjectGallery({ images, videoUrl }: ProjectGalleryProps) {
       {/* Mobile — horizontal scroll gallery */}
       <div className="lg:hidden">
         <div
-          className="-mx-4 sm:-mx-6 flex gap-3 overflow-x-auto overscroll-x-contain px-4 sm:px-6 pb-2 snap-x snap-mandatory no-scrollbar [-webkit-overflow-scrolling:touch]"
+          className="-mx-4 sm:-mx-6 flex gap-3 overflow-x-auto overscroll-x-contain pl-4 pr-6 sm:pl-6 sm:pr-8 pb-2 snap-x snap-mandatory no-scrollbar [-webkit-overflow-scrolling:touch]"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           role="list"
           aria-label="Project gallery"
@@ -93,7 +93,6 @@ export function ProjectGallery({ images, videoUrl }: ProjectGalleryProps) {
               </div>
             </div>
           ))}
-          <div className="w-2 shrink-0" aria-hidden />
         </div>
       </div>
 

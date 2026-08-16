@@ -85,5 +85,101 @@ export function sanitizeHtml(html: string): string {
     excess--;
   }
 
-  return result.trim();
+  result = labelUnlabeledSelects(result.trim());
+  return result;
+}
+
+function escapeAttr(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;');
+}
+
+function stripTags(value: string): string {
+  return value.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function selectHasAccessibleName(attrs: string, html: string, selectIndex: number): boolean {
+  if (/\b(aria-label|aria-labelledby|title)\s*=/i.test(attrs)) return true;
+
+  const idMatch = attrs.match(/\bid\s*=\s*(["'])([^"']+)\1/i);
+  if (idMatch) {
+    const id = idMatch[2].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const labelFor = new RegExp(`<label\\b[^>]*\\sfor\\s*=\\s*(["'])${id}\\1`, 'i');
+    if (labelFor.test(html)) return true;
+  }
+
+  return false;
+}
+
+/** Infer a short label from CMS markup immediately before a <select>. */
+function inferSelectLabel(html: string, selectIndex: number): string | null {
+  const before = html.slice(Math.max(0, selectIndex - 800), selectIndex);
+
+  const rowStart = Math.max(
+    before.lastIndexOf('eoi-row'),
+    before.lastIndexOf('form-row'),
+    before.lastIndexOf('form-group'),
+  );
+  const context = rowStart > 0 ? before.slice(rowStart) : before;
+
+  const labeled = context.match(/<label\b[^>]*>([\s\S]*?)<\/label>\s*$/i);
+  if (labeled) {
+    const text = stripTags(labeled[1]);
+    if (text.length >= 2 && text.length <= 120) return text;
+  }
+
+  const inlineTags = [...context.matchAll(/<(span|strong|b|p|div|label|h[1-6])\b[^>]*>([^<]{2,120})<\/\1>/gi)];
+  if (inlineTags.length > 0) {
+    const text = inlineTags[inlineTags.length - 1][2].trim();
+    if (text.length >= 2) return text;
+  }
+
+  const after = html.slice(selectIndex, selectIndex + 600);
+  const firstOption = after.match(/<option\b[^>]*>([^<]{2,80})<\/option>/i);
+  if (firstOption) {
+    const text = firstOption[1].trim();
+    if (!/^(select|choose|--|\d)/i.test(text)) return text;
+  }
+
+  return null;
+}
+
+/**
+ * Adds aria-label to <select> elements in CMS HTML that lack an accessible name.
+ * Fixes Lighthouse agent-accessibility-tree / select-name failures on project pages.
+ */
+function labelUnlabeledSelects(html: string): string {
+  const selectRe = /<select\b([^>]*)>/gi;
+  const replacements: { start: number; end: number; replacement: string }[] = [];
+
+  let match: RegExpExecArray | null;
+  while ((match = selectRe.exec(html)) !== null) {
+    const [fullMatch, attrs] = match;
+    const start = match.index;
+
+    if (selectHasAccessibleName(attrs, html, start)) continue;
+
+    const label = inferSelectLabel(html, start);
+    if (!label) continue;
+
+    const trimmedAttrs = attrs.trim();
+    const attrPart = trimmedAttrs.length > 0 ? ` ${trimmedAttrs}` : '';
+    replacements.push({
+      start,
+      end: start + fullMatch.length,
+      replacement: `<select${attrPart} aria-label="${escapeAttr(label)}">`,
+    });
+  }
+
+  if (replacements.length === 0) return html;
+
+  let result = html;
+  for (let i = replacements.length - 1; i >= 0; i--) {
+    const { start, end, replacement } = replacements[i];
+    result = result.slice(0, start) + replacement + result.slice(end);
+  }
+
+  return result;
 }
