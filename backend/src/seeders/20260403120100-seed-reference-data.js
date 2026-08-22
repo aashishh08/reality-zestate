@@ -86,14 +86,11 @@ export async function up(queryInterface) {
     { name: 'Off-Market', slug: 'off-market', propertyType: 'residential' },
     { name: 'Luxury', slug: 'luxury', propertyType: 'residential' },
     { name: 'Ultra Luxury', slug: 'ultra-luxury', propertyType: 'residential' },
-    { name: 'Affordable', slug: 'affordable', propertyType: 'residential' },
-    { name: 'Mid Segment', slug: 'mid-segment', propertyType: 'residential' },
     { name: 'Plotted', slug: 'plotted', propertyType: 'residential' },
     { name: 'Villa', slug: 'villa', propertyType: 'residential' },
     { name: 'Commercial', slug: 'commercial', propertyType: 'commercial' },
     { name: 'Office Space', slug: 'office-space', propertyType: 'commercial' },
     { name: 'Retail', slug: 'retail', propertyType: 'commercial' },
-    { name: 'Co-working', slug: 'co-working', propertyType: 'commercial' },
     { name: 'Industrial', slug: 'industrial', propertyType: 'commercial' },
   ]) {
     await queryInterface.sequelize.query(
