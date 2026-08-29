@@ -18,9 +18,9 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "Superluxere - Luxury Real Estate & Premium Properties",
+    default: "Super Luxury Real Estate Advisory India | SuperLuxeRE",
   },
-  description: "Discover curated luxury real estate properties in India. Trending projects, upcoming launches, and boutique collections. Your gateway to premium living.",
+  description: "SuperLuxeRE is India's specialist super luxury and ultra luxury real estate advisory. We help HNIs, UHNWIs, NRIs and family offices access curated off-market and pre-launch properties on Golf Course Road, Noida Expressway and Worli.",
   keywords: ["luxury real estate", "premium properties", "luxury apartments", "penthouses", "villas", "Gurgaon", "Delhi", "Mumbai", "Bangalore"],
   authors: [{ name: "Superluxere" }],
   openGraph: {
@@ -28,8 +28,8 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: getSiteUrl(),
     siteName: "Superluxere",
-    title: "Superluxere - Luxury Real Estate & Premium Properties",
-    description: "Discover curated luxury real estate properties in India.",
+    title: "Super Luxury Real Estate Advisory India | SuperLuxeRE",
+    description: "SuperLuxeRE is India's specialist super luxury and ultra luxury real estate advisory. We help HNIs, UHNWIs, NRIs and family offices access curated off-market and pre-launch properties on Golf Course Road, Noida Expressway and Worli.",
   },
   robots: {
     index: true,

@@ -39,9 +39,9 @@ export function generateMetadata(): Metadata {
   const base = getSiteUrl();
   const canonicalUrl = base;
   const ogImage = getDefaultOgImageUrl();
-  const title = "Luxury Real Estate & Premium Properties";
+  const title = "Super Luxury Real Estate Advisory India | SuperLuxeRE";
   const description =
-    "Discover curated luxury real estate properties in India. Trending projects, upcoming launches, and boutique collections.";
+    "SuperLuxeRE is India's specialist super luxury and ultra luxury real estate advisory. We help HNIs, UHNWIs, NRIs and family offices access curated off-market and pre-launch properties on Golf Course Road, Noida Expressway and Worli.";
 
   return {
     title,
