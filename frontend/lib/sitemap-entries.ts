@@ -93,6 +93,7 @@ export async function buildSitemapEntries(): Promise<SitemapEntry[]> {
   }));
 
   const developerPages: SitemapEntry[] = developers.map((d) => ({
+    // Backend only returns developers with ≥1 published property (see listPublishedDevelopersForSitemap).
     url: `${baseUrl}/developer/${d.slug}`,
     lastModified: safeDate(d),
     changeFrequency: 'monthly',

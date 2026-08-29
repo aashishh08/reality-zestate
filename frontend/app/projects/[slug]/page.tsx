@@ -376,19 +376,21 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      {/* Master Plan */}
-      {(details?.masterPlan || details?.masterPlanDescription) && (
-        <section id="masterplan" className="py-8 sm:py-10 md:py-12 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ErrorBoundary sectionName="Master Plan">
-              <ProjectMasterPlan
-                masterPlanImage={details.masterPlan}
-                description={details.masterPlanDescription}
-                sectionDescription={details.masterPlanIntro}
-                heading={details.sectionHeadings?.masterPlan}
-              />
-            </ErrorBoundary>
-          </div>
+      {/* Residences (Floor Plans — sizes & prices) */}
+      {details?.floorPlans && details.floorPlans.length > 0 && (
+        <section id="floorplans">
+          <ErrorBoundary sectionName="Floor Plans">
+            <ProjectFloorPlans
+              floorPlans={details.floorPlans}
+              descriptionSections={details.floorPlanDescriptionSections}
+              floorPlanPanelQuote={details.floorPlanPanelQuote}
+              heading={details.sectionHeadings?.floorPlans}
+              description={details.floorPlansIntro}
+              propertyId={project.id}
+              propertySlug={slug}
+              projectTitle={project.title}
+            />
+          </ErrorBoundary>
         </section>
       )}
 
@@ -428,21 +430,19 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      {/* Residences (Floor Plans) */}
-      {details?.floorPlans && details.floorPlans.length > 0 && (
-        <section id="floorplans">
-          <ErrorBoundary sectionName="Floor Plans">
-            <ProjectFloorPlans
-              floorPlans={details.floorPlans}
-              descriptionSections={details.floorPlanDescriptionSections}
-              floorPlanPanelQuote={details.floorPlanPanelQuote}
-              heading={details.sectionHeadings?.floorPlans}
-              description={details.floorPlansIntro}
-              propertyId={project.id}
-              propertySlug={slug}
-              projectTitle={project.title}
-            />
-          </ErrorBoundary>
+      {/* Master Plan */}
+      {(details?.masterPlan || details?.masterPlanDescription) && (
+        <section id="masterplan" className="py-8 sm:py-10 md:py-12 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ErrorBoundary sectionName="Master Plan">
+              <ProjectMasterPlan
+                masterPlanImage={details.masterPlan}
+                description={details.masterPlanDescription}
+                sectionDescription={details.masterPlanIntro}
+                heading={details.sectionHeadings?.masterPlan}
+              />
+            </ErrorBoundary>
+          </div>
         </section>
       )}
 

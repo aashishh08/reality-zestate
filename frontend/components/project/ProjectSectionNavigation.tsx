@@ -17,10 +17,10 @@ interface ProjectSectionNavigationProps {
 const defaultSections: NavItem[] = [
   { id: "overview", label: "Overview" },
   { id: "gallery", label: "Gallery" },
-  { id: "masterplan", label: "Masterplan" },
+  { id: "floorplans", label: "Residences" },
   { id: "location", label: "Location" },
   { id: "amenities", label: "Amenities" },
-  { id: "floorplans", label: "Residences" },
+  { id: "masterplan", label: "Masterplan" },
   { id: "paymentplans", label: "Payment Plans" },
   { id: "team", label: "Team" },
   { id: "faqs", label: "FAQs" },

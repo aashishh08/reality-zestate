@@ -23,8 +23,8 @@ import {
 } from '@/lib/listing-search-params';
 import {
   hasListingQueryVariant,
-  ROBOTS_NOINDEX_FOLLOW,
   ROBOTS_NOINDEX_NOFOLLOW,
+  robotsForDeveloperListingPage,
 } from '@/lib/seo/listing-metadata';
 import { buildCollectionPageMetadata } from '@/lib/seo/collection-metadata';
 
@@ -55,6 +55,12 @@ export async function generateMetadata({
     };
   }
 
+  const listingPreview = await fetchDeveloperSlugProperties(slug, {
+    limit: 1,
+    offset: 0,
+  });
+  const publishedCount = listingPreview.pagination?.total ?? 0;
+
   const base = getSiteUrl();
   const canonicalUrl = `${base}/developer/${developer.slug}`;
 
@@ -64,7 +70,7 @@ export async function generateMetadata({
     defaultDescription: `Explore all projects and properties by ${developer.name}. Discover residential and commercial developments with premium amenities.`,
     defaultOgDescription: `Browse all properties developed by ${developer.name}`,
     keywords: [developer.name, 'properties', 'projects', 'real estate', 'developer'],
-    ...(hasQueryVariant ? { robots: ROBOTS_NOINDEX_FOLLOW } : {}),
+    robots: robotsForDeveloperListingPage(hasQueryVariant, publishedCount),
   });
 }
 

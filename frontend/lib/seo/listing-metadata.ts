@@ -3,6 +3,17 @@ import type { ListingUrlSearchParams } from '@/lib/listing-search-params';
 export const ROBOTS_NOINDEX_FOLLOW = { index: false, follow: true } as const;
 export const ROBOTS_NOINDEX_NOFOLLOW = { index: false, follow: false } as const;
 
+/** Developer collection pages with no published inventory should not be indexed. */
+export function robotsForDeveloperListingPage(
+  hasQueryVariant: boolean,
+  publishedCount: number,
+): typeof ROBOTS_NOINDEX_FOLLOW | undefined {
+  if (hasQueryVariant || publishedCount === 0) {
+    return ROBOTS_NOINDEX_FOLLOW;
+  }
+  return undefined;
+}
+
 export type ListingQueryVariantOptions = {
   /** Include city/category query params (e.g. /projects index) */
   showCityCategory?: boolean;
