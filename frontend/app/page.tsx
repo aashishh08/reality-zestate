@@ -77,6 +77,7 @@ async function getHomePageData() {
       upcomingProperties: data.upcoming,
       boutiqueProperties: data.boutique,
       locations: data.locations,
+      featuredDevelopers: data.featuredDevelopers,
       developers: data.developers,
       categories: data.categories,
       featuredCorridors,
@@ -90,6 +91,7 @@ async function getHomePageData() {
       upcomingProperties: [],
       boutiqueProperties: [],
       locations: [],
+      featuredDevelopers: [],
       developers: [],
       categories: [],
       featuredCorridors: [],
@@ -103,6 +105,7 @@ export default async function Home() {
     upcomingProperties,
     boutiqueProperties,
     locations,
+    featuredDevelopers,
     developers,
     categories,
     featuredCorridors,
@@ -129,7 +132,7 @@ export default async function Home() {
       <UpcomingProjects properties={upcomingProperties} />
 
       {/* 4. Browse by Developer */}
-      <BrowseByDeveloper developers={developers} />
+      <BrowseByDeveloper developers={featuredDevelopers} />
 
 
       <BoutiqueCollection properties={boutiqueProperties} />

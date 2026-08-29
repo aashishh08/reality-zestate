@@ -4,6 +4,7 @@ import locationService from '../../location/service/locationService.js';
 import developerService from '../../developer/service/developerService.js';
 import categoryService from '../../category/service/categoryService.js';
 import { FEATURED_CORRIDOR_SLUGS } from '../../../config/featuredCorridors.js';
+import { FEATURED_DEVELOPER_SLUGS } from '../../../config/featuredDevelopers.js';
 import { Location, Property, sequelize } from '../../../models/index.js';
 import {
   LOCATION_BASE_ATTRIBUTES,
@@ -11,7 +12,7 @@ import {
 } from '../../../constants/locationAttributes.js';
 import { withMemoryCache } from '../../../utils/memoryCache.js';
 
-const CACHE_KEY = 'homepage:public:v3';
+const CACHE_KEY = 'homepage:public:v4';
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
 const SECTION_TAGS = {
@@ -125,6 +126,7 @@ class HomepageService {
         upcoming,
         boutique,
         allLocations,
+        featuredDevelopersResult,
         developersResult,
         allCategories,
         featuredCorridors,
@@ -133,6 +135,7 @@ class HomepageService {
         loadHomepagePart('upcoming', [], () => propertiesForTag(SECTION_TAGS.upcoming, 8)),
         loadHomepagePart('boutique', [], () => propertiesForTag(SECTION_TAGS.boutique, 8)),
         loadHomepagePart('locations', [], () => locationService.listLocations()),
+        loadHomepagePart('featuredDevelopers', [], () => developerService.listDevelopersBySlugs(FEATURED_DEVELOPER_SLUGS)),
         loadHomepagePart('developers', { developers: [] }, () => developerService.listDevelopers(12, 0)),
         loadHomepagePart('categories', [], () => categoryService.listCategories()),
         loadHomepagePart('featuredCorridors', [], () => buildFeaturedCorridors()),
@@ -151,6 +154,7 @@ class HomepageService {
         upcoming,
         boutique,
         locations,
+        featuredDevelopers: featuredDevelopersResult ?? [],
         developers: developersResult?.developers ?? [],
         categories,
         featuredCorridors,

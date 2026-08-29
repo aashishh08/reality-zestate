@@ -18,6 +18,7 @@ export interface HomepageData {
   upcoming: PropertyItem[];
   boutique: PropertyItem[];
   locations: Location[];
+  featuredDevelopers: Array<{ id: string; name: string; slug: string; logo?: string }>;
   developers: Array<{ id: string; name: string; slug: string; logo?: string }>;
   categories: Category[];
   featuredCorridors: HomepageCorridorPayload[];
@@ -40,6 +41,7 @@ export async function fetchHomepageData(
     upcoming: raw?.upcoming ?? [],
     boutique: raw?.boutique ?? [],
     locations: raw?.locations ?? [],
+    featuredDevelopers: raw?.featuredDevelopers ?? [],
     developers: raw?.developers ?? [],
     categories: raw?.categories ?? [],
     featuredCorridors: raw?.featuredCorridors ?? [],

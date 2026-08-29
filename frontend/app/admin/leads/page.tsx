@@ -8,10 +8,11 @@ import {
     Users, LogOut, Menu, X, TrendingUp, Building2,
     FileText, Plus, RefreshCw, Search, Phone, Mail,
     CheckCircle2, XCircle, Clock, Star, AlertCircle, Filter,
-    ChevronDown, Layout,
+    ChevronDown, Layout, Download,
 } from 'lucide-react';
 import Link from 'next/link';
 import { getLeads, updateLeadStatus, Lead } from '@/lib/api/leads';
+import { buildCsv, downloadCsv } from '@/lib/utils/export-csv';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 
 // ─────────────────────────────────────────
@@ -52,6 +53,61 @@ function formatDate(iso?: string) {
     });
 }
 
+function formatDateForCsv(iso?: string) {
+    if (!iso) return '';
+    return new Date(iso).toISOString();
+}
+
+function matchesLeadFilters(
+    lead: Lead,
+    search: string,
+    filterStatus: LeadStatus | '',
+    filterSource: string,
+) {
+    const q = search.toLowerCase();
+    const propertyTitle = lead.Property?.title?.toLowerCase() ?? '';
+    const matchesSearch = !q
+        || lead.name.toLowerCase().includes(q)
+        || lead.email.toLowerCase().includes(q)
+        || lead.phone.includes(q)
+        || propertyTitle.includes(q);
+    const matchesStatus = !filterStatus || lead.status === filterStatus;
+    const matchesSource = !filterSource || (lead.source || 'website') === filterSource;
+    return matchesSearch && matchesStatus && matchesSource;
+}
+
+function exportLeadsToCsv(leads: Lead[]) {
+    const headers = [
+        'Name',
+        'Email',
+        'Phone',
+        'Source',
+        'Project',
+        'Project Slug',
+        'Layout Download',
+        'Status',
+        'Submitted At',
+        'Lead ID',
+    ];
+
+    const rows = leads.map((lead) => [
+        lead.name,
+        lead.email,
+        lead.phone,
+        lead.source ? formatSource(lead.source) : '',
+        lead.Property?.title ?? '',
+        lead.Property?.slug ?? '',
+        lead.layoutDownload ? 'Yes' : 'No',
+        STATUS_META[lead.status]?.label ?? lead.status,
+        formatDateForCsv(lead.createdAt),
+        lead.id,
+    ]);
+
+    const csv = buildCsv(headers, rows);
+    const dateStamp = new Date().toISOString().slice(0, 10);
+    downloadCsv(`superluxere-leads-${dateStamp}.csv`, csv);
+}
+
 // ─────────────────────────────────────────
 // Main component
 // ─────────────────────────────────────────
@@ -71,6 +127,7 @@ export default function AdminLeadsPage() {
 
     // Status update
     const [updatingId, setUpdatingId] = useState<string | null>(null);
+    const [exporting, setExporting] = useState(false);
 
     const handleLogout = () => { logout(); router.push('/admin/login'); };
 
@@ -107,14 +164,31 @@ export default function AdminLeadsPage() {
     };
 
     // ── Client-side filtering ──
-    const filtered = leads.filter(l => {
-        const q = search.toLowerCase();
-        const propertyTitle = l.Property?.title?.toLowerCase() ?? '';
-        const matchesSearch = !q || l.name.toLowerCase().includes(q) || l.email.toLowerCase().includes(q) || l.phone.includes(q) || propertyTitle.includes(q);
-        const matchesStatus = !filterStatus || l.status === filterStatus;
-        const matchesSource = !filterSource || (l.source || 'website') === filterSource;
-        return matchesSearch && matchesStatus && matchesSource;
-    });
+    const filtered = leads.filter((l) => matchesLeadFilters(l, search, filterStatus, filterSource));
+
+    const handleExportCsv = async () => {
+        if (!token) return;
+        setExporting(true);
+        try {
+            let exportLeads = leads;
+            if (total > leads.length) {
+                const res = await getLeads({ limit: total, offset: 0 }, token);
+                exportLeads = res.data ?? [];
+            }
+            const rowsToExport = exportLeads.filter((l) =>
+                matchesLeadFilters(l, search, filterStatus, filterSource),
+            );
+            if (rowsToExport.length === 0) {
+                alert('No leads to export with the current filters.');
+                return;
+            }
+            exportLeadsToCsv(rowsToExport);
+        } catch (e: any) {
+            alert(e?.message || 'Failed to export leads');
+        } finally {
+            setExporting(false);
+        }
+    };
 
     // ── Computed stats ──
     const stats = {
@@ -145,13 +219,23 @@ export default function AdminLeadsPage() {
                                 <span className="px-2 py-0.5 bg-gray-700 text-gray-300 text-xs rounded-full font-medium">{total}</span>
                             )}
                         </div>
-                        <button
-                            onClick={loadLeads}
-                            className="flex items-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-xl text-sm transition"
-                        >
-                            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                            <span>Refresh</span>
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={handleExportCsv}
+                                disabled={loading || exporting || total === 0}
+                                className="flex items-center space-x-2 px-4 py-2 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm transition"
+                            >
+                                <Download className={`w-4 h-4 ${exporting ? 'animate-pulse' : ''}`} />
+                                <span>{exporting ? 'Exporting…' : 'Export CSV'}</span>
+                            </button>
+                            <button
+                                onClick={loadLeads}
+                                className="flex items-center space-x-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-xl text-sm transition"
+                            >
+                                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                                <span>Refresh</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div className="p-8 space-y-6 max-w-7xl mx-auto">

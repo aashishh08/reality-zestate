@@ -60,6 +60,10 @@ export const DEVELOPERS = [
   { slug: 'prestige-group',          label: 'prestige group'            },
   { slug: 'aipl',                    label: 'AIPL'                      },
   { slug: 'max-antara',              label: 'Max Antara'                },
+  { slug: 'elan-group',              label: 'Elan Group'                },
+  { slug: 'shapoorji-pallonji',      label: 'Shapoorji Pallonji'        },
+  { slug: 'galaxy-sawasdee-group',   label: 'Galaxy Sawasdee Group'     },
+  { slug: 'conscient-infrastructure', label: 'Conscient Infrastructure' },
 ];
 
 export const DEVELOPER_SLUGS = DEVELOPERS.map(d => d.slug);

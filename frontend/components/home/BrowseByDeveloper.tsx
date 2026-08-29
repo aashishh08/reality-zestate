@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Building2 } from "lucide-react";
 import { Developer } from "@/lib";
+import { featuredDeveloperDisplayName } from "@/data/featured-developers";
 
 interface BrowseByDeveloperProps {
     developers: Developer[];
@@ -12,8 +13,6 @@ interface BrowseByDeveloperProps {
 
 export function BrowseByDeveloper({ developers }: BrowseByDeveloperProps) {
     if (!developers || developers.length === 0) return null;
-
-    const display = developers.slice(0, 6);
 
     return (
         <section className="py-6 md:py-24 bg-[#F5F5F0]">
@@ -53,7 +52,7 @@ export function BrowseByDeveloper({ developers }: BrowseByDeveloperProps) {
 
                 {/* Developer grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6">
-                    {display.map((dev, index) => (
+                    {developers.map((dev, index) => (
                         <motion.div
                             key={dev.id}
                             initial={{ opacity: 0, y: 30 }}
@@ -66,7 +65,7 @@ export function BrowseByDeveloper({ developers }: BrowseByDeveloperProps) {
                                     {dev.logo?.trim() ? (
                                         <Image
                                             src={dev.logo.trim()}
-                                            alt={dev.name}
+                                            alt={featuredDeveloperDisplayName(dev.slug, dev.name)}
                                             fill
                                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                                             sizes="(max-width: 768px) 50vw, 33vw"
@@ -82,7 +81,7 @@ export function BrowseByDeveloper({ developers }: BrowseByDeveloperProps) {
 
                                     <div className="absolute bottom-0 left-0 right-0 p-2.5 md:p-5">
                                         <p className="text-gold text-[8px] md:text-xs font-bold uppercase tracking-widest mb-0.5 md:mb-1">Developer</p>
-                                        <h3 className="text-white font-serif font-bold text-xs md:text-lg leading-tight line-clamp-2">{dev.name}</h3>
+                                        <h3 className="text-white font-serif font-bold text-xs md:text-lg leading-tight line-clamp-2">{featuredDeveloperDisplayName(dev.slug, dev.name)}</h3>
                                         <span className="hidden md:inline-flex items-center gap-1 text-white/60 text-xs mt-2 border-b border-white/20 pb-0.5 group-hover:border-gold group-hover:text-gold transition-colors">
                                             View Projects <ArrowRight className="w-3 h-3" />
                                         </span>

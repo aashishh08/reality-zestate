@@ -55,6 +55,17 @@ class DeveloperService {
     };
   }
 
+  async listDevelopersBySlugs(slugs) {
+    if (!Array.isArray(slugs) || slugs.length === 0) return [];
+
+    const rows = await Developer.findAll({
+      where: { slug: { [Op.in]: slugs } },
+    });
+
+    const bySlug = new Map(rows.map((developer) => [developer.slug, developer]));
+    return slugs.map((slug) => bySlug.get(slug)).filter(Boolean);
+  }
+
   async listAdminDevelopers() {
     const developers = await Developer.findAll({
       order: [['name', 'ASC']],
