@@ -128,6 +128,19 @@ class BlogService {
       blogs: rows,
     };
   }
+
+  async getAdminStats() {
+    const [total, published] = await Promise.all([
+      Blog.count(),
+      Blog.count({ where: { isPublished: true } }),
+    ]);
+
+    return {
+      total,
+      published,
+      drafts: total - published,
+    };
+  }
 }
 
 export default new BlogService();

@@ -35,6 +35,13 @@ export async function adminRegister(data: RegisterRequest): Promise<AuthResponse
   });
 }
 
+export async function getBlogStats(token: string) {
+  return fetchFromAPI<{ total: number; published: number; drafts: number }>('/blogs/admin/stats', {
+    method: 'GET',
+    token,
+  });
+}
+
 export async function getAllBlogs(
   token: string,
   filters?: { search?: string; limit?: number; offset?: number; isPublished?: boolean },

@@ -137,6 +137,15 @@ class BlogController {
       },
     });
   }
+
+  async getAdminStats(req, res) {
+    const stats = await blogService.getAdminStats();
+
+    res.json({
+      success: true,
+      data: stats,
+    });
+  }
 }
 
 export default new BlogController();

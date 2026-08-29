@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
-import { getAllBlogs } from '@/lib/api/admin';
+import { getAllBlogs, getBlogStats } from '@/lib/api/admin';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 
 interface Blog {
@@ -41,17 +41,18 @@ export default function AdminDashboardPage() {
     if (!token) return;
     try {
       setLoading(true);
-      // Fetch up to 100 so we can derive accurate counts client-side
-      const response = await getAllBlogs(token, { limit: 100 }) as any;
-      const blogs: Blog[] = response.data || [];
+      const [statsResponse, recentResponse] = await Promise.all([
+        getBlogStats(token),
+        getAllBlogs(token, { limit: 5, offset: 0 }) as Promise<any>,
+      ]);
 
       setStats({
-        total: response.pagination?.total ?? blogs.length,
-        published: blogs.filter((b) => b.isPublished).length,
-        drafts: blogs.filter((b) => !b.isPublished).length,
+        total: statsResponse.total,
+        published: statsResponse.published,
+        drafts: statsResponse.drafts,
       });
 
-      // Show 5 most recently updated
+      const blogs: Blog[] = recentResponse.data || [];
       setRecentBlogs(
         [...blogs]
           .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())

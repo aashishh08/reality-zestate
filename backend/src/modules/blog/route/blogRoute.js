@@ -18,6 +18,14 @@ router.get('/', async (req, res, next) => {
 });
 
 // Admin routes MUST be before /:slug otherwise Express matches "admin" as a slug value
+router.get('/admin/stats', authMiddleware, requireRole('SUPER_ADMIN', 'ADMIN', 'EDITOR'), async (req, res, next) => {
+  try {
+    await blogController.getAdminStats(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/admin/all', authMiddleware, requireRole('SUPER_ADMIN', 'ADMIN', 'EDITOR'), async (req, res, next) => {
   try {
     await blogController.listAllBlogs(req, res);

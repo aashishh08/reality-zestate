@@ -9,6 +9,7 @@ import { getAllBlogs, deleteBlog } from '@/lib/api/admin';
 import { updateBlog } from '@/lib/api/blogs';
 import { revalidateBlogCaches } from '@/app/actions/revalidate-homepage';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
+import { Pagination } from '@/components/ui/Pagination';
 
 interface Blog {
   id: string;
@@ -20,9 +21,13 @@ interface Blog {
   updatedAt: string;
 }
 
+const PAGE_SIZE = 20;
+
 export default function BlogsListPage() {
   const { token } = useAdminAuth();
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [appliedSearch, setAppliedSearch] = useState('');
@@ -31,22 +36,37 @@ export default function BlogsListPage() {
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
 
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const hasNextPage = page < totalPages;
+  const hasPreviousPage = page > 1;
+  const rangeStart = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
+  const rangeEnd = Math.min(page * PAGE_SIZE, total);
+
   const loadBlogs = useCallback(async () => {
     if (!token) return;
     try {
       setLoading(true);
       setError('');
-      const filters: { search?: string; isPublished?: boolean } = {};
+      const filters: {
+        search?: string;
+        isPublished?: boolean;
+        limit: number;
+        offset: number;
+      } = {
+        limit: PAGE_SIZE,
+        offset: (page - 1) * PAGE_SIZE,
+      };
       if (appliedSearch) filters.search = appliedSearch;
       if (filterStatus !== '') filters.isPublished = filterStatus === 'published';
       const response: any = await getAllBlogs(token, filters);
       setBlogs(response.data || []);
+      setTotal(response.pagination?.total ?? 0);
     } catch (err: any) {
       setError(err?.message || 'Failed to load blogs');
     } finally {
       setLoading(false);
     }
-  }, [token, appliedSearch, filterStatus]);
+  }, [token, appliedSearch, filterStatus, page]);
 
   useEffect(() => {
     loadBlogs();
@@ -54,6 +74,7 @@ export default function BlogsListPage() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    setPage(1);
     setAppliedSearch(search);
   };
 
@@ -64,7 +85,11 @@ export default function BlogsListPage() {
       setDeleteLoading(blog.id);
       await deleteBlog(blog.id, token!);
       await revalidateBlogCaches(blog.slug);
-      setBlogs(blogs.filter((b) => b.id !== blog.id));
+      if (blogs.length === 1 && page > 1) {
+        setPage((p) => p - 1);
+      } else {
+        loadBlogs();
+      }
     } catch (err: any) {
       setError(err?.message || 'Failed to delete blog');
     } finally {
@@ -90,9 +115,7 @@ export default function BlogsListPage() {
       <div className="flex h-screen bg-gray-900">
         <AdminSidebar />
 
-        {/* Main Content */}
         <div className="flex-1 overflow-auto">
-          {/* Header */}
           <div className="h-16 bg-gray-800 border-b border-gray-700 px-8 flex items-center justify-between">
             <h1 className="text-2xl font-bold text-white">Blog Management</h1>
             <Link
@@ -104,16 +127,13 @@ export default function BlogsListPage() {
             </Link>
           </div>
 
-          {/* Content */}
           <div className="p-8">
-            {/* Error Message */}
             {error && (
               <div className="mb-6 p-4 bg-red-500/10 border border-red-500 rounded-lg text-red-500 text-sm">
                 {error}
               </div>
             )}
 
-            {/* Search + Status filter */}
             <form onSubmit={handleSearch} className="mb-6 flex items-center gap-3 flex-wrap">
               <div className="relative flex-1 min-w-[200px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -127,7 +147,10 @@ export default function BlogsListPage() {
               </div>
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
+                onChange={(e) => {
+                  setPage(1);
+                  setFilterStatus(e.target.value);
+                }}
                 className="px-4 py-3 bg-gray-800 border border-gray-700 text-gray-300 rounded-lg text-sm focus:outline-none focus:border-amber-500"
               >
                 <option value="">All Status</option>
@@ -144,7 +167,12 @@ export default function BlogsListPage() {
               </button>
             </form>
 
-            {/* Blogs Table */}
+            {!loading && total > 0 && (
+              <p className="mb-4 text-sm text-gray-400">
+                Showing {rangeStart}–{rangeEnd} of {total} blog{total === 1 ? '' : 's'}
+              </p>
+            )}
+
             {loading ? (
               <div className="text-center py-12">
                 <div className="inline-block w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
@@ -163,86 +191,100 @@ export default function BlogsListPage() {
                 </Link>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-700">
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Title</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Slug</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Status</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Created</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {blogs.map((blog) => (
-                      <tr key={blog.id} className="border-b border-gray-700 hover:bg-gray-800/50 transition">
-                        <td className="px-6 py-4 text-sm text-white truncate max-w-xs">{blog.title}</td>
-                        <td className="px-6 py-4 text-sm text-gray-400 truncate max-w-xs">{blog.slug}</td>
-                        <td className="px-6 py-4 text-sm">
-                          <span
-                            className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-medium ${
-                              blog.isPublished
-                                ? 'bg-emerald-500/15 text-emerald-400'
-                                : 'bg-gray-700 text-gray-400'
-                            }`}
-                          >
-                            {blog.isPublished ? (
-                              <>
-                                <CheckCircle2 className="w-3 h-3" />
-                                <span>Published</span>
-                              </>
-                            ) : (
-                              <>
-                                <EyeOff className="w-3 h-3" />
-                                <span>Draft</span>
-                              </>
-                            )}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-400">
-                          {new Date(blog.createdAt).toLocaleDateString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm space-x-2 flex">
-                          <Link
-                            href={`/admin/blogs/${blog.id}/edit`}
-                            className="p-2 text-amber-500 hover:bg-gray-700 rounded-lg transition"
-                            title="Edit"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </Link>
-                          <button
-                            onClick={() => handleTogglePublish(blog)}
-                            disabled={togglingId === blog.id}
-                            className="p-2 text-gray-400 hover:text-amber-400 hover:bg-gray-700 rounded-lg transition disabled:opacity-50"
-                            title={blog.isPublished ? 'Unpublish / hide' : 'Publish'}
-                          >
-                            {togglingId === blog.id ? (
-                              <RefreshCw className="w-4 h-4 animate-spin" />
-                            ) : blog.isPublished ? (
-                              <EyeOff className="w-4 h-4" />
-                            ) : (
-                              <Eye className="w-4 h-4" />
-                            )}
-                          </button>
-                          <button
-                            onClick={() => handleDelete(blog)}
-                            disabled={deleteLoading === blog.id}
-                            className="p-2 text-red-500 hover:bg-gray-700 rounded-lg transition disabled:opacity-50"
-                            title="Delete"
-                          >
-                            {deleteLoading === blog.id ? (
-                              <div className="w-4 h-4 border border-red-500 border-t-transparent rounded-full animate-spin" />
-                            ) : (
-                              <Trash2 className="w-4 h-4" />
-                            )}
-                          </button>
-                        </td>
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-700">
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Title</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Slug</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Status</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Created</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {blogs.map((blog) => (
+                        <tr key={blog.id} className="border-b border-gray-700 hover:bg-gray-800/50 transition">
+                          <td className="px-6 py-4 text-sm text-white truncate max-w-xs">{blog.title}</td>
+                          <td className="px-6 py-4 text-sm text-gray-400 truncate max-w-xs">{blog.slug}</td>
+                          <td className="px-6 py-4 text-sm">
+                            <span
+                              className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-medium ${
+                                blog.isPublished
+                                  ? 'bg-emerald-500/15 text-emerald-400'
+                                  : 'bg-gray-700 text-gray-400'
+                              }`}
+                            >
+                              {blog.isPublished ? (
+                                <>
+                                  <CheckCircle2 className="w-3 h-3" />
+                                  <span>Published</span>
+                                </>
+                              ) : (
+                                <>
+                                  <EyeOff className="w-3 h-3" />
+                                  <span>Draft</span>
+                                </>
+                              )}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-400">
+                            {new Date(blog.createdAt).toLocaleDateString()}
+                          </td>
+                          <td className="px-6 py-4 text-sm space-x-2 flex">
+                            <Link
+                              href={`/admin/blogs/${blog.id}/edit`}
+                              className="p-2 text-amber-500 hover:bg-gray-700 rounded-lg transition"
+                              title="Edit"
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </Link>
+                            <button
+                              onClick={() => handleTogglePublish(blog)}
+                              disabled={togglingId === blog.id}
+                              className="p-2 text-gray-400 hover:text-amber-400 hover:bg-gray-700 rounded-lg transition disabled:opacity-50"
+                              title={blog.isPublished ? 'Unpublish / hide' : 'Publish'}
+                            >
+                              {togglingId === blog.id ? (
+                                <RefreshCw className="w-4 h-4 animate-spin" />
+                              ) : blog.isPublished ? (
+                                <EyeOff className="w-4 h-4" />
+                              ) : (
+                                <Eye className="w-4 h-4" />
+                              )}
+                            </button>
+                            <button
+                              onClick={() => handleDelete(blog)}
+                              disabled={deleteLoading === blog.id}
+                              className="p-2 text-red-500 hover:bg-gray-700 rounded-lg transition disabled:opacity-50"
+                              title="Delete"
+                            >
+                              {deleteLoading === blog.id ? (
+                                <div className="w-4 h-4 border border-red-500 border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                <Trash2 className="w-4 h-4" />
+                              )}
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {totalPages > 1 && (
+                  <div className="mt-8">
+                    <Pagination
+                      currentPage={page}
+                      totalPages={totalPages}
+                      onPageChange={setPage}
+                      hasNextPage={hasNextPage}
+                      hasPreviousPage={hasPreviousPage}
+                    />
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
