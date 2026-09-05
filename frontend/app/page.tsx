@@ -8,7 +8,7 @@ import { CityLocations } from "@/components/home/CityLocations";
 import { fetchHomepageData } from "@/lib/api/homepage";
 import { buildFeaturedCorridorCardsFromApi } from "@/lib/featured-corridors";
 import { getSiteUrl } from "@/lib/site-url";
-import { getDefaultOgImageUrl } from "@/lib/seo";
+import { getDefaultOgImageEntry, getDefaultOgImageUrl } from "@/lib/seo";
 
 const FloatingActions = dynamic(() =>
   import("@/components/layout/FloatingActions").then((m) => ({ default: m.FloatingActions })),
@@ -38,7 +38,6 @@ export const revalidate = 3600;
 export function generateMetadata(): Metadata {
   const base = getSiteUrl();
   const canonicalUrl = base;
-  const ogImage = getDefaultOgImageUrl();
   const title = "Super Luxury Real Estate Advisory India | SuperLuxeRE";
   const description =
     "SuperLuxeRE is India's specialist super luxury and ultra luxury real estate advisory. We help HNIs, UHNWIs, NRIs and family offices access curated off-market and pre-launch properties on Golf Course Road, Noida Expressway and Worli.";
@@ -56,13 +55,13 @@ export function generateMetadata(): Metadata {
       url: canonicalUrl,
       siteName: "Superluxere",
       locale: "en_IN",
-      images: [{ url: ogImage, width: 1200, height: 630, alt: "Superluxere" }],
+      images: [getDefaultOgImageEntry()],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [ogImage],
+      images: [getDefaultOgImageUrl()],
     },
   };
 }

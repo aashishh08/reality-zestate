@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
 import { getSiteUrl } from "@/lib/site-url";
+import { getDefaultOgImageEntry, getDefaultOgImageUrl } from "@/lib/seo";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -30,6 +31,13 @@ export const metadata: Metadata = {
     siteName: "Superluxere",
     title: "Super Luxury Real Estate Advisory India | SuperLuxeRE",
     description: "SuperLuxeRE is India's specialist super luxury and ultra luxury real estate advisory. We help HNIs, UHNWIs, NRIs and family offices access curated off-market and pre-launch properties on Golf Course Road, Noida Expressway and Worli.",
+    images: [getDefaultOgImageEntry()],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Super Luxury Real Estate Advisory India | SuperLuxeRE",
+    description: "SuperLuxeRE is India's specialist super luxury and ultra luxury real estate advisory. We help HNIs, UHNWIs, NRIs and family offices access curated off-market and pre-launch properties on Golf Course Road, Noida Expressway and Worli.",
+    images: [getDefaultOgImageUrl()],
   },
   robots: {
     index: true,

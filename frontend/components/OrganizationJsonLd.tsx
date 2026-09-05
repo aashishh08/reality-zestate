@@ -5,6 +5,7 @@
  */
 import { getSiteUrl } from "@/lib/site-url";
 import { CONTACT_INFO } from "@/lib/constants";
+import { SITE_LOGO_PATH } from "@/lib/seo";
 
 export function OrganizationJsonLd() {
   const base = getSiteUrl();
@@ -17,9 +18,9 @@ export function OrganizationJsonLd() {
     url: base,
     logo: {
       "@type": "ImageObject",
-      url: `${base}/images/luxury-living.jpg`,
-      width: 1200,
-      height: 630,
+      url: `${base}${SITE_LOGO_PATH}`,
+      width: 1024,
+      height: 1024,
     },
     description:
       "India's premier luxury real estate portal, curating premium residential and commercial properties across Gurgaon, Delhi, Mumbai, Bengaluru, Hyderabad, and other major Indian cities.",

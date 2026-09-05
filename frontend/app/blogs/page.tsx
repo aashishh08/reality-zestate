@@ -5,7 +5,7 @@ import BlogCard from '@/components/blog/BlogCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { NewTabLink } from '@/components/ui/NewTabLink';
 import { getSiteUrl } from '@/lib/site-url';
-import { getDefaultOgImageUrl } from '@/lib/seo';
+import { getDefaultOgImageEntry, getDefaultOgImageUrl } from '@/lib/seo';
 
 type SearchParamsShape = {
   category?: string;
@@ -53,7 +53,7 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
       url: canonicalUrl,
       locale: 'en_IN',
       siteName: 'Superluxere',
-      images: [{ url: ogFallbackImage, width: 1200, height: 630, alt: 'Superluxere Luxury Real Estate Blog' }],
+      images: [getDefaultOgImageEntry()],
     },
     twitter: {
       card: 'summary_large_image',

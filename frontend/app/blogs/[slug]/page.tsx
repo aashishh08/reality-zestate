@@ -10,7 +10,7 @@ import { CONTACT_INFO } from '@/lib/constants';
 import { TrackedWhatsAppLink } from '@/components/analytics/TrackedWhatsAppLink';
 import { sanitizeHtml } from '@/lib/utils/sanitize-html';
 import { getSiteUrl } from '@/lib/site-url';
-import { getDefaultOgImageUrl } from '@/lib/seo';
+import { getDefaultOgImageEntry, getDefaultOgImageUrl, getSiteLogoUrl } from '@/lib/seo';
 import { ROBOTS_NOINDEX_NOFOLLOW } from '@/lib/seo/listing-metadata';
 import { Calendar, Clock, User, ArrowLeft, Facebook, Twitter, Linkedin, ArrowRight } from 'lucide-react';
 import { BlogLeadPageContext } from '@/components/blog/BlogLeadPageContext';
@@ -62,7 +62,6 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
     const base = getSiteUrl();
     const canonicalUrl = `${base}/blogs/${slug}`;
-    const fallbackImage = getDefaultOgImageUrl();
     const metaTitle = post.seo?.metaTitle?.trim() || post.title;
     const metaDescription =
       post.seo?.metaDescription ||
@@ -84,17 +83,13 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
         modifiedTime: post.updatedAt,
         locale: 'en_IN',
         siteName: 'Superluxere',
-        images: post.featuredImage
-          ? [{ url: post.featuredImage, width: 1200, height: 630, alt: post.title }]
-          : [{ url: fallbackImage, width: 1200, height: 630, alt: 'Superluxere' }],
+        images: [getDefaultOgImageEntry()],
       },
       twitter: {
         card: 'summary_large_image',
         title: metaTitle,
         description: metaDescription,
-        images: post.featuredImage
-          ? [post.featuredImage]
-          : [fallbackImage],
+        images: [getDefaultOgImageUrl()],
       },
       alternates: {
         canonical: canonicalUrl,
@@ -110,6 +105,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const base = getSiteUrl();
   const fallbackImage = getDefaultOgImageUrl();
+  const siteLogoUrl = getSiteLogoUrl();
 
   let post: BlogPost | undefined;
   try {
@@ -577,7 +573,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               '@type': 'Organization',
               name: 'Superluxere',
               url: base,
-              logo: { '@type': 'ImageObject', url: fallbackImage },
+              logo: { '@type': 'ImageObject', url: siteLogoUrl },
             },
             mainEntityOfPage: { '@type': 'WebPage', '@id': shareUrl },
             keywords: (post.tags || []).join(', '),
