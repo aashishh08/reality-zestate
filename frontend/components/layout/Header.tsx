@@ -80,7 +80,7 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
               className="inline-flex items-center gap-1.5 rounded-full bg-gold/90 hover:bg-gold px-2.5 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs font-bold text-[#2C2416] tracking-wide transition-colors touch-manipulation"
             >
               <PhoneCall className="w-3 h-3 shrink-0" />
-              <span className="hidden sm:inline">Get a callback</span>
+              <span className="hidden sm:inline">Request callback</span>
               <span className="sm:hidden">Callback</span>
             </button>
           </div>
