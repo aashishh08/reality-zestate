@@ -9,6 +9,7 @@ import {
   FOOTER_CATEGORY_LINKS,
   FOOTER_EXPLORE_LINKS,
 } from "@/lib/seo/navigation-links";
+import { SITE_DISCLAIMER } from "@/lib/site-disclaimer";
 
 interface FooterProps {
   locations?: Location[];
@@ -129,6 +130,16 @@ export function Footer({ locations = [] }: FooterProps) {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* ── Disclaimer ─────────────────────────────────────────────── */}
+        <div className="border-t border-[#C9A961]/20 pt-6 md:pt-8 mb-6 md:mb-8 min-w-0">
+          <h3 className="text-xs font-bold mb-3 tracking-widest uppercase text-[#2C2416]">
+            Disclaimer
+          </h3>
+          <p className="text-[11px] md:text-xs leading-relaxed text-zinc-500 whitespace-pre-line">
+            {SITE_DISCLAIMER}
+          </p>
         </div>
 
         {/* ── Bottom bar ─────────────────────────────────────────────── */}

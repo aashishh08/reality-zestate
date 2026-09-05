@@ -1,0 +1,6 @@
+/** Site-wide legal disclaimer — shown in the public footer. */
+export const SITE_DISCLAIMER = `Disclaimer: This is not the official website of any developer or property listed herein. SuperLuxeRE is an authorised channel partner platform for information purposes only. All rights for logos and images are reserved to the respective developers. Thank you for visiting our website.
+
+This disclaimer (“Disclaimer”) applies to this website and all microsites and websites owned or operated by SuperLuxeRE. By using or accessing this website you agree with this Disclaimer without any qualification or limitation. This website is in the process of being updated from time to time.
+
+By accessing this website, you confirm that the information — including brochures and marketing collaterals on this website — is solely for informational purposes only and that you have not relied on this information for making any booking or purchase in any project. Nothing on this website constitutes advertising, marketing, booking, selling, an offer for sale, or an invitation to purchase a unit in any project by any developer. SuperLuxeRE is not liable for any consequence of any action taken by you relying on such material or information on this website.`;
