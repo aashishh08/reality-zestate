@@ -29,6 +29,11 @@ export function resolveLeadPopupSource(
   modalSource: string,
   context: LeadPopupContext = {},
 ): string {
+  if (modalSource !== 'lead-popup' && modalSource !== 'lead-popup-timer') {
+    if (context.propertySlug) return `${modalSource} | ${context.propertySlug}`;
+    return modalSource;
+  }
+
   const pageSource = getLeadSourceFromPathname(pathname);
 
   if (pageSource === 'blogs') {

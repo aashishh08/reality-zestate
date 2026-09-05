@@ -3,11 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { NewTabLink } from "@/components/ui/NewTabLink";
-import { Menu, X, ChevronDown, MapPin, Building2, Tag, LayoutGrid, Phone } from "lucide-react";
+import { Menu, X, ChevronDown, MapPin, Building2, Tag, LayoutGrid, Phone, PhoneCall } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SCROLL_THRESHOLDS, CONTACT_INFO } from "@/lib/constants";
 import { Location, Developer, Category } from "@/lib";
 import { STATUS_TAG_LINKS } from "@/lib/seo/navigation-links";
+import { useLeadModal } from "@/lib/contexts/LeadModalContext";
 
 interface HeaderProps {
   locations?: Location[];
@@ -21,6 +22,7 @@ const phoneHref = `tel:${CONTACT_INFO.PHONE_NUMBER.replace(/\s/g, "")}`;
 const phoneDisplay = CONTACT_INFO.PHONE_NUMBER.replace(/^(\+91)(\d{5})(\d{5})$/, "$1 $2 $3");
 
 export function Header({ locations = [], developers = [], categories = [] }: HeaderProps) {
+  const { openModal } = useLeadModal();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setMobileMenu] = useState(false);
   const [activeMega, setActiveMega] = useState<MegaMenu>(null);
@@ -61,7 +63,7 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
     <div className="fixed top-0 left-0 right-0 z-50">
       <div className="bg-[#2C2416] text-white border-b border-white/10">
         <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-16">
-          <div className="flex items-center justify-center h-8 sm:h-9">
+          <div className="flex items-center justify-center gap-3 sm:gap-5 h-8 sm:h-9">
             <a
               href={phoneHref}
               className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-semibold tracking-wide hover:text-gold transition-colors touch-manipulation"
@@ -71,6 +73,16 @@ export function Header({ locations = [], developers = [], categories = [] }: Hea
               <span className="hidden sm:inline text-white/70">Call us:</span>
               <span>{phoneDisplay}</span>
             </a>
+            <span className="h-3 w-px bg-white/20 shrink-0" aria-hidden />
+            <button
+              type="button"
+              onClick={() => openModal("top-banner-callback")}
+              className="inline-flex items-center gap-1.5 rounded-full bg-gold/90 hover:bg-gold px-2.5 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs font-bold text-[#2C2416] tracking-wide transition-colors touch-manipulation"
+            >
+              <PhoneCall className="w-3 h-3 shrink-0" />
+              <span className="hidden sm:inline">Get a callback</span>
+              <span className="sm:hidden">Callback</span>
+            </button>
           </div>
         </div>
       </div>

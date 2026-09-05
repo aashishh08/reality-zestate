@@ -75,8 +75,8 @@ export default function RootLayout({
       >
         <OrganizationJsonLd />
         <WebSiteJsonLd />
-        <SiteHeader />
         <LeadModalProvider>
+          <SiteHeader />
           {children}
           <LazyLeadPopup />
         </LeadModalProvider>

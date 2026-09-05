@@ -90,8 +90,12 @@ export function LeadModalProvider({ children }: { children: React.ReactNode }) {
 
     const openModal = useCallback((source: string = 'lead-popup') => {
         if (isAdminPath(pathname)) return;
-        const pageSource = getLeadSourceFromPathname(pathname);
-        setModalSource(pageSource ?? source);
+        if (source !== 'lead-popup') {
+            setModalSource(source);
+        } else {
+            const pageSource = getLeadSourceFromPathname(pathname);
+            setModalSource(pageSource ?? source);
+        }
         setIsOpen(true);
     }, [pathname]);
 
